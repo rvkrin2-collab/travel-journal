@@ -3,28 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Кыргызстан 2026</title>
+  <title>Кыргызстан 2026 — экспедиционный журнал</title>
+  <meta name="description" content="Живой журнал путешествия по Кыргызстану: маршрут, главы, фотографии и заметки.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="hero">
-    <div>
+    <div class="hero__shade"></div>
+    <div class="hero__content">
       <p class="kicker">Экспедиционный журнал</p>
       <h1>Кыргызстан 2026</h1>
       <p class="subtitle">4–11 июля · Иссык-Куль · Алтын-Арашан · Сон-Кёль · Кокомерен</p>
+      <div class="hero__stats">
+        <span>8 дней</span>
+        <span>горные дороги</span>
+        <span>кочевники</span>
+        <span>живой дневник</span>
+      </div>
     </div>
   </header>
 
+  <nav class="nav">
+    <a href="#idea">Идея</a>
+    <a href="#route">Маршрут</a>
+    <a href="#days">Дни</a>
+    <a href="#how">Как пополняется</a>
+  </nav>
+
   <main>
-    <section class="intro">
-      <h2>Живой журнал путешествия</h2>
-      <p>Сюда будут добавляться фотографии, короткие видео, голосовые заметки и дневниковые главы по мере поездки.</p>
+    <section class="intro" id="idea">
+      <p class="eyebrow">Не блог, а личный журнал</p>
+      <h2>Путешествие, которое собирается по мере движения</h2>
+      <p>Сюда будут добавляться фотографии, короткие видео, голосовые заметки и дневниковые главы. Не туристический отчёт, а история поездки: места, люди, дороги, случайные наблюдения и личные впечатления.</p>
     </section>
 
-    <section id="days"></section>
+    <section class="route-card" id="route">
+      <div>
+        <p class="eyebrow">Кольцо по Кыргызстану</p>
+        <h2>От древнего Баласагуна до высокогорного Сон-Кёля</h2>
+      </div>
+      <div class="route-line">
+        <span>Бишкек</span><span>Бурана</span><span>Чон-Кемин</span><span>Иссык-Куль</span><span>Каракол</span><span>Алтын-Арашан</span><span>Сон-Кёль</span><span>Кокомерен</span>
+      </div>
+    </section>
+
+    <section id="days" class="days"></section>
+
+    <section class="process" id="how">
+      <p class="eyebrow">Механика обновления</p>
+      <h2>Как сайт будет жить во время поездки</h2>
+      <div class="steps">
+        <article><b>1</b><h3>Материалы</h3><p>В течение дня отправляются фото, видео и голосовые заметки.</p></article>
+        <article><b>2</b><h3>Глава</h3><p>Из материалов собирается рассказ дня: история, контекст, впечатления и подписи.</p></article>
+        <article><b>3</b><h3>Публикация</h3><p>Файлы обновляются в GitHub, и сайт появляется по той же ссылке.</p></article>
+      </div>
+    </section>
   </main>
 
-  <footer>Кыргызстан 2026 · личный журнал путешествия</footer>
+  <footer>Кыргызстан 2026 · личный экспедиционный журнал</footer>
   <script src="script.js"></script>
 </body>
 </html>
