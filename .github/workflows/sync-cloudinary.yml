@@ -1,0 +1,42 @@
+name: Sync Cloudinary photos
+
+on:
+  workflow_dispatch:
+    inputs:
+      day_tag:
+        description: "Cloudinary day tag"
+        required: true
+        default: "day01"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sync photos
+        run: node sync-cloudinary.mjs
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          DAY_TAG: ${{ github.event.inputs.day_tag }}
+          OUT_FILE: data/day01-photos.json
+
+      - name: Commit photo data
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add data/day01-photos.json
+          git commit -m "Sync Cloudinary photos for day01" || echo "No changes"
+          git push
