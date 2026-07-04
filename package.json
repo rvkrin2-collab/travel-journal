@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "sync:photos": "node sync-cloudinary.mjs"
+  }
+}
