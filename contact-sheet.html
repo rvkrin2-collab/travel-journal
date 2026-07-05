@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Контактный лист · Журнал путешествий</title>
+  <meta name="robots" content="noindex,nofollow">
+  <style>
+    :root{
+      --paper:#f3eadb;
+      --paper2:#fff8ec;
+      --ink:#161614;
+      --muted:#6e6559;
+      --bronze:#a76b3d;
+      --green:#263c34;
+      --line:rgba(22,22,20,.16);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
+    header{max-width:1440px;margin:0 auto;padding:34px 18px 20px}
+    .eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:12px;font-weight:800;color:var(--bronze);margin:0 0 8px}
+    h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(42px,8vw,82px);line-height:.9;letter-spacing:-.055em;margin:0 0 16px}
+    .lead{font-size:18px;color:#342d25;max-width:900px;margin:0}
+    .panel{max-width:1440px;margin:0 auto;padding:0 18px 24px}
+    .tools{background:var(--green);color:white;border-radius:28px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .tools p{margin:0;color:#eadcc7}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    a.button,button{border:0;border-radius:999px;padding:11px 15px;background:#fff8ec;color:#1d1b17;font-weight:800;cursor:pointer;font:inherit;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+    button.secondary,a.button.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.28)}
+    main{max-width:1440px;margin:0 auto;padding:0 18px 56px}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+    .card{background:var(--paper2);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 16px 42px rgba(73,55,37,.09);cursor:zoom-in}
+    .image-wrap{position:relative;background:#ddd}
+    .image-wrap img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+    .num{position:absolute;left:12px;top:12px;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(22,22,20,.82);color:white;font-weight:900}
+    .meta{padding:12px 13px 14px}
+    .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#5f5549;word-break:break-all;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px}
+    .sub{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px;color:var(--muted);font-size:12px}
+    .sub span{border:1px solid var(--line);border-radius:999px;padding:5px 8px;background:#fffaf0}
+    dialog{border:0;border-radius:26px;padding:0;width:min(1100px,calc(100vw - 24px));background:#111;color:#fff;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+    dialog::backdrop{background:rgba(0,0,0,.74)}
+    .modal-img{display:block;width:100%;max-height:82vh;object-fit:contain;background:#111}
+    .modal-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:#161614}
+    .modal-id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#eadcc7;word-break:break-all}
+    .close{background:#fff8ec;color:#161614}
+    footer{padding:22px 18px;text-align:center;color:var(--muted)}
+    @media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tools{border-radius:22px}}
+    @media(max-width:520px){.grid{grid-template-columns:1fr}header{padding-top:24px}.card{border-radius:20px}}
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Редакторский просмотр · скрытая страница</p>
+    <h1 id="pageTitle">Контактный лист</h1>
+    <p class="lead" id="pageLead">Крупная сетка всех кадров дня. Нужна для первичного визуального отбора: главное фото, рассказ, за кадром, убрать.</p>
+  </header>
+
+  <section class="panel">
+    <div class="tools">
+      <p id="sourceNote">Загружаю фотографии…</p>
+      <div class="actions">
+        <a id="editorLink" class="button" href="editor.html">✍️ Открыть редактор</a>
+        <button id="copyBtn" class="secondary">📋 Скопировать список</button>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <dialog id="viewer">
+    <img id="viewerImg" class="modal-img" alt="">
+    <div class="modal-bar">
+      <div id="viewerId" class="modal-id"></div>
+      <button id="closeBtn" class="close">Закрыть</button>
+    </div>
+  </dialog>
+
+  <footer id="footerText">Контактный лист</footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const trip = cleanSegment(params.get('trip') || 'kyrgyzstan-2026', 'kyrgyzstan-2026');
+    const day = normalizeDay(params.get('day') || params.get('day_tag') || 'day02');
+    const photoPath = `data/${trip}/${day}-photos.json`;
+
+    const pageTitle = document.querySelector('#pageTitle');
+    const pageLead = document.querySelector('#pageLead');
+    const sourceNote = document.querySelector('#sourceNote');
+    const grid = document.querySelector('#grid');
+    const editorLink = document.querySelector('#editorLink');
+    const copyBtn = document.querySelector('#copyBtn');
+    const footerText = document.querySelector('#footerText');
+    const viewer = document.querySelector('#viewer');
+    const viewerImg = document.querySelector('#viewerImg');
+    const viewerId = document.querySelector('#viewerId');
+    const closeBtn = document.querySelector('#closeBtn');
+    let photos = [];
+
+    function cleanSegment(value, fallback){
+      const cleaned = String(value || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+      return cleaned || fallback;
+    }
+
+    function normalizeDay(value){
+      const raw = String(value || '').trim().toLowerCase();
+      const number = raw.match(/\d+/);
+      if(number) return `day${String(Number(number[0])).padStart(2, '0')}`;
+      return cleanSegment(raw, 'day02');
+    }
+
+    function dayLabel(dayTag){
+      const number = dayTag.match(/\d+/)?.[0];
+      return number ? `Day ${String(Number(number)).padStart(2, '0')}` : dayTag;
+    }
+
+    function imageUrl(url, width = 1200){
+      return url.replace('/image/upload/', `/image/upload/f_auto,q_auto,w_${width}/`);
+    }
+
+    function originalUrl(publicId){
+      return `https://res.cloudinary.com/tftagnuy/image/upload/f_auto,q_auto,w_1800/${publicId}.jpg`;
+    }
+
+    function photoShape(photo){
+      if(!photo.width || !photo.height) return '';
+      if(photo.height > photo.width) return 'вертикальный';
+      if(photo.width > photo.height) return 'горизонтальный';
+      return 'квадратный';
+    }
+
+    function renderCard(photo, index){
+      const num = index + 1;
+      const shape = photoShape(photo);
+      return `
+        <article class="card" data-public-id="${photo.public_id}" data-url="${photo.url}" data-number="${num}">
+          <div class="image-wrap">
+            <img src="${imageUrl(photo.url)}" alt="Фото ${num}" loading="lazy">
+            <div class="num">${num}</div>
+          </div>
+          <div class="meta">
+            <div class="id">${photo.public_id}</div>
+            <div class="sub">
+              ${shape ? `<span>${shape}</span>` : ''}
+              ${photo.width && photo.height ? `<span>${photo.width}×${photo.height}</span>` : ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function openViewer(card){
+      const publicId = card.dataset.publicId;
+      viewerImg.src = originalUrl(publicId);
+      viewerImg.alt = `Фото ${card.dataset.number}`;
+      viewerId.textContent = `${card.dataset.number}. ${publicId}`;
+      viewer.showModal();
+    }
+
+    async function copyList(){
+      const text = photos.map((photo, index) => `${index + 1}. ${photo.public_id}`).join('\n');
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = '✅ Список скопирован';
+      window.setTimeout(() => copyBtn.textContent = '📋 Скопировать список', 2200);
+    }
+
+    async function init(){
+      pageTitle.textContent = `Контактный лист ${dayLabel(day)}`;
+      footerText.textContent = `Контактный лист · ${trip} · ${dayLabel(day)}`;
+      editorLink.href = `editor.html?trip=${encodeURIComponent(trip)}&day=${encodeURIComponent(day)}`;
+      try{
+        const response = await fetch(photoPath, {cache:'no-store'});
+        if(!response.ok) throw new Error(`HTTP ${response.status}`);
+        photos = await response.json();
+        pageLead.textContent = `Все ${photos.length} фотографий дня крупной сеткой. Нажатие на карточку открывает кадр крупнее.`;
+        sourceNote.textContent = `Источник: ${photoPath}`;
+        grid.innerHTML = photos.map(renderCard).join('');
+        document.querySelectorAll('.card').forEach(card => card.addEventListener('click', () => openViewer(card)));
+      }catch(error){
+        sourceNote.textContent = `Не удалось загрузить ${photoPath}`;
+        grid.innerHTML = `<p>Файл фотографий не найден или недоступен.</p>`;
+      }
+    }
+
+    copyBtn.addEventListener('click', () => copyList().catch(() => {
+      copyBtn.textContent = 'Не удалось скопировать';
+      window.setTimeout(() => copyBtn.textContent = '📋 Скопировать список', 2200);
+    }));
+    closeBtn.addEventListener('click', () => viewer.close());
+    viewer.addEventListener('click', event => {
+      if(event.target === viewer) viewer.close();
+    });
+
+    init();
+  </script>
+</body>
+</html>
