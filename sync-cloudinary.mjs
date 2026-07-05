@@ -4,12 +4,16 @@ const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
 const apiKey = process.env.CLOUDINARY_API_KEY;
 const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
+const trip = process.env.TRIP || process.env.TRIP_TAG || "kyrgyzstan-2026";
 const dayTag = process.env.DAY_TAG || "day01";
-const tripTag = process.env.TRIP_TAG || "";
-const outFile = process.env.OUT_FILE || `data/${dayTag}-photos.json`;
+const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-photos.json`;
 
 if (!cloudName || !apiKey || !apiSecret) {
   throw new Error("Cloudinary secrets are missing");
+}
+
+if (!trip) {
+  throw new Error("TRIP is required");
 }
 
 if (!dayTag) {
@@ -55,9 +59,7 @@ do {
   nextCursor = data.next_cursor || "";
 } while (nextCursor);
 
-if (tripTag) {
-  resources = resources.filter((item) => Array.isArray(item.tags) && item.tags.includes(tripTag));
-}
+resources = resources.filter((item) => Array.isArray(item.tags) && item.tags.includes(trip));
 
 const photos = resources
   .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))
@@ -74,5 +76,5 @@ await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", { recursive: tr
 await fs.writeFile(outFile, JSON.stringify(photos, null, 2), "utf8");
 
 console.log(`Saved ${photos.length} photos to ${outFile}`);
+console.log(`Trip: ${trip}`);
 console.log(`Day tag: ${dayTag}`);
-if (tripTag) console.log(`Trip tag filter: ${tripTag}`);
