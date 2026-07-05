@@ -26,18 +26,28 @@
     main{max-width:1240px;margin:0 auto;padding:0 18px 54px}
     .tools{background:var(--green);color:white;border-radius:28px;padding:20px;margin:18px 0 26px}
     .tools h2{font-family:Georgia,"Times New Roman",serif;font-size:32px;letter-spacing:-.03em;margin:0 0 10px}
-    .tools p{margin:0;color:#eadcc7}
+    .tools p{margin:0 0 14px;color:#eadcc7}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button,.file-button{border:0;border-radius:999px;padding:11px 15px;background:#fff8ec;color:#1d1b17;font-weight:800;cursor:pointer;font:inherit;font-size:14px;display:inline-flex;align-items:center;gap:7px}
+    button.secondary,.file-button.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.28)}
+    #importFile{display:none}
+    .save-note{font-size:13px;color:#eadcc7;margin-top:10px;min-height:20px}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
     .card{background:var(--paper2);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 16px 42px rgba(73,55,37,.09)}
     .thumb{aspect-ratio:4/3;background:#ddd;display:block;width:100%;object-fit:cover}
     .info{padding:14px 14px 16px}
-    .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--bronze);color:white;font-weight:800;margin-bottom:10px}
+    .topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--bronze);color:white;font-weight:800;flex:0 0 auto}
     .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#5f5549;word-break:break-all;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0 0}
     .hint{font-size:14px;color:var(--muted);margin:8px 0 0}
-    textarea{width:100%;min-height:72px;resize:vertical;border:1px solid var(--line);border-radius:14px;background:#fffaf0;padding:10px;margin-top:10px;font:inherit;font-size:14px;color:var(--ink)}
+    .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+    .choice{display:flex;align-items:center;gap:7px;font-size:13px;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer}
+    .choice input{accent-color:var(--bronze)}
+    input[type="text"],textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:#fffaf0;padding:10px;margin-top:8px;font:inherit;font-size:14px;color:var(--ink)}
+    textarea{min-height:76px;resize:vertical}
     footer{padding:22px 18px;text-align:center;color:var(--muted)}
     @media(max-width:920px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:580px){.grid{grid-template-columns:1fr}header{padding-top:24px}.tools{border-radius:22px}.card{border-radius:20px}}
+    @media(max-width:580px){.grid{grid-template-columns:1fr}header{padding-top:24px}.tools{border-radius:22px}.card{border-radius:20px}.choices{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -55,8 +65,16 @@
 
   <main>
     <section class="tools">
-      <h2>Как отвечать</h2>
-      <p>Напиши мне по номерам: какие фото оставить, что на них изображено и какие убрать. Например: «1 — башня, главное; 4 — балбалы; 7 — вечер в Чон-Кемине; 10 — убрать».</p>
+      <h2>Редакторский пакет</h2>
+      <p>Выбери статус каждого кадра, подпиши что на фото, добавь заметку. Кнопка «Сохранить» держит всё в этом браузере. Кнопка «Экспорт» скачивает JSON — его можно прислать мне сюда.</p>
+      <div class="actions">
+        <button id="saveBtn">💾 Сохранить</button>
+        <button id="exportBtn">📤 Экспорт JSON</button>
+        <label class="file-button secondary" for="importFile">📥 Импорт JSON</label>
+        <input id="importFile" type="file" accept="application/json,.json">
+        <button id="clearBtn" class="secondary">🧹 Очистить</button>
+      </div>
+      <div id="saveNote" class="save-note"></div>
     </section>
 
     <section id="grid" class="grid"></section>
@@ -65,22 +83,118 @@
   <footer>Редакторская доска · Кыргызстан 2026</footer>
 
   <script>
+    const DAY_KEY = 'kyrgyzstan-2026-day01-review';
     const grid = document.querySelector('#grid');
+    const saveNote = document.querySelector('#saveNote');
+    let photos = [];
 
     function imageUrl(url){
       return url.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_900/');
     }
 
+    function savedReview(){
+      try{
+        return JSON.parse(localStorage.getItem(DAY_KEY) || '{}');
+      }catch(error){
+        return {};
+      }
+    }
+
+    function setNote(text){
+      saveNote.textContent = text;
+      window.clearTimeout(setNote.timer);
+      setNote.timer = window.setTimeout(() => saveNote.textContent = '', 3500);
+    }
+
+    function getCardData(card){
+      const publicId = card.dataset.publicId;
+      const selected = card.querySelector('input[type="radio"]:checked');
+      return {
+        public_id: publicId,
+        number: Number(card.dataset.number),
+        status: selected ? selected.value : '',
+        label: card.querySelector('[data-field="label"]').value.trim(),
+        note: card.querySelector('[data-field="note"]').value.trim()
+      };
+    }
+
+    function collectReview(){
+      return {
+        trip: 'kyrgyzstan-2026',
+        day: 'day01',
+        updated_at: new Date().toISOString(),
+        items: Array.from(document.querySelectorAll('.card')).map(getCardData)
+      };
+    }
+
+    function applyReview(review){
+      const byId = new Map((review.items || []).map(item => [item.public_id, item]));
+      document.querySelectorAll('.card').forEach(card => {
+        const item = byId.get(card.dataset.publicId);
+        if(!item) return;
+        const radio = card.querySelector(`input[value="${item.status || ''}"]`);
+        if(radio) radio.checked = true;
+        card.querySelector('[data-field="label"]').value = item.label || '';
+        card.querySelector('[data-field="note"]').value = item.note || '';
+      });
+    }
+
+    function saveReview(){
+      localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
+      setNote('Сохранено в этом браузере. Можно закрыть страницу и вернуться позже.');
+    }
+
+    function exportReview(){
+      const review = collectReview();
+      localStorage.setItem(DAY_KEY, JSON.stringify(review, null, 2));
+      const blob = new Blob([JSON.stringify(review, null, 2)], {type:'application/json'});
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'day01-review.json';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+      setNote('JSON скачан. Его можно прислать мне в чат.');
+    }
+
+    function clearReview(){
+      if(!confirm('Очистить все отметки и заметки для Day 01 в этом браузере?')) return;
+      localStorage.removeItem(DAY_KEY);
+      document.querySelectorAll('.card input[type="radio"]').forEach(input => input.checked = input.value === 'unset');
+      document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
+      setNote('Очищено.');
+    }
+
+    async function importReview(file){
+      const text = await file.text();
+      const review = JSON.parse(text);
+      applyReview(review);
+      localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
+      setNote('Импортировано и сохранено в браузере.');
+    }
+
     function renderCard(photo, index){
       const num = index + 1;
       return `
-        <article class="card">
+        <article class="card" data-public-id="${photo.public_id}" data-number="${num}">
           <img class="thumb" src="${imageUrl(photo.url)}" alt="Фото ${num}" loading="lazy">
           <div class="info">
-            <div class="num">${num}</div>
+            <div class="topline">
+              <div class="num">${num}</div>
+            </div>
             <div class="id">${photo.public_id}</div>
-            <p class="hint">Заметка автора / решение по кадру:</p>
-            <textarea placeholder="Например: башня, оставить главным / убрать / балбалы / дорога..."></textarea>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="status-${num}" value="hero">⭐ Главное</label>
+              <label class="choice"><input type="radio" name="status-${num}" value="story">✅ В рассказ</label>
+              <label class="choice"><input type="radio" name="status-${num}" value="backstage">📦 За кадром</label>
+              <label class="choice"><input type="radio" name="status-${num}" value="skip">❌ Убрать</label>
+              <label class="choice"><input type="radio" name="status-${num}" value="unset" checked>⚪ Не выбрано</label>
+            </div>
+            <p class="hint">Что на фото?</p>
+            <input data-field="label" type="text" placeholder="Например: балбалы / лестница / вид с башни">
+            <p class="hint">Заметка автора</p>
+            <textarea data-field="note" placeholder="Например: оставить главным, хорошая атмосфера, снять подпись про Баласагун..."></textarea>
           </div>
         </article>
       `;
@@ -89,12 +203,26 @@
     async function init(){
       try{
         const response = await fetch('data/day01-photos.json', {cache:'no-store'});
-        const photos = await response.json();
+        photos = await response.json();
         grid.innerHTML = photos.map(renderCard).join('');
+        applyReview(savedReview());
+        document.querySelectorAll('input, textarea').forEach(input => input.addEventListener('change', saveReview));
+        document.querySelectorAll('textarea, input[type="text"]').forEach(input => input.addEventListener('input', () => {
+          localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
+        }));
       }catch(error){
         grid.innerHTML = '<p>Не удалось загрузить data/day01-photos.json</p>';
       }
     }
+
+    document.querySelector('#saveBtn').addEventListener('click', saveReview);
+    document.querySelector('#exportBtn').addEventListener('click', exportReview);
+    document.querySelector('#clearBtn').addEventListener('click', clearReview);
+    document.querySelector('#importFile').addEventListener('change', event => {
+      const file = event.target.files[0];
+      if(file) importReview(file).catch(() => setNote('Не удалось импортировать JSON.'));
+      event.target.value = '';
+    });
 
     init();
   </script>
