@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Редактор · День 2 · Кыргызстан 2026</title>
+  <title>Редактор · Журнал путешествий</title>
   <meta name="robots" content="noindex,nofollow">
   <style>
     :root{
@@ -28,8 +28,8 @@
     .tools h2{font-family:Georgia,"Times New Roman",serif;font-size:32px;letter-spacing:-.03em;margin:0 0 10px}
     .tools p{margin:0 0 14px;color:#eadcc7}
     .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-    button,.file-button{border:0;border-radius:999px;padding:11px 15px;background:#fff8ec;color:#1d1b17;font-weight:800;cursor:pointer;font:inherit;font-size:14px;display:inline-flex;align-items:center;gap:7px}
-    button.secondary,.file-button.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.28)}
+    button,.file-button,a.button{border:0;border-radius:999px;padding:11px 15px;background:#fff8ec;color:#1d1b17;font-weight:800;cursor:pointer;font:inherit;font-size:14px;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+    button.secondary,.file-button.secondary,a.button.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.28)}
     #importFile{display:none}
     .save-note{font-size:13px;color:#eadcc7;margin-top:10px;min-height:20px}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
@@ -38,6 +38,7 @@
     .info{padding:14px 14px 16px}
     .topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
     .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--bronze);color:white;font-weight:800;flex:0 0 auto}
+    .shape{font-size:12px;color:var(--muted);background:#f1e2cf;border:1px solid var(--line);border-radius:999px;padding:6px 9px;white-space:nowrap}
     .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#5f5549;word-break:break-all;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0 0}
     .hint{font-size:14px;color:var(--muted);margin:8px 0 0}
     .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
@@ -53,8 +54,8 @@
 <body>
   <header>
     <p class="eyebrow">Редакторская версия · скрытая страница</p>
-    <h1>Черновик Day 02</h1>
-    <p class="lead">Эта страница не связана с основным сайтом. Здесь собраны все 17 фотографий второго дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.</p>
+    <h1 id="pageTitle">Черновик</h1>
+    <p class="lead" id="pageLead">Здесь собраны фотографии дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.</p>
     <div class="status">
       <span>🟢 День загружен</span>
       <span>🟡 Фото сортируются</span>
@@ -66,12 +67,13 @@
   <main>
     <section class="tools">
       <h2>Редакторский пакет</h2>
-      <p>Выбери статус каждого кадра, подпиши что на фото, добавь заметку. Кнопка «Сохранить» держит всё в этом браузере. Кнопка «Экспорт» скачивает JSON — его можно прислать мне сюда.</p>
+      <p id="sourceNote">Выбери статус каждого кадра, подпиши что на фото, добавь заметку. Кнопка «Сохранить» держит всё в этом браузере. Кнопка «Экспорт» скачивает JSON — его можно прислать мне сюда.</p>
       <div class="actions">
         <button id="saveBtn">💾 Сохранить</button>
         <button id="exportBtn">📤 Экспорт JSON</button>
         <label class="file-button secondary" for="importFile">📥 Импорт JSON</label>
         <input id="importFile" type="file" accept="application/json,.json">
+        <a id="contactSheetLink" class="button secondary" href="contact-sheet.html">🖼 Контактный лист</a>
         <button id="clearBtn" class="secondary">🧹 Очистить</button>
       </div>
       <div id="saveNote" class="save-note"></div>
@@ -80,13 +82,40 @@
     <section id="grid" class="grid"></section>
   </main>
 
-  <footer>Редакторская доска · Кыргызстан 2026 · День 2</footer>
+  <footer id="footerText">Редакторская доска</footer>
 
   <script>
-    const DAY_KEY = 'kyrgyzstan-2026-day02-review';
+    const params = new URLSearchParams(window.location.search);
+    const trip = cleanSegment(params.get('trip') || 'kyrgyzstan-2026', 'kyrgyzstan-2026');
+    const day = normalizeDay(params.get('day') || params.get('day_tag') || 'day02');
+    const photoPath = `data/${trip}/${day}-photos.json`;
+    const DAY_KEY = `${trip}-${day}-review`;
+
     const grid = document.querySelector('#grid');
     const saveNote = document.querySelector('#saveNote');
+    const pageTitle = document.querySelector('#pageTitle');
+    const pageLead = document.querySelector('#pageLead');
+    const sourceNote = document.querySelector('#sourceNote');
+    const footerText = document.querySelector('#footerText');
+    const contactSheetLink = document.querySelector('#contactSheetLink');
     let photos = [];
+
+    function cleanSegment(value, fallback){
+      const cleaned = String(value || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+      return cleaned || fallback;
+    }
+
+    function normalizeDay(value){
+      const raw = String(value || '').trim().toLowerCase();
+      const number = raw.match(/\d+/);
+      if(number) return `day${String(Number(number[0])).padStart(2, '0')}`;
+      return cleanSegment(raw, 'day02');
+    }
+
+    function dayLabel(dayTag){
+      const number = dayTag.match(/\d+/)?.[0];
+      return number ? `Day ${String(Number(number)).padStart(2, '0')}` : dayTag;
+    }
 
     function imageUrl(url){
       return url.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_900/');
@@ -120,9 +149,9 @@
 
     function collectReview(){
       return {
-        trip: 'kyrgyzstan-2026',
-        day: 'day02',
-        photos_source: 'data/kyrgyzstan-2026/day02-photos.json',
+        trip,
+        day,
+        photos_source: photoPath,
         updated_at: new Date().toISOString(),
         items: Array.from(document.querySelectorAll('.card')).map(getCardData)
       };
@@ -151,7 +180,7 @@
       const blob = new Blob([JSON.stringify(review, null, 2)], {type:'application/json'});
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'day02-review.json';
+      link.download = `${day}-review.json`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -160,7 +189,7 @@
     }
 
     function clearReview(){
-      if(!confirm('Очистить все отметки и заметки для Day 02 в этом браузере?')) return;
+      if(!confirm(`Очистить все отметки и заметки для ${dayLabel(day)} в этом браузере?`)) return;
       localStorage.removeItem(DAY_KEY);
       document.querySelectorAll('.card input[type="radio"]').forEach(input => input.checked = input.value === 'unset');
       document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
@@ -175,14 +204,23 @@
       setNote('Импортировано и сохранено в браузере.');
     }
 
+    function photoShape(photo){
+      if(!photo.width || !photo.height) return '';
+      if(photo.height > photo.width) return 'вертикальный';
+      if(photo.width > photo.height) return 'горизонтальный';
+      return 'квадратный';
+    }
+
     function renderCard(photo, index){
       const num = index + 1;
+      const shape = photoShape(photo);
       return `
         <article class="card" data-public-id="${photo.public_id}" data-number="${num}">
           <img class="thumb" src="${imageUrl(photo.url)}" alt="Фото ${num}" loading="lazy">
           <div class="info">
             <div class="topline">
               <div class="num">${num}</div>
+              ${shape ? `<div class="shape">${shape}</div>` : ''}
             </div>
             <div class="id">${photo.public_id}</div>
             <div class="choices">
@@ -202,9 +240,15 @@
     }
 
     async function init(){
+      pageTitle.textContent = `Черновик ${dayLabel(day)}`;
+      footerText.textContent = `Редакторская доска · ${trip} · ${dayLabel(day)}`;
+      contactSheetLink.href = `contact-sheet.html?trip=${encodeURIComponent(trip)}&day=${encodeURIComponent(day)}`;
       try{
-        const response = await fetch('data/kyrgyzstan-2026/day02-photos.json', {cache:'no-store'});
+        const response = await fetch(photoPath, {cache:'no-store'});
+        if(!response.ok) throw new Error(`HTTP ${response.status}`);
         photos = await response.json();
+        pageLead.textContent = `Эта страница не связана с основным сайтом. Здесь собраны все ${photos.length} фотографий дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.`;
+        sourceNote.textContent = `Источник фотографий: ${photoPath}. Выбери статус каждого кадра, подпиши что на фото, добавь заметку. Кнопка «Экспорт» скачивает JSON — его можно прислать мне сюда.`;
         grid.innerHTML = photos.map(renderCard).join('');
         applyReview(savedReview());
         document.querySelectorAll('input, textarea').forEach(input => input.addEventListener('change', saveReview));
@@ -212,7 +256,7 @@
           localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
         }));
       }catch(error){
-        grid.innerHTML = '<p>Не удалось загрузить data/kyrgyzstan-2026/day02-photos.json</p>';
+        grid.innerHTML = `<p>Не удалось загрузить ${photoPath}</p>`;
       }
     }
 
