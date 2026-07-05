@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "sync:photos": "node sync-cloudinary.mjs"
+    "sync:photos": "node sync-cloudinary.mjs",
+    "analyze:photos": "node analyze-photos.mjs"
   }
 }
