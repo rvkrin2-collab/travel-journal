@@ -26,13 +26,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          REQUEST_FILE=$(ls -t sync-requests/*.json sync-requests/**/*.json 2>/dev/null | head -n 1)
+          REQUEST_FILE=$(find sync-requests -type f -name '*.json' -print0 | xargs -0 ls -t | head -n 1 || true)
           if [ -z "$REQUEST_FILE" ]; then
             echo "No sync request file found"
             exit 1
           fi
-          TRIP=$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); console.log(r.trip)" "$REQUEST_FILE")
-          DAY_TAG=$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); console.log(r.day_tag)" "$REQUEST_FILE")
+          TRIP=$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); console.log(r.trip || '')" "$REQUEST_FILE")
+          DAY_TAG=$(node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync(process.argv[1],'utf8')); console.log(r.day_tag || '')" "$REQUEST_FILE")
           if [ -z "$TRIP" ] || [ -z "$DAY_TAG" ]; then
             echo "trip and day_tag are required in $REQUEST_FILE"
             exit 1
