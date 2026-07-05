@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Редактор · Кыргызстан 2026</title>
+  <title>Редактор · День 2 · Кыргызстан 2026</title>
   <meta name="robots" content="noindex,nofollow">
   <style>
     :root{
@@ -53,10 +53,10 @@
 <body>
   <header>
     <p class="eyebrow">Редакторская версия · скрытая страница</p>
-    <h1>Черновик Day 01</h1>
-    <p class="lead">Эта страница не связана с основным сайтом. Здесь собраны все фотографии дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.</p>
+    <h1>Черновик Day 02</h1>
+    <p class="lead">Эта страница не связана с основным сайтом. Здесь собраны все 17 фотографий второго дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.</p>
     <div class="status">
-      <span>🟡 День загружен</span>
+      <span>🟢 День загружен</span>
       <span>🟡 Фото сортируются</span>
       <span>⚪ Текст уточняется</span>
       <span>⚪ Финальная публикация после отбора</span>
@@ -80,10 +80,10 @@
     <section id="grid" class="grid"></section>
   </main>
 
-  <footer>Редакторская доска · Кыргызстан 2026</footer>
+  <footer>Редакторская доска · Кыргызстан 2026 · День 2</footer>
 
   <script>
-    const DAY_KEY = 'kyrgyzstan-2026-day01-review';
+    const DAY_KEY = 'kyrgyzstan-2026-day02-review';
     const grid = document.querySelector('#grid');
     const saveNote = document.querySelector('#saveNote');
     let photos = [];
@@ -121,7 +121,8 @@
     function collectReview(){
       return {
         trip: 'kyrgyzstan-2026',
-        day: 'day01',
+        day: 'day02',
+        photos_source: 'data/kyrgyzstan-2026/day02-photos.json',
         updated_at: new Date().toISOString(),
         items: Array.from(document.querySelectorAll('.card')).map(getCardData)
       };
@@ -150,7 +151,7 @@
       const blob = new Blob([JSON.stringify(review, null, 2)], {type:'application/json'});
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'day01-review.json';
+      link.download = 'day02-review.json';
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -159,7 +160,7 @@
     }
 
     function clearReview(){
-      if(!confirm('Очистить все отметки и заметки для Day 01 в этом браузере?')) return;
+      if(!confirm('Очистить все отметки и заметки для Day 02 в этом браузере?')) return;
       localStorage.removeItem(DAY_KEY);
       document.querySelectorAll('.card input[type="radio"]').forEach(input => input.checked = input.value === 'unset');
       document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
@@ -188,13 +189,13 @@
               <label class="choice"><input type="radio" name="status-${num}" value="hero">⭐ Главное</label>
               <label class="choice"><input type="radio" name="status-${num}" value="story">✅ В рассказ</label>
               <label class="choice"><input type="radio" name="status-${num}" value="backstage">📦 За кадром</label>
-              <label class="choice"><input type="radio" name="status-${num}" value="skip">❌ Убрать</label>
+              <label class="choice"><input type="radio" name="status-${num}" value="skip">❌ Не использовать</label>
               <label class="choice"><input type="radio" name="status-${num}" value="unset" checked>⚪ Не выбрано</label>
             </div>
             <p class="hint">Что на фото?</p>
-            <input data-field="label" type="text" placeholder="Например: балбалы / лестница / вид с башни">
-            <p class="hint">Заметка автора</p>
-            <textarea data-field="note" placeholder="Например: оставить главным, хорошая атмосфера, снять подпись про Баласагун..."></textarea>
+            <input data-field="label" type="text" placeholder="Например: перевал / дорога / юрты / ущелье">
+            <p class="hint">Что важно рассказать</p>
+            <textarea data-field="note" placeholder="Например: оставить главным, хороший переход между сценами, проверить название места..."></textarea>
           </div>
         </article>
       `;
@@ -202,7 +203,7 @@
 
     async function init(){
       try{
-        const response = await fetch('data/day01-photos.json', {cache:'no-store'});
+        const response = await fetch('data/kyrgyzstan-2026/day02-photos.json', {cache:'no-store'});
         photos = await response.json();
         grid.innerHTML = photos.map(renderCard).join('');
         applyReview(savedReview());
@@ -211,7 +212,7 @@
           localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
         }));
       }catch(error){
-        grid.innerHTML = '<p>Не удалось загрузить data/day01-photos.json</p>';
+        grid.innerHTML = '<p>Не удалось загрузить data/kyrgyzstan-2026/day02-photos.json</p>';
       }
     }
 
