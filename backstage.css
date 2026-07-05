@@ -1,0 +1,1 @@
+.backstage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}.backstage-card{border:1px solid var(--line);border-radius:18px;overflow:hidden}.backstage-card img{display:block;width:100%;height:128px;object-fit:cover}.backstage-card p{margin:0;padding:9px 10px;font-size:13px;color:var(--muted)}
