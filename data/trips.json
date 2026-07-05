@@ -1,0 +1,16 @@
+{
+  "current_trip": "kyrgyzstan-2026",
+  "trips": [
+    {
+      "id": "kyrgyzstan-2026",
+      "title": "Кыргызстан 2026",
+      "cloudinary_tag": "kyrgyzstan-2026",
+      "data_path": "data/kyrgyzstan-2026",
+      "status": "active"
+    }
+  ],
+  "rules": {
+    "canonical_trip_id": "The same value is used everywhere: Cloudinary trip tag, GitHub data folder, workflow trip input.",
+    "day_tag_format": "day01, day02, day03"
+  }
+}
