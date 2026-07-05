@@ -24,6 +24,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: cloudinary-sync-${{ github.event.inputs.trip }}-${{ github.event.inputs.day_tag }}
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -32,7 +36,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
+
+      - name: Sync with latest main
+        run: |
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -70,5 +81,4 @@ jobs:
             exit 0
           fi
           git commit -m "Sync and analyze Cloudinary photos for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
-          git pull --rebase origin main
-          git push
+          git push origin HEAD:main
