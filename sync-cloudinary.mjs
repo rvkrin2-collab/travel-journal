@@ -50,6 +50,17 @@ async function fetchPage(nextCursor = "") {
   return response.json();
 }
 
+function deduplicateByPublicId(items) {
+  const byPublicId = new Map();
+
+  for (const item of items) {
+    if (!item?.public_id) continue;
+    byPublicId.set(item.public_id, item);
+  }
+
+  return Array.from(byPublicId.values());
+}
+
 let resources = [];
 let nextCursor = "";
 
@@ -59,7 +70,9 @@ do {
   nextCursor = data.next_cursor || "";
 } while (nextCursor);
 
-resources = resources.filter((item) => Array.isArray(item.tags) && item.tags.includes(trip));
+resources = deduplicateByPublicId(
+  resources.filter((item) => Array.isArray(item.tags) && item.tags.includes(trip))
+);
 
 const photos = resources
   .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))
@@ -75,6 +88,6 @@ const photos = resources
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", { recursive: true });
 await fs.writeFile(outFile, JSON.stringify(photos, null, 2), "utf8");
 
-console.log(`Saved ${photos.length} photos to ${outFile}`);
+console.log(`Saved ${photos.length} unique photos to ${outFile}`);
 console.log(`Trip: ${trip}`);
 console.log(`Day tag: ${dayTag}`);
