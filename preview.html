@@ -3,19 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Предпросмотр · День 1</title>
+  <title>Предпросмотр · День 1 · Кыргызстан 2026</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .preview-note{max-width:1100px;margin:24px auto 0;padding:16px 18px;border-radius:22px;background:#263c34;color:#fff8ec}
+    .preview-note p{margin:0;color:#eadcc7}
+    .backstage{margin-top:52px}
+    .backstage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .backstage-card{background:#fff8ec;border:1px solid rgba(22,22,20,.14);border-radius:22px;overflow:hidden}
+    .backstage-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+    .backstage-card p{margin:0;padding:12px 14px;color:#6e6559}
+    @media(max-width:700px){.backstage-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-  <main>
-    <section class="story">
-      <div class="story-head">
-        <p class="eyebrow">Предпросмотр</p>
-        <h2>День 1</h2>
-        <p>Черновик главы.</p>
+  <header class="hero">
+    <div class="hero__shade"></div>
+    <div class="hero__content">
+      <p class="kicker">Предпросмотр главы</p>
+      <h1>День 1</h1>
+      <p class="subtitle">От Баласагуна к подножию Тянь-Шаня</p>
+      <div class="hero__stats">
+        <span>Бишкек</span><span>Башня Бурана</span><span>Чон-Кемин</span><span>черновик</span>
       </div>
+    </div>
+  </header>
+
+  <div class="preview-note">
+    <p>Это скрытая страница предпросмотра. На основной сайт она не ведёт. После проверки перенесу главу на главную страницу.</p>
+  </div>
+
+  <main>
+    <section class="story" id="story-day-1">
+      <div class="story-head">
+        <p class="eyebrow">День 1 · 4 июля 2026</p>
+        <h2>От древнего Баласагуна к первой ночёвке в горах</h2>
+        <p>Первый день начался не с гор, а с памяти о городе, которого почти не видно. Башня Бурана стоит в открытой Чуйской долине, но когда-то рядом был Баласагун — важный город на Великом шёлковом пути. После Бураны дорога постепенно ушла к Чон-Кемину: от кирпича XI века и каменных изваяний — к широким долинам и вечерним горам.</p>
+        <div class="chapter-meta">
+          <span>Маршрут: Бишкек → Бурана → Чон-Кемин</span>
+          <span>Тема дня: история, степь и первый вечер у Тянь-Шаня</span>
+        </div>
+      </div>
+      <div id="storyPhotos" class="story-photos"></div>
+      <section class="backstage">
+        <div class="story-head">
+          <p class="eyebrow">За кадром</p>
+          <h2>Хорошие, но не основные кадры</h2>
+          <p>Эти фотографии не ведут рассказ, но сохраняют атмосферу дня и могут пригодиться для расширенной галереи.</p>
+        </div>
+        <div id="backstagePhotos" class="backstage-grid"></div>
+      </section>
     </section>
   </main>
+
+  <footer>Кыргызстан 2026 · предпросмотр главы</footer>
+
+  <script>
+    const CLOUD_NAME = 'tftagnuy';
+    const story = [
+      {publicId:'IMG20260704173627_e3pqlm', title:'Башня Бурана', text:'Сейчас она кажется одинокой башней среди полей, но это остаток большого средневекового города. Бурана сразу задаёт правильный тон путешествию: Кыргызстан здесь открывается не только природой, но и глубокой историей.'},
+      {publicId:'IMG20260704171835_lridzy', title:'Внутри башни', text:'Узкая лестница внутри Бураны — хороший момент, когда памятник перестаёт быть картинкой. Поднимаешься почти боком, чувствуешь толщину кладки и понимаешь, что это сооружение стоит здесь почти тысячу лет.'},
+      {publicId:'IMG20260704173337_jwlwky', title:'Кирпичные узоры', text:'У Бураны важно смотреть не только на силуэт, но и на детали. Орнаментальная кладка делает башню живой: это не просто древняя стена, а работа мастеров, которые думали и о прочности, и о красоте.'},
+      {publicId:'IMG20260704173240_zgkykq', title:'Ещё ближе к кладке', text:'На близком расстоянии башня читается почти как ткань: ритм кирпича, тени, неровности, следы времени. Такой кадр нужен, чтобы не потерять материальность места.'},
+      {publicId:'IMG20260704174039_v1gjfl', title:'Каменные стражи степи', text:'Балбалы — каменные изваяния тюркской эпохи. Их ставили как памятные знаки, часто в честь воинов и знатных людей. Рядом с Бураной они выглядят как отдельная галерея под открытым небом.'},
+      {publicId:'IMG20260704172715_rvc9qz', title:'Простор Чуйской долины', text:'С башни открывается широкий вид на долину: поля, деревья, дорога и дальние горы. Именно этот простор помогает представить, почему здесь проходили караванные пути.'},
+      {publicId:'IMG20260704195812_ueptsh', title:'Приехали на ночёвку', text:'После Бураны дорога меняет настроение. История остаётся позади, а впереди появляется Чон-Кемин — уже не просто точка маршрута, а первый вечер среди гор.'},
+      {publicId:'IMG20260704200919_uon8ky', title:'Финал первого дня', text:'К вечеру свет стал мягче, а долина — тише. Хороший финал первого дня: от древнего города и каменных стражей путь привёл к горам, где начинается следующая часть путешествия.'}
+    ];
+    const backstage = [
+      {publicId:'IMG20260704173138_wyqlyx', title:'Дополнительный кадр Бураны'},
+      {publicId:'IMG20260704200013_quoamh', title:'Дополнительная панорама Чон-Кемина'}
+    ];
+    function imageUrl(publicId, width = 1800){return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto,w_${width}/${publicId}.jpg`;}
+    function renderStoryItem(item, index){return `<article class="photo-story ${index === 0 ? 'photo-story--hero' : ''}"><img src="${imageUrl(item.publicId)}" alt="${item.title}" loading="${index === 0 ? 'eager' : 'lazy'}"><div class="photo-caption"><h3>${item.title}</h3><p>${item.text}</p></div></article>`;}
+    function renderBackstageItem(item){return `<article class="backstage-card"><img src="${imageUrl(item.publicId, 900)}" alt="${item.title}" loading="lazy"><p>${item.title}</p></article>`;}
+    document.querySelector('#storyPhotos').innerHTML = story.map(renderStoryItem).join('');
+    document.querySelector('#backstagePhotos').innerHTML = backstage.map(renderBackstageItem).join('');
+  </script>
 </body>
 </html>
