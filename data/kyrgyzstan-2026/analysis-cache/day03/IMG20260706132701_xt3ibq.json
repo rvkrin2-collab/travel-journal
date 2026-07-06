@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260706132701_xt3ibq",
+  "number": 10,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342481/IMG20260706132701_xt3ibq.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается широкая долина, окруженная зелеными холмами и горами, под облачным небом.",
+  "likely_subject": "долина",
+  "place_hints": [
+    "горы",
+    "пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и простор кыргызской долины.",
+  "editor_note": "Кадр передает атмосферу спокойствия и величия природы, что соответствует стилю журнала.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T13:11:10.047Z",
+  "model": "gpt-4o-mini"
+}

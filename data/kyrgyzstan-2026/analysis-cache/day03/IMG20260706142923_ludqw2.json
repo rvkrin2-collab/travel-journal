@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260706142923_ludqw2",
+  "number": 12,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342798/IMG20260706142923_ludqw2.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены овцы, пасущиеся на зелёном склоне горы под облачным небом.",
+  "likely_subject": "пастбище с овцами",
+  "place_hints": [
+    "горы",
+    "пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Пастбище, где овцы мирно пасутся под облачным небом.",
+  "editor_note": "Кадр хорошо передаёт атмосферу сельской жизни в горах Кыргызстана, добавляя контекст к рассказу о местной культуре.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T13:11:28.610Z",
+  "model": "gpt-4o-mini"
+}

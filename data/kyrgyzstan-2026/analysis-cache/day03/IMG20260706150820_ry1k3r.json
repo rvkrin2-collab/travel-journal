@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260706150820_ry1k3r",
+  "number": 16,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342894/IMG20260706150820_ry1k3r.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображён живописный водоём, окружённый зелёными лесами и горами. Спокойная атмосфера природы создаёт ощущение уединения.",
+  "likely_subject": "водоём",
+  "place_hints": [
+    "горы",
+    "лес",
+    "пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и гармония природы в сердце Кыргызстана.",
+  "editor_note": "Этот кадр подчеркивает красоту природного ландшафта, что соответствует стилю журнала.",
+  "needs_fact_check": [
+    "точное название водоёма"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T13:11:52.574Z",
+  "model": "gpt-4o-mini"
+}

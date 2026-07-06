@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260706161518_disv6m",
+  "number": 19,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342922/IMG20260706161518_disv6m.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена всадница на лошади, смотрящая на горные пейзажи под облачным небом.",
+  "likely_subject": "всадница на лошади",
+  "place_hints": [
+    "горы",
+    "пастбище"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Всадница на лошади, погруженная в величие гор.",
+  "editor_note": "Кадр передает атмосферу свободы и связи с природой, что соответствует теме путешествия.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T13:12:11.899Z",
+  "model": "gpt-4o-mini"
+}

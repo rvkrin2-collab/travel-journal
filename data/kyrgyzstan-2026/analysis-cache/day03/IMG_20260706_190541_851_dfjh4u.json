@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG_20260706_190541_851_dfjh4u",
+  "number": 22,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783343169/IMG_20260706_190541_851_dfjh4u.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии вид изнутри юрты с открытой дверью, через которую просматривается зелёный ландшафт за пределами.",
+  "likely_subject": "интерьер юрты",
+  "place_hints": [
+    "традиционное жилище киргизов",
+    "горные пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": true,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Взгляд из юрты на бескрайние пастбища.",
+  "editor_note": "Кадр передаёт атмосферу традиционного киргизского быта и связь с природой, что важно для общего повествования.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T13:12:27.776Z",
+  "model": "gpt-4o-mini"
+}

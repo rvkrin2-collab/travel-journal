@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260706130357_ijl8sb",
+  "number": 9,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342468/IMG20260706130357_ijl8sb.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены коровы, пасущиеся на зелёном пастбище, с горным ландшафтом на заднем плане.",
+  "likely_subject": "пастбище с коровами",
+  "place_hints": [
+    "горный ландшафт",
+    "пастбище"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 6,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Пастбище, где коровы мирно пасутся под облачным небом.",
+  "editor_note": "Кадр передаёт атмосферу сельской жизни в Кыргызстане и может служить иллюстрацией к рассказу о местной культуре.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T13:11:05.048Z",
+  "model": "gpt-4o-mini"
+}
