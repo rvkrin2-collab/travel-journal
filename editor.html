@@ -6,15 +6,7 @@
   <title>Редактор · Журнал путешествий</title>
   <meta name="robots" content="noindex,nofollow">
   <style>
-    :root{
-      --paper:#f3eadb;
-      --paper2:#fff8ec;
-      --ink:#161614;
-      --muted:#6e6559;
-      --bronze:#a76b3d;
-      --green:#263c34;
-      --line:rgba(22,22,20,.16);
-    }
+    :root{--paper:#f3eadb;--paper2:#fff8ec;--ink:#161614;--muted:#6e6559;--bronze:#a76b3d;--green:#263c34;--line:rgba(22,22,20,.16)}
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);line-height:1.5}
     header{padding:34px 18px 22px;max-width:1240px;margin:0 auto}
@@ -30,58 +22,66 @@
     .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
     button,.file-button,a.button{border:0;border-radius:999px;padding:11px 15px;background:#fff8ec;color:#1d1b17;font-weight:800;cursor:pointer;font:inherit;font-size:14px;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
     button.secondary,.file-button.secondary,a.button.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.28)}
-    #importFile{display:none}
-    .save-note{font-size:13px;color:#eadcc7;margin-top:10px;min-height:20px}
+    #importFile{display:none}.save-note{font-size:13px;color:#eadcc7;margin-top:10px;min-height:20px}
+    .chapter-box{background:#fff8ec;border:1px solid var(--line);border-radius:24px;padding:18px;margin:0 0 22px}
+    .chapter-box h2{font-family:Georgia,"Times New Roman",serif;font-size:32px;letter-spacing:-.03em;margin:0 0 10px}
+    .chapter-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.chapter-fields .wide{grid-column:1/-1}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
     .card{background:var(--paper2);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 16px 42px rgba(73,55,37,.09)}
     .thumb{aspect-ratio:4/3;background:#ddd;display:block;width:100%;object-fit:cover}
-    .info{padding:14px 14px 16px}
-    .topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .info{padding:14px 14px 16px}.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
     .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--bronze);color:white;font-weight:800;flex:0 0 auto}
     .shape{font-size:12px;color:var(--muted);background:#f1e2cf;border:1px solid var(--line);border-radius:999px;padding:6px 9px;white-space:nowrap}
     .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#5f5549;word-break:break-all;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0 0}
-    .hint{font-size:14px;color:var(--muted);margin:8px 0 0}
-    .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
-    .choice{display:flex;align-items:center;gap:7px;font-size:13px;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer}
-    .choice input{accent-color:var(--bronze)}
+    .hint{font-size:14px;color:var(--muted);margin:8px 0 0}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+    .choice{display:flex;align-items:center;gap:7px;font-size:13px;background:#f1e2cf;border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer}.choice input{accent-color:var(--bronze)}
     input[type="text"],textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:#fffaf0;padding:10px;margin-top:8px;font:inherit;font-size:14px;color:var(--ink)}
-    textarea{min-height:76px;resize:vertical}
-    footer{padding:22px 18px;text-align:center;color:var(--muted)}
-    @media(max-width:920px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    textarea{min-height:76px;resize:vertical}.chapter-box textarea{min-height:92px}footer{padding:22px 18px;text-align:center;color:var(--muted)}
+    @media(max-width:920px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chapter-fields{grid-template-columns:1fr}}
     @media(max-width:580px){.grid{grid-template-columns:1fr}header{padding-top:24px}.tools{border-radius:22px}.card{border-radius:20px}.choices{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <header>
-    <p class="eyebrow">Редакторская версия · скрытая страница</p>
+    <p class="eyebrow">Авторский редактор · скрытая страница</p>
     <h1 id="pageTitle">Черновик</h1>
-    <p class="lead" id="pageLead">Здесь собраны фотографии дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.</p>
+    <p class="lead" id="pageLead">ИИ уже сделал предварительный отбор. Здесь автор правит статусы, подписи и логику главы. Экспортированный JSON становится авторским решением.</p>
     <div class="status">
-      <span>🟢 День загружен</span>
-      <span>🟡 Фото сортируются</span>
-      <span>⚪ Текст уточняется</span>
-      <span>⚪ Финальная публикация после отбора</span>
+      <span>🟢 Фото загружены</span><span>🟡 ИИ-предзаполнение</span><span>🟠 Авторский отбор</span><span>⚪ Финальная глава после экспорта</span>
     </div>
   </header>
-
   <main>
     <section class="tools">
       <h2>Редакторский пакет</h2>
-      <p id="sourceNote">Выбери статус каждого кадра, подпиши что на фото, добавь заметку. Кнопка «Сохранить» держит всё в этом браузере. Кнопка «Экспорт» скачивает JSON — его можно прислать мне сюда.</p>
+      <p id="sourceNote">Страница загружает фото и предварительный <b>ai-review</b>. Исправь выбор, подписи и заметки, затем экспортируй <b>author-review</b> и пришли мне JSON.</p>
       <div class="actions">
         <button id="saveBtn">💾 Сохранить</button>
-        <button id="exportBtn">📤 Экспорт JSON</button>
+        <button id="exportBtn">📤 Экспорт author-review JSON</button>
         <label class="file-button secondary" for="importFile">📥 Импорт JSON</label>
         <input id="importFile" type="file" accept="application/json,.json">
         <a id="contactSheetLink" class="button secondary" href="contact-sheet.html">🖼 Контактный лист</a>
+        <a id="previewLink" class="button secondary" href="preview.html">👁 Preview</a>
+        <button id="reloadAiBtn" class="secondary">↩️ Вернуть ИИ-отбор</button>
         <button id="clearBtn" class="secondary">🧹 Очистить</button>
       </div>
       <div id="saveNote" class="save-note"></div>
     </section>
 
+    <section class="chapter-box">
+      <p class="eyebrow">Идея главы</p>
+      <h2>Авторская правка текста</h2>
+      <div class="chapter-fields">
+        <label>Название<input id="chapterTitleInput" type="text" data-chapter="title"></label>
+        <label>Подзаголовок<input id="chapterSubtitleInput" type="text" data-chapter="subtitle"></label>
+        <label>Тема<input id="chapterThemeInput" type="text" data-chapter="theme"></label>
+        <label>Маршрут / проверка<input id="chapterRouteInput" type="text" data-chapter="route_note"></label>
+        <label class="wide">Центральная мысль<textarea id="chapterThoughtInput" data-chapter="central_thought"></textarea></label>
+        <label class="wide">Вступление<textarea id="chapterIntroInput" data-chapter="intro"></textarea></label>
+      </div>
+    </section>
+
     <section id="grid" class="grid"></section>
   </main>
-
   <footer id="footerText">Редакторская доска</footer>
 
   <script>
@@ -89,75 +89,51 @@
     const trip = cleanSegment(params.get('trip') || 'kyrgyzstan-2026', 'kyrgyzstan-2026');
     const day = normalizeDay(params.get('day') || params.get('day_tag') || 'day02');
     const photoPath = `data/${trip}/${day}-photos.json`;
-    const DAY_KEY = `${trip}-${day}-review`;
+    const aiReviewPath = `data/${trip}/${day}-ai-review.json`;
+    const legacyReviewPath = `data/${trip}/${day}-review.json`;
+    const DAY_KEY = `${trip}-${day}-author-review`;
 
     const grid = document.querySelector('#grid');
     const saveNote = document.querySelector('#saveNote');
     const pageTitle = document.querySelector('#pageTitle');
     const pageLead = document.querySelector('#pageLead');
-    const sourceNote = document.querySelector('#sourceNote');
     const footerText = document.querySelector('#footerText');
     const contactSheetLink = document.querySelector('#contactSheetLink');
+    const previewLink = document.querySelector('#previewLink');
     let photos = [];
+    let aiReview = null;
 
-    function cleanSegment(value, fallback){
-      const cleaned = String(value || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
-      return cleaned || fallback;
-    }
+    function cleanSegment(value, fallback){const cleaned = String(value || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');return cleaned || fallback;}
+    function normalizeDay(value){const raw = String(value || '').trim().toLowerCase();const number = raw.match(/\d+/);if(number) return `day${String(Number(number[0])).padStart(2, '0')}`;return cleanSegment(raw, 'day02');}
+    function dayLabel(dayTag){const number = dayTag.match(/\d+/)?.[0];return number ? `Day ${String(Number(number)).padStart(2, '0')}` : dayTag;}
+    function imageUrl(url){return url.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_900/');}
+    function setNote(text){saveNote.textContent = text;window.clearTimeout(setNote.timer);setNote.timer = window.setTimeout(() => saveNote.textContent = '', 4500);}
 
-    function normalizeDay(value){
-      const raw = String(value || '').trim().toLowerCase();
-      const number = raw.match(/\d+/);
-      if(number) return `day${String(Number(number[0])).padStart(2, '0')}`;
-      return cleanSegment(raw, 'day02');
-    }
+    async function loadJsonIfExists(path){const response = await fetch(path, {cache:'no-store'});if(!response.ok) return null;return response.json();}
+    function savedReview(){try{return JSON.parse(localStorage.getItem(DAY_KEY) || '{}');}catch(error){return {};}}
 
-    function dayLabel(dayTag){
-      const number = dayTag.match(/\d+/)?.[0];
-      return number ? `Day ${String(Number(number)).padStart(2, '0')}` : dayTag;
-    }
-
-    function imageUrl(url){
-      return url.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_900/');
-    }
-
-    function savedReview(){
-      try{
-        return JSON.parse(localStorage.getItem(DAY_KEY) || '{}');
-      }catch(error){
-        return {};
-      }
-    }
-
-    function setNote(text){
-      saveNote.textContent = text;
-      window.clearTimeout(setNote.timer);
-      setNote.timer = window.setTimeout(() => saveNote.textContent = '', 3500);
+    function getChapterData(){
+      const chapter = {};
+      document.querySelectorAll('[data-chapter]').forEach(input => chapter[input.dataset.chapter] = input.value.trim());
+      chapter.fact_checks = aiReview?.chapter?.fact_checks || [];
+      chapter.eyebrow = aiReview?.chapter?.eyebrow || dayLabel(day);
+      return chapter;
     }
 
     function getCardData(card){
       const publicId = card.dataset.publicId;
       const selected = card.querySelector('input[type="radio"]:checked');
-      return {
-        public_id: publicId,
-        number: Number(card.dataset.number),
-        status: selected ? selected.value : '',
-        label: card.querySelector('[data-field="label"]').value.trim(),
-        note: card.querySelector('[data-field="note"]').value.trim()
-      };
+      return {public_id: publicId, number: Number(card.dataset.number), status: selected ? selected.value : '', label: card.querySelector('[data-field="label"]').value.trim(), note: card.querySelector('[data-field="note"]').value.trim()};
     }
 
     function collectReview(){
-      return {
-        trip,
-        day,
-        photos_source: photoPath,
-        updated_at: new Date().toISOString(),
-        items: Array.from(document.querySelectorAll('.card')).map(getCardData)
-      };
+      return {trip, day, photos_source: photoPath, ai_review_source: aiReviewPath, status: 'author_review', updated_at: new Date().toISOString(), chapter: getChapterData(), items: Array.from(document.querySelectorAll('.card')).map(getCardData)};
     }
 
     function applyReview(review){
+      if(review.chapter){
+        document.querySelectorAll('[data-chapter]').forEach(input => input.value = review.chapter[input.dataset.chapter] || '');
+      }
       const byId = new Map((review.items || []).map(item => [item.public_id, item]));
       document.querySelectorAll('.card').forEach(card => {
         const item = byId.get(card.dataset.publicId);
@@ -169,107 +145,45 @@
       });
     }
 
-    function saveReview(){
-      localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
-      setNote('Сохранено в этом браузере. Можно закрыть страницу и вернуться позже.');
-    }
-
+    function saveReview(){localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));setNote('Сохранено в этом браузере. Это ещё не GitHub — экспортируй JSON и пришли мне.');}
     function exportReview(){
       const review = collectReview();
       localStorage.setItem(DAY_KEY, JSON.stringify(review, null, 2));
       const blob = new Blob([JSON.stringify(review, null, 2)], {type:'application/json'});
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${day}-review.json`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(link.href);
-      setNote('JSON скачан. Его можно прислать мне в чат.');
+      const link = document.createElement('a');link.href = URL.createObjectURL(blob);link.download = `${day}-author-review.json`;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(link.href);
+      setNote('author-review JSON скачан. Пришли его мне, и я соберу final-review и preview.');
     }
-
-    function clearReview(){
-      if(!confirm(`Очистить все отметки и заметки для ${dayLabel(day)} в этом браузере?`)) return;
-      localStorage.removeItem(DAY_KEY);
-      document.querySelectorAll('.card input[type="radio"]').forEach(input => input.checked = input.value === 'unset');
-      document.querySelectorAll('input[type="text"], textarea').forEach(input => input.value = '');
-      setNote('Очищено.');
-    }
-
-    async function importReview(file){
-      const text = await file.text();
-      const review = JSON.parse(text);
-      applyReview(review);
-      localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
-      setNote('Импортировано и сохранено в браузере.');
-    }
-
-    function photoShape(photo){
-      if(!photo.width || !photo.height) return '';
-      if(photo.height > photo.width) return 'вертикальный';
-      if(photo.width > photo.height) return 'горизонтальный';
-      return 'квадратный';
-    }
+    function clearReview(){if(!confirm(`Очистить авторские правки для ${dayLabel(day)} в этом браузере?`)) return;localStorage.removeItem(DAY_KEY);applyReview(aiReview || {items:[]});setNote('Авторские правки очищены. Возвращён ИИ-отбор.');}
+    async function importReview(file){const text = await file.text();const review = JSON.parse(text);applyReview(review);localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));setNote('Импортировано и сохранено в браузере.');}
+    function reloadAiReview(){if(!aiReview) return setNote('ИИ-отбор не найден.');if(!confirm('Вернуть ИИ-предзаполнение и затереть текущие поля на странице?')) return;applyReview(aiReview);setNote('ИИ-отбор возвращён.');}
+    function photoShape(photo){if(!photo.width || !photo.height) return '';if(photo.height > photo.width) return 'вертикальный';if(photo.width > photo.height) return 'горизонтальный';return 'квадратный';}
 
     function renderCard(photo, index){
-      const num = index + 1;
-      const shape = photoShape(photo);
-      return `
-        <article class="card" data-public-id="${photo.public_id}" data-number="${num}">
-          <img class="thumb" src="${imageUrl(photo.url)}" alt="Фото ${num}" loading="lazy">
-          <div class="info">
-            <div class="topline">
-              <div class="num">${num}</div>
-              ${shape ? `<div class="shape">${shape}</div>` : ''}
-            </div>
-            <div class="id">${photo.public_id}</div>
-            <div class="choices">
-              <label class="choice"><input type="radio" name="status-${num}" value="hero">⭐ Главное</label>
-              <label class="choice"><input type="radio" name="status-${num}" value="story">✅ В рассказ</label>
-              <label class="choice"><input type="radio" name="status-${num}" value="backstage">📦 За кадром</label>
-              <label class="choice"><input type="radio" name="status-${num}" value="skip">❌ Не использовать</label>
-              <label class="choice"><input type="radio" name="status-${num}" value="unset" checked>⚪ Не выбрано</label>
-            </div>
-            <p class="hint">Что на фото?</p>
-            <input data-field="label" type="text" placeholder="Например: перевал / дорога / юрты / ущелье">
-            <p class="hint">Что важно рассказать</p>
-            <textarea data-field="note" placeholder="Например: оставить главным, хороший переход между сценами, проверить название места..."></textarea>
-          </div>
-        </article>
-      `;
+      const num = index + 1;const shape = photoShape(photo);
+      return `<article class="card" data-public-id="${photo.public_id}" data-number="${num}">
+        <img class="thumb" src="${imageUrl(photo.url)}" alt="Фото ${num}" loading="lazy"><div class="info"><div class="topline"><div class="num">${num}</div>${shape ? `<div class="shape">${shape}</div>` : ''}</div><div class="id">${photo.public_id}</div>
+        <div class="choices"><label class="choice"><input type="radio" name="status-${num}" value="hero">⭐ Главное</label><label class="choice"><input type="radio" name="status-${num}" value="story">✅ В рассказ</label><label class="choice"><input type="radio" name="status-${num}" value="backstage">📦 За кадром</label><label class="choice"><input type="radio" name="status-${num}" value="skip">❌ Не использовать</label><label class="choice"><input type="radio" name="status-${num}" value="unset" checked>⚪ Не выбрано</label></div>
+        <p class="hint">Что на фото?</p><input type="text" data-field="label" placeholder="Например: Иссык-Куль после каньона"><p class="hint">Что важно рассказать</p><textarea data-field="note" placeholder="Зачем этот кадр нужен истории дня?"></textarea></div></article>`;
     }
 
     async function init(){
-      pageTitle.textContent = `Черновик ${dayLabel(day)}`;
-      footerText.textContent = `Редакторская доска · ${trip} · ${dayLabel(day)}`;
-      contactSheetLink.href = `contact-sheet.html?trip=${encodeURIComponent(trip)}&day=${encodeURIComponent(day)}`;
-      try{
-        const response = await fetch(photoPath, {cache:'no-store'});
-        if(!response.ok) throw new Error(`HTTP ${response.status}`);
-        photos = await response.json();
-        pageLead.textContent = `Эта страница не связана с основным сайтом. Здесь собраны все ${photos.length} фотографий дня, чтобы выбрать сильные кадры и точно сопоставить фото с подписью.`;
-        sourceNote.textContent = `Источник фотографий: ${photoPath}. Выбери статус каждого кадра, подпиши что на фото, добавь заметку. Кнопка «Экспорт» скачивает JSON — его можно прислать мне сюда.`;
-        grid.innerHTML = photos.map(renderCard).join('');
-        applyReview(savedReview());
-        document.querySelectorAll('input, textarea').forEach(input => input.addEventListener('change', saveReview));
-        document.querySelectorAll('textarea, input[type="text"]').forEach(input => input.addEventListener('input', () => {
-          localStorage.setItem(DAY_KEY, JSON.stringify(collectReview(), null, 2));
-        }));
-      }catch(error){
-        grid.innerHTML = `<p>Не удалось загрузить ${photoPath}</p>`;
-      }
+      pageTitle.textContent = `${dayLabel(day)} · ${trip}`;footerText.textContent = `${trip} · ${dayLabel(day)} · author-review`;contactSheetLink.href = `contact-sheet.html?trip=${trip}&day=${day}`;previewLink.href = `preview.html?trip=${trip}&day=${day}`;
+      photos = await loadJsonIfExists(photoPath);
+      if(!Array.isArray(photos)) throw new Error(`Не удалось загрузить ${photoPath}`);
+      aiReview = await loadJsonIfExists(aiReviewPath) || await loadJsonIfExists(legacyReviewPath) || {items:[], chapter:{}};
+      grid.innerHTML = photos.map(renderCard).join('');
+      applyReview(aiReview);
+      const saved = savedReview();
+      if(saved.items?.length || saved.chapter) applyReview(saved);
+      pageLead.textContent = aiReview?.status ? `Загружено предзаполнение: ${aiReview.status}. Теперь это авторский отбор.` : 'ИИ-предзаполнение не найдено. Можно разметить вручную.';
     }
 
     document.querySelector('#saveBtn').addEventListener('click', saveReview);
     document.querySelector('#exportBtn').addEventListener('click', exportReview);
     document.querySelector('#clearBtn').addEventListener('click', clearReview);
-    document.querySelector('#importFile').addEventListener('change', event => {
-      const file = event.target.files[0];
-      if(file) importReview(file).catch(() => setNote('Не удалось импортировать JSON.'));
-      event.target.value = '';
-    });
-
-    init();
+    document.querySelector('#reloadAiBtn').addEventListener('click', reloadAiReview);
+    document.querySelector('#importFile').addEventListener('change', event => {const file = event.target.files?.[0];if(file) importReview(file).catch(error => setNote(`Ошибка импорта: ${error.message}`));});
+    init().catch(error => {grid.innerHTML = `<div class="card"><div class="info">Ошибка: ${error.message}</div></div>`;});
   </script>
 </body>
 </html>
