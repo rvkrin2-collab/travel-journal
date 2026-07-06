@@ -1,0 +1,66 @@
+name: Build editorial review
+
+on:
+  workflow_dispatch:
+    inputs:
+      trip:
+        description: "Canonical trip id. Example: kyrgyzstan-2026"
+        required: true
+        default: "kyrgyzstan-2026"
+      day_tag:
+        description: "Day tag. Example: day02"
+        required: true
+        default: "day02"
+      model:
+        description: "OpenAI text model for editorial review"
+        required: false
+        default: "gpt-4o-mini"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: editorial-review-${{ github.event.inputs.trip }}-${{ github.event.inputs.day_tag }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Sync with latest main
+        run: |
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build editorial review
+        run: node build-review.mjs
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_TEXT_MODEL: ${{ github.event.inputs.model }}
+          TRIP: ${{ github.event.inputs.trip }}
+          DAY_TAG: ${{ github.event.inputs.day_tag }}
+
+      - name: Commit review
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "Build editorial review for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          git push origin HEAD:main
