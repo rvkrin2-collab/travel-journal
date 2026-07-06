@@ -70,6 +70,8 @@ jobs:
           DAY_TAG: ${{ github.event.inputs.day_tag }}
           IN_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-photos.json
           OUT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
+          DAY_CONTEXT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-author-notes.json
+          CACHE_DIR: data/${{ github.event.inputs.trip }}/analysis-cache/${{ github.event.inputs.day_tag }}-author-context-v2
 
       - name: Commit photo data and analysis
         run: |
