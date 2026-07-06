@@ -1,4 +1,4 @@
-name: Build editorial review
+name: Build AI review
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
         required: true
         default: "day02"
       model:
-        description: "OpenAI text model for editorial review"
+        description: "OpenAI text model for AI prefilled review"
         required: false
         default: "gpt-4o-mini"
 
@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: editorial-review-${{ github.event.inputs.trip }}-${{ github.event.inputs.day_tag }}
+  group: ai-review-${{ github.event.inputs.trip }}-${{ github.event.inputs.day_tag }}
   cancel-in-progress: false
 
 jobs:
@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build editorial review
+      - name: Build AI review
         run: node build-review.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -53,7 +53,7 @@ jobs:
           TRIP: ${{ github.event.inputs.trip }}
           DAY_TAG: ${{ github.event.inputs.day_tag }}
 
-      - name: Commit review
+      - name: Commit AI review
         run: |
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
@@ -62,5 +62,5 @@ jobs:
             echo "No changes"
             exit 0
           fi
-          git commit -m "Build editorial review for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          git commit -m "Build AI review for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
           git push origin HEAD:main
