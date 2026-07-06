@@ -12,7 +12,7 @@ on:
         required: true
         default: "day01"
       analyze:
-        description: "Run AI photo analysis after sync"
+        description: "Run AI photo analysis after sync, only if author notes exist"
         required: false
         type: boolean
         default: true
@@ -60,8 +60,22 @@ jobs:
           DAY_TAG: ${{ github.event.inputs.day_tag }}
           OUT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-photos.json
 
+      - name: Check author notes
+        id: author_notes
+        run: |
+          AUTHOR_NOTES="data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-author-notes.json"
+          echo "author_notes_file=$AUTHOR_NOTES" >> "$GITHUB_OUTPUT"
+          if [ -f "$AUTHOR_NOTES" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Author notes found: $AUTHOR_NOTES"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Author notes missing: $AUTHOR_NOTES"
+            echo "Photo sync will be committed, but AI analysis is intentionally skipped."
+          fi
+
       - name: Analyze photos
-        if: ${{ github.event.inputs.analyze != 'false' }}
+        if: ${{ github.event.inputs.analyze != 'false' && steps.author_notes.outputs.exists == 'true' }}
         run: node analyze-photos.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -73,6 +87,12 @@ jobs:
           DAY_CONTEXT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-author-notes.json
           CACHE_DIR: data/${{ github.event.inputs.trip }}/analysis-cache/${{ github.event.inputs.day_tag }}-author-context-v2
 
+      - name: Explain skipped analysis
+        if: ${{ github.event.inputs.analyze != 'false' && steps.author_notes.outputs.exists != 'true' }}
+        run: |
+          echo "AI analysis skipped because author notes are missing."
+          echo "Create data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-author-notes.json first, then rerun this workflow."
+
       - name: Commit photo data and analysis
         run: |
           git config user.name "travel-journal-bot"
@@ -82,5 +102,9 @@ jobs:
             echo "No changes"
             exit 0
           fi
-          git commit -m "Sync and analyze Cloudinary photos for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          if [ "${{ steps.author_notes.outputs.exists }}" = "true" ] && [ "${{ github.event.inputs.analyze }}" != "false" ]; then
+            git commit -m "Sync and analyze Cloudinary photos for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          else
+            git commit -m "Sync Cloudinary photos for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          fi
           git push origin HEAD:main
