@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705094951_mjycuo",
+  "number": 2,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242591/IMG20260705094951_mjycuo.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображен живописный пейзаж с коровами на зеленом лугу, окруженном горами и облаками на фоне ясного неба.",
+  "likely_subject": "пейзаж с коровами",
+  "place_hints": [
+    "горная местность",
+    "сельская местность"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Спокойствие сельской жизни на фоне величественных гор.",
+  "editor_note": "Этот кадр подчеркивает связь человека с природой и может служить иллюстрацией к рассказу о жизни в горах.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "вид коров и их порода"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.351Z",
+  "model": "gpt-4o-mini"
+}

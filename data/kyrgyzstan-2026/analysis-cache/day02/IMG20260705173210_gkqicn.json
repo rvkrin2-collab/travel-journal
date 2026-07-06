@@ -1,0 +1,37 @@
+{
+  "public_id": "IMG20260705173210_gkqicn",
+  "number": 19,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783309084/IMG20260705173210_gkqicn.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается панорама спокойного водоема, на фоне которого виднеются заснеженные горные вершины под ясным небом.",
+  "likely_subject": "водоем с горным пейзажем",
+  "place_hints": [
+    "горы",
+    "водоем",
+    "возможно, регион с высокими горами"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 9,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина водоема и величие гор создают атмосферу умиротворения.",
+  "editor_note": "Этот кадр важен для передачи чувства спокойствия и величия природы, что соответствует стилю журнала.",
+  "needs_fact_check": [
+    "точное местоположение водоема",
+    "идентификация гор на заднем плане"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T03:40:23.847Z",
+  "model": "gpt-4o-mini"
+}

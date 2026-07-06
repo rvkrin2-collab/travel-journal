@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705114210_uvlrvy",
+  "number": 4,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242592/IMG20260705114210_uvlrvy.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображено яркое поле с желтыми цветами, простирающееся до горизонта, на фоне зеленых холмов и ясного голубого неба.",
+  "likely_subject": "желтое цветочное поле",
+  "place_hints": [
+    "возможно, сельская местность",
+    "горные районы"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 6,
+  "emotional_score": 7,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Цветы, расцветающие под ясным небом.",
+  "editor_note": "Этот кадр добавляет визуальную глубину и атмосферу спокойствия, подчеркивая красоту природы.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "вид цветущих растений"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.352Z",
+  "model": "gpt-4o-mini"
+}

@@ -1,0 +1,37 @@
+{
+  "public_id": "IMG20260705094857_heww7i",
+  "number": 5,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242592/IMG20260705094857_heww7i.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображен живописный горный пейзаж с зелеными холмами и снежными вершинами на фоне ясного голубого неба.",
+  "likely_subject": "горный пейзаж",
+  "place_hints": [
+    "горы",
+    "природа",
+    "возможно, Центральная Азия"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Гармония природы в горах.",
+  "editor_note": "Этот кадр подчеркивает красоту и спокойствие природы, что важно для создания атмосферы путешествия.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "время года"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.352Z",
+  "model": "gpt-4o-mini"
+}

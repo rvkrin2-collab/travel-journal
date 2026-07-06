@@ -1,0 +1,34 @@
+{
+  "public_id": "IMG20260705140322_qvzf9a",
+  "number": 10,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242646/IMG20260705140322_qvzf9a.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается живописный пейзаж с зелеными холмами и фиолетовыми цветами, под ярким голубым небом. Вдали виднеются горы, создающие ощущение глубины и простора.",
+  "likely_subject": "пейзаж с цветами",
+  "place_hints": [
+    "возможно, регион с лавандами или подобными растениями"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": true,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и красота природы в каждом цветке.",
+  "editor_note": "Этот кадр подчеркивает красоту природы и может служить фоном для рассказа о путешествии по живописным местам.",
+  "needs_fact_check": [
+    "точное местоположение и название растений на фотографии"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.354Z",
+  "model": "gpt-4o-mini"
+}

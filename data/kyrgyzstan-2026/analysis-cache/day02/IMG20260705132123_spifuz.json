@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705132123_spifuz",
+  "number": 6,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242620/IMG20260705132123_spifuz.jpg",
+  "width": 3264,
+  "height": 2448,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены красные скалы с характерными формами, под ярким голубым небом. Свет и тени создают интересные текстуры на поверхности.",
+  "likely_subject": "скалы",
+  "place_hints": [
+    "пустынный или горный регион",
+    "возможно, Южная Америка"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Природа создает уникальные формы в красных скалах.",
+  "editor_note": "Кадр подчеркивает красоту природных форм, что важно для визуального повествования о путешествии.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "геологические особенности региона"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.352Z",
+  "model": "gpt-4o-mini"
+}

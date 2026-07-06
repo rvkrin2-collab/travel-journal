@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705094857_qeyyzt",
+  "number": 1,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783227473/IMG20260705094857_qeyyzt.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается живописный горный пейзаж с зелеными холмами и снежными вершинами на горизонте. Яркое небо с облаками дополняет атмосферу спокойствия.",
+  "likely_subject": "горный пейзаж",
+  "place_hints": [
+    "горы",
+    "возможно, регион с альпийским климатом"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина гор, где природа говорит сама за себя.",
+  "editor_note": "Этот кадр важен для передачи величия природы и спокойствия, что соответствует стилю журнала.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "время года"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.350Z",
+  "model": "gpt-4o-mini"
+}

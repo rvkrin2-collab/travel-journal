@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260705192128_uq69oz",
+  "number": 20,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783309089/IMG20260705192128_uq69oz.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии видно спокойное море на фоне величественных снежных гор. Чистое небо создает ощущение безмятежности и простора.",
+  "likely_subject": "горный пейзаж",
+  "place_hints": [
+    "возможно, горы Тянь-Шаня или аналогичный регион"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и величие гор, отраженные в спокойных водах.",
+  "editor_note": "Этот кадр подчеркивает красоту природы и создает атмосферу спокойствия, что важно для общего повествования.",
+  "needs_fact_check": [
+    "точное местоположение гор",
+    "состояние экологии региона"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-06T03:40:29.121Z",
+  "model": "gpt-4o-mini"
+}

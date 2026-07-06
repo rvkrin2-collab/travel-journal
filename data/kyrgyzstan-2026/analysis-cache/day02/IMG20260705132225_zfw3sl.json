@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705132225_zfw3sl",
+  "number": 13,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242658/IMG20260705132225_zfw3sl.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены высокие скалы с характерной текстурой, создающие впечатление величия и древности. Яркое небо контрастирует с теплыми оттенками земли.",
+  "likely_subject": "скалы",
+  "place_hints": [
+    "пустынная местность",
+    "возможно, геологически интересный регион"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Величие природы, запечатленное в скалах.",
+  "editor_note": "Кадр подчеркивает природную красоту и геологическую уникальность региона, что важно для общего повествования.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "геологические особенности скал"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.355Z",
+  "model": "gpt-4o-mini"
+}

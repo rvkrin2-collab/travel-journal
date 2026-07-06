@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG_20260705_151344_239_baqwsa",
+  "number": 17,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242952/IMG_20260705_151344_239_baqwsa.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены три лошади, пасущиеся на зелёном лугу с горным пейзажем на заднем плане.",
+  "likely_subject": "лошади",
+  "place_hints": [
+    "горный регион",
+    "возможно, Центральная Азия"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Лошади на зелёных склонах гор.",
+  "editor_note": "Кадр добавляет атмосферу спокойствия и связи с природой, что соответствует стилю журнала.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "информация о породах лошадей"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.356Z",
+  "model": "gpt-4o-mini"
+}

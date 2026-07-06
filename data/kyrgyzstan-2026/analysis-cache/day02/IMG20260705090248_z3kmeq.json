@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705090248_z3kmeq",
+  "number": 12,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242652/IMG20260705090248_z3kmeq.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены лошади на пастбище, а также человек, ухаживающий за одной из них. На заднем плане видны горы и постройки.",
+  "likely_subject": "лошади",
+  "place_hints": [
+    "горная местность",
+    "сельская местность"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Уход за лошадьми в горной деревне.",
+  "editor_note": "Кадр подчеркивает связь человека и природы, что важно для рассказа о местной культуре.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "идентификация лошадей"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.355Z",
+  "model": "gpt-4o-mini"
+}

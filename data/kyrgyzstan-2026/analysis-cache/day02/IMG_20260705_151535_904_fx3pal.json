@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG_20260705_151535_904_fx3pal",
+  "number": 15,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242952/IMG_20260705_151535_904_fx3pal.jpg",
+  "width": 1280,
+  "height": 960,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображено широкое поле с ярко-желтыми цветами, простирающееся до подножия холмов под ясным голубым небом.",
+  "likely_subject": "желтое цветочное поле",
+  "place_hints": [
+    "возможно, сельская местность",
+    "горные районы"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Поле желтых цветов, усыпанное солнечным светом.",
+  "editor_note": "Этот кадр создает атмосферу спокойствия и красоты природы, что важно для общего повествования о путешествии.",
+  "needs_fact_check": [
+    "точное местоположение поля",
+    "сезон цветения растений"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.356Z",
+  "model": "gpt-4o-mini"
+}

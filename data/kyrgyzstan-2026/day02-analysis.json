@@ -2,8 +2,14 @@
   "trip": "kyrgyzstan-2026",
   "day": "day02",
   "photos_source": "data/kyrgyzstan-2026/day02-photos.json",
-  "generated_at": "2026-07-05T13:29:44.881Z",
+  "cache_dir": "data/kyrgyzstan-2026/analysis-cache/day02",
+  "generated_at": "2026-07-06T03:40:29.121Z",
   "model": "gpt-4o-mini",
+  "cache_stats": {
+    "reused_from_cache": 0,
+    "reused_from_previous_day_analysis": 17,
+    "analyzed_new": 3
+  },
   "items": [
     {
       "public_id": "IMG20260705094857_qeyyzt",
@@ -36,7 +42,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "время года"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.350Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705094951_mjycuo",
@@ -69,7 +78,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "вид коров и их порода"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.351Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705094749_olnhtj",
@@ -102,7 +114,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "состояние лошадей"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.351Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705114210_uvlrvy",
@@ -135,7 +150,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "вид цветущих растений"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.352Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705094857_heww7i",
@@ -169,7 +187,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "время года"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.352Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705132123_spifuz",
@@ -202,7 +223,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "геологические особенности региона"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.352Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705133547_vv9vo7",
@@ -235,7 +259,10 @@
       "needs_fact_check": [
         "точное местоположение скал",
         "информация о геологическом составе"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.352Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705094904_p2hbf6",
@@ -268,7 +295,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "время года"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.353Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705135150_hxiixy",
@@ -301,7 +331,10 @@
       "needs_fact_check": [
         "точное местоположение каньона",
         "информация о флоре и фауне в этом регионе"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.354Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705140322_qvzf9a",
@@ -332,7 +365,10 @@
       "editor_note": "Этот кадр подчеркивает красоту природы и может служить фоном для рассказа о путешествии по живописным местам.",
       "needs_fact_check": [
         "точное местоположение и название растений на фотографии"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.354Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705135108_x3ng6u",
@@ -365,7 +401,10 @@
       "needs_fact_check": [
         "точное местоположение каньона",
         "информация о растительности в этом регионе"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.355Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705090248_z3kmeq",
@@ -398,7 +437,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "идентификация лошадей"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.355Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG20260705132225_zfw3sl",
@@ -431,7 +473,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "геологические особенности скал"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.355Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG_20260705_151341_391_ac4rxq",
@@ -464,7 +509,10 @@
       "needs_fact_check": [
         "точное местоположение",
         "состояние лошади"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.355Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG_20260705_151535_904_fx3pal",
@@ -497,7 +545,10 @@
       "needs_fact_check": [
         "точное местоположение поля",
         "сезон цветения растений"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.356Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG_20260705_151531_201_y9kbiz",
@@ -531,7 +582,10 @@
       "needs_fact_check": [
         "точное местоположение съемки",
         "информация о лошадях"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.356Z",
+      "model": "gpt-4o-mini"
     },
     {
       "public_id": "IMG_20260705_151344_239_baqwsa",
@@ -564,32 +618,150 @@
       "needs_fact_check": [
         "точное местоположение",
         "информация о породах лошадей"
-      ]
+      ],
+      "analysis_source": "previous-day-analysis",
+      "analyzed_at": "2026-07-06T03:40:11.356Z",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "public_id": "IMG20260705203320_aqvyyq",
+      "number": 18,
+      "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783309082/IMG20260705203320_aqvyyq.jpg",
+      "width": 3072,
+      "height": 4096,
+      "orientation": "vertical",
+      "visual_summary": "На фотографии спокойная поверхность воды, отражающая нежные оттенки заката, с горным горизонтом на заднем плане.",
+      "likely_subject": "водная поверхность",
+      "place_hints": [
+        "горы",
+        "озеро"
+      ],
+      "people": false,
+      "landscape": true,
+      "architecture": false,
+      "interior": false,
+      "vehicle_or_road": false,
+      "food": false,
+      "animal": false,
+      "composition_score": 8,
+      "story_score": 7,
+      "emotional_score": 9,
+      "technical_score": 8,
+      "redundancy_risk": 2,
+      "suggested_role": "story",
+      "caption_seed": "Тишина и спокойствие на водной глади.",
+      "editor_note": "Кадр создает атмосферу умиротворения и может служить переходным моментом в рассказе о природе.",
+      "needs_fact_check": [
+        "точное местоположение озера",
+        "состояние окружающей природы"
+      ],
+      "analysis_source": "vision",
+      "analyzed_at": "2026-07-06T03:40:18.041Z",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "public_id": "IMG20260705173210_gkqicn",
+      "number": 19,
+      "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783309084/IMG20260705173210_gkqicn.jpg",
+      "width": 4096,
+      "height": 3072,
+      "orientation": "horizontal",
+      "visual_summary": "На фотографии открывается панорама спокойного водоема, на фоне которого виднеются заснеженные горные вершины под ясным небом.",
+      "likely_subject": "водоем с горным пейзажем",
+      "place_hints": [
+        "горы",
+        "водоем",
+        "возможно, регион с высокими горами"
+      ],
+      "people": false,
+      "landscape": true,
+      "architecture": false,
+      "interior": false,
+      "vehicle_or_road": false,
+      "food": false,
+      "animal": false,
+      "composition_score": 8,
+      "story_score": 7,
+      "emotional_score": 6,
+      "technical_score": 9,
+      "redundancy_risk": 2,
+      "suggested_role": "story",
+      "caption_seed": "Тишина водоема и величие гор создают атмосферу умиротворения.",
+      "editor_note": "Этот кадр важен для передачи чувства спокойствия и величия природы, что соответствует стилю журнала.",
+      "needs_fact_check": [
+        "точное местоположение водоема",
+        "идентификация гор на заднем плане"
+      ],
+      "analysis_source": "vision",
+      "analyzed_at": "2026-07-06T03:40:23.847Z",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "public_id": "IMG20260705192128_uq69oz",
+      "number": 20,
+      "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783309089/IMG20260705192128_uq69oz.jpg",
+      "width": 4096,
+      "height": 3072,
+      "orientation": "horizontal",
+      "visual_summary": "На фотографии видно спокойное море на фоне величественных снежных гор. Чистое небо создает ощущение безмятежности и простора.",
+      "likely_subject": "горный пейзаж",
+      "place_hints": [
+        "возможно, горы Тянь-Шаня или аналогичный регион"
+      ],
+      "people": false,
+      "landscape": true,
+      "architecture": false,
+      "interior": false,
+      "vehicle_or_road": false,
+      "food": false,
+      "animal": false,
+      "composition_score": 8,
+      "story_score": 7,
+      "emotional_score": 6,
+      "technical_score": 8,
+      "redundancy_risk": 2,
+      "suggested_role": "story",
+      "caption_seed": "Тишина и величие гор, отраженные в спокойных водах.",
+      "editor_note": "Этот кадр подчеркивает красоту природы и создает атмосферу спокойствия, что важно для общего повествования.",
+      "needs_fact_check": [
+        "точное местоположение гор",
+        "состояние экологии региона"
+      ],
+      "analysis_source": "vision",
+      "analyzed_at": "2026-07-06T03:40:29.121Z",
+      "model": "gpt-4o-mini"
     }
   ],
   "recommendation": {
     "hero": "IMG20260705094857_qeyyzt",
     "story": [
-      "IMG20260705114210_uvlrvy",
-      "IMG20260705094857_heww7i",
-      "IMG_20260705_151535_904_fx3pal",
-      "IMG20260705094904_p2hbf6",
-      "IMG20260705090248_z3kmeq",
       "IMG20260705094951_mjycuo",
+      "IMG20260705094749_olnhtj",
+      "IMG20260705114210_uvlrvy",
+      "IMG20260705132123_spifuz",
       "IMG20260705133547_vv9vo7",
-      "IMG20260705135150_hxiixy"
+      "IMG20260705140322_qvzf9a",
+      "IMG20260705173210_gkqicn",
+      "IMG20260705203320_aqvyyq"
     ],
     "backstage": [
-      "IMG20260705140322_qvzf9a",
+      "IMG20260705090248_z3kmeq",
       "IMG20260705135108_x3ng6u",
+      "IMG20260705135150_hxiixy",
+      "IMG20260705192128_uq69oz",
       "IMG20260705132225_zfw3sl",
-      "IMG_20260705_151531_201_y9kbiz",
-      "IMG_20260705_151344_239_baqwsa",
-      "IMG20260705094749_olnhtj",
-      "IMG20260705132123_spifuz",
-      "IMG_20260705_151341_391_ac4rxq"
+      "IMG_20260705_151535_904_fx3pal"
     ],
-    "skip": [],
-    "note": "Автоотбор предварительный. Перед публикацией редактор проверяет порядок кадров, подписи и факты."
+    "skip": [
+      "IMG20260705094857_heww7i",
+      "IMG20260705094904_p2hbf6",
+      "IMG_20260705_151341_391_ac4rxq",
+      "IMG_20260705_151531_201_y9kbiz",
+      "IMG_20260705_151344_239_baqwsa"
+    ],
+    "sequence_note": "Начинаем с величественного горного пейзажа, затем переходим к сельским сценам с коровами и лошадьми, далее показываем цветочные поля и скалы, завершаем спокойными водоемами.",
+    "editorial_summary": "День наполнен красотой природы: от горных пейзажей до спокойных водоемов, каждая фотография передает атмосферу умиротворения и связи с природой.",
+    "fact_checks": [],
+    "source": "series"
   }
 }

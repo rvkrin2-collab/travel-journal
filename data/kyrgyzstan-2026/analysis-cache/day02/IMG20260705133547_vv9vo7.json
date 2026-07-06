@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705133547_vv9vo7",
+  "number": 7,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242639/IMG20260705133547_vv9vo7.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены величественные красные скалы, поднимающиеся к ясному голубому небу. Текстура и форма скал создают ощущение древности и силы природы.",
+  "likely_subject": "скалы",
+  "place_hints": [
+    "пустынные или горные районы",
+    "возможно, национальный парк"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 5,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Величие красных скал, олицетворяющее силу природы.",
+  "editor_note": "Этот кадр подчеркивает природную красоту и может служить фоном для рассказа о путешествии по диким местам.",
+  "needs_fact_check": [
+    "точное местоположение скал",
+    "информация о геологическом составе"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.352Z",
+  "model": "gpt-4o-mini"
+}

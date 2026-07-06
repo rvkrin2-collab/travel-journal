@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705094904_p2hbf6",
+  "number": 8,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242646/IMG20260705094904_p2hbf6.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается просторный пейзаж с зелеными холмами и горной цепью на заднем плане. Яркое голубое небо с несколькими облаками создает ощущение спокойствия.",
+  "likely_subject": "природа",
+  "place_hints": [
+    "горный регион",
+    "возможно, Центральная Азия"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 8,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Спокойствие горного пейзажа под ярким небом.",
+  "editor_note": "Этот кадр важен для передачи атмосферы природы и спокойствия, что соответствует стилю журнала.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "время года"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.353Z",
+  "model": "gpt-4o-mini"
+}

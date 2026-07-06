@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260705135108_x3ng6u",
+  "number": 11,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242649/IMG20260705135108_x3ng6u.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображён узкий каньон с ярко выраженными слоями красной породы и зелеными растениями, пробивающимися сквозь камни.",
+  "likely_subject": "каньон",
+  "place_hints": [
+    "пустынная местность",
+    "возможно, южные регионы"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тайны каньона, скрытые от глаз.",
+  "editor_note": "Кадр хорошо передаёт атмосферу природного ландшафта и может служить иллюстрацией для рассказа о путешествии по диким местам.",
+  "needs_fact_check": [
+    "точное местоположение каньона",
+    "информация о растительности в этом регионе"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.355Z",
+  "model": "gpt-4o-mini"
+}

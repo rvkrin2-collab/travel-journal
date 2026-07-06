@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG_20260705_151341_391_ac4rxq",
+  "number": 14,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242952/IMG_20260705_151341_391_ac4rxq.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена лошадь, пасущаяся на зелёном лугу, с ярким небом на фоне.",
+  "likely_subject": "лошадь",
+  "place_hints": [
+    "сельская местность",
+    "природа"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 6,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Лошадь на лугу, наслаждающаяся свежей травой.",
+  "editor_note": "Кадр добавляет атмосферу спокойствия и связи с природой, что соответствует стилю журнала.",
+  "needs_fact_check": [
+    "точное местоположение",
+    "состояние лошади"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.355Z",
+  "model": "gpt-4o-mini"
+}

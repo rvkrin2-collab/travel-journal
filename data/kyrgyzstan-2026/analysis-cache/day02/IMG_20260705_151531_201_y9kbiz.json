@@ -1,0 +1,37 @@
+{
+  "public_id": "IMG_20260705_151531_201_y9kbiz",
+  "number": 16,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783242952/IMG_20260705_151531_201_y9kbiz.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии видны головы лошадей, стоящих в воде, с четкими деталями их грив и ушей. Кадр передает атмосферу спокойствия и близости к природе.",
+  "likely_subject": "лошади",
+  "place_hints": [
+    "вода",
+    "природа",
+    "возможно, горный или сельский регион"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Лошади наслаждаются прохладой воды.",
+  "editor_note": "Кадр добавляет элемент взаимодействия с природой и подчеркивает спокойствие путешествия.",
+  "needs_fact_check": [
+    "точное местоположение съемки",
+    "информация о лошадях"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T03:40:11.356Z",
+  "model": "gpt-4o-mini"
+}
