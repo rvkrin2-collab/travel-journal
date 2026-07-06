@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Предпросмотр · День 1 · Кыргызстан 2026</title>
+  <title>Предпросмотр · Журнал путешествий</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="stylesheet" href="style.css">
   <style>
@@ -14,72 +14,153 @@
     .backstage-card{background:#fff8ec;border:1px solid rgba(22,22,20,.14);border-radius:22px;overflow:hidden}
     .backstage-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
     .backstage-card p{margin:0;padding:12px 14px;color:#6e6559}
+    .fact-box{max-width:1100px;margin:32px auto 0;padding:18px;border:1px solid rgba(22,22,20,.14);border-radius:24px;background:#fff8ec;color:#342d25}
+    .fact-box h3{font-family:Georgia,"Times New Roman",serif;font-size:26px;line-height:1;margin:0 0 10px}
+    .fact-box ul{margin:0;padding-left:20px;color:#6e6559}
+    .loading{max-width:1100px;margin:40px auto;padding:22px;border-radius:24px;background:#fff8ec;color:#342d25}
     @media(max-width:700px){.backstage-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <header class="hero">
+  <header class="hero" id="heroHeader">
     <div class="hero__shade"></div>
     <div class="hero__content">
       <p class="kicker">Предпросмотр главы</p>
-      <h1>День 1</h1>
-      <p class="subtitle">От Баласагуна к подножию Тянь-Шаня</p>
-      <div class="hero__stats">
-        <span>Бишкек</span><span>Башня Бурана</span><span>Чон-Кемин</span><span>черновик</span>
-      </div>
+      <h1 id="heroTitle">Черновик</h1>
+      <p class="subtitle" id="heroSubtitle">Загрузка редакторского отбора…</p>
+      <div class="hero__stats" id="heroStats"><span>скрытая страница</span><span>черновик</span></div>
     </div>
   </header>
 
   <div class="preview-note">
-    <p>Это скрытая страница предпросмотра. На основной сайт она не ведёт. После проверки перенесу главу на главную страницу.</p>
+    <p>Это скрытая страница предпросмотра. На основной сайт она не ведёт. Публикация — только после утверждения.</p>
   </div>
 
   <main>
-    <section class="story" id="story-day-1">
+    <section class="story" id="storySection">
       <div class="story-head">
-        <p class="eyebrow">День 1 · 4 июля 2026</p>
-        <h2>От древнего Баласагуна к первой ночёвке в горах</h2>
-        <p>Первый день начался не с гор, а с памяти о городе, которого почти не видно. Башня Бурана стоит в открытой Чуйской долине, но когда-то рядом был Баласагун — важный город на Великом шёлковом пути. После Бураны дорога постепенно ушла к Чон-Кемину: от кирпича XI века и каменных изваяний — к широким долинам и вечерним горам.</p>
-        <div class="chapter-meta">
-          <span>Маршрут: Бишкек → Бурана → Чон-Кемин</span>
-          <span>Тема дня: история, степь и первый вечер у Тянь-Шаня</span>
-        </div>
+        <p class="eyebrow" id="chapterEyebrow">День</p>
+        <h2 id="chapterTitle">Загрузка</h2>
+        <p id="chapterIntro">Собираю фотографии и подписи из редакторского JSON.</p>
+        <div class="chapter-meta" id="chapterMeta"></div>
       </div>
-      <div id="storyPhotos" class="story-photos"></div>
+      <div id="storyPhotos" class="story-photos"><div class="loading">Загрузка предпросмотра…</div></div>
       <section class="backstage">
         <div class="story-head">
           <p class="eyebrow">За кадром</p>
           <h2>Хорошие, но не основные кадры</h2>
-          <p>Эти фотографии не ведут рассказ, но сохраняют атмосферу дня и могут пригодиться для расширенной галереи.</p>
+          <p>Эти фотографии сохраняют материал дня, но не ведут основной рассказ.</p>
         </div>
         <div id="backstagePhotos" class="backstage-grid"></div>
+      </section>
+      <section class="fact-box" id="factBox" hidden>
+        <h3>Проверить перед публикацией</h3>
+        <ul id="factList"></ul>
       </section>
     </section>
   </main>
 
-  <footer>Кыргызстан 2026 · предпросмотр главы</footer>
+  <footer id="footerText">Кыргызстан 2026 · предпросмотр главы</footer>
 
   <script>
-    const CLOUD_NAME = 'tftagnuy';
-    const story = [
-      {publicId:'IMG20260704173627_e3pqlm', title:'Башня Бурана', text:'Сейчас она кажется одинокой башней среди полей, но это остаток большого средневекового города. Бурана сразу задаёт правильный тон путешествию: Кыргызстан здесь открывается не только природой, но и глубокой историей.'},
-      {publicId:'IMG20260704171835_lridzy', title:'Внутри башни', text:'Узкая лестница внутри Бураны — хороший момент, когда памятник перестаёт быть картинкой. Поднимаешься почти боком, чувствуешь толщину кладки и понимаешь, что это сооружение стоит здесь почти тысячу лет.'},
-      {publicId:'IMG20260704173337_jwlwky', title:'Кирпичные узоры', text:'У Бураны важно смотреть не только на силуэт, но и на детали. Орнаментальная кладка делает башню живой: это не просто древняя стена, а работа мастеров, которые думали и о прочности, и о красоте.'},
-      {publicId:'IMG20260704173240_zgkykq', title:'Ещё ближе к кладке', text:'На близком расстоянии башня читается почти как ткань: ритм кирпича, тени, неровности, следы времени. Такой кадр нужен, чтобы не потерять материальность места.'},
-      {publicId:'IMG20260704174039_v1gjfl', title:'Каменные стражи степи', text:'Балбалы — каменные изваяния тюркской эпохи. Их ставили как памятные знаки, часто в честь воинов и знатных людей. Рядом с Бураной они выглядят как отдельная галерея под открытым небом.'},
-      {publicId:'IMG20260704172715_rvc9qz', title:'Простор Чуйской долины', text:'С башни открывается широкий вид на долину: поля, деревья, дорога и дальние горы. Именно этот простор помогает представить, почему здесь проходили караванные пути.'},
-      {publicId:'IMG20260704195812_ueptsh', title:'Приехали на ночёвку', text:'После Бураны дорога меняет настроение. История остаётся позади, а впереди появляется Чон-Кемин — уже не просто точка маршрута, а первый вечер среди гор.'},
-      {publicId:'IMG20260704200919_uon8ky', title:'Финал первого дня', text:'К вечеру свет стал мягче, а долина — тише. Хороший финал первого дня: от древнего города и каменных стражей путь привёл к горам, где начинается следующая часть путешествия.'}
-    ];
-    const backstage = [
-      {publicId:'IMG20260704173138_wyqlyx', title:'Дополнительный кадр Бураны'},
-      {publicId:'IMG20260704200013_quoamh', title:'Дополнительная панорама Чон-Кемина'}
-    ];
-    function imageUrl(publicId, width = 1800){return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto,w_${width}/${publicId}.jpg`;}
-    function renderStoryItem(item, index){return `<article class="photo-story ${index === 0 ? 'photo-story--hero' : ''}"><img src="${imageUrl(item.publicId)}" alt="${item.title}" loading="${index === 0 ? 'eager' : 'lazy'}"><div class="photo-caption"><h3>${item.title}</h3><p>${item.text}</p></div></article>`;}
-    function renderBackstageItem(item){return `<article class="backstage-card"><img src="${imageUrl(item.publicId, 900)}" alt="${item.title}" loading="lazy"><p>${item.title}</p></article>`;}
-    document.querySelector('#storyPhotos').innerHTML = story.map(renderStoryItem).join('');
-    document.querySelector('#backstagePhotos').innerHTML = backstage.map(renderBackstageItem).join('');
+    const params = new URLSearchParams(window.location.search);
+    const trip = cleanSegment(params.get('trip') || 'kyrgyzstan-2026', 'kyrgyzstan-2026');
+    const day = normalizeDay(params.get('day') || params.get('day_tag') || 'day02');
+    const reviewPath = `data/${trip}/${day}-review.json`;
+    const photosPath = `data/${trip}/${day}-photos.json`;
+
+    function cleanSegment(value, fallback){
+      const cleaned = String(value || '').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+      return cleaned || fallback;
+    }
+
+    function normalizeDay(value){
+      const raw = String(value || '').trim().toLowerCase();
+      const number = raw.match(/\d+/);
+      if(number) return `day${String(Number(number[0])).padStart(2, '0')}`;
+      return cleanSegment(raw, 'day02');
+    }
+
+    function dayLabel(dayTag){
+      const number = dayTag.match(/\d+/)?.[0];
+      return number ? `День ${Number(number)}` : dayTag;
+    }
+
+    function imageUrl(url, width = 1800){
+      return url.replace('/image/upload/', `/image/upload/f_auto,q_auto,w_${width}/`);
+    }
+
+    function esc(value){
+      return String(value || '').replace(/[&<>"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[char]));
+    }
+
+    function orderItems(review){
+      const rank = {hero: 0, story: 1, backstage: 2, skip: 3};
+      return [...(review.items || [])].sort((a, b) => (rank[a.status] ?? 9) - (rank[b.status] ?? 9) || (a.number || 0) - (b.number || 0));
+    }
+
+    function renderStoryItem(item, photo, index){
+      const title = item.label || `Кадр ${item.number || index + 1}`;
+      const text = item.note || '';
+      return `<article class="photo-story ${index === 0 ? 'photo-story--hero' : ''}">
+        <img src="${imageUrl(photo.url)}" alt="${esc(title)}" loading="${index === 0 ? 'eager' : 'lazy'}">
+        <div class="photo-caption"><h3>${esc(title)}</h3><p>${esc(text)}</p></div>
+      </article>`;
+    }
+
+    function renderBackstageItem(item, photo){
+      const title = item.label || `Кадр ${item.number || ''}`;
+      return `<article class="backstage-card"><img src="${imageUrl(photo.url, 900)}" alt="${esc(title)}" loading="lazy"><p>${esc(title)}</p></article>`;
+    }
+
+    async function loadJson(path){
+      const response = await fetch(path, {cache: 'no-store'});
+      if(!response.ok) throw new Error(`${path}: ${response.status}`);
+      return response.json();
+    }
+
+    async function init(){
+      const [review, photos] = await Promise.all([loadJson(reviewPath), loadJson(photosPath)]);
+      const photoById = new Map(photos.map(photo => [photo.public_id, photo]));
+      const chapter = review.chapter || {};
+      const ordered = orderItems(review);
+      const story = ordered.filter(item => item.status === 'hero' || item.status === 'story');
+      const backstage = ordered.filter(item => item.status === 'backstage');
+      const hero = story[0];
+      const heroPhoto = hero ? photoById.get(hero.public_id) : null;
+
+      document.title = `Предпросмотр · ${chapter.title || dayLabel(day)} · ${trip}`;
+      document.querySelector('#heroTitle').textContent = chapter.title || dayLabel(day);
+      document.querySelector('#heroSubtitle').textContent = chapter.subtitle || '';
+      document.querySelector('#chapterEyebrow').textContent = chapter.eyebrow || dayLabel(day);
+      document.querySelector('#chapterTitle').textContent = chapter.title || dayLabel(day);
+      document.querySelector('#chapterIntro').textContent = chapter.intro || '';
+      document.querySelector('#footerText').textContent = `${trip} · ${dayLabel(day)} · предпросмотр`;
+      document.querySelector('#heroStats').innerHTML = [chapter.route_note, chapter.theme, 'черновик'].filter(Boolean).map(item => `<span>${esc(item)}</span>`).join('');
+      document.querySelector('#chapterMeta').innerHTML = [chapter.route_note, chapter.theme].filter(Boolean).map(item => `<span>${esc(item)}</span>`).join('');
+      if(heroPhoto){
+        document.querySelector('#heroHeader').style.backgroundImage = `url(${imageUrl(heroPhoto.url, 2000)})`;
+      }
+
+      document.querySelector('#storyPhotos').innerHTML = story.map((item, index) => {
+        const photo = photoById.get(item.public_id);
+        return photo ? renderStoryItem(item, photo, index) : '';
+      }).join('');
+
+      document.querySelector('#backstagePhotos').innerHTML = backstage.map(item => {
+        const photo = photoById.get(item.public_id);
+        return photo ? renderBackstageItem(item, photo) : '';
+      }).join('');
+
+      if(Array.isArray(chapter.fact_checks) && chapter.fact_checks.length){
+        document.querySelector('#factBox').hidden = false;
+        document.querySelector('#factList').innerHTML = chapter.fact_checks.map(item => `<li>${esc(item)}</li>`).join('');
+      }
+    }
+
+    init().catch(error => {
+      document.querySelector('#storyPhotos').innerHTML = `<div class="loading">Не удалось загрузить предпросмотр: ${esc(error.message)}</div>`;
+    });
   </script>
 </body>
 </html>
