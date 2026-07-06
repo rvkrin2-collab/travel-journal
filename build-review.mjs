@@ -12,7 +12,7 @@ const dayContextFile = process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-c
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
 const ideasFile = process.env.IDEAS_FILE || `data/${trip}/${dayTag}-ideas.json`;
 const selectedIdeaFile = process.env.SELECTED_IDEA_FILE || `data/${trip}/${dayTag}-selected-idea.json`;
-const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-review.json`;
+const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-ai-review.json`;
 
 if (!apiKey) {
   throw new Error("OPENAI_API_KEY secret is missing");
@@ -76,14 +76,17 @@ function compactPhotos(photos) {
   }));
 }
 
-async function buildReview(payload) {
+async function buildAiReview(payload) {
   const prompt = `Ты выпускающий редактор авторского тревел-журнала.
 
-Новая логика процесса:
+Задача: создать ПРЕДВАРИТЕЛЬНЫЙ ИИ-ОТБОР для редактора, а не финальную публикацию.
+
+Канонический процесс:
 1. Фотографии дают визуальный материал.
 2. Авторские заметки дают личный смысл дня.
 3. Выбранная идея главы является главным законом отбора.
-4. Review должен собирать историю под выбранную идею, а не просто выбирать красивые фотографии.
+4. AI review предварительно заполняет редактор: статусы кадров, подписи и редакторские комментарии.
+5. Автор затем правит этот отбор вручную и экспортирует author-review.
 
 Правила:
 - Используй только public_id из списка photos.
@@ -106,7 +109,7 @@ async function buildReview(payload) {
   "author_notes_source": "${authorNotesFile}",
   "ideas_source": "${ideasFile}",
   "selected_idea_source": "${selectedIdeaFile}",
-  "status": "draft_review",
+  "status": "ai_review",
   "updated_at": "ISO_DATE",
   "chapter": {
     "title": "...",
@@ -148,12 +151,12 @@ ${JSON.stringify(payload, null, 2)}`;
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`OpenAI review error: ${response.status} ${text}`);
+    throw new Error(`OpenAI AI review error: ${response.status} ${text}`);
   }
 
   const data = await response.json();
   const content = data.choices?.[0]?.message?.content;
-  if (!content) throw new Error("OpenAI returned empty review content");
+  if (!content) throw new Error("OpenAI returned empty AI review content");
   return extractJson(content);
 }
 
@@ -188,8 +191,8 @@ const selectedIdea = await readJsonIfExists(selectedIdeaFile);
 
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${photosFile} does not contain photos`);
 if (!analysis) throw new Error(`${analysisFile} is missing`);
-if (!selectedIdea) throw new Error(`${selectedIdeaFile} is missing. Choose a chapter idea before building review.`);
-if (!authorNotes) throw new Error(`${authorNotesFile} is missing. Add author impressions before building review.`);
+if (!selectedIdea) throw new Error(`${selectedIdeaFile} is missing. Choose a chapter idea before building AI review.`);
+if (!authorNotes) throw new Error(`${authorNotesFile} is missing. Add author impressions before building AI review.`);
 
 const payload = {
   trip,
@@ -204,7 +207,7 @@ const payload = {
   selected_idea: selectedIdea
 };
 
-const review = validateReview(await buildReview(payload), photos);
+const review = validateReview(await buildAiReview(payload), photos);
 review.trip = trip;
 review.day = dayTag;
 review.photos_source = photosFile;
@@ -213,9 +216,9 @@ review.context_source = dayContextFile;
 review.author_notes_source = authorNotesFile;
 review.ideas_source = ideasFile;
 review.selected_idea_source = selectedIdeaFile;
-review.status = "draft_review";
+review.status = "ai_review";
 review.updated_at = new Date().toISOString();
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", { recursive: true });
 await fs.writeFile(outFile, JSON.stringify(review, null, 2), "utf8");
-console.log(`Saved editorial review to ${outFile}`);
+console.log(`Saved AI review to ${outFile}`);
