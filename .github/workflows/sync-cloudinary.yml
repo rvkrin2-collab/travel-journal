@@ -74,6 +74,13 @@ jobs:
             echo "Photo sync will be committed, but AI analysis is intentionally skipped."
           fi
 
+      - name: Reset stale analysis cache
+        if: ${{ github.event.inputs.analyze != 'false' && steps.author_notes.outputs.exists == 'true' }}
+        run: |
+          rm -f data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
+          rm -rf data/${{ github.event.inputs.trip }}/analysis-cache/${{ github.event.inputs.day_tag }}-author-context-v2
+          echo "Removed stale analysis and context cache before fresh AI analysis."
+
       - name: Analyze photos
         if: ${{ github.event.inputs.analyze != 'false' && steps.author_notes.outputs.exists == 'true' }}
         run: node analyze-photos.mjs
