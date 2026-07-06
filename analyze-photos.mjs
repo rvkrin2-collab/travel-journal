@@ -7,6 +7,8 @@ const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
 const inFile = process.env.IN_FILE || `data/${trip}/${dayTag}-photos.json`;
 const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-analysis.json`;
 const cacheDir = process.env.CACHE_DIR || `data/${trip}/analysis-cache/${dayTag}`;
+const tripContextFile = process.env.TRIP_CONTEXT_FILE || `data/${trip}/trip-context.json`;
+const dayContextFile = process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-context.json`;
 
 if (!apiKey) {
   throw new Error("OPENAI_API_KEY secret is missing");
@@ -35,6 +37,23 @@ async function readJsonIfExists(path) {
     if (error?.code === "ENOENT") return null;
     throw error;
   }
+}
+
+function compactContext(context) {
+  if (!context) return null;
+  return context;
+}
+
+function contextPromptBlock(context) {
+  const parts = [];
+  if (context.tripContext) {
+    parts.push(`Контекст путешествия:\n${JSON.stringify(compactContext(context.tripContext), null, 2)}`);
+  }
+  if (context.dayContext) {
+    parts.push(`Контекст дня:\n${JSON.stringify(compactContext(context.dayContext), null, 2)}`);
+  }
+  if (!parts.length) return "Контекст не найден. Не выдумывай географию, названия мест, растения и геологию.";
+  return parts.join("\n\n");
 }
 
 function extractJson(text) {
@@ -95,10 +114,18 @@ function isReusableCachedAnalysis(photo, cached) {
   return true;
 }
 
-async function analyzePhoto(photo, index, total) {
+async function analyzePhoto(photo, index, total, context) {
   const prompt = `Ты фоторедактор авторского тревел-журнала. Проанализируй кадр ${index + 1} из ${total}.
 
 Стиль журнала: спокойный, интеллектуальный, визуальный. Фотография рассказывает историю, текст только усиливает кадр. Не используй рекламные обороты.
+
+${contextPromptBlock(context)}
+
+Правила фактов:
+- Используй контекст как ограничение, а не как повод придумывать детали.
+- Если название места, растения, горы или водоёма не подтверждено, добавь это в needs_fact_check.
+- Не называй водоём морем, если в контексте нет такого подтверждения.
+- Не переноси кадр в другую страну или регион.
 
 Верни только JSON без Markdown по схеме:
 {
@@ -188,7 +215,7 @@ function buildAlgorithmicRecommendation(items) {
   };
 }
 
-async function buildSeriesRecommendation(items) {
+async function buildSeriesRecommendation(items, context) {
   const fallback = buildAlgorithmicRecommendation(items);
   const compactItems = items.map((item) => ({
     public_id: item.public_id,
@@ -210,6 +237,8 @@ async function buildSeriesRecommendation(items) {
 
   const prompt = `Ты выпускающий фоторедактор авторского тревел-журнала. Ниже — анализ всех кадров одного дня. Составь первичный отбор серии.
 
+${contextPromptBlock(context)}
+
 Правила:
 - 1 главное фото.
 - 6-8 фотографий рассказа.
@@ -217,6 +246,7 @@ async function buildSeriesRecommendation(items) {
 - Слабые и повторяющиеся — skip.
 - Порядок рассказа может отличаться от исходного, если история станет сильнее.
 - Не выдумывай географию и факты: если надо проверить, добавь в fact_checks.
+- Соблюдай must_not_assume из контекста дня.
 
 Верни только JSON:
 {
@@ -300,6 +330,12 @@ if (!Array.isArray(photos) || photos.length === 0) {
   throw new Error(`${inFile} does not contain photos`);
 }
 
+const context = {
+  tripContext: await readJsonIfExists(tripContextFile),
+  dayContext: await readJsonIfExists(dayContextFile)
+};
+console.log(`Context: trip=${Boolean(context.tripContext)} day=${Boolean(context.dayContext)}`);
+
 await fs.mkdir(cacheDir, { recursive: true });
 const previousById = await seedCacheFromPreviousOutFile();
 const items = [];
@@ -328,7 +364,7 @@ for (let index = 0; index < photos.length; index += 1) {
   }
 
   console.log(`Analyzing new photo ${index + 1}/${photos.length}: ${photo.public_id}`);
-  const analysis = await analyzePhoto(photo, index, photos.length);
+  const analysis = await analyzePhoto(photo, index, photos.length, context);
   await fs.writeFile(path, JSON.stringify(analysis, null, 2), "utf8");
   items.push(analysis);
   stats.analyzed_new += 1;
@@ -339,11 +375,15 @@ const result = {
   day: dayTag,
   photos_source: inFile,
   cache_dir: cacheDir,
+  context: {
+    trip_context_file: context.tripContext ? tripContextFile : null,
+    day_context_file: context.dayContext ? dayContextFile : null
+  },
   generated_at: new Date().toISOString(),
   model,
   cache_stats: stats,
   items,
-  recommendation: await buildSeriesRecommendation(items)
+  recommendation: await buildSeriesRecommendation(items, context)
 };
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", { recursive: true });
