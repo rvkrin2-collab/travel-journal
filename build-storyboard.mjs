@@ -32,41 +32,34 @@ function extractJson(text) {
 }
 
 async function buildStoryboard(payload) {
-  const prompt = `Ты редактор фотокниги. На основе final-review собери storyboard: последовательность сцен, ритм текста и роль кадров.
+  const prompt = `Собери storyboard для тревел-журнала.
 
-Правила:
-- Это не публикационный текст, а сценарий главы.
-- Не меняй public_id и не добавляй новых фотографий.
-- Сцены должны объяснять драматургию: зачем этот блок нужен.
-- Пиши коротко, спокойно, без рекламных формулировок.
+Основной объект — сцена, не отдельная подпись к фото.
+У каждой сцены: title, text, text_mode, photos.
+text — короткая фраза или абзац между фотографиями. Не объясняй очевидное на снимке.
+Используй только public_id из final_review.
+Пиши спокойно, без рекламного тона.
 
 Верни только JSON:
 {
-  "trip": "${trip}",
-  "day": "${dayTag}",
-  "status": "storyboard",
-  "updated_at": "ISO_DATE",
-  "final_review_source": "${finalReviewFile}",
-  "chapter": {
-    "title": "...",
-    "one_line": "...",
-    "emotional_curve": "...",
-    "rhythm": "..."
-  },
-  "scenes": [
-    {"id":"...","title":"...","role":"...","text_rhythm":"...","photos":["public_id"]}
-  ],
-  "backstage_role": "...",
-  "publication_note": "..."
+  "trip":"${trip}",
+  "day":"${dayTag}",
+  "status":"storyboard",
+  "updated_at":"ISO_DATE",
+  "final_review_source":"${finalReviewFile}",
+  "chapter":{"title":"...","subtitle":"...","one_line":"...","intro":"...","emotional_curve":"...","rhythm":"..."},
+  "scenes":[{"id":"...","title":"...","text":"...","text_mode":"short|quiet|pause|main|final","photos":["public_id"]}],
+  "backstage_role":"...",
+  "publication_note":"..."
 }
 
-Входные данные:
+DATA:
 ${JSON.stringify(payload, null, 2)}`;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {"Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json"},
-    body: JSON.stringify({model, temperature: 0.2, response_format: {type: "json_object"}, messages: [{role: "user", content: prompt}]})
+    body: JSON.stringify({model, temperature: 0.18, response_format: {type: "json_object"}, messages: [{role: "user", content: prompt}]})
   });
   if (!response.ok) throw new Error(`OpenAI storyboard error: ${response.status} ${await response.text()}`);
   const data = await response.json();
