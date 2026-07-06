@@ -1,0 +1,33 @@
+{
+  "trip": "kyrgyzstan-2026",
+  "country": "Кыргызстан",
+  "language": "ru",
+  "journal_style": {
+    "references": ["National Geographic", "Sidetracked Magazine", "Cereal Magazine"],
+    "tone": "спокойный, наблюдательный, журнальный",
+    "principles": [
+      "фотографии ведут рассказ",
+      "каждый кадр держит одну мысль",
+      "текст короткий и точный",
+      "не использовать рекламные формулы"
+    ],
+    "banned_phrases": [
+      "захватывающие виды",
+      "жемчужина региона",
+      "словами не передать",
+      "обязательно стоит посетить",
+      "незабываемое путешествие"
+    ]
+  },
+  "fact_policy": {
+    "do_not_invent_places": true,
+    "mark_uncertain_facts": true,
+    "avoid_species_identification_without_confidence": true,
+    "avoid_geology_claims_without_source": true
+  },
+  "global_context": [
+    "Это авторский журнал путешествия по Кыргызстану в 2026 году.",
+    "Для природных сцен допустимо говорить о горах, пастбищах, долинах, скалах, воде только если это видно на фотографии.",
+    "Не переносить кадры в другие страны или регионы, если нет явных оснований."
+  ]
+}
