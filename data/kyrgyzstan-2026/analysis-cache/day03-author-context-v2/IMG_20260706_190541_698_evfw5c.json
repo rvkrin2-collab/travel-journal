@@ -1,0 +1,32 @@
+{
+  "public_id": "IMG_20260706_190541_698_evfw5c",
+  "number": 20,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783343168/IMG_20260706_190541_698_evfw5c.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображен интерьер юрты с яркими красными и зелеными элементами декора.",
+  "likely_subject": "интерьер юрты",
+  "place_hints": [
+    "традиционное жилище Кыргызстана"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": false,
+  "interior": true,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тепло и уют традиционной юрты, отражающие культуру Кыргызстана.",
+  "editor_note": "Кадр подчеркивает культурное наследие региона и создает атмосферу уюта.",
+  "needs_fact_check": [],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T13:12:17.562Z",
+  "model": "gpt-4o-mini"
+}

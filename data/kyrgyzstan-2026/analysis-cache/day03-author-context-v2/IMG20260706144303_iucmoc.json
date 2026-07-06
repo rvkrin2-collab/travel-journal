@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260706144303_iucmoc",
+  "number": 6,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342409/IMG20260706144303_iucmoc.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается панорама зеленых пастбищ и гор, с рекой, извивающейся внизу. Облака создают интересные тени на ландшафте.",
+  "likely_subject": "пейзаж с пастбищами и горами",
+  "place_hints": [
+    "Кыргызстан",
+    "горный ландшафт"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и просторы кыргызских пастбищ.",
+  "editor_note": "Кадр хорошо передает атмосферу открытого пространства и природы Кыргызстана, что соответствует стилю журнала.",
+  "needs_fact_check": [],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T13:10:35.460Z",
+  "model": "gpt-4o-mini"
+}

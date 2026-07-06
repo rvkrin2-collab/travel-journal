@@ -1,0 +1,37 @@
+{
+  "public_id": "IMG20260706112115_idfyih",
+  "number": 17,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342905/IMG20260706112115_idfyih.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена каменная статуя с человеческим лицом, расположенная на фоне гор и облачного неба.",
+  "likely_subject": "каменная статуя",
+  "place_hints": [
+    "горы",
+    "пастбища",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Каменная статуя, хранящая тайны прошлого Кыргызстана.",
+  "editor_note": "Кадр добавляет историческую глубину и контекст к рассказу о культуре и наследии региона.",
+  "needs_fact_check": [
+    "идентификация статуи",
+    "точное местоположение"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T13:11:59.704Z",
+  "model": "gpt-4o-mini"
+}

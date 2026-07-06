@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260706142349_kxpozv",
+  "number": 3,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342167/IMG20260706142349_kxpozv.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается просторный ландшафт с зелеными пастбищами и извивающейся речкой, окруженной камнями.",
+  "likely_subject": "пейзаж с речкой и пастбищами",
+  "place_hints": [
+    "горы на горизонте",
+    "пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и просторы кыргызских пастбищ.",
+  "editor_note": "Кадр хорошо передает атмосферу природы Кыргызстана, подчеркивая его спокойствие и красоту.",
+  "needs_fact_check": [],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T13:10:16.126Z",
+  "model": "gpt-4o-mini"
+}

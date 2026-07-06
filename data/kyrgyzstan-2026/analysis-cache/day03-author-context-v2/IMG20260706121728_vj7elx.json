@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260706121728_vj7elx",
+  "number": 13,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783342827/IMG20260706121728_vj7elx.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии виден водоём с зелёными берегами и цветущими растениями на переднем плане, а вдали виднеются горы.",
+  "likely_subject": "водоём",
+  "place_hints": [
+    "горы на горизонте",
+    "растительность на берегу"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 7,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Тишина водоёма отражает величие окружающих гор.",
+  "editor_note": "Кадр хорошо передаёт атмосферу природы Кыргызстана, подчеркивая гармонию между водой и растительностью.",
+  "needs_fact_check": [
+    "точное название водоёма",
+    "идентификация растительности на переднем плане"
+  ],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T13:11:34.923Z",
+  "model": "gpt-4o-mini"
+}

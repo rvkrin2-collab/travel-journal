@@ -2,16 +2,16 @@
   "trip": "kyrgyzstan-2026",
   "day": "day03",
   "photos_source": "data/kyrgyzstan-2026/day03-photos.json",
-  "cache_dir": "data/kyrgyzstan-2026/analysis-cache/day03",
+  "cache_dir": "data/kyrgyzstan-2026/analysis-cache/day03-author-context-v2",
   "context": {
     "trip_context_file": "data/kyrgyzstan-2026/trip-context.json",
-    "day_context_file": null
+    "day_context_file": "data/kyrgyzstan-2026/day03-author-notes.json"
   },
-  "generated_at": "2026-07-06T13:19:39.636Z",
+  "generated_at": "2026-07-06T13:40:43.752Z",
   "model": "gpt-4o-mini",
   "cache_stats": {
-    "reused_from_cache": 22,
-    "reused_from_previous_day_analysis": 0,
+    "reused_from_cache": 0,
+    "reused_from_previous_day_analysis": 22,
     "analyzed_new": 0
   },
   "items": [
@@ -45,7 +45,7 @@
       "caption_seed": "Тихие воды реки, отражающие величие гор.",
       "editor_note": "Кадр передает атмосферу уединения и красоты природы Кыргызстана, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:03.664Z",
       "model": "gpt-4o-mini"
     },
@@ -79,7 +79,7 @@
       "caption_seed": "Одинокое дерево в бескрайних просторах кыргызской долины.",
       "editor_note": "Этот кадр подчеркивает величие природы и одиночество в открытом пространстве, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:09.935Z",
       "model": "gpt-4o-mini"
     },
@@ -112,7 +112,7 @@
       "caption_seed": "Тишина и просторы кыргызских пастбищ.",
       "editor_note": "Кадр хорошо передает атмосферу природы Кыргызстана, подчеркивая его спокойствие и красоту.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:16.126Z",
       "model": "gpt-4o-mini"
     },
@@ -146,7 +146,7 @@
       "caption_seed": "Спокойствие горного пейзажа Кыргызстана.",
       "editor_note": "Кадр хорошо передаёт атмосферу природы Кыргызстана и может служить иллюстрацией к рассказу о путешествии по этому региону.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:22.578Z",
       "model": "gpt-4o-mini"
     },
@@ -180,7 +180,7 @@
       "caption_seed": "Тишина горного ландшафта Кыргызстана.",
       "editor_note": "Кадр хорошо передаёт атмосферу природы и может служить основой для рассказа о путешествии по горам.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:29.431Z",
       "model": "gpt-4o-mini"
     },
@@ -213,7 +213,7 @@
       "caption_seed": "Тишина и просторы кыргызских пастбищ.",
       "editor_note": "Кадр хорошо передает атмосферу открытого пространства и природы Кыргызстана, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:35.460Z",
       "model": "gpt-4o-mini"
     },
@@ -249,7 +249,7 @@
       "needs_fact_check": [
         "название водоёма"
       ],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:53.357Z",
       "model": "gpt-4o-mini"
     },
@@ -283,7 +283,7 @@
       "caption_seed": "Извивающаяся дорога ведет в сердце гор.",
       "editor_note": "Кадр хорошо передает атмосферу путешествия по горам, подчеркивая удаленность и спокойствие природы.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:10:59.524Z",
       "model": "gpt-4o-mini"
     },
@@ -316,7 +316,7 @@
       "caption_seed": "Пастбище, где коровы мирно пасутся под облачным небом.",
       "editor_note": "Кадр передаёт атмосферу сельской жизни в Кыргызстане и может служить иллюстрацией к рассказу о местной культуре.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:05.048Z",
       "model": "gpt-4o-mini"
     },
@@ -349,7 +349,7 @@
       "caption_seed": "Тишина и простор кыргызской долины.",
       "editor_note": "Кадр передает атмосферу спокойствия и величия природы, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:10.047Z",
       "model": "gpt-4o-mini"
     },
@@ -382,7 +382,7 @@
       "caption_seed": "Спокойствие кыргызских пастбищ под облачным небом.",
       "editor_note": "Кадр передает атмосферу открытого пространства и природы Кыргызстана, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:21.144Z",
       "model": "gpt-4o-mini"
     },
@@ -415,7 +415,7 @@
       "caption_seed": "Пастбище, где овцы мирно пасутся под облачным небом.",
       "editor_note": "Кадр хорошо передаёт атмосферу сельской жизни в горах Кыргызстана, добавляя контекст к рассказу о местной культуре.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:28.610Z",
       "model": "gpt-4o-mini"
     },
@@ -451,7 +451,7 @@
         "точное название водоёма",
         "идентификация растительности на переднем плане"
       ],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:34.923Z",
       "model": "gpt-4o-mini"
     },
@@ -485,7 +485,7 @@
       "caption_seed": "Спокойствие горного озера в сердце Кыргызстана.",
       "editor_note": "Этот кадр подчеркивает природную красоту региона и создает атмосферу умиротворения, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:41.049Z",
       "model": "gpt-4o-mini"
     },
@@ -519,7 +519,7 @@
       "caption_seed": "Корова на берегу водоёма в горах Кыргызстана.",
       "editor_note": "Кадр хорошо передаёт атмосферу сельской жизни и природного окружения, что соответствует стилю журнала.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:46.468Z",
       "model": "gpt-4o-mini"
     },
@@ -555,7 +555,7 @@
       "needs_fact_check": [
         "точное название водоёма"
       ],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:52.574Z",
       "model": "gpt-4o-mini"
     },
@@ -592,7 +592,7 @@
         "идентификация статуи",
         "точное местоположение"
       ],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:11:59.704Z",
       "model": "gpt-4o-mini"
     },
@@ -626,7 +626,7 @@
       "caption_seed": "Тишина горного пейзажа, где природа и культура переплетаются.",
       "editor_note": "Кадр удачно передает атмосферу Кыргызстана, сочетая природные и культурные элементы.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:12:05.251Z",
       "model": "gpt-4o-mini"
     },
@@ -659,7 +659,7 @@
       "caption_seed": "Всадница на лошади, погруженная в величие гор.",
       "editor_note": "Кадр передает атмосферу свободы и связи с природой, что соответствует теме путешествия.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:12:11.899Z",
       "model": "gpt-4o-mini"
     },
@@ -691,7 +691,7 @@
       "caption_seed": "Тепло и уют традиционной юрты, отражающие культуру Кыргызстана.",
       "editor_note": "Кадр подчеркивает культурное наследие региона и создает атмосферу уюта.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:12:17.562Z",
       "model": "gpt-4o-mini"
     },
@@ -723,7 +723,7 @@
       "caption_seed": "Тепло и уют традиционной юрты в сердце Кыргызстана.",
       "editor_note": "Кадр передает атмосферу традиционного кыргызского быта, что важно для общего повествования о культуре страны.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:12:22.344Z",
       "model": "gpt-4o-mini"
     },
@@ -756,43 +756,45 @@
       "caption_seed": "Взгляд из юрты на бескрайние пастбища.",
       "editor_note": "Кадр передаёт атмосферу традиционного киргизского быта и связь с природой, что важно для общего повествования.",
       "needs_fact_check": [],
-      "analysis_source": "vision",
+      "analysis_source": "previous-day-analysis",
       "analyzed_at": "2026-07-06T13:12:27.776Z",
       "model": "gpt-4o-mini"
     }
   ],
   "recommendation": {
-    "hero": "IMG20260706142328_xy078o",
+    "hero": "IMG20260706151014_baozcj",
     "story": [
+      "IMG20260706142328_xy078o",
       "IMG20260706131517_pbj2vk",
       "IMG20260706142349_kxpozv",
-      "IMG20260706144303_iucmoc",
+      "IMG20260706151349_gt9ezu",
       "IMG20260706152245_01_zjkyia",
-      "IMG20260706151014_baozcj",
-      "IMG20260706112115_idfyih",
-      "IMG20260706161518_disv6m",
-      "IMG20260706132701_xt3ibq"
+      "IMG20260706144303_iucmoc",
+      "IMG20260706161518_disv6m"
     ],
     "backstage": [
-      "IMG20260706144406_l6j741",
-      "IMG20260706142923_ludqw2",
+      "IMG20260706112115_idfyih",
       "IMG20260706121728_vj7elx",
+      "IMG20260706142923_ludqw2",
+      "IMG20260706144406_l6j741",
       "IMG20260706130246_sjcgdx",
-      "IMG20260706151335_g5yxkq",
+      "IMG20260706132701_xt3ibq",
+      "IMG20260706142331_yfprqi",
       "IMG20260706150820_ry1k3r",
       "IMG_20260706_190541_698_evfw5c",
       "IMG_20260706_190541_430_vx4pzg",
       "IMG_20260706_190541_851_dfjh4u"
     ],
     "skip": [
-      "IMG20260706142331_yfprqi",
-      "IMG20260706151349_gt9ezu",
       "IMG20260706130357_ijl8sb",
-      "IMG20260706132543_ibgcqq"
+      "IMG20260706132543_ibgcqq",
+      "IMG20260706151335_g5yxkq"
     ],
-    "sequence_note": "Кадры расположены так, чтобы показать разнообразие природных и культурных аспектов Кыргызстана, начиная с величественных пейзажей и заканчивая элементами традиционного быта.",
-    "editorial_summary": "День наполнен спокойными и живописными сценами природы Кыргызстана, а также элементами местной культуры, создавая гармоничное повествование о путешествии.",
-    "fact_checks": [],
+    "sequence_note": "Начинаем с природного ландшафта, затем переходим к петроглифам, продолжаем с пастбищ и животных, завершаем сценой с юртой и горным озером.",
+    "editorial_summary": "День наполнен гармонией человека и природы, от величественных ландшафтов до уютного обеда в юрте.",
+    "fact_checks": [
+      "Проверить название горного озера и детали маршрута внутри ущелья."
+    ],
     "source": "series"
   }
 }

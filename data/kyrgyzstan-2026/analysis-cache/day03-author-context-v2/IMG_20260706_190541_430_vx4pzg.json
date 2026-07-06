@@ -1,0 +1,32 @@
+{
+  "public_id": "IMG_20260706_190541_430_vx4pzg",
+  "number": 21,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783343169/IMG_20260706_190541_430_vx4pzg.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображен интерьер юрты с яркими элементами декора и открытой дверью, через которую виден зеленый ландшафт за пределами.",
+  "likely_subject": "интерьер юрты",
+  "place_hints": [
+    "традиционное жилище Кыргызстана"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": true,
+  "interior": true,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тепло и уют традиционной юрты в сердце Кыргызстана.",
+  "editor_note": "Кадр передает атмосферу традиционного кыргызского быта, что важно для общего повествования о культуре страны.",
+  "needs_fact_check": [],
+  "analysis_source": "previous-day-analysis",
+  "analyzed_at": "2026-07-06T13:12:22.344Z",
+  "model": "gpt-4o-mini"
+}
