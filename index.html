@@ -3,55 +3,51 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Кыргызстан 2026 — экспедиционный журнал</title>
-  <meta name="description" content="Живой журнал путешествия по Кыргызстану: маршрут, главы, фотографии и заметки.">
+  <title>Кыргызстан 2026 — журнал путешествия</title>
+  <meta name="description" content="Авторский журнал путешествия по Кыргызстану: главы, фотографии, маршрут и заметки.">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="backstage.css">
-  <link rel="stylesheet" href="magazine.css">
+  <style>
+    body{background:#f4eee4;color:#251f19}.cover{min-height:100svh;display:flex;align-items:flex-end;position:relative;color:#fff8ec;background:url('https://res.cloudinary.com/tftagnuy/image/upload/f_auto,q_auto,w_2200/IMG_20260705_151344_239_baqwsa.jpg') center/cover}.cover:after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.68),rgba(0,0,0,.05) 65%)}.cover__inner{position:relative;z-index:1;padding:0 20px 44px}.cover small,.section-label{display:block;font:500 11px/1.1 Inter,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#9c7d5c;margin-bottom:12px}.cover small{color:rgba(255,248,236,.72)}.cover h1{font:300 clamp(54px,14vw,128px)/.88 Georgia,serif;letter-spacing:-.055em;margin:0 0 16px}.cover p{font:300 clamp(16px,4vw,25px)/1.12 Georgia,serif;margin:0;max-width:760px;color:rgba(255,248,236,.88)}main{max-width:1180px;margin:auto;padding:54px 18px}.lead{max-width:760px;margin:0 0 54px}.lead h2{font:300 clamp(34px,8vw,76px)/.95 Georgia,serif;letter-spacing:-.04em;margin:0 0 16px}.lead p{font:300 20px/1.34 Georgia,serif;margin:0;color:#3b3229}.chapters{display:grid;gap:28px}.chapter-card{display:grid;gap:16px;color:inherit;text-decoration:none}.chapter-card img{width:100%;display:block;height:auto}.chapter-card__text{display:grid;gap:8px}.chapter-card h3{font:300 clamp(32px,7vw,68px)/.95 Georgia,serif;letter-spacing:-.04em;margin:0}.chapter-card p{font:300 18px/1.28 Georgia,serif;margin:0;max-width:680px;color:#3b3229}.chapter-card--draft{opacity:.55}.chapter-card--draft img{filter:grayscale(.25)}.route{margin-top:64px;padding-top:34px;border-top:1px solid rgba(37,31,25,.16)}.route-list{display:grid;gap:12px;margin-top:18px}.route-day{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid rgba(37,31,25,.12)}.route-day b{font:300 32px/1 Georgia,serif;color:#9c7d5c}.route-day h4{font:300 22px/1.08 Georgia,serif;margin:0 0 4px}.route-day p{margin:0;color:#5f5247;font-size:14px}@media(min-width:840px){.cover__inner{max-width:1180px;width:100%;margin:auto;padding:0 34px 56px}.chapters{grid-template-columns:1.1fr .9fr;align-items:start}.chapter-card:first-child{grid-column:1 / -1;grid-template-columns:1.15fr .85fr;align-items:end}.chapter-card:first-child img{min-height:64vh;object-fit:cover}.chapter-card:first-child .chapter-card__text{padding:0 0 16px}.route-list{grid-template-columns:1fr 1fr}.route-day{border-bottom:0;border-top:1px solid rgba(37,31,25,.12)}}
+  </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="hero__shade"></div>
-    <div class="hero__content">
-      <p class="kicker">Экспедиционный журнал</p>
+  <header class="cover">
+    <div class="cover__inner">
+      <small>Travel Journal</small>
       <h1>Кыргызстан 2026</h1>
-      <p class="subtitle">4–11 июля · Иссык-Куль · Алтын-Арашан · Сон-Кёль · Кокомерен</p>
-      <div class="hero__stats">
-        <span>8 дней</span>
-        <span>горные дороги</span>
-        <span>кочевники</span>
-        <span>живой дневник</span>
-      </div>
+      <p>Фотографии ведут историю. Текст остаётся тихим: только чтобы задать ритм, место и паузу между кадрами.</p>
     </div>
   </header>
-
-  <nav class="nav">
-    <a href="#idea">Идея</a>
-    <a href="#route">Маршрут</a>
-    <a href="#days">Дни</a>
-  </nav>
-
   <main>
-    <section class="intro" id="idea">
-      <p class="eyebrow">Не блог, а личный журнал</p>
-      <h2>Путешествие, которое собирается по мере движения</h2>
-      <p>Сюда будут добавляться фотографии, короткие видео, голосовые заметки и дневниковые главы. Не туристический отчёт, а история поездки: места, люди, дороги, случайные наблюдения и личные впечатления.</p>
+    <section class="lead">
+      <span class="section-label">Журнал путешествия</span>
+      <h2>Горы, вода и дорога по кругу</h2>
+      <p>Июльская поездка по Кыргызстану: Чуйская долина, Иссык-Куль, Каракол, Алтын-Арашан, Сон-Кёль и дорога обратно через Кокомерен.</p>
     </section>
-
-    <section class="route-card" id="route">
-      <div>
-        <p class="eyebrow">Кольцо по Кыргызстану</p>
-        <h2>От древнего Баласагуна до высокогорного Сон-Кёля</h2>
-      </div>
-      <div class="route-line">
-        <span>Бишкек</span><span>Бурана</span><span>Чон-Кемин</span><span>Иссык-Куль</span><span>Каракол</span><span>Алтын-Арашан</span><span>Сон-Кёль</span><span>Кокомерен</span>
+    <section class="chapters" aria-label="Главы">
+      <a class="chapter-card" href="day02.html">
+        <img src="https://res.cloudinary.com/tftagnuy/image/upload/f_auto,q_auto,w_1800/IMG_20260705_151344_239_baqwsa.jpg" alt="Горы и вода">
+        <div class="chapter-card__text"><span class="section-label">День 2 · опубликовано</span><h3>Горы и вода</h3><p>Конная прогулка, Боомское ущелье, красный Кок-Мойнок и вечерняя тишина Иссык-Куля.</p></div>
+      </a>
+      <article class="chapter-card chapter-card--draft">
+        <img src="https://res.cloudinary.com/tftagnuy/image/upload/f_auto,q_auto,w_1400/IMG20260704173627_e3pqlm.jpg" alt="День 1">
+        <div class="chapter-card__text"><span class="section-label">День 1 · в работе</span><h3>Бурана и Чон-Кемин</h3><p>Башня, балбалы и первая ночёвка у гор. Эту главу ещё нужно привести к новому формату.</p></div>
+      </article>
+    </section>
+    <section class="route">
+      <span class="section-label">Маршрут</span>
+      <div class="route-list">
+        <div class="route-day"><b>01</b><div><h4>Бишкек → Бурана → Чон-Кемин</h4><p>История, степь и первая долина.</p></div></div>
+        <div class="route-day"><b>02</b><div><h4>Чон-Кемин → Кок-Мойнок → Чок-Тал</h4><p>Лошади, каньон и Иссык-Куль.</p></div></div>
+        <div class="route-day"><b>03</b><div><h4>Чок-Тал → Чолпон-Ата → Каракол</h4><p>Северный берег озера и дорога на восток.</p></div></div>
+        <div class="route-day"><b>04</b><div><h4>Алтын-Арашан</h4><p>Горная долина и горячие источники.</p></div></div>
+        <div class="route-day"><b>05</b><div><h4>Джети-Огуз → Барскоон → Боконбаево</h4><p>Южный берег и красные скалы.</p></div></div>
+        <div class="route-day"><b>06</b><div><h4>Боконбаево → Кочкор</h4><p>Каньоны, озёра и дорога внутрь страны.</p></div></div>
+        <div class="route-day"><b>07</b><div><h4>Кочкор → Сон-Кёль → Кызыл-Ой</h4><p>Высокогорное озеро и кочевая равнина.</p></div></div>
+        <div class="route-day"><b>08</b><div><h4>Кокомерен → Суусамыр → Бишкек</h4><p>Финальная дорога к вылету.</p></div></div>
       </div>
     </section>
-
-    <section id="days" class="days"></section>
   </main>
-
-  <footer>Кыргызстан 2026 · личный экспедиционный журнал</footer>
-  <script src="script.js"></script>
+  <footer>Кыргызстан 2026 · авторский журнал путешествия</footer>
 </body>
 </html>
