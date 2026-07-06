@@ -2,6 +2,7 @@
   "scripts": {
     "sync:photos": "node sync-cloudinary.mjs",
     "analyze:photos": "node analyze-photos.mjs",
-    "build:editorial": "node build-review.mjs"
+    "build:ai-review": "node build-review.mjs",
+    "build:final-review": "node build-final-review.mjs"
   }
 }
