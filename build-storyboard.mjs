@@ -32,13 +32,36 @@ function extractJson(text) {
 }
 
 async function buildStoryboard(payload) {
-  const prompt = `Собери storyboard для тревел-журнала.
+  const prompt = `Собери storyboard для авторского тревел-журнала.
 
-Основной объект — сцена, не отдельная подпись к фото.
-У каждой сцены: title, text, text_mode, photos.
-text — короткая фраза или абзац между фотографиями. Не объясняй очевидное на снимке.
-Используй только public_id из final_review.
-Пиши спокойно, без рекламного тона.
+Главный принцип: финальная вёрстка не повторяет механический порядок карточек. Она строит визуальный рассказ.
+
+Иерархия решений:
+1. Авторская идея и маршрут дня.
+2. Сила фотографии.
+3. Ритм финальной публикации.
+4. Технический порядок кадров в author-review.
+
+Что нужно сделать:
+- Разложить материал на сцены, а не на отдельные подписи к фото.
+- У каждой сцены: title, text, text_mode, photos, layout, editorial_note.
+- text — короткая фраза или абзац между фотографиями. Не объясняй очевидное на снимке.
+- Используй только public_id из final_review.
+- Порядок сцен может отличаться от порядка карточек, если так история становится сильнее.
+- Горизонтальные фотографии обычно ставь широкими блоками.
+- Вертикальные фотографии используй точечно: как паузу или пару, если они усиливают сцену.
+- Не ставь подряд много похожих пейзажей. Один сильный кадр лучше трёх повторов.
+- Человеческие сцены ставь там, где они меняют смысл, а не просто как иллюстрацию.
+- За кадром оставляй хорошие, но необязательные фотографии.
+
+Тон текста:
+- спокойный;
+- точный;
+- журнальный;
+- без рекламных слов;
+- без банальных ИИ-фраз.
+
+Запрещённые обороты: «захватывающие виды», «жемчужина», «словами не передать», «незабываемый», «обязательно стоит», «живописный уголок», «величие природы».
 
 Верни только JSON:
 {
@@ -47,8 +70,18 @@ text — короткая фраза или абзац между фотогра
   "status":"storyboard",
   "updated_at":"ISO_DATE",
   "final_review_source":"${finalReviewFile}",
-  "chapter":{"title":"...","subtitle":"...","one_line":"...","intro":"...","emotional_curve":"...","rhythm":"..."},
-  "scenes":[{"id":"...","title":"...","text":"...","text_mode":"short|quiet|pause|main|final","photos":["public_id"]}],
+  "chapter":{
+    "title":"...",
+    "subtitle":"...",
+    "one_line":"...",
+    "intro":"...",
+    "emotional_curve":"...",
+    "rhythm":"..."
+  },
+  "layout_rules":["..."],
+  "scenes":[
+    {"id":"...","title":"...","text":"...","text_mode":"short|quiet|pause|main|final","photos":["public_id"],"layout":"single-wide|wide-pair|story-pair|single-quiet|inside-outside-pair|transition","editorial_note":"..."}
+  ],
   "backstage_role":"...",
   "publication_note":"..."
 }
@@ -59,7 +92,7 @@ ${JSON.stringify(payload, null, 2)}`;
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {"Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json"},
-    body: JSON.stringify({model, temperature: 0.18, response_format: {type: "json_object"}, messages: [{role: "user", content: prompt}]})
+    body: JSON.stringify({model, temperature: 0.15, response_format: {type: "json_object"}, messages: [{role: "user", content: prompt}]})
   });
   if (!response.ok) throw new Error(`OpenAI storyboard error: ${response.status} ${await response.text()}`);
   const data = await response.json();
