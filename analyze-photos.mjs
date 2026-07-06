@@ -6,6 +6,7 @@ const trip = process.env.TRIP || "kyrgyzstan-2026";
 const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
 const inFile = process.env.IN_FILE || `data/${trip}/${dayTag}-photos.json`;
 const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-analysis.json`;
+const cacheDir = process.env.CACHE_DIR || `data/${trip}/analysis-cache/${dayTag}`;
 
 if (!apiKey) {
   throw new Error("OPENAI_API_KEY secret is missing");
@@ -20,6 +21,20 @@ function normalizeDay(value) {
 
 function imageUrl(url) {
   return url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_1400/");
+}
+
+function cachePath(publicId) {
+  const safeName = encodeURIComponent(publicId).replace(/%/g, "_");
+  return `${cacheDir}/${safeName}.json`;
+}
+
+async function readJsonIfExists(path) {
+  try {
+    return JSON.parse(await fs.readFile(path, "utf8"));
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
 }
 
 function extractJson(text) {
@@ -41,7 +56,7 @@ function safeNumber(value, fallback = 0) {
   return Number.isFinite(number) ? number : fallback;
 }
 
-function normalizeAnalysis(photo, raw, index) {
+function normalizeAnalysis(photo, raw, index, source = "vision") {
   return {
     public_id: photo.public_id,
     number: index + 1,
@@ -67,8 +82,17 @@ function normalizeAnalysis(photo, raw, index) {
     suggested_role: ["hero", "story", "backstage", "skip"].includes(raw.suggested_role) ? raw.suggested_role : "story",
     caption_seed: String(raw.caption_seed || "").trim(),
     editor_note: String(raw.editor_note || "").trim(),
-    needs_fact_check: Array.isArray(raw.needs_fact_check) ? raw.needs_fact_check.map(String).slice(0, 6) : []
+    needs_fact_check: Array.isArray(raw.needs_fact_check) ? raw.needs_fact_check.map(String).slice(0, 6) : [],
+    analysis_source: source,
+    analyzed_at: raw.analyzed_at || new Date().toISOString(),
+    model: raw.model || model
   };
+}
+
+function isReusableCachedAnalysis(photo, cached) {
+  if (!cached || cached.public_id !== photo.public_id) return false;
+  if (!cached.visual_summary && !cached.editor_note) return false;
+  return true;
 }
 
 async function analyzePhoto(photo, index, total) {
@@ -134,10 +158,10 @@ async function analyzePhoto(photo, index, total) {
     throw new Error(`OpenAI returned empty content for ${photo.public_id}`);
   }
 
-  return normalizeAnalysis(photo, extractJson(content), index);
+  return normalizeAnalysis(photo, extractJson(content), index, "vision");
 }
 
-function buildRecommendation(items) {
+function buildAlgorithmicRecommendation(items) {
   const sorted = [...items].sort((a, b) => {
     const scoreA = a.story_score + a.composition_score + a.emotional_score + a.technical_score - a.redundancy_risk * 0.5;
     const scoreB = b.story_score + b.composition_score + b.emotional_score + b.technical_score - b.redundancy_risk * 0.5;
@@ -159,8 +183,115 @@ function buildRecommendation(items) {
     story: story.map((item) => item.public_id),
     backstage: backstage.map((item) => item.public_id),
     skip: skip.map((item) => item.public_id),
+    source: "algorithmic",
     note: "Автоотбор предварительный. Перед публикацией редактор проверяет порядок кадров, подписи и факты."
   };
+}
+
+async function buildSeriesRecommendation(items) {
+  const fallback = buildAlgorithmicRecommendation(items);
+  const compactItems = items.map((item) => ({
+    public_id: item.public_id,
+    number: item.number,
+    orientation: item.orientation,
+    visual_summary: item.visual_summary,
+    likely_subject: item.likely_subject,
+    scores: {
+      composition: item.composition_score,
+      story: item.story_score,
+      emotional: item.emotional_score,
+      technical: item.technical_score,
+      redundancy: item.redundancy_risk
+    },
+    suggested_role: item.suggested_role,
+    caption_seed: item.caption_seed,
+    editor_note: item.editor_note
+  }));
+
+  const prompt = `Ты выпускающий фоторедактор авторского тревел-журнала. Ниже — анализ всех кадров одного дня. Составь первичный отбор серии.
+
+Правила:
+- 1 главное фото.
+- 6-8 фотографий рассказа.
+- Остальные хорошие — за кадром.
+- Слабые и повторяющиеся — skip.
+- Порядок рассказа может отличаться от исходного, если история станет сильнее.
+- Не выдумывай географию и факты: если надо проверить, добавь в fact_checks.
+
+Верни только JSON:
+{
+  "hero": "public_id",
+  "story": ["public_id"],
+  "backstage": ["public_id"],
+  "skip": ["public_id"],
+  "sequence_note": "коротко: логика порядка",
+  "editorial_summary": "коротко: о чём день визуально",
+  "fact_checks": ["что проверить"],
+  "source": "series"
+}
+
+Кадры:
+${JSON.stringify(compactItems, null, 2)}`;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model,
+        temperature: 0.2,
+        response_format: { type: "json_object" },
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      console.warn(`Series recommendation failed: ${response.status} ${text}`);
+      return fallback;
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) return fallback;
+    const raw = extractJson(content);
+    const knownIds = new Set(items.map((item) => item.public_id));
+    const cleanList = (list) => Array.isArray(list) ? list.map(String).filter((id) => knownIds.has(id)) : [];
+    const hero = knownIds.has(raw.hero) ? raw.hero : fallback.hero;
+    const story = cleanList(raw.story).filter((id) => id !== hero).slice(0, 8);
+    const used = new Set([hero, ...story].filter(Boolean));
+    const backstage = cleanList(raw.backstage).filter((id) => !used.has(id));
+    backstage.forEach((id) => used.add(id));
+    const skip = cleanList(raw.skip).filter((id) => !used.has(id));
+    const assigned = new Set([...used, ...skip]);
+    for (const item of items) {
+      if (!assigned.has(item.public_id)) backstage.push(item.public_id);
+    }
+
+    return {
+      hero,
+      story,
+      backstage,
+      skip,
+      sequence_note: String(raw.sequence_note || "").trim(),
+      editorial_summary: String(raw.editorial_summary || "").trim(),
+      fact_checks: Array.isArray(raw.fact_checks) ? raw.fact_checks.map(String).slice(0, 12) : [],
+      source: "series"
+    };
+  } catch (error) {
+    console.warn(`Series recommendation failed: ${error.message}`);
+    return fallback;
+  }
+}
+
+async function seedCacheFromPreviousOutFile() {
+  const previous = await readJsonIfExists(outFile);
+  const items = Array.isArray(previous?.items) ? previous.items : [];
+  if (!items.length) return new Map();
+  return new Map(items.map((item) => [item.public_id, item]));
 }
 
 const rawPhotos = await fs.readFile(inFile, "utf8");
@@ -169,25 +300,54 @@ if (!Array.isArray(photos) || photos.length === 0) {
   throw new Error(`${inFile} does not contain photos`);
 }
 
+await fs.mkdir(cacheDir, { recursive: true });
+const previousById = await seedCacheFromPreviousOutFile();
 const items = [];
+const stats = { reused_from_cache: 0, reused_from_previous_day_analysis: 0, analyzed_new: 0 };
+
 for (let index = 0; index < photos.length; index += 1) {
   const photo = photos[index];
-  console.log(`Analyzing ${index + 1}/${photos.length}: ${photo.public_id}`);
+  const path = cachePath(photo.public_id);
+  const cached = await readJsonIfExists(path);
+
+  if (isReusableCachedAnalysis(photo, cached)) {
+    console.log(`Reusing cache ${index + 1}/${photos.length}: ${photo.public_id}`);
+    items.push(normalizeAnalysis(photo, cached, index, cached.analysis_source || "cache"));
+    stats.reused_from_cache += 1;
+    continue;
+  }
+
+  const previous = previousById.get(photo.public_id);
+  if (isReusableCachedAnalysis(photo, previous)) {
+    console.log(`Seeding cache from existing day analysis ${index + 1}/${photos.length}: ${photo.public_id}`);
+    const seeded = normalizeAnalysis(photo, previous, index, "previous-day-analysis");
+    await fs.writeFile(path, JSON.stringify(seeded, null, 2), "utf8");
+    items.push(seeded);
+    stats.reused_from_previous_day_analysis += 1;
+    continue;
+  }
+
+  console.log(`Analyzing new photo ${index + 1}/${photos.length}: ${photo.public_id}`);
   const analysis = await analyzePhoto(photo, index, photos.length);
+  await fs.writeFile(path, JSON.stringify(analysis, null, 2), "utf8");
   items.push(analysis);
+  stats.analyzed_new += 1;
 }
 
 const result = {
   trip,
   day: dayTag,
   photos_source: inFile,
+  cache_dir: cacheDir,
   generated_at: new Date().toISOString(),
   model,
+  cache_stats: stats,
   items,
-  recommendation: buildRecommendation(items)
+  recommendation: await buildSeriesRecommendation(items)
 };
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", { recursive: true });
 await fs.writeFile(outFile, JSON.stringify(result, null, 2), "utf8");
 
 console.log(`Saved analysis for ${items.length} photos to ${outFile}`);
+console.log(`Cache stats: ${JSON.stringify(stats)}`);
