@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260707121057_b9oumd",
+  "number": 9,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439135/IMG20260707121057_b9oumd.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена бурная река, окруженная высокими соснами и скалистыми берегами. Облака на небе создают атмосферу спокойствия и величия природы.",
+  "likely_subject": "река",
+  "place_hints": [
+    "Алтын-Арашан",
+    "горы Кыргызстана"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Бурная река, омывающая скалистые берега, отражает мощь природы.",
+  "editor_note": "Кадр подчеркивает контраст между природной красотой и человеческим вмешательством, что соответствует центральной теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:35.911Z",
+  "model": "gpt-4o-mini"
+}

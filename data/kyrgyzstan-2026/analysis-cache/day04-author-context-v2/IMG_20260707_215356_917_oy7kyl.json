@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG_20260707_215356_917_oy7kyl",
+  "number": 18,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439669/IMG_20260707_215356_917_oy7kyl.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена бурная река, окружённая зелёными лугами и высокими хвойными деревьями.",
+  "likely_subject": "река",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Река, стремительно несущая свои воды среди зелени и хвойных лесов.",
+  "editor_note": "Кадр подчеркивает контраст между природной красотой и застройкой, отражая центральную мысль главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:05:24.122Z",
+  "model": "gpt-4o-mini"
+}

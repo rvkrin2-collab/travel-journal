@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260707153207_swlibm",
+  "number": 7,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439132/IMG20260707153207_swlibm.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображена долина с зелеными пастбищами, окруженная горами. Вдалеке видны белые юрты и река, протекающая через ландшафт.",
+  "likely_subject": "долина с юртами",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина долины, где природа и традиционная жизнь соседствуют.",
+  "editor_note": "Этот кадр подчеркивает контраст между природой и человеческим присутствием, что важно для рассказа.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:23.740Z",
+  "model": "gpt-4o-mini"
+}

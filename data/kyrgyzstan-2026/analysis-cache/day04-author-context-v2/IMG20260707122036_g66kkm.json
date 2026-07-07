@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260707122036_g66kkm",
+  "number": 5,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439107/IMG20260707122036_g66kkm.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии виден указатель с названием Алтын-Арашан, украшенный множеством наклеек, на фоне зелёных деревьев и горной реки.",
+  "likely_subject": "указатель на Алтын-Арашан",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 6,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Указатель на Алтын-Арашан, окружённый природой.",
+  "editor_note": "Кадр подчеркивает контраст между человеческим вмешательством и природой, что соответствует теме главы.",
+  "needs_fact_check": [
+    "подтвердить правильность написания Алтын-Арашан"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:10.431Z",
+  "model": "gpt-4o-mini"
+}

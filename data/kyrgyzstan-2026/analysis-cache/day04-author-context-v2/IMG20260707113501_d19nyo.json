@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260707113501_d19nyo",
+  "number": 6,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439114/IMG20260707113501_d19nyo.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена зелёная долина с рекой, окружённая высокими хвойными деревьями и горами на фоне облачного неба.",
+  "likely_subject": "природа долины",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Тишина и зелень Алтын-Арашан.",
+  "editor_note": "Этот кадр подчеркивает контраст между природой и застройкой, отражая центральную мысль главы о силе природы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:17.306Z",
+  "model": "gpt-4o-mini"
+}

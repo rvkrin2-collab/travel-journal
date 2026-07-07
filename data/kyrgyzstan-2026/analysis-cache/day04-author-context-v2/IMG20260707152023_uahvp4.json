@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260707152023_uahvp4",
+  "number": 1,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439093/IMG20260707152023_uahvp4.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображена долина с бурной рекой и несколькими гостевыми домами на фоне гор.",
+  "likely_subject": "гостевые дома в долине",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 6,
+  "story_score": 7,
+  "emotional_score": 5,
+  "technical_score": 6,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Гостевые дома в Алтын-Арашане, окруженные природой.",
+  "editor_note": "Кадр иллюстрирует контраст между природой и застройкой, что соответствует теме главы.",
+  "needs_fact_check": [
+    "точное название местности",
+    "фактические детали о гостевых домах"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:03:45.488Z",
+  "model": "gpt-4o-mini"
+}

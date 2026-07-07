@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260707151822_l3txyw",
+  "number": 10,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439137/IMG20260707151822_l3txyw.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображена река, текущая среди зелёных лесов и гор. Вдали виднеются горные вершины, покрытые облаками.",
+  "likely_subject": "река",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Река, текущая среди зелёных лесов Алтын-Арашана.",
+  "editor_note": "Этот кадр подчеркивает контраст между природой и застройкой, а также иллюстрирует тему открытия красоты в непосредственной близости от базы.",
+  "needs_fact_check": [
+    "подтвердить название реки",
+    "уточнить местоположение в Алтын-Арашане"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:41.420Z",
+  "model": "gpt-4o-mini"
+}

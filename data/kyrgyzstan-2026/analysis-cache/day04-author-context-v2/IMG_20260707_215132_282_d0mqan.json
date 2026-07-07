@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG_20260707_215132_282_d0mqan",
+  "number": 12,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439589/IMG_20260707_215132_282_d0mqan.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена бурная река, окруженная густыми хвойными лесами и зелеными склонами гор.",
+  "likely_subject": "река",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Бурная река, обрамленная хвойными лесами, раскрывает силу природы.",
+  "editor_note": "Кадр подчеркивает контраст между природной красотой и человеческим вмешательством, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:51.286Z",
+  "model": "gpt-4o-mini"
+}

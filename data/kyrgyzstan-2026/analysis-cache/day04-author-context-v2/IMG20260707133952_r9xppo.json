@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260707133952_r9xppo",
+  "number": 4,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439107/IMG20260707133952_r9xppo.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображен горный пейзаж с извивающейся рекой и небольшим поселением на фоне. Синяя машина стоит на труднопроходимой дороге, указывая на сложность маршрута.",
+  "likely_subject": "горы и дорога",
+  "place_hints": [
+    "Алтын-Арашан",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": true,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Дорога в Алтын-Арашан: трудности и красота на каждом шагу.",
+  "editor_note": "Кадр подчеркивает контраст между природой и человеческими усилиями, что соответствует центральной мысли главы.",
+  "needs_fact_check": [
+    "точное название поселения",
+    "фактические детали маршрута"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:04:03.870Z",
+  "model": "gpt-4o-mini"
+}

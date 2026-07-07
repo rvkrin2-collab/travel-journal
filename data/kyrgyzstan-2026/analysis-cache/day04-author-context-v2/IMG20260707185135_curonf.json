@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260707185135_curonf",
+  "number": 3,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783439095/IMG20260707185135_curonf.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображен вход в заведение с яркой вывеской на киргизском языке. Внутри видны столы с посетителями.",
+  "likely_subject": "заведение общественного питания",
+  "place_hints": [
+    "Кыргызстан",
+    "город Каракол"
+  ],
+  "people": true,
+  "landscape": false,
+  "architecture": true,
+  "interior": true,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 4,
+  "story_score": 3,
+  "emotional_score": 2,
+  "technical_score": 5,
+  "redundancy_risk": 6,
+  "suggested_role": "backstage",
+  "caption_seed": "Местное заведение, где встречаются туристы и местные жители.",
+  "editor_note": "Кадр может дополнить рассказ о взаимодействии туристов с местной культурой, но не является центральным элементом.",
+  "needs_fact_check": [
+    "название заведения",
+    "точное местоположение в Караколе"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-07T16:03:57.996Z",
+  "model": "gpt-4o-mini"
+}
