@@ -52,6 +52,12 @@ jobs:
           TRIP: ${{ github.event.inputs.trip }}
           DAY_TAG: ${{ github.event.inputs.day_tag }}
 
+      - name: Validate storyboard
+        run: node validate-storyboard.mjs
+        env:
+          TRIP: ${{ github.event.inputs.trip }}
+          DAY_TAG: ${{ github.event.inputs.day_tag }}
+
       - name: Commit storyboard
         run: |
           git config user.name "travel-journal-bot"
