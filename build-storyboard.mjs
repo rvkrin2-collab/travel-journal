@@ -5,6 +5,7 @@ const model = process.env.OPENAI_TEXT_MODEL || "gpt-4o-mini";
 const trip = process.env.TRIP || "kyrgyzstan-2026";
 const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
 const finalReviewFile = process.env.FINAL_REVIEW_FILE || `data/${trip}/${dayTag}-final-review.json`;
+const authorReviewFile = process.env.AUTHOR_REVIEW_FILE || `data/${trip}/${dayTag}-author-review.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
 const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-storyboard.json`;
 
@@ -21,6 +22,10 @@ async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
 }
 
+async function readJsonIfExists(path) {
+  try { return await readJson(path); } catch (error) { if (error?.code === "ENOENT") return null; throw error; }
+}
+
 function extractJson(text) {
   const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
   try { return JSON.parse(cleaned); } catch (error) {
@@ -31,7 +36,7 @@ function extractJson(text) {
   }
 }
 
-async function buildStoryboard(payload) {
+async function buildStoryboard(payload, reviewSourceFile) {
   const prompt = `Собери storyboard для авторского тревел-журнала.
 
 Главный принцип: финальная вёрстка строит визуальный рассказ, но не ломает географию дня.
@@ -54,7 +59,7 @@ async function buildStoryboard(payload) {
 - Разложить материал на сцены, а не на отдельные подписи к фото.
 - У каждой сцены: title, text, text_mode, photos, layout, editorial_note.
 - text — короткая фраза или абзац между фотографиями. Не объясняй очевидное на снимке.
-- Используй только public_id из final_review.
+- Используй только public_id из review.
 - Порядок сцен может отличаться от порядка карточек только внутри одной подтверждённой локации. Порядок локаций должен следовать маршруту дня.
 - Горизонтальные фотографии обычно ставь широкими блоками.
 - Вертикальные фотографии используй точечно: как паузу или пару, если они усиливают сцену.
@@ -77,7 +82,7 @@ async function buildStoryboard(payload) {
   "day":"${dayTag}",
   "status":"storyboard",
   "updated_at":"ISO_DATE",
-  "final_review_source":"${finalReviewFile}",
+  "final_review_source":"${reviewSourceFile}",
   "chapter":{
     "title":"...",
     "subtitle":"...",
@@ -109,15 +114,19 @@ ${JSON.stringify(payload, null, 2)}`;
   return extractJson(data.choices?.[0]?.message?.content || "");
 }
 
-const finalReview = await readJson(finalReviewFile);
+const finalReview = await readJsonIfExists(finalReviewFile);
+const authorReview = await readJsonIfExists(authorReviewFile);
+const review = finalReview || authorReview;
+const reviewSourceFile = finalReview ? finalReviewFile : authorReviewFile;
+if (!review) throw new Error(`${finalReviewFile} or ${authorReviewFile} is required to build storyboard`);
 let authorNotes = null;
 try { authorNotes = await readJson(authorNotesFile); } catch (error) {}
-const storyboard = await buildStoryboard({final_review: finalReview, author_notes: authorNotes});
+const storyboard = await buildStoryboard({review, final_review: finalReview, author_review: authorReview, author_notes: authorNotes}, reviewSourceFile);
 storyboard.trip = trip;
 storyboard.day = dayTag;
 storyboard.status = "storyboard";
-storyboard.final_review_source = finalReviewFile;
+storyboard.final_review_source = reviewSourceFile;
 storyboard.updated_at = new Date().toISOString();
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", {recursive: true});
 await fs.writeFile(outFile, JSON.stringify(storyboard, null, 2), "utf8");
-console.log(`Saved storyboard to ${outFile}`);
+console.log(`Saved storyboard to ${outFile} from ${reviewSourceFile}`);
