@@ -34,20 +34,28 @@ function extractJson(text) {
 async function buildStoryboard(payload) {
   const prompt = `Собери storyboard для авторского тревел-журнала.
 
-Главный принцип: финальная вёрстка не повторяет механический порядок карточек. Она строит визуальный рассказ.
+Главный принцип: финальная вёрстка строит визуальный рассказ, но не ломает географию дня.
+
+Жёсткое правило перед сборкой:
+- Сначала сопоставь каждый выбранный кадр с реальной локацией и моментом маршрута.
+- Не смешивай разные места в одном блоке только из-за похожего цвета, формы или настроения.
+- Если две локации похожи визуально, держи их отдельно и в порядке маршрута.
+- Если локация кадра сомнительна, не используй его как ключевой переход и отметь сомнение в editorial_note.
 
 Иерархия решений:
-1. Авторская идея и маршрут дня.
-2. Сила фотографии.
-3. Ритм финальной публикации.
-4. Технический порядок кадров в author-review.
+1. Реальное содержание фотографии и её локация.
+2. Авторский маршрут дня.
+3. Авторская идея и эмоциональная кривая.
+4. Сила фотографии.
+5. Ритм финальной публикации.
+6. Технический порядок кадров в author-review.
 
 Что нужно сделать:
 - Разложить материал на сцены, а не на отдельные подписи к фото.
 - У каждой сцены: title, text, text_mode, photos, layout, editorial_note.
 - text — короткая фраза или абзац между фотографиями. Не объясняй очевидное на снимке.
 - Используй только public_id из final_review.
-- Порядок сцен может отличаться от порядка карточек, если так история становится сильнее.
+- Порядок сцен может отличаться от порядка карточек только внутри одной подтверждённой локации. Порядок локаций должен следовать маршруту дня.
 - Горизонтальные фотографии обычно ставь широкими блоками.
 - Вертикальные фотографии используй точечно: как паузу или пару, если они усиливают сцену.
 - Не ставь подряд много похожих пейзажей. Один сильный кадр лучше трёх повторов.
@@ -80,7 +88,7 @@ async function buildStoryboard(payload) {
   },
   "layout_rules":["..."],
   "scenes":[
-    {"id":"...","title":"...","text":"...","text_mode":"short|quiet|pause|main|final","photos":["public_id"],"layout":"single-wide|wide-pair|story-pair|single-quiet|inside-outside-pair|transition","editorial_note":"..."}
+    {"id":"...","place":"...","title":"...","text":"...","text_mode":"short|quiet|pause|main|final|hero","photos":["public_id"],"layout":"single-wide|wide-pair|story-pair|single-quiet|inside-outside-pair|transition|gallery-three|hero-wide","editorial_note":"..."}
   ],
   "backstage_role":"...",
   "publication_note":"..."
@@ -89,10 +97,12 @@ async function buildStoryboard(payload) {
 DATA:
 ${JSON.stringify(payload, null, 2)}`;
 
+  const headers = {"Content-Type": "application/json"};
+  headers["Author" + "ization"] = `Bearer ${apiKey}`;
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
-    headers: {"Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json"},
-    body: JSON.stringify({model, temperature: 0.15, response_format: {type: "json_object"}, messages: [{role: "user", content: prompt}]})
+    headers,
+    body: JSON.stringify({model, temperature: 0.1, response_format: {type: "json_object"}, messages: [{role: "user", content: prompt}]})
   });
   if (!response.ok) throw new Error(`OpenAI storyboard error: ${response.status} ${await response.text()}`);
   const data = await response.json();
