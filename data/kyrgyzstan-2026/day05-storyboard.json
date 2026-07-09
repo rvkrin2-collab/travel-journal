@@ -2,7 +2,7 @@
   "trip": "kyrgyzstan-2026",
   "day": "day05",
   "status": "storyboard",
-  "updated_at": "2026-07-09T09:35:00.000Z",
+  "updated_at": "2026-07-09T10:05:00.000Z",
   "source": "manual_editorial_layout_geography_first_author_notes",
   "author_review_source": "data/kyrgyzstan-2026/day05-author-review.json",
   "preview_notes_source": "day05-preview-author-notes.json",
@@ -90,11 +90,11 @@
       "id": "fairy-tale-hero",
       "place": "Каньон Сказка",
       "title": "Неземная Сказка",
-      "text": "Это главный визуальный удар дня. Не нужно объяснять слишком много: формы сами делают место странным и почти нереальным.",
+      "text": "Формы сами делают место странным и почти нереальным.",
       "text_mode": "hero",
       "photos": ["IMG20260708171231_ngh0so"],
       "layout": "hero-wide",
-      "editorial_note": "Главное фото главы."
+      "editorial_note": "Главное фото главы. Текст держать коротким: без фразы «главный визуальный удар»."
     },
     {
       "id": "fairy-tale-details",
