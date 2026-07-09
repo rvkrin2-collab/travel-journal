@@ -4,6 +4,7 @@
     "analyze:photos": "node analyze-photos.mjs",
     "build:ai-review": "node build-review.mjs",
     "build:final-review": "node build-final-review.mjs",
-    "build:storyboard": "node build-storyboard.mjs"
+    "build:storyboard": "node build-storyboard.mjs",
+    "validate:storyboard": "node validate-storyboard.mjs"
   }
 }
