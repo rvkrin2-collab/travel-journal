@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260708175223_bbpx47",
+  "number": 23,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517835/IMG20260708175223_bbpx47.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены красные и коричневые холмы, переходящие в водную гладь, под облачным небом.",
+  "likely_subject": "ландшафт с холмами и водоемом",
+  "place_hints": [
+    "вероятно, район близ озера"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Ландшафт, где земля встречается с водой.",
+  "editor_note": "Кадр подчеркивает разнообразие природных форм и создает контраст между холмами и водоемом, что соответствует теме главы.",
+  "needs_fact_check": [
+    "точное название водоема",
+    "географическая привязка холмов"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:56.496Z",
+  "model": "gpt-4o-mini"
+}

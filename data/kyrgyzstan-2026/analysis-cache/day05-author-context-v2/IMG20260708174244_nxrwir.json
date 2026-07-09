@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708174244_nxrwir",
+  "number": 20,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517828/IMG20260708174244_nxrwir.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается панорама каньона с яркими красными и коричневыми скалами, на переднем плане сидит человек, погружённый в свои мысли.",
+  "likely_subject": "каньон Сказка",
+  "place_hints": [
+    "Кыргызстан",
+    "каньон"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Человек на краю каньона, погружённый в размышления о природе.",
+  "editor_note": "Кадр подчеркивает тему внутреннего диалога и удивления от природы, что соответствует эмоциональной линии дня.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:39.896Z",
+  "model": "gpt-4o-mini"
+}

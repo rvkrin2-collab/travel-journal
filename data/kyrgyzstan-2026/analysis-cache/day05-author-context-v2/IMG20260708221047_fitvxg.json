@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708221047_fitvxg",
+  "number": 26,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783569680/IMG20260708221047_fitvxg.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображен элемент юрты с характерными красными спицами, создающими геометрический узор.",
+  "likely_subject": "декор юрты",
+  "place_hints": [
+    "Кыргызстан",
+    "юрточный лагерь"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 5,
+  "emotional_score": 4,
+  "technical_score": 6,
+  "redundancy_risk": 3,
+  "suggested_role": "backstage",
+  "caption_seed": "Элемент юрты, отражающий традиционное искусство Кыргызстана.",
+  "editor_note": "Кадр добавляет контекст о культуре и быте, но не является центральным в рассказе.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:17:11.931Z",
+  "model": "gpt-4o-mini"
+}

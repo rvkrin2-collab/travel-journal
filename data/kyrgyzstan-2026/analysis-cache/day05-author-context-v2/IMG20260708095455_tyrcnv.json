@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260708095455_tyrcnv",
+  "number": 3,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517772/IMG20260708095455_tyrcnv.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображено здание с яркой архитектурой, окруженное зелеными насаждениями и цветами.",
+  "likely_subject": "архитектурный объект",
+  "place_hints": [
+    "Кыргызстан",
+    "культурные элементы"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 5,
+  "emotional_score": 4,
+  "technical_score": 6,
+  "redundancy_risk": 3,
+  "suggested_role": "backstage",
+  "caption_seed": "Яркие детали архитектуры в окружении зелени.",
+  "editor_note": "Кадр добавляет контекст о культурной среде, но не является центральным элементом рассказа.",
+  "needs_fact_check": [
+    "точное название здания и его культурное значение"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:01.561Z",
+  "model": "gpt-4o-mini"
+}

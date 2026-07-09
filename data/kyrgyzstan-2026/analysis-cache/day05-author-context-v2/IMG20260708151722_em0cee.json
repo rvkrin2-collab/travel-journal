@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708151722_em0cee",
+  "number": 8,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517790/IMG20260708151722_em0cee.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены величественные горы, покрытые зелеными лесами, под облачным небом.",
+  "likely_subject": "горы",
+  "place_hints": [
+    "Кыргызстан",
+    "горы"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Величие гор Кыргызстана, скрытых под облаками.",
+  "editor_note": "Кадр подчеркивает природную красоту региона и создает атмосферу спокойствия, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:30.827Z",
+  "model": "gpt-4o-mini"
+}

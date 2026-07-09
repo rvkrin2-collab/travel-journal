@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708111820_wzszrv",
+  "number": 13,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517796/IMG20260708111820_wzszrv.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены красные скалы с характерными слоями, освещенные солнечным светом под облачным небом.",
+  "likely_subject": "скалы",
+  "place_hints": [
+    "Джети-Огуз",
+    "Киргизия"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Скалы Джети-Огуз, отражающие мощь природы.",
+  "editor_note": "Кадр подчеркивает уникальность ландшафта и может служить связующим элементом в рассказе о путешествии.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:01.409Z",
+  "model": "gpt-4o-mini"
+}

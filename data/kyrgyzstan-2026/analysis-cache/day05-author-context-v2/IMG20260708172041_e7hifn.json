@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708172041_e7hifn",
+  "number": 18,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517821/IMG20260708172041_e7hifn.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены красные скалы с характерными формами и текстурами, под ярким голубым небом.",
+  "likely_subject": "скалы каньона Сказка",
+  "place_hints": [
+    "Киргизия",
+    "каньон Сказка"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Уникальные формы красных скал каньона Сказка.",
+  "editor_note": "Этот кадр важен для передачи атмосферы каньона и его природной красоты, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:29.217Z",
+  "model": "gpt-4o-mini"
+}

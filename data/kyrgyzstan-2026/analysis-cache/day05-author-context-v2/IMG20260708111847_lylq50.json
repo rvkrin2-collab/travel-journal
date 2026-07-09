@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708111847_lylq50",
+  "number": 7,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517781/IMG20260708111847_lylq50.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены красные скалы, образующие узкий проход, окружённый зелёной растительностью.",
+  "likely_subject": "скалы каньона Сказка",
+  "place_hints": [
+    "каньон Сказка",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Узкий проход между красными скалами каньона Сказка.",
+  "editor_note": "Этот кадр подчеркивает уникальность ландшафта каньона Сказка и его природную красоту.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:24.597Z",
+  "model": "gpt-4o-mini"
+}

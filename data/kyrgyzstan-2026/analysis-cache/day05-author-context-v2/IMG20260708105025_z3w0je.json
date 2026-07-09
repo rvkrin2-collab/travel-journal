@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708105025_z3w0je",
+  "number": 4,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517772/IMG20260708105025_z3w0je.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены высокие красные скалы, окруженные зелеными деревьями и кустарниками, создающими контраст с ярким небом.",
+  "likely_subject": "скалы",
+  "place_hints": [
+    "Джети-Огуз",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Скалы Джети-Огуз, олицетворяющие величие природы.",
+  "editor_note": "Кадр подчеркивает природную красоту региона и может служить связующим элементом в рассказе о путешествии.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:07.831Z",
+  "model": "gpt-4o-mini"
+}

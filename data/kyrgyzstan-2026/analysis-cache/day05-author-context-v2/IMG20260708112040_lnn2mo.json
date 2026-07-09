@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708112040_lnn2mo",
+  "number": 1,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517772/IMG20260708112040_lnn2mo.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены юрты у подножия красной скалы, подчеркивающей природный ландшафт региона.",
+  "likely_subject": "юрты",
+  "place_hints": [
+    "красные скалы",
+    "юрточный лагерь"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "backstage",
+  "caption_seed": "Юрты у подножия красных скал создают атмосферу уединения и гармонии с природой.",
+  "editor_note": "Кадр подчеркивает связь между традиционным образом жизни и природным окружением, что важно для общего повествования.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:14:49.185Z",
+  "model": "gpt-4o-mini"
+}

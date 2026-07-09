@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG_20260708_122820_343_y2zwrq",
+  "number": 5,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517775/IMG_20260708_122820_343_y2zwrq.jpg",
+  "width": 960,
+  "height": 1280,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены красные скалы и юрта на фоне облачного неба.",
+  "likely_subject": "юрта",
+  "place_hints": [
+    "красные скалы",
+    "юрточный лагерь"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "backstage",
+  "caption_seed": "Юрта на фоне красных скал, символизирующая связь человека с природой.",
+  "editor_note": "Кадр подчеркивает атмосферу юрточного лагеря и контраст между природой и человеческим жильем.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:13.245Z",
+  "model": "gpt-4o-mini"
+}

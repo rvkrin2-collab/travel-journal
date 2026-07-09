@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260708174424_ndrigo",
+  "number": 24,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517837/IMG20260708174424_ndrigo.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены горные образования с яркими красными и коричневыми слоями, на фоне которых простирается водная гладь.",
+  "likely_subject": "горные образования",
+  "place_hints": [
+    "Кыргызстан",
+    "может быть близость к озеру"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Горные слои, отражающие разнообразие природы Кыргызстана.",
+  "editor_note": "Кадр подчеркивает уникальность ландшафта и может служить связующим элементом в рассказе о природных формах Кыргызстана.",
+  "needs_fact_check": [
+    "точное название водоёма на фоне",
+    "географическая привязка к месту съемки"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:17:01.604Z",
+  "model": "gpt-4o-mini"
+}

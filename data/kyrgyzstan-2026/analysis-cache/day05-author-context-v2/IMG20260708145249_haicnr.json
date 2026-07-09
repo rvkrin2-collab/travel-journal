@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708145249_haicnr",
+  "number": 12,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517794/IMG20260708145249_haicnr.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены горы, окруженные лесом, с юртой на переднем плане. Небо затянуто облаками, создавая атмосферу спокойствия.",
+  "likely_subject": "горы и юрта",
+  "place_hints": [
+    "Кыргызстан",
+    "горный ландшафт"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "backstage",
+  "caption_seed": "Спокойствие горного ландшафта с юртой на фоне.",
+  "editor_note": "Кадр подчеркивает атмосферу уединения и гармонии с природой, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:55.681Z",
+  "model": "gpt-4o-mini"
+}

@@ -1,0 +1,32 @@
+{
+  "public_id": "IMG20260708180431_vply0f",
+  "number": 25,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517838/IMG20260708180431_vply0f.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены красные скалы, возвышающиеся под облачным небом, с частичным солнечным светом, пробивающимся сквозь облака.",
+  "likely_subject": "скалы",
+  "place_hints": [
+    "каньон Сказка"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Скалы каньона Сказка под облачным небом.",
+  "editor_note": "Кадр хорошо передает атмосферу каньона и его уникальный ландшафт, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:17:06.940Z",
+  "model": "gpt-4o-mini"
+}

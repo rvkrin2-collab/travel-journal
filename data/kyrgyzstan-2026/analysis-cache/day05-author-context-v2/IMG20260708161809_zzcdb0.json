@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260708161809_zzcdb0",
+  "number": 14,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517809/IMG20260708161809_zzcdb0.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображена скульптура лица, вырезанная в камне, на фоне гор и леса. Река протекает рядом с памятником.",
+  "likely_subject": "скульптура Юрия Гагарина",
+  "place_hints": [
+    "Киргизия",
+    "район Барскоон"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Памятник Юрию Гагарину на фоне величественных гор Кыргызстана.",
+  "editor_note": "Кадр подчеркивает связь с историей и природой, что соответствует теме дня.",
+  "needs_fact_check": [
+    "Факт о пребывании Юрия Гагарина в районе Барскоона"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:07.553Z",
+  "model": "gpt-4o-mini"
+}

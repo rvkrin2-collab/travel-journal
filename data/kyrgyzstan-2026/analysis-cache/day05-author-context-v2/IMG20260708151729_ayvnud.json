@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260708151729_ayvnud",
+  "number": 10,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517792/IMG20260708151729_ayvnud.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены горные склоны, покрытые зелёной растительностью, с водопадом, видимым на фоне. Небо затянуто облаками, создавая атмосферу спокойствия.",
+  "likely_subject": "горный ландшафт с водопадом",
+  "place_hints": [
+    "горы Кыргызстана",
+    "возможно, район Барскоона"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 6,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Горный ландшафт с водопадом на фоне облачного неба.",
+  "editor_note": "Этот кадр подчеркивает разнообразие природных форм в Кыргызстане и может служить связующим элементом между ключевыми сценами.",
+  "needs_fact_check": [
+    "точное местоположение водопада",
+    "подтверждение географической привязки к Барскоону"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:42.879Z",
+  "model": "gpt-4o-mini"
+}

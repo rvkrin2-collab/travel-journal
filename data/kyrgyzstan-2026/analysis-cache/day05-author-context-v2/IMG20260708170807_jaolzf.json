@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708170807_jaolzf",
+  "number": 17,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517814/IMG20260708170807_jaolzf.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены разноцветные горные склоны и небольшое водоём с отражением неба.",
+  "likely_subject": "ландшафт каньона Сказка",
+  "place_hints": [
+    "Киргизия",
+    "каньон Сказка"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Удивительные формы и цвета каньона Сказка.",
+  "editor_note": "Кадр хорошо иллюстрирует разнообразие природного ландшафта, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:23.972Z",
+  "model": "gpt-4o-mini"
+}

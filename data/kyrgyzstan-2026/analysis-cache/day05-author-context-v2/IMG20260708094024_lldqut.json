@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260708094024_lldqut",
+  "number": 2,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517772/IMG20260708094024_lldqut.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображен деревянный храм с зелеными куполами и крестами, окруженный цветущими розами.",
+  "likely_subject": "деревянный храм",
+  "place_hints": [
+    "Кыргызстан",
+    "традиционная архитектура"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 5,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "backstage",
+  "caption_seed": "Традиционный деревянный храм среди цветущих роз.",
+  "editor_note": "Кадр добавляет контекст культурного наследия Кыргызстана, но не является центральным для основного рассказа.",
+  "needs_fact_check": [
+    "точное название храма",
+    "историческая информация о храме"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:14:56.003Z",
+  "model": "gpt-4o-mini"
+}

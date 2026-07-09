@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708154138_tpk7pf",
+  "number": 9,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517792/IMG20260708154138_tpk7pf.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображен водопад, стремящийся вниз по скалистому склону, окруженный зелеными деревьями и камнями.",
+  "likely_subject": "водопад",
+  "place_hints": [
+    "горы",
+    "пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Водопад, стремящийся вниз по скалам, создает ощущение силы природы.",
+  "editor_note": "Этот кадр подчеркивает разнообразие природных форм в Кыргызстане и соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:15:36.743Z",
+  "model": "gpt-4o-mini"
+}

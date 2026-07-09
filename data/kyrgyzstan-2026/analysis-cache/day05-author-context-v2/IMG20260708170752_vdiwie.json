@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708170752_vdiwie",
+  "number": 15,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517810/IMG20260708170752_vdiwie.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены скалистые холмы с характерными слоями и растительностью на переднем плане.",
+  "likely_subject": "ландшафт каньона Сказка",
+  "place_hints": [
+    "каньон Сказка",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Ландшафт каньона Сказка, где природа удивляет своими формами.",
+  "editor_note": "Кадр хорошо иллюстрирует тему разнообразия природных форм, что соответствует центральной мысли главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:13.818Z",
+  "model": "gpt-4o-mini"
+}

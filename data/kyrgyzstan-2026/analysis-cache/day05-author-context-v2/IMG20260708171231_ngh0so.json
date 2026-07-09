@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708171231_ngh0so",
+  "number": 16,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783517810/IMG20260708171231_ngh0so.jpg",
+  "width": 3264,
+  "height": 2448,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены яркие, многослойные горные образования с характерными красными и желтыми оттенками под ясным небом.",
+  "likely_subject": "горные образования",
+  "place_hints": [
+    "Кыргызстан",
+    "каньон Сказка"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 8,
+  "technical_score": 9,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Удивительные формы каньона Сказка, где природа создает уникальные ландшафты.",
+  "editor_note": "Этот кадр подчеркивает разнообразие природных форм и красоту ландшафта, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:16:19.195Z",
+  "model": "gpt-4o-mini"
+}

@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260708211248_b89qjz",
+  "number": 27,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783569680/IMG20260708211248_b89qjz.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии виден юрточный лагерь, освещённый мягким светом в вечернее время. Вдали виднеется водоём, возможно, озеро.",
+  "likely_subject": "юрточный лагерь",
+  "place_hints": [
+    "юрточный лагерь у Боконбаево",
+    "вода на горизонте"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "backstage",
+  "caption_seed": "Юрточный лагерь у Боконбаево в вечернем свете.",
+  "editor_note": "Кадр подчеркивает атмосферу спокойствия и завершения дня, что соответствует финалу путешествия.",
+  "needs_fact_check": [
+    "подтвердить, что водоём на горизонте действительно является озером, а не морем"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:17:17.595Z",
+  "model": "gpt-4o-mini"
+}

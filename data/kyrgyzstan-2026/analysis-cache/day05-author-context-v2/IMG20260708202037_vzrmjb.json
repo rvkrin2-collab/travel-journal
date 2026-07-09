@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260708202037_vzrmjb",
+  "number": 28,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783569682/IMG20260708202037_vzrmjb.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена юрта на фоне вечернего неба с облаками. Мягкий свет создает атмосферу спокойствия.",
+  "likely_subject": "юрта",
+  "place_hints": [
+    "Кыргызстан",
+    "юрточный лагерь"
+  ],
+  "people": false,
+  "landscape": false,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 8,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "backstage",
+  "caption_seed": "Юрта, символ традиционного кочевого быта, на фоне вечернего неба.",
+  "editor_note": "Кадр подчеркивает атмосферу завершения дня и спокойствия, что важно для финала рассказа.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-09T07:17:23.453Z",
+  "model": "gpt-4o-mini"
+}
