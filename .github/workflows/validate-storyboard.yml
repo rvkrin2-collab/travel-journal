@@ -1,0 +1,36 @@
+name: Validate storyboard
+
+on:
+  workflow_dispatch:
+    inputs:
+      trip:
+        description: "Canonical trip id. Example: kyrgyzstan-2026"
+        required: true
+        default: "kyrgyzstan-2026"
+      day_tag:
+        description: "Day tag. Example: day05"
+        required: true
+        default: "day05"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate storyboard
+        run: node validate-storyboard.mjs
+        env:
+          TRIP: ${{ github.event.inputs.trip }}
+          DAY_TAG: ${{ github.event.inputs.day_tag }}
