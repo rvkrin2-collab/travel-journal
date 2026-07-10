@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 
 const apiKey = process.env.OPENAI_API_KEY;
-const model = process.env.OPENAI_TEXT_MODEL || process.env.OPENAI_VISION_MODEL || "gpt-4o-mini";
+const model = process.env.OPENAI_TEXT_MODEL || process.env.OPENAI_VISION_MODEL || "gpt-4o";
 const trip = process.env.TRIP || "kyrgyzstan-2026";
 const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
 const photosFile = process.env.PHOTOS_FILE || `data/${trip}/${dayTag}-photos.json`;
@@ -36,15 +36,25 @@ function compactItem(item) {
     number: item.number,
     orientation: item.orientation,
     visual_summary: item.visual_summary,
+    foreground: item.foreground,
+    midground: item.midground,
+    background: item.background,
     visible_elements: item.visible_elements,
     dominant_subject: item.dominant_subject,
+    secondary_subjects: item.secondary_subjects,
     scene_type: item.scene_type,
+    people_count: item.people_count,
+    animal_count: item.animal_count,
+    light: item.light,
+    weather: item.weather,
+    composition: item.composition,
+    technical_quality: item.technical_quality,
     likely_location: item.likely_location,
     location_confidence: item.location_confidence,
+    location_reason: item.location_reason,
     observation_confidence: item.observation_confidence,
     uncertainties: item.uncertainties,
     caption_seed: item.caption_seed,
-    editor_note: item.editor_note,
     needs_fact_check: item.needs_fact_check
   };
 }
@@ -52,9 +62,7 @@ function compactItem(item) {
 function validateRecommendation(recommendation, photos) {
   const expectedIds = photos.map(photo => photo.public_id);
   const decisions = recommendation?.decisions;
-  if (!decisions || typeof decisions !== "object") {
-    throw new Error("analysis.recommendation.decisions missing");
-  }
+  if (!decisions || typeof decisions !== "object") throw new Error("analysis.recommendation.decisions missing");
 
   for (const id of expectedIds) {
     const status = decisions[id]?.status;
@@ -67,10 +75,7 @@ function validateRecommendation(recommendation, photos) {
   if (extraIds.length) throw new Error(`Unknown public_id in series recommendation: ${extraIds.join(", ")}`);
 
   const heroIds = expectedIds.filter(id => decisions[id].status === "hero");
-  if (heroIds.length !== 1) {
-    throw new Error(`Series recommendation must contain exactly one hero, got ${heroIds.length}`);
-  }
-
+  if (heroIds.length !== 1) throw new Error(`Series recommendation must contain exactly one hero, got ${heroIds.length}`);
   return decisions;
 }
 
@@ -115,7 +120,7 @@ async function callStructured(prompt, schema, logLabel) {
     headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
     body: JSON.stringify({
       model,
-      temperature: 0.05,
+      temperature: 0,
       response_format: {type: "json_schema", json_schema: schema},
       messages: [{role: "user", content: prompt}]
     })
@@ -128,6 +133,14 @@ async function callStructured(prompt, schema, logLabel) {
   if (choice?.finish_reason !== "stop") throw new Error(`${logLabel} incomplete: ${choice?.finish_reason || "unknown"}`);
   if (!choice?.message?.content) throw new Error(`${logLabel} content is empty`);
   return JSON.parse(choice.message.content);
+}
+
+function containsLatinText(value) {
+  return /[A-Za-z]{4,}/.test(String(value || ""));
+}
+
+function validateRussianText(value, field) {
+  if (containsLatinText(value)) throw new Error(`${field} must be written in Russian`);
 }
 
 function validateReview(review, photos) {
@@ -143,6 +156,8 @@ function validateReview(review, photos) {
     seen.add(item.public_id);
     if (!["hero", "story", "backstage", "skip"].includes(item.status)) throw new Error(`Invalid status: ${item.status}`);
     if (!String(item.label || "").trim()) throw new Error(`Empty label: ${item.public_id}`);
+    validateRussianText(item.label, `Label ${item.public_id}`);
+    validateRussianText(item.note, `Note ${item.public_id}`);
   }
 
   const missing = expectedIds.filter(id => !seen.has(id));
@@ -151,8 +166,9 @@ function validateReview(review, photos) {
 
   for (const field of ["title", "subtitle", "eyebrow", "route_note", "theme", "central_thought", "intro"]) {
     if (!String(review.chapter?.[field] || "").trim()) throw new Error(`Empty chapter field: ${field}`);
+    validateRussianText(review.chapter[field], `Chapter ${field}`);
   }
-
+  for (const fact of review.chapter.fact_checks || []) validateRussianText(fact, "Chapter fact_check");
   return review;
 }
 
@@ -172,15 +188,25 @@ const missingAnalysis = photos.map(photo => photo.public_id).filter(id => !analy
 if (missingAnalysis.length) throw new Error(`Visual analysis missing public_id values: ${missingAnalysis.join(", ")}`);
 
 const decisions = validateRecommendation(analysis.recommendation, photos);
+const selected = analysis.items
+  .filter(item => ["hero", "story"].includes(decisions[item.public_id].status))
+  .map(compactItem);
+
 const chapterPrompt = `Ты пишешь текст главы авторского тревел-журнала после завершённого визуального анализа и редакторского отбора всей серии.
+
+ПИШИ ТОЛЬКО ПО-РУССКИ во всех текстовых полях.
 
 Правила:
 - история должна вытекать из реально выбранных фотографий;
 - авторские заметки задают смысл, но не меняют содержание кадров;
 - сохраняй реальный порядок маршрута;
-- пиши спокойно, точно, без рекламных оборотов и громких эпитетов;
-- не придумывай географические и исторические факты;
-- intro — 1-3 предложения.
+- intro — 1-3 коротких предложения;
+- не используй рекламные, туристические и типичные ИИ-обороты;
+- запрещены слова и обороты: «идеально передаёт», «величие природы», «гармония с природой», «уникальный», «живописный», «насладиться», «погружаемся», «бескрайняя красота»;
+- не превращай наблюдение в символ: дорога не обязана «символизировать путь», лошади не обязаны «символизировать свободу»;
+- не придумывай быт, традиции, назначение предметов и занятия людей;
+- географическое название используй только там, где location_confidence >= 0.6;
+- fact_checks включают только реальные внешние факты для публикации; не добавляй проверки того, что уже видно на фотографии. Если таких фактов нет, верни пустой массив.
 
 DATA:
 ${JSON.stringify({
@@ -189,9 +215,7 @@ ${JSON.stringify({
   context,
   author_notes: authorNotes,
   series_recommendation: analysis.recommendation,
-  selected_analysis: analysis.items
-    .filter(item => ["hero", "story"].includes(decisions[item.public_id].status))
-    .map(compactItem)
+  selected_analysis: selected
 }, null, 2)}`;
 
 const chapter = await callStructured(chapterPrompt, chapterSchema, "Chapter copy");
@@ -206,16 +230,21 @@ for (let index = 0; index < photos.length; index++) {
 
   const itemPrompt = `Ты пишешь предзаполнение редактора для ОДНОЙ фотографии тревел-журнала.
 
+ПИШИ ТОЛЬКО ПО-РУССКИ во всех текстовых полях.
+
 Критически важно:
 - работай только с public_id ${photo.public_id};
-- label должен описывать именно эту фотографию;
+- label должен буквально и кратко описывать именно эту фотографию;
+- note — одно или два коротких предложения о роли кадра в серии;
 - не переноси объекты, людей, животных или локации из соседних кадров;
-- опирайся прежде всего на visual_summary и visible_elements;
+- не называй неясный предмет конкретным устройством или вещью;
+- если предмет не опознан уверенно, пиши «предмет», «оборудование» или «неясный объект»;
 - название локации используй только при location_confidence >= 0.6;
 - статус уже выбран и не подлежит изменению;
-- label — короткое точное описание;
-- note — что важно рассказать или почему кадр выполняет назначенную роль;
-- для skip и backstage тоже дай осмысленные label и note.
+- не пересказывай всю тему главы в каждой карточке;
+- не используй слова и обороты: «идеально передаёт», «величие», «гармония», «символизирует», «уникальный», «живописный», «насладиться»;
+- не придумывай культурное значение, образ жизни, назначение предметов и действия людей;
+- для skip и backstage объясни конкретную визуальную причину: дубль, слабая композиция, отсутствие новой функции или технический недостаток.
 
 DATA:
 ${JSON.stringify({
