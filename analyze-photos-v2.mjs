@@ -39,7 +39,11 @@ function clamp(value, min, max, fallback = min) {
 }
 
 function containsLatinText(value) {
-  return /[A-Za-z]{4,}/.test(String(value || ""));
+  const cleaned = String(value || "")
+    .replace(/https?:\/\/\S+/gi, " ")
+    .replace(/\bIMG\d+_[A-Za-z0-9]+\b/g, " ")
+    .replace(/\b(?:hero|story|backstage|skip)\b/gi, " ");
+  return /[A-Za-z]{4,}/.test(cleaned);
 }
 
 function assertRussian(value, field) {
@@ -227,7 +231,7 @@ function validateRecommendation(raw, items) {
   for (const id of expectedIds) {
     if (!decisions[id]) throw new Error(`Series recommendation missing public_id: ${id}`);
     if (!["hero", "story", "backstage", "skip"].includes(decisions[id].status)) throw new Error(`Invalid series status for ${id}: ${decisions[id].status}`);
-    [decisions[id].reason, decisions[id].visual_function, decisions[id].duplicate_group].forEach((value, i) => assertRussian(value, `Series ${id} text ${i}`));
+    assertRussian(decisions[id].reason, `Series ${id} reason`);
   }
 
   if (statuses.filter(status => status === "hero").length !== 1) throw new Error("Series recommendation must contain exactly one hero");
