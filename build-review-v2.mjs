@@ -30,8 +30,8 @@ async function readJsonIfExists(path) {
   }
 }
 
-function compactAnalysis(analysis) {
-  return (analysis.items || []).map(item => ({
+function compactItem(item) {
+  return {
     public_id: item.public_id,
     number: item.number,
     orientation: item.orientation,
@@ -46,7 +46,7 @@ function compactAnalysis(analysis) {
     caption_seed: item.caption_seed,
     editor_note: item.editor_note,
     needs_fact_check: item.needs_fact_check
-  }));
+  };
 }
 
 function validateRecommendation(recommendation, photos) {
@@ -67,92 +67,82 @@ function validateRecommendation(recommendation, photos) {
   if (extraIds.length) throw new Error(`Unknown public_id in series recommendation: ${extraIds.join(", ")}`);
 
   const heroIds = expectedIds.filter(id => decisions[id].status === "hero");
-  if (heroIds.length !== 1) throw new Error(`Series recommendation must contain exactly one hero, got ${heroIds.length}`);
+  if (heroIds.length !== 1) {
+    throw new Error(`Series recommendation must contain exactly one hero, got ${heroIds.length}`);
+  }
 
   return decisions;
 }
 
-function responseSchema(photos) {
-  const itemProperties = Object.fromEntries(photos.map(photo => [photo.public_id, {
+const chapterSchema = {
+  name: "travel_journal_chapter_copy",
+  strict: true,
+  schema: {
     type: "object",
     additionalProperties: false,
-    required: ["label", "note"],
+    required: ["title", "subtitle", "eyebrow", "route_note", "theme", "central_thought", "intro", "fact_checks"],
     properties: {
+      title: {type: "string", minLength: 1},
+      subtitle: {type: "string", minLength: 1},
+      eyebrow: {type: "string", minLength: 1},
+      route_note: {type: "string", minLength: 1},
+      theme: {type: "string", minLength: 1},
+      central_thought: {type: "string", minLength: 1},
+      intro: {type: "string", minLength: 1},
+      fact_checks: {type: "array", items: {type: "string"}}
+    }
+  }
+};
+
+const itemSchema = {
+  name: "travel_journal_photo_copy",
+  strict: true,
+  schema: {
+    type: "object",
+    additionalProperties: false,
+    required: ["public_id", "label", "note"],
+    properties: {
+      public_id: {type: "string", minLength: 1},
       label: {type: "string", minLength: 1},
       note: {type: "string"}
     }
-  }]));
+  }
+};
 
-  return {
-    name: "travel_journal_review_copy",
-    strict: true,
-    schema: {
-      type: "object",
-      additionalProperties: false,
-      required: ["chapter", "items"],
-      properties: {
-        chapter: {
-          type: "object",
-          additionalProperties: false,
-          required: ["title", "subtitle", "eyebrow", "route_note", "theme", "central_thought", "intro", "fact_checks"],
-          properties: {
-            title: {type: "string", minLength: 1},
-            subtitle: {type: "string", minLength: 1},
-            eyebrow: {type: "string", minLength: 1},
-            route_note: {type: "string", minLength: 1},
-            theme: {type: "string", minLength: 1},
-            central_thought: {type: "string", minLength: 1},
-            intro: {type: "string", minLength: 1},
-            fact_checks: {type: "array", items: {type: "string"}}
-          }
-        },
-        items: {
-          type: "object",
-          additionalProperties: false,
-          required: photos.map(photo => photo.public_id),
-          properties: itemProperties
-        }
-      }
-    }
-  };
-}
-
-function buildReview(raw, photos, decisions) {
-  const items = photos.map((photo, index) => {
-    const copy = raw.items?.[photo.public_id];
-    if (!copy) throw new Error(`Review copy missing public_id: ${photo.public_id}`);
-    return {
-      public_id: photo.public_id,
-      number: index + 1,
-      status: decisions[photo.public_id].status,
-      label: String(copy.label || "").trim(),
-      note: String(copy.note || "").trim()
-    };
+async function callStructured(prompt, schema, logLabel) {
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
+    body: JSON.stringify({
+      model,
+      temperature: 0.05,
+      response_format: {type: "json_schema", json_schema: schema},
+      messages: [{role: "user", content: prompt}]
+    })
   });
 
-  const chapter = {
-    ...raw.chapter,
-    fact_checks: (raw.chapter.fact_checks || []).map(String).map(value => value.trim()).filter(Boolean)
-  };
-
-  return {chapter, items};
+  if (!response.ok) throw new Error(`${logLabel} error: ${response.status} ${await response.text()}`);
+  const data = await response.json();
+  const choice = data.choices?.[0];
+  console.log(`${logLabel} finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
+  if (choice?.finish_reason !== "stop") throw new Error(`${logLabel} incomplete: ${choice?.finish_reason || "unknown"}`);
+  if (!choice?.message?.content) throw new Error(`${logLabel} content is empty`);
+  return JSON.parse(choice.message.content);
 }
 
 function validateReview(review, photos) {
   const expectedIds = photos.map(photo => photo.public_id);
-  const seen = new Set();
-
-  if (!Array.isArray(review?.items)) throw new Error("Review items missing");
-  if (review.items.length !== photos.length) {
-    throw new Error(`Review must contain all photos: got ${review.items.length}, expected ${photos.length}`);
+  if (!Array.isArray(review.items) || review.items.length !== photos.length) {
+    throw new Error(`Review must contain all photos: got ${review.items?.length || 0}, expected ${photos.length}`);
   }
 
+  const seen = new Set();
   for (const item of review.items) {
     if (!expectedIds.includes(item.public_id)) throw new Error(`Unknown public_id: ${item.public_id}`);
     if (seen.has(item.public_id)) throw new Error(`Duplicate public_id: ${item.public_id}`);
     seen.add(item.public_id);
     if (!["hero", "story", "backstage", "skip"].includes(item.status)) throw new Error(`Invalid status: ${item.status}`);
-    if (!item.label) throw new Error(`Empty label: ${item.public_id}`);
+    if (!String(item.label || "").trim()) throw new Error(`Empty label: ${item.public_id}`);
   }
 
   const missing = expectedIds.filter(id => !seen.has(id));
@@ -177,65 +167,86 @@ if (!Array.isArray(analysis.items) || analysis.items.length !== photos.length) {
   throw new Error(`Visual analysis must contain all photos: got ${analysis.items?.length || 0}, expected ${photos.length}`);
 }
 
-const analysisIds = new Set(analysis.items.map(item => item.public_id));
-const missingAnalysis = photos.map(photo => photo.public_id).filter(id => !analysisIds.has(id));
+const analysisById = new Map(analysis.items.map(item => [item.public_id, item]));
+const missingAnalysis = photos.map(photo => photo.public_id).filter(id => !analysisById.has(id));
 if (missingAnalysis.length) throw new Error(`Visual analysis missing public_id values: ${missingAnalysis.join(", ")}`);
 
 const decisions = validateRecommendation(analysis.recommendation, photos);
-const payload = {
-  trip,
-  day: dayTag,
-  photo_count: photos.length,
-  context,
-  author_notes: authorNotes,
-  series_recommendation: {
-    sequence_note: analysis.recommendation.sequence_note,
-    editorial_summary: analysis.recommendation.editorial_summary,
-    fact_checks: analysis.recommendation.fact_checks,
-    decisions
-  },
-  analysis: compactAnalysis(analysis)
-};
-
-const prompt = `Ты готовишь текстовое предзаполнение редактора авторского тревел-журнала.
-
-Редакторский отбор уже выполнен после визуального анализа всей серии. Не меняй статусы фотографий. Для каждого public_id создай только:
-- label: точное краткое описание фотографии;
-- note: что важно рассказать или почему кадр выполняет назначенную роль.
+const chapterPrompt = `Ты пишешь текст главы авторского тревел-журнала после завершённого визуального анализа и редакторского отбора всей серии.
 
 Правила:
-- опирайся прежде всего на visual_summary и visible_elements;
-- не приписывай фотографии то, чего на ней не видно;
-- название локации используй только при location_confidence >= 0.6;
-- авторские заметки задают смысл главы, но не меняют содержание кадров;
-- chapter должен вытекать из выбранной серии и маршрута;
-- текст спокойный, точный, без рекламных оборотов и громких эпитетов;
-- для backstage и skip всё равно дай осмысленные label и note;
-- не меняй и не пересматривай series_recommendation.decisions.
+- история должна вытекать из реально выбранных фотографий;
+- авторские заметки задают смысл, но не меняют содержание кадров;
+- сохраняй реальный порядок маршрута;
+- пиши спокойно, точно, без рекламных оборотов и громких эпитетов;
+- не придумывай географические и исторические факты;
+- intro — 1-3 предложения.
 
 DATA:
-${JSON.stringify(payload, null, 2)}`;
+${JSON.stringify({
+  trip,
+  day: dayTag,
+  context,
+  author_notes: authorNotes,
+  series_recommendation: analysis.recommendation,
+  selected_analysis: analysis.items
+    .filter(item => ["hero", "story"].includes(decisions[item.public_id].status))
+    .map(compactItem)
+}, null, 2)}`;
 
-const response = await fetch("https://api.openai.com/v1/chat/completions", {
-  method: "POST",
-  headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
-  body: JSON.stringify({
-    model,
-    temperature: 0.05,
-    response_format: {type: "json_schema", json_schema: responseSchema(photos)},
-    messages: [{role: "user", content: prompt}]
-  })
-});
+const chapter = await callStructured(chapterPrompt, chapterSchema, "Chapter copy");
+chapter.fact_checks = (chapter.fact_checks || []).map(String).map(value => value.trim()).filter(Boolean);
 
-if (!response.ok) throw new Error(`Review v2 error: ${response.status} ${await response.text()}`);
-const data = await response.json();
-const choice = data.choices?.[0];
-console.log(`Review response finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
-if (choice?.finish_reason !== "stop") throw new Error(`Review response incomplete: ${choice?.finish_reason || "unknown"}`);
-if (!choice?.message?.content) throw new Error("Review response content is empty");
+const items = [];
+for (let index = 0; index < photos.length; index++) {
+  const photo = photos[index];
+  const visual = compactItem(analysisById.get(photo.public_id));
+  const decision = decisions[photo.public_id];
+  console.log(`Review copy ${index + 1}/${photos.length}: ${photo.public_id}`);
 
-const raw = JSON.parse(choice.message.content);
-const review = validateReview(buildReview(raw, photos, decisions), photos);
+  const itemPrompt = `Ты пишешь предзаполнение редактора для ОДНОЙ фотографии тревел-журнала.
+
+Критически важно:
+- работай только с public_id ${photo.public_id};
+- label должен описывать именно эту фотографию;
+- не переноси объекты, людей, животных или локации из соседних кадров;
+- опирайся прежде всего на visual_summary и visible_elements;
+- название локации используй только при location_confidence >= 0.6;
+- статус уже выбран и не подлежит изменению;
+- label — короткое точное описание;
+- note — что важно рассказать или почему кадр выполняет назначенную роль;
+- для skip и backstage тоже дай осмысленные label и note.
+
+DATA:
+${JSON.stringify({
+  public_id: photo.public_id,
+  number: index + 1,
+  status: decision.status,
+  selection_reason: decision.reason,
+  visual_analysis: visual,
+  chapter: {
+    title: chapter.title,
+    theme: chapter.theme,
+    central_thought: chapter.central_thought
+  },
+  author_notes: authorNotes
+}, null, 2)}`;
+
+  const copy = await callStructured(itemPrompt, itemSchema, `Photo copy ${photo.public_id}`);
+  if (copy.public_id !== photo.public_id) {
+    throw new Error(`Photo copy public_id mismatch: got ${copy.public_id}, expected ${photo.public_id}`);
+  }
+
+  items.push({
+    public_id: photo.public_id,
+    number: index + 1,
+    status: decision.status,
+    label: String(copy.label || "").trim(),
+    note: String(copy.note || "").trim()
+  });
+}
+
+const review = validateReview({chapter, items}, photos);
 review.trip = trip;
 review.day = dayTag;
 review.photos_source = photosFile;
@@ -248,4 +259,4 @@ review.updated_at = new Date().toISOString();
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", {recursive: true});
 await fs.writeFile(outFile, JSON.stringify(review, null, 2), "utf8");
-console.log(`Saved AI review for all ${review.items.length} photos using validated series selection to ${outFile}`);
+console.log(`Saved isolated per-photo AI review for all ${review.items.length} photos to ${outFile}`);
