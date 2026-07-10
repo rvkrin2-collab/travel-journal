@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 
 const apiKey = process.env.OPENAI_API_KEY;
-const model = process.env.OPENAI_VISION_MODEL || "gpt-4o-mini";
+const model = process.env.OPENAI_VISION_MODEL || "gpt-4o";
 const trip = process.env.TRIP || "kyrgyzstan-2026";
 const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
 const inFile = process.env.IN_FILE || `data/${trip}/${dayTag}-photos.json`;
@@ -30,137 +30,200 @@ async function readJsonIfExists(path) {
 }
 
 function imageUrl(url) {
-  return url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_1800/");
+  return url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_2200/");
 }
 
-function extractJson(text) {
-  const cleaned = String(text || "").trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
-  try {
-    return JSON.parse(cleaned);
-  } catch (error) {
-    const start = cleaned.indexOf("{");
-    const end = cleaned.lastIndexOf("}");
-    if (start >= 0 && end > start) return JSON.parse(cleaned.slice(start, end + 1));
-    throw error;
-  }
-}
-
-function num(value) {
+function clamp(value, min, max, fallback = min) {
   const number = Number(value);
-  return Number.isFinite(number) ? Math.max(0, Math.min(10, number)) : 0;
+  return Number.isFinite(number) ? Math.max(min, Math.min(max, number)) : fallback;
 }
 
-async function analyzePhoto(photo, index, total, context) {
-  const prompt = `Ты выполняешь строгий визуальный анализ фотографии для авторского тревел-журнала.
-
-Кадр ${index + 1} из ${total}.
-
-КРИТИЧЕСКИЙ ПОРЯДОК:
-1. Сначала опиши только то, что реально видно на изображении.
-2. Отдельно перечисли наблюдаемые элементы: растительность, рельеф, снег, воду, людей, животных, здания, дорогу, небо и погоду.
-3. Только затем предложи вероятную локацию из маршрута. Маршрут не должен искажать визуальное описание.
-4. Если локация неочевидна, поставь location_confidence ниже 0.6 и напиши «не определена».
-5. Не называй зелёные луга пустыней, заснеженные вершины сухими горами, озеро дорогой и наоборот.
-6. Не делай редакторский отбор до завершения наблюдения.
-
-Контекст дня:
-${JSON.stringify(context || {}, null, 2)}
-
-Верни только JSON:
-{
-  "visual_summary":"точное описание видимого, 1-3 предложения",
-  "visible_elements":{
-    "terrain":"",
-    "vegetation":"",
-    "water":"",
-    "snow":"",
-    "sky_weather":"",
-    "people":"",
-    "animals":"",
-    "structures":"",
-    "road_vehicle":""
-  },
-  "dominant_subject":"",
-  "scene_type":"portrait|animal|meadow|mountain|canyon|lake|road|settlement|other",
-  "likely_location":"подтверждённая или вероятная локация; либо не определена",
-  "location_confidence":0.0,
-  "observation_confidence":0.0,
-  "uncertainties":[""],
-  "composition_score":0,
-  "story_score":0,
-  "emotional_score":0,
-  "technical_score":0,
-  "redundancy_risk":0,
-  "suggested_role":"hero|story|backstage|skip",
-  "caption_seed":"нейтральная подпись, основанная только на видимом",
-  "editor_note":"роль кадра, не подменяя наблюдение интерпретацией",
-  "needs_fact_check":[""]
-}
-
-Оценки 0-10, confidence 0-1.`;
+async function callStructured({prompt, schema, image, label}) {
+  const content = [{type: "text", text: prompt}];
+  if (image) content.push({type: "image_url", image_url: {url: image, detail: "high"}});
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
     body: JSON.stringify({
       model,
-      temperature: 0.05,
-      response_format: {type: "json_object"},
-      messages: [{
-        role: "user",
-        content: [
-          {type: "text", text: prompt},
-          {type: "image_url", image_url: {url: imageUrl(photo.url), detail: "high"}}
-        ]
-      }]
+      temperature: 0,
+      response_format: {type: "json_schema", json_schema: schema},
+      messages: [{role: "user", content}]
     })
   });
 
-  if (!response.ok) throw new Error(`Vision error ${photo.public_id}: ${response.status} ${await response.text()}`);
+  if (!response.ok) throw new Error(`${label} error: ${response.status} ${await response.text()}`);
   const data = await response.json();
   const choice = data.choices?.[0];
-  if (choice?.finish_reason !== "stop") throw new Error(`Vision response incomplete for ${photo.public_id}: ${choice?.finish_reason || "unknown"}`);
-  const raw = extractJson(choice?.message?.content || "");
+  console.log(`${label} finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
+  if (choice?.finish_reason !== "stop") throw new Error(`${label} incomplete: ${choice?.finish_reason || "unknown"}`);
+  if (!choice?.message?.content) throw new Error(`${label} content is empty`);
+  return JSON.parse(choice.message.content);
+}
 
-  return {
-    schema_version: schemaVersion,
-    public_id: photo.public_id,
-    number: index + 1,
-    url: photo.url,
-    width: photo.width,
-    height: photo.height,
-    orientation: photo.height > photo.width ? "vertical" : photo.width > photo.height ? "horizontal" : "square",
-    visual_summary: String(raw.visual_summary || "").trim(),
-    visible_elements: raw.visible_elements || {},
-    dominant_subject: String(raw.dominant_subject || "").trim(),
-    scene_type: String(raw.scene_type || "other").trim(),
-    likely_location: String(raw.likely_location || "не определена").trim(),
-    location_confidence: Math.max(0, Math.min(1, Number(raw.location_confidence) || 0)),
-    observation_confidence: Math.max(0, Math.min(1, Number(raw.observation_confidence) || 0)),
-    uncertainties: Array.isArray(raw.uncertainties) ? raw.uncertainties.map(String).filter(Boolean) : [],
-    composition_score: num(raw.composition_score),
-    story_score: num(raw.story_score),
-    emotional_score: num(raw.emotional_score),
-    technical_score: num(raw.technical_score),
-    redundancy_risk: num(raw.redundancy_risk),
-    suggested_role: ["hero", "story", "backstage", "skip"].includes(raw.suggested_role) ? raw.suggested_role : "story",
-    caption_seed: String(raw.caption_seed || "").trim(),
-    editor_note: String(raw.editor_note || "").trim(),
-    needs_fact_check: Array.isArray(raw.needs_fact_check) ? raw.needs_fact_check.map(String).filter(Boolean) : [],
-    analysis_source: "vision-v2-high-detail",
-    analyzed_at: new Date().toISOString(),
-    model
-  };
+const observationSchema = {
+  name: "travel_photo_observation",
+  strict: true,
+  schema: {
+    type: "object",
+    additionalProperties: false,
+    required: [
+      "visual_summary",
+      "foreground",
+      "midground",
+      "background",
+      "visible_elements",
+      "dominant_subject",
+      "secondary_subjects",
+      "scene_type",
+      "people_count",
+      "animal_count",
+      "light",
+      "weather",
+      "composition",
+      "technical_quality",
+      "observation_confidence",
+      "uncertainties"
+    ],
+    properties: {
+      visual_summary: {type: "string", minLength: 1},
+      foreground: {type: "string"},
+      midground: {type: "string"},
+      background: {type: "string"},
+      visible_elements: {
+        type: "object",
+        additionalProperties: false,
+        required: ["terrain", "vegetation", "water", "snow", "sky", "people", "animals", "structures", "road_vehicle"],
+        properties: {
+          terrain: {type: "string"},
+          vegetation: {type: "string"},
+          water: {type: "string"},
+          snow: {type: "string"},
+          sky: {type: "string"},
+          people: {type: "string"},
+          animals: {type: "string"},
+          structures: {type: "string"},
+          road_vehicle: {type: "string"}
+        }
+      },
+      dominant_subject: {type: "string"},
+      secondary_subjects: {type: "array", items: {type: "string"}},
+      scene_type: {type: "string", enum: ["portrait", "animal", "meadow", "mountain", "canyon", "lake", "road", "settlement", "interior", "detail", "other"]},
+      people_count: {type: "integer", minimum: 0},
+      animal_count: {type: "integer", minimum: 0},
+      light: {type: "string"},
+      weather: {type: "string"},
+      composition: {
+        type: "object",
+        additionalProperties: false,
+        required: ["framing", "depth", "balance", "visual_anchor", "horizon", "distractions"],
+        properties: {
+          framing: {type: "string"},
+          depth: {type: "string"},
+          balance: {type: "string"},
+          visual_anchor: {type: "string"},
+          horizon: {type: "string"},
+          distractions: {type: "string"}
+        }
+      },
+      technical_quality: {
+        type: "object",
+        additionalProperties: false,
+        required: ["sharpness", "exposure", "color", "motion_blur", "score"],
+        properties: {
+          sharpness: {type: "string"},
+          exposure: {type: "string"},
+          color: {type: "string"},
+          motion_blur: {type: "string"},
+          score: {type: "number", minimum: 0, maximum: 10}
+        }
+      },
+      observation_confidence: {type: "number", minimum: 0, maximum: 1},
+      uncertainties: {type: "array", items: {type: "string"}}
+    }
+  }
+};
+
+const geographySchema = {
+  name: "travel_photo_geography",
+  strict: true,
+  schema: {
+    type: "object",
+    additionalProperties: false,
+    required: ["likely_location", "location_confidence", "location_reason", "caption_seed", "needs_fact_check"],
+    properties: {
+      likely_location: {type: "string"},
+      location_confidence: {type: "number", minimum: 0, maximum: 1},
+      location_reason: {type: "string"},
+      caption_seed: {type: "string", minLength: 1},
+      needs_fact_check: {type: "array", items: {type: "string"}}
+    }
+  }
+};
+
+async function observePhoto(photo, index, total) {
+  const prompt = `Ты выполняешь только визуальное наблюдение одной фотографии для авторского тревел-журнала.
+
+Кадр ${index + 1} из ${total}.
+
+КРИТИЧЕСКИЕ ПРАВИЛА:
+- Не используй маршрут, время съёмки, имя файла, Public ID и сведения о путешествии.
+- Не определяй географию.
+- Не решай, брать ли фотографию в рассказ.
+- Не повторяй общие слова вроде «простор», «тишина», «красота», если они не описывают конкретный видимый признак.
+- Сначала разложи изображение на передний, средний и задний планы.
+- Укажи точное количество видимых людей и животных, если их можно посчитать; иначе дай минимально достоверное число.
+- Отделяй то, что видно, от того, в чём есть сомнение.
+- Техническое качество оцени по резкости, экспозиции, цвету и смазу.
+- Пиши конкретно: что именно находится в кадре, где оно расположено и как устроена композиция.
+
+Верни только наблюдение по изображению.`;
+
+  return callStructured({
+    prompt,
+    schema: observationSchema,
+    image: imageUrl(photo.url),
+    label: `Observation ${photo.public_id}`
+  });
+}
+
+async function inferGeography(photo, observation, context) {
+  const prompt = `Теперь, после завершённого визуального наблюдения, оцени вероятную географию кадра.
+
+Правила:
+- Используй только наблюдение и реальный маршрут дня.
+- Не меняй визуальное описание под маршрут.
+- Если кадр подходит сразу нескольким точкам или не содержит уникальных признаков, укажи «не определена» и confidence ниже 0.6.
+- Название места допустимо в caption_seed только при confidence >= 0.6.
+- Не добавляй исторические, этнографические или географические факты, которых нет во входных данных.
+- caption_seed должен быть нейтральным и конкретным, без рекламных эпитетов.
+
+DATA:
+${JSON.stringify({
+  public_id: photo.public_id,
+  observation,
+  route: context?.route || null,
+  actual_route_order: context?.actual_route_order || null
+}, null, 2)}`;
+
+  return callStructured({
+    prompt,
+    schema: geographySchema,
+    label: `Geography ${photo.public_id}`
+  });
 }
 
 function recommendationSchema(items) {
   const properties = Object.fromEntries(items.map(item => [item.public_id, {
     type: "object",
     additionalProperties: false,
-    required: ["status", "reason"],
+    required: ["status", "reason", "visual_function", "duplicate_group"],
     properties: {
       status: {type: "string", enum: ["hero", "story", "backstage", "skip"]},
-      reason: {type: "string", minLength: 1}
+      reason: {type: "string", minLength: 1},
+      visual_function: {type: "string", minLength: 1},
+      duplicate_group: {type: "string"}
     }
   }]));
 
@@ -225,61 +288,51 @@ async function seriesRecommendation(items, context) {
   const compact = items.map(item => ({
     public_id: item.public_id,
     number: item.number,
+    orientation: item.orientation,
     visual_summary: item.visual_summary,
+    foreground: item.foreground,
+    midground: item.midground,
+    background: item.background,
     visible_elements: item.visible_elements,
     dominant_subject: item.dominant_subject,
+    secondary_subjects: item.secondary_subjects,
     scene_type: item.scene_type,
+    people_count: item.people_count,
+    animal_count: item.animal_count,
+    composition: item.composition,
+    technical_quality: item.technical_quality,
     likely_location: item.likely_location,
     location_confidence: item.location_confidence,
-    observation_confidence: item.observation_confidence,
-    suggested_role: item.suggested_role,
-    scores: {
-      composition: item.composition_score,
-      story: item.story_score,
-      emotional: item.emotional_score,
-      technical: item.technical_score,
-      redundancy: item.redundancy_risk
-    }
+    caption_seed: item.caption_seed
   }));
 
-  const prompt = `Ты выпускающий фоторедактор. Сделай предварительный отбор только после чтения визуального анализа всех кадров.
+  const prompt = `Ты выпускающий фоторедактор авторского журнала. Все фотографии уже отдельно и подробно проанализированы как изображения.
 
-Контекст:
-${JSON.stringify(context || {}, null, 2)}
+Сначала сравни кадры между собой, затем сделай редакторский отбор.
 
 Правила:
 - прими решение по каждому public_id;
-- визуальное описание важнее предполагаемой локации;
-- кадры с location_confidence ниже 0.6 нельзя уверенно подписывать названием места;
 - ровно 1 hero;
 - обычно 6-8 story, если материал это оправдывает;
-- все остальные кадры обязательно получают статус backstage или skip;
-- финал должен соответствовать авторской сцене, но только если фото действительно это показывает;
-- не меняй наблюдаемые луга на пустыню или наоборот;
-- сохраняй реальный порядок локаций;
-- не смешивай разные локации в одном смысловом блоке;
-- не ставь рядом визуальные дубли.
+- хорошие, но повторяющиеся или второстепенные кадры отправляй в backstage, а не автоматически в skip;
+- skip — только технически слабые, действительно лишние или худшие дубли;
+- не выбирай hero только потому, что он первый или соответствует авторской теме;
+- оценивай визуальную силу, композицию, разнообразие функций и ритм серии;
+- укажи duplicate_group для кадров, которые выполняют одну и ту же визуальную функцию;
+- не ставь рядом несколько кадров с одинаковой функцией;
+- сохраняй порядок реальных локаций;
+- финальная сцена автора имеет высокий приоритет, но должна быть визуально подтверждена;
+- причины должны быть конкретными: чем этот кадр сильнее или слабее соседних.
 
-Кадры:
-${JSON.stringify(compact, null, 2)}`;
+DATA:
+${JSON.stringify({context, items: compact}, null, 2)}`;
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
-    body: JSON.stringify({
-      model,
-      temperature: 0.05,
-      response_format: {type: "json_schema", json_schema: recommendationSchema(items)},
-      messages: [{role: "user", content: prompt}]
-    })
+  const raw = await callStructured({
+    prompt,
+    schema: recommendationSchema(items),
+    label: "Series analysis"
   });
-
-  if (!response.ok) throw new Error(`Series analysis error: ${response.status} ${await response.text()}`);
-  const data = await response.json();
-  const choice = data.choices?.[0];
-  console.log(`Series response finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
-  if (choice?.finish_reason !== "stop") throw new Error(`Series response incomplete: ${choice?.finish_reason || "unknown"}`);
-  return validateRecommendation(JSON.parse(choice?.message?.content || "{}"), items);
+  return validateRecommendation(raw, items);
 }
 
 const photos = await readJson(inFile);
@@ -288,8 +341,47 @@ const context = await readJsonIfExists(dayContextFile);
 const items = [];
 
 for (let index = 0; index < photos.length; index++) {
-  console.log(`Vision v2 ${index + 1}/${photos.length}: ${photos[index].public_id}`);
-  items.push(await analyzePhoto(photos[index], index, photos.length, context));
+  const photo = photos[index];
+  console.log(`Visual observation ${index + 1}/${photos.length}: ${photo.public_id}`);
+  const observation = await observePhoto(photo, index, photos.length);
+  const geography = await inferGeography(photo, observation, context);
+
+  items.push({
+    schema_version: schemaVersion,
+    public_id: photo.public_id,
+    number: index + 1,
+    url: photo.url,
+    width: photo.width,
+    height: photo.height,
+    orientation: photo.height > photo.width ? "vertical" : photo.width > photo.height ? "horizontal" : "square",
+    visual_summary: String(observation.visual_summary || "").trim(),
+    foreground: String(observation.foreground || "").trim(),
+    midground: String(observation.midground || "").trim(),
+    background: String(observation.background || "").trim(),
+    visible_elements: observation.visible_elements || {},
+    dominant_subject: String(observation.dominant_subject || "").trim(),
+    secondary_subjects: Array.isArray(observation.secondary_subjects) ? observation.secondary_subjects.map(String).filter(Boolean) : [],
+    scene_type: observation.scene_type || "other",
+    people_count: Math.max(0, Number(observation.people_count) || 0),
+    animal_count: Math.max(0, Number(observation.animal_count) || 0),
+    light: String(observation.light || "").trim(),
+    weather: String(observation.weather || "").trim(),
+    composition: observation.composition || {},
+    technical_quality: {
+      ...(observation.technical_quality || {}),
+      score: clamp(observation.technical_quality?.score, 0, 10, 0)
+    },
+    likely_location: String(geography.likely_location || "не определена").trim(),
+    location_confidence: clamp(geography.location_confidence, 0, 1, 0),
+    location_reason: String(geography.location_reason || "").trim(),
+    observation_confidence: clamp(observation.observation_confidence, 0, 1, 0),
+    uncertainties: Array.isArray(observation.uncertainties) ? observation.uncertainties.map(String).filter(Boolean) : [],
+    caption_seed: String(geography.caption_seed || "").trim(),
+    needs_fact_check: Array.isArray(geography.needs_fact_check) ? geography.needs_fact_check.map(String).filter(Boolean) : [],
+    analysis_source: "vision-v2-separated-observation-geography",
+    analyzed_at: new Date().toISOString(),
+    model
+  });
 }
 
 const recommendation = await seriesRecommendation(items, context);
@@ -301,10 +393,11 @@ const result = {
   context_source: context ? dayContextFile : null,
   generated_at: new Date().toISOString(),
   model,
+  analysis_method: "observation_without_context_then_geography_then_series_selection",
   items,
   recommendation
 };
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", {recursive: true});
 await fs.writeFile(outFile, JSON.stringify(result, null, 2), "utf8");
-console.log(`Saved observation-first analysis for ${items.length} photos; series recommendation classified all ${items.length} photos to ${outFile}`);
+console.log(`Saved separated visual analysis for ${items.length} photos; series recommendation classified all ${items.length} photos to ${outFile}`);
