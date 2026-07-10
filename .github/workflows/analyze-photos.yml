@@ -8,9 +8,9 @@ on:
         required: true
         default: "kyrgyzstan-2026"
       day_tag:
-        description: "Day tag. Example: day02"
+        description: "Day tag. Example: day06"
         required: true
-        default: "day02"
+        default: "day06"
       model:
         description: "OpenAI vision model"
         required: false
@@ -19,6 +19,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: analyze-${{ github.event.inputs.trip }}-${{ github.event.inputs.day_tag }}
+  cancel-in-progress: false
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
@@ -26,14 +30,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Sync with latest main
+        run: |
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Analyze photos
-        run: node analyze-photos.mjs
+      - name: Analyze photos with high-detail vision
+        run: node analyze-photos-v2.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_VISION_MODEL: ${{ github.event.inputs.model }}
@@ -47,5 +60,9 @@ jobs:
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add data/
-          git commit -m "Analyze photos for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}" || echo "No changes"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git commit -m "Analyze photos v2 for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          git push origin HEAD:main
