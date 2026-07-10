@@ -14,7 +14,7 @@ on:
       model:
         description: "OpenAI text model"
         required: false
-        default: "gpt-4o"
+        default: "gpt-4o-mini"
 
 permissions:
   contents: write
@@ -38,8 +38,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build AI review with rate-limit retries
-        run: node run-build-review-v2.mjs
+      - name: Build economical AI review
+        run: node build-review-v2.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_TEXT_MODEL: ${{ github.event.inputs.model }}
