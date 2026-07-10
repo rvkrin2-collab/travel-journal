@@ -4,9 +4,9 @@
   "day": "day07",
   "photos_source": "data/kyrgyzstan-2026/day07-photos.json",
   "context_source": "data/kyrgyzstan-2026/day07-context.json",
-  "generated_at": "2026-07-10T16:21:27.562Z",
+  "generated_at": "2026-07-10T16:34:28.370Z",
   "model": "gpt-4o",
-  "analysis_method": "observation_without_context_then_geography_then_series_selection",
+  "analysis_method": "observation_without_context_then_conservative_geography_then_series_selection",
   "items": [
     {
       "schema_version": 2,
@@ -16,59 +16,58 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A vast landscape with a dirt road leading into the distance under a partly cloudy sky.",
-      "foreground": "A dirt road runs diagonally from the bottom left to the center, bordered by grassy terrain with scattered rocks.",
-      "midground": "The road continues into the distance, flanked by rolling green hills.",
-      "background": "Distant mountains are visible under a blue sky with scattered clouds.",
+      "visual_summary": "Дорога на фоне горного пейзажа с облачным небом.",
+      "foreground": "Грунтовая дорога с камнями по краям.",
+      "midground": "Зеленые поля и холмы, простирающиеся вдаль.",
+      "background": "Горный хребет на горизонте под облачным небом.",
       "visible_elements": {
-        "terrain": "Rolling hills and a dirt road.",
-        "vegetation": "Sparse grass and small wildflowers.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Partly cloudy with patches of blue sky.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Холмистая местность с грунтовой дорогой.",
+        "vegetation": "Трава и редкие цветы на полях.",
+        "water": "Не видно.",
+        "snow": "Не видно.",
+        "sky": "Ясное небо с облаками.",
+        "people": "Не видно.",
+        "animals": "Не видно.",
+        "structures": "Не видно.",
+        "road_vehicle": "Не видно."
       },
-      "dominant_subject": "Dirt road",
+      "dominant_subject": "Грунтовая дорога.",
       "secondary_subjects": [
-        "Rolling hills",
-        "Clouds"
+        "Холмы",
+        "Горы",
+        "Облака"
       ],
       "scene_type": "road",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Natural daylight with soft shadows.",
-      "weather": "Partly cloudy",
+      "light": "Естественное дневное освещение.",
+      "weather": "Ясная погода с облаками.",
       "composition": {
-        "framing": "The road leads the eye into the distance, creating a sense of depth.",
-        "depth": "Strong depth with the road leading into the horizon.",
-        "balance": "Balanced with the road and hills on either side.",
-        "visual_anchor": "The road serves as the visual anchor.",
-        "horizon": "The horizon is placed in the upper third of the image.",
-        "distractions": "None"
+        "framing": "Дорога уходит вдаль, создавая перспективу.",
+        "depth": "Глубина создается уходящей вдаль дорогой и холмами.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Дорога в центре кадра.",
+        "horizon": "Горизонтальная линия на уровне гор.",
+        "distractions": "Нет явных отвлекающих элементов."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with balanced highlights and shadows.",
-        "color": "Natural colors with a slight green tint in the grass.",
-        "motion_blur": "None",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
         "score": 8.5
       },
-      "likely_location": "Between Kochkor and Song-Kul Lake",
-      "location_confidence": 0.7,
-      "location_reason": "The visual elements of rolling hills, a dirt road, and distant mountains align with the terrain typically found between Kochkor and Song-Kul Lake. The absence of water and structures further supports this location, as the area is known for its open landscapes and sparse vegetation.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На фотографии видна грунтовая дорога, холмы и горы на горизонте, что может соответствовать нескольким точкам маршрута. Нет уникальных объектов, которые бы однозначно указывали на конкретное место.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the scene"
+        "Точное определение дальних объектов."
       ],
-      "caption_seed": "A dirt road stretches through rolling hills under a partly cloudy sky.",
-      "needs_fact_check": [
-        "Verify if the terrain between Kochkor and Song-Kul Lake matches the described visual elements."
-      ],
+      "caption_seed": "Грунтовая дорога, уходящая вдаль, на фоне холмов и гор под облачным небом.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:18:51.212Z",
+      "analyzed_at": "2026-07-10T16:32:28.676Z",
       "model": "gpt-4o"
     },
     {
@@ -79,59 +78,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A vast mountainous landscape with green hills and a clear blue sky.",
-      "foreground": "Green grassy hills with a dirt road winding through them.",
-      "midground": "More hills and a continuation of the dirt road, leading towards the mountains.",
-      "background": "Tall mountains with rocky surfaces under a clear blue sky with scattered clouds.",
+      "visual_summary": "Горный пейзаж с зелеными холмами и ясным небом.",
+      "foreground": "Зеленые холмы с редкой растительностью и небольшой дорогой.",
+      "midground": "Продолжение холмов и долина, ведущая к горам.",
+      "background": "Высокие горы с каменистыми склонами и голубое небо с облаками.",
       "visible_elements": {
-        "terrain": "Hilly and mountainous terrain.",
-        "vegetation": "Green grass covering the hills.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Clear blue sky with scattered white clouds.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Холмы и горы.",
+        "vegetation": "Трава и редкие кустарники.",
+        "water": "Маленький ручей вдоль дороги.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное голубое небо с облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Green hills and mountains.",
+      "dominant_subject": "Горный ландшафт.",
       "secondary_subjects": [
-        "Dirt road",
-        "Clouds in the sky"
+        "Дорога",
+        "Ручей"
       ],
       "scene_type": "mountain",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода.",
       "composition": {
-        "framing": "Wide shot capturing the expanse of the landscape.",
-        "depth": "Good depth with foreground hills leading to distant mountains.",
-        "balance": "Balanced with hills on both sides and mountains in the center.",
-        "visual_anchor": "The dirt road leading through the hills.",
-        "horizon": "Visible and slightly above the center.",
-        "distractions": "None"
+        "framing": "Горизонтальное кадрирование с акцентом на горы.",
+        "depth": "Глубокая перспектива с несколькими планами.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Горы на заднем плане.",
+        "horizon": "Четко видимая линия горизонта.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with vibrant greens and blues.",
-        "motion_blur": "None",
-        "score": 8.5
+        "sharpness": "Высокая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Насыщенные естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 4.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.7,
-      "location_reason": "The visual summary and elements such as the mountainous terrain, green grassy hills, and clear blue sky align with the typical landscape around озеро Сон-Куль, which is known for its expansive and scenic mountainous views.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На изображении виден типичный горный пейзаж с зелеными холмами и ясным небом, который может соответствовать нескольким точкам маршрута. Нет уникальных объектов, которые могли бы точно указать на конкретное место.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the scene."
+        "Точный масштаб гор трудно определить."
       ],
-      "caption_seed": "A scenic view of green hills and distant mountains under a clear blue sky.",
-      "needs_fact_check": [
-        "Verify if the dirt road is a common feature in the area around озеро Сон-Куль."
-      ],
+      "caption_seed": "Горный пейзаж с зелеными холмами, ясным небом и небольшим ручьем вдоль дороги.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:00.551Z",
+      "analyzed_at": "2026-07-10T16:32:37.459Z",
       "model": "gpt-4o"
     },
     {
@@ -142,60 +139,58 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A series of yurts on a grassy plain under a clear blue sky.",
-      "foreground": "Grassy terrain with a few patches of bare ground.",
-      "midground": "Several white yurts arranged in a line, with a person walking between them.",
-      "background": "Distant mountains and a clear blue sky with a few clouds.",
+      "visual_summary": "На изображении представлена равнина с юртами на фоне гор и неба.",
+      "foreground": "На переднем плане видны юрты, расположенные на травянистой равнине.",
+      "midground": "На среднем плане продолжается равнина, видны дополнительные юрты и человек.",
+      "background": "На заднем плане видны горы и облачное небо.",
       "visible_elements": {
-        "terrain": "Grassy plain with some bare patches.",
-        "vegetation": "Sparse grass.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Clear blue with a few clouds.",
-        "people": "One person visible walking between the yurts.",
-        "animals": "None visible.",
-        "structures": "Several white yurts with decorative patterns.",
-        "road_vehicle": "None visible."
+        "terrain": "равнина с травой",
+        "vegetation": "низкая трава",
+        "water": "отсутствует",
+        "snow": "на вершинах гор",
+        "sky": "голубое с облаками",
+        "people": "один человек",
+        "animals": "отсутствуют",
+        "structures": "юрты",
+        "road_vehicle": "отсутствуют"
       },
-      "dominant_subject": "Yurts",
+      "dominant_subject": "юрты",
       "secondary_subjects": [
-        "Person",
-        "Mountains",
-        "Sky"
+        "человек",
+        "горы",
+        "небо"
       ],
-      "scene_type": "settlement",
+      "scene_type": "meadow",
       "people_count": 1,
       "animal_count": 0,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "естественное дневное освещение",
+      "weather": "ясная погода с облаками",
       "composition": {
-        "framing": "Wide shot with yurts leading into the distance.",
-        "depth": "Good depth with foreground, midground, and background elements.",
-        "balance": "Balanced with yurts on the right and open space on the left.",
-        "visual_anchor": "Yurts in the midground.",
-        "horizon": "Visible and level.",
-        "distractions": "None significant."
+        "framing": "центральное",
+        "depth": "глубокая",
+        "balance": "симметричная",
+        "visual_anchor": "юрты",
+        "horizon": "виден",
+        "distractions": "отсутствуют"
       },
       "technical_quality": {
-        "sharpness": "Good",
-        "exposure": "Well-exposed",
-        "color": "Natural and vibrant",
-        "motion_blur": "None",
+        "sharpness": "хорошая",
+        "exposure": "правильная",
+        "color": "естественные",
+        "motion_blur": "отсутствует",
         "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.85,
-      "location_reason": "The presence of yurts on a grassy plain with distant mountains aligns with the typical landscape around Lake Son-Kul, known for its summer pastures and nomadic settlements.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На изображении видны юрты на равнине с горами на заднем плане, что может соответствовать нескольким точкам маршрута, таким как окрестности озера Сон-Куль или Жумгал. Однако, отсутствие уникальных ориентиров, таких как озеро или специфические горные формы, не позволяет точно определить местоположение.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact number of yurts in the distance."
+        "точное количество юрт на заднем плане"
       ],
-      "caption_seed": "A series of yurts on a grassy plain with distant mountains under a clear blue sky.",
-      "needs_fact_check": [
-        "Verify the presence of yurts at Lake Son-Kul during the observation period."
-      ],
+      "caption_seed": "Равнина с юртами на фоне гор и облачного неба.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:06.824Z",
+      "analyzed_at": "2026-07-10T16:32:42.937Z",
       "model": "gpt-4o"
     },
     {
@@ -206,61 +201,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A serene landscape with a vast sky, distant mountains, and a lake.",
-      "foreground": "A grassy field with some small plants visible.",
-      "midground": "A large body of water, possibly a lake, stretching across the image.",
-      "background": "Distant mountains with some snow on the peaks, under a clear blue sky with scattered clouds.",
+      "visual_summary": "Пейзаж с озером и горами на фоне.",
+      "foreground": "Травянистая равнина.",
+      "midground": "Озеро с гладкой поверхностью.",
+      "background": "Горный хребет с облаками над ним.",
       "visible_elements": {
-        "terrain": "Flat grassy field in the foreground.",
-        "vegetation": "Sparse grass and small plants in the foreground.",
-        "water": "A large lake in the midground.",
-        "snow": "Visible on the distant mountain peaks.",
-        "sky": "Clear blue with scattered clouds and a visible sunbeam.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Равнина и горы.",
+        "vegetation": "Трава на переднем плане.",
+        "water": "Озеро в средней части кадра.",
+        "snow": "Нет видимого снега.",
+        "sky": "Ясное небо с облаками.",
+        "people": "Люди не видны.",
+        "animals": "Животные не видны.",
+        "structures": "Структуры отсутствуют.",
+        "road_vehicle": "Транспорт отсутствует."
       },
-      "dominant_subject": "The lake and mountains under a vast sky.",
+      "dominant_subject": "Озеро и горы.",
       "secondary_subjects": [
-        "Grassy field",
-        "Clouds",
-        "Sunbeam"
+        "Облака",
+        "Травянистая равнина"
       ],
       "scene_type": "lake",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight with a sunbeam visible.",
-      "weather": "Clear with scattered clouds.",
+      "light": "Яркий солнечный свет.",
+      "weather": "Ясная погода с небольшими облаками.",
       "composition": {
-        "framing": "Wide shot with the horizon placed low, emphasizing the sky.",
-        "depth": "Good depth with distinct foreground, midground, and background layers.",
-        "balance": "Balanced with the lake and mountains horizontally centered.",
-        "visual_anchor": "The sunbeam cutting through the sky.",
-        "horizon": "Low in the frame, separating the lake from the sky.",
-        "distractions": "None significant."
+        "framing": "Широкий кадр с горизонтом в нижней трети.",
+        "depth": "Глубина создается за счет слоев: равнина, озеро, горы.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Горный хребет на заднем плане.",
+        "horizon": "Четкий горизонт.",
+        "distractions": "Отвлекающие элементы отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with a strong blue sky.",
-        "motion_blur": "None visible.",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствие смаза.",
         "score": 8.5
       },
       "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.85,
-      "location_reason": "The visual elements such as the large lake, distant snow-capped mountains, and the clear sky align with the known geography of озеро Сон-Куль, which is part of the provided route.",
+      "location_confidence": 0.7,
+      "location_reason": "На маршруте есть только одно озеро, которое соответствует описанию: озеро Сон-Куль. Видимое озеро и горы на фоне совпадают с известными характеристиками этого места.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the scene."
+        "Точное определение местоположения."
       ],
-      "caption_seed": "A tranquil scene of a lake with distant mountains under a vast sky.",
-      "needs_fact_check": [
-        "Ensure the visual description matches the known geography of озеро Сон-Куль.",
-        "Verify the presence of snow on mountain peaks during the time of observation."
-      ],
+      "caption_seed": "Озеро с гладкой поверхностью на фоне горного хребта под ясным небом.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:14.322Z",
+      "analyzed_at": "2026-07-10T16:32:50.351Z",
       "model": "gpt-4o"
     },
     {
@@ -271,61 +262,58 @@
       "width": 3264,
       "height": 2448,
       "orientation": "horizontal",
-      "visual_summary": "A vast landscape with a grassy field, a dirt path, a distant lake, and mountains under a clear sky.",
-      "foreground": "Grassy field with small yellow flowers and a dirt path running diagonally.",
-      "midground": "Continuation of the grassy field leading to a lake.",
-      "background": "Mountain range under a partly cloudy sky.",
+      "visual_summary": "Изображение открытого пространства с травянистой равниной, дорогой и водоёмом на фоне гор.",
+      "foreground": "Травянистая равнина с редкими цветами и грунтовая дорога.",
+      "midground": "Продолжение равнины, переходящей в водоём.",
+      "background": "Горы на горизонте и облачное небо.",
       "visible_elements": {
-        "terrain": "Grassy field with a dirt path.",
-        "vegetation": "Sparse grass with small yellow flowers.",
-        "water": "Visible lake in the midground.",
-        "snow": "None visible.",
-        "sky": "Clear blue sky with some clouds.",
-        "people": "One person visible near the lake.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Равнина с травой и грунтовой дорогой.",
+        "vegetation": "Трава с редкими цветами.",
+        "water": "Водоём на среднем плане.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное небо с облаками.",
+        "people": "Один человек на дальнем плане.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Grassy field with a dirt path.",
+      "dominant_subject": "Травянистая равнина и дорога.",
       "secondary_subjects": [
-        "Lake",
-        "Mountains",
-        "Sky"
+        "Водоём",
+        "Горы",
+        "Облака"
       ],
       "scene_type": "meadow",
       "people_count": 1,
       "animal_count": 0,
-      "light": "Bright daylight with clear visibility.",
-      "weather": "Clear with some clouds.",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с облаками.",
       "composition": {
-        "framing": "Wide shot with the path leading the eye towards the lake and mountains.",
-        "depth": "Good depth with foreground, midground, and background elements.",
-        "balance": "Balanced with the path and horizon line.",
-        "visual_anchor": "Dirt path leading towards the lake.",
-        "horizon": "Visible and slightly above the center.",
-        "distractions": "None significant."
+        "framing": "Горизонтальная ориентация с акцентом на равнину и небо.",
+        "depth": "Глубина создаётся за счёт перехода от равнины к водоёму и горам.",
+        "balance": "Сбалансированное распределение элементов по горизонтали.",
+        "visual_anchor": "Грунтовая дорога ведёт взгляд вглубь кадра.",
+        "horizon": "Чёткий горизонт на уровне верхней трети кадра.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with a slight emphasis on greens and blues.",
-        "motion_blur": "None.",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
         "score": 8.5
       },
       "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.7,
-      "location_reason": "The visual elements such as the grassy field, dirt path, distant lake, and mountain range align with the typical landscape around Lake Son-Kul, which is known for its vast meadows and surrounding mountains.",
+      "location_confidence": 0.6,
+      "location_reason": "На изображении виден водоём, который может быть озером Сон-Куль, единственным озером на маршруте. Горы на горизонте также соответствуют описанию местности вокруг озера.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the scene."
+        "Трудно определить точное количество людей из-за расстояния."
       ],
-      "caption_seed": "A scenic view of a grassy field with a dirt path leading towards a lake and mountains under a clear sky.",
-      "needs_fact_check": [
-        "Verify if the observed landscape matches the typical features of Lake Son-Kul.",
-        "Confirm the presence of small yellow flowers in the region during the observed time."
-      ],
+      "caption_seed": "Травянистая равнина с грунтовой дорогой, ведущей к водоёму на фоне гор.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:24.435Z",
+      "analyzed_at": "2026-07-10T16:33:02.181Z",
       "model": "gpt-4o"
     },
     {
@@ -336,60 +324,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A serene landscape with a herd of horses grazing on a vast green meadow under a clear blue sky.",
-      "foreground": "A patch of bare soil with some grass and small rocks.",
-      "midground": "A herd of horses grazing on a green meadow.",
-      "background": "Distant mountains under a clear blue sky with a few clouds.",
+      "visual_summary": "На изображении запечатлено стадо лошадей на фоне гор и неба.",
+      "foreground": "Передний план состоит из травянистой равнины с небольшими участками голой земли.",
+      "midground": "На среднем плане видны лошади, пасущиеся на траве.",
+      "background": "На заднем плане видны горы и голубое небо с облаками.",
       "visible_elements": {
-        "terrain": "Flat grassy meadow with some bare soil patches.",
-        "vegetation": "Short green grass covering most of the meadow.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Clear blue sky with a few scattered clouds.",
-        "people": "None visible.",
-        "animals": "A herd of horses, approximately 15-20.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "равнина",
+        "vegetation": "трава",
+        "water": "отсутствует",
+        "snow": "отсутствует",
+        "sky": "голубое небо с облаками",
+        "people": "отсутствуют",
+        "animals": "лошади",
+        "structures": "отсутствуют",
+        "road_vehicle": "отсутствуют"
       },
-      "dominant_subject": "Herd of horses grazing.",
+      "dominant_subject": "лошади",
       "secondary_subjects": [
-        "Green meadow",
-        "Distant mountains",
-        "Blue sky"
+        "горы",
+        "небо"
       ],
       "scene_type": "meadow",
       "people_count": 0,
-      "animal_count": 15,
-      "light": "Bright daylight with clear visibility.",
-      "weather": "Clear and sunny.",
+      "animal_count": 10,
+      "light": "естественное дневное освещение",
+      "weather": "ясная погода",
       "composition": {
-        "framing": "Wide shot capturing the meadow and sky.",
-        "depth": "Foreground with soil, midground with horses, background with mountains.",
-        "balance": "Balanced with horses in the center and open sky above.",
-        "visual_anchor": "Herd of horses in the center.",
-        "horizon": "Visible, dividing the meadow and sky.",
-        "distractions": "None significant."
+        "framing": "широкий кадр",
+        "depth": "глубина создается за счет расположения лошадей и гор на заднем плане",
+        "balance": "симметричное распределение объектов",
+        "visual_anchor": "лошади",
+        "horizon": "горизонтальная линия четко видна",
+        "distractions": "отсутствуют"
       },
       "technical_quality": {
-        "sharpness": "Good sharpness with clear details of horses and grass.",
-        "exposure": "Well-exposed with balanced lighting.",
-        "color": "Natural colors with vibrant greens and blues.",
-        "motion_blur": "None visible.",
+        "sharpness": "хорошая",
+        "exposure": "правильная",
+        "color": "естественные",
+        "motion_blur": "отсутствует",
         "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.7,
-      "location_reason": "The serene landscape with a herd of horses grazing on a vast green meadow under a clear blue sky is characteristic of the area around Lake Son-Kul, known for its expansive meadows and horse herding.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На изображении нет уникальных объектов, которые могли бы однозначно указать на конкретную точку маршрута. Видимые элементы, такие как лошади, горы и равнина, могут встречаться в нескольких местах маршрута.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact number of horses due to distance."
+        "Точное количество лошадей может быть не совсем верным из-за их расположения."
       ],
-      "caption_seed": "A herd of horses grazing on a vast green meadow under a clear blue sky.",
-      "needs_fact_check": [
-        "Verify if the visual characteristics match the typical landscape around Lake Son-Kul."
-      ],
+      "caption_seed": "Стадо лошадей пасется на травянистой равнине на фоне гор и голубого неба с облаками.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:37.618Z",
+      "analyzed_at": "2026-07-10T16:33:08.595Z",
       "model": "gpt-4o"
     },
     {
@@ -400,59 +385,58 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A vast grassy plain with yurts and a swing set under a partly cloudy sky.",
-      "foreground": "A grassy field with scattered stones and a wooden swing set on the left.",
-      "midground": "Two yurts are visible on the left side of the image.",
-      "background": "A wide expanse of grassland extending to distant hills under a blue sky with clouds.",
+      "visual_summary": "Пейзаж с юртами и качелями на фоне гор и облачного неба.",
+      "foreground": "На переднем плане видны качели из дерева и верёвок, а также юрта слева.",
+      "midground": "На среднем плане расположены ещё одна юрта и камни, выложенные в линию.",
+      "background": "На заднем плане видны горы и облачное небо.",
       "visible_elements": {
-        "terrain": "Grassy plain with scattered stones.",
-        "vegetation": "Short grass with some small flowers.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Partly cloudy with blue sky.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "Two yurts and a wooden swing set.",
-        "road_vehicle": "None visible."
+        "terrain": "Равнина с травяным покровом.",
+        "vegetation": "Низкая трава с редкими цветами.",
+        "water": "Не видно.",
+        "snow": "Не видно.",
+        "sky": "Ясное небо с облаками.",
+        "people": "Не видно.",
+        "animals": "Не видно.",
+        "structures": "Юрты и качели.",
+        "road_vehicle": "Не видно."
       },
-      "dominant_subject": "Yurts and swing set on a grassy plain.",
+      "dominant_subject": "Юрты и качели.",
       "secondary_subjects": [
-        "Clouds",
-        "Distant hills"
+        "Камни",
+        "Горы",
+        "Облака"
       ],
       "scene_type": "meadow",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight with clear visibility.",
-      "weather": "Partly cloudy with no precipitation.",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с облаками.",
       "composition": {
-        "framing": "The swing set and yurts are positioned on the left, leading the eye into the open plain.",
-        "depth": "Good depth with foreground elements leading to distant hills.",
-        "balance": "Balanced with structures on the left and open space on the right.",
-        "visual_anchor": "Swing set and yurts.",
-        "horizon": "Visible and slightly above center.",
-        "distractions": "None significant."
+        "framing": "Широкий кадр с акцентом на юрты и качели.",
+        "depth": "Глубина создаётся за счёт расположения объектов на разных планах.",
+        "balance": "Сбалансированное распределение объектов по кадру.",
+        "visual_anchor": "Качели и юрта слева.",
+        "horizon": "Чёткий горизонт.",
+        "distractions": "Нет явных отвлекающих элементов."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with good contrast between sky and land.",
-        "motion_blur": "None visible.",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
         "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.7,
-      "location_reason": "The presence of yurts and a vast grassy plain is characteristic of the area around Lake Son-Kul, known for its summer pastures and nomadic camps.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На фотографии видны юрты и качели на фоне гор, что может соответствовать нескольким точкам маршрута. Отсутствие уникальных ориентиров, таких как озеро или специфические горные формы, не позволяет точно определить местоположение.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the scene."
+        "Точное количество юрт за пределами кадра."
       ],
-      "caption_seed": "A serene scene of yurts and a swing set on a grassy plain under a partly cloudy sky.",
-      "needs_fact_check": [
-        "Verify if the image was taken near Lake Son-Kul based on the route and visual elements."
-      ],
+      "caption_seed": "Юрты и качели на фоне гор и облачного неба.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:48.397Z",
+      "analyzed_at": "2026-07-10T16:33:15.340Z",
       "model": "gpt-4o"
     },
     {
@@ -463,61 +447,58 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A series of yurts on a grassy plain under a partly cloudy sky.",
-      "foreground": "Grassy plain with scattered stones and a wooden structure.",
-      "midground": "Several yurts arranged in a line with a person near one of them.",
-      "background": "Distant mountains under a partly cloudy sky.",
+      "visual_summary": "На изображении представлена равнина с юртами и горами на заднем плане.",
+      "foreground": "Травянистая равнина с несколькими камнями и небольшими цветами.",
+      "midground": "Несколько юрт и деревянная конструкция, напоминающая сушилку для одежды. Видны два человека рядом с одной из юрт.",
+      "background": "Горный хребет и облачное небо.",
       "visible_elements": {
-        "terrain": "Grassy plain with scattered stones.",
-        "vegetation": "Sparse grass and small wildflowers.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Partly cloudy with large white clouds.",
-        "people": "One person visible near a yurt.",
-        "animals": "None visible.",
-        "structures": "Several yurts and a wooden structure.",
-        "road_vehicle": "None visible."
+        "terrain": "Равнина с травой и камнями.",
+        "vegetation": "Низкая трава и небольшие цветы.",
+        "water": "Отсутствует.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное небо с облаками.",
+        "people": "Два человека рядом с юртой.",
+        "animals": "Отсутствуют.",
+        "structures": "Юрты и деревянная конструкция.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Yurts on a grassy plain.",
+      "dominant_subject": "Юрты на равнине.",
       "secondary_subjects": [
-        "Wooden structure",
-        "Person near a yurt",
-        "Distant mountains"
+        "деревянная конструкция",
+        "горы",
+        "люди"
       ],
       "scene_type": "settlement",
-      "people_count": 1,
+      "people_count": 2,
       "animal_count": 0,
-      "light": "Bright daylight with soft shadows.",
-      "weather": "Clear with some clouds.",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с облаками.",
       "composition": {
-        "framing": "Wide shot capturing the yurts and landscape.",
-        "depth": "Good depth with foreground, midground, and background elements.",
-        "balance": "Balanced with yurts evenly distributed across the frame.",
-        "visual_anchor": "Yurts and wooden structure.",
-        "horizon": "Visible and level.",
-        "distractions": "None significant."
+        "framing": "Широкий кадр с равниной и небом.",
+        "depth": "Глубина создается за счет расположения юрт и гор на заднем плане.",
+        "balance": "Сбалансированное распределение объектов по кадру.",
+        "visual_anchor": "Юрты в центре кадра.",
+        "horizon": "Четко виден, расположен в нижней трети кадра.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with good contrast.",
-        "color": "Natural colors with a slight green tint from the grass.",
-        "motion_blur": "None visible.",
-        "score": 8.5
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 4.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.75,
-      "location_reason": "The presence of yurts on a grassy plain with distant mountains aligns with the typical landscape around Lake Son-Kul, known for its summer pastures and nomadic settlements.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На изображении видны юрты и горы, что может соответствовать нескольким точкам маршрута, таким как равнины около озера Сон-Куль или в районе Жумгала. Однако, отсутствуют уникальные ориентиры, которые могли бы точно указать на конкретное место.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact number of yurts due to partial obstruction."
+        "Назначение деревянной конструкции."
       ],
-      "caption_seed": "Yurts on a grassy plain with distant mountains.",
-      "needs_fact_check": [
-        "Verify the presence of yurts in the specified route locations.",
-        "Confirm the typical landscape features around Lake Son-Kul."
-      ],
+      "caption_seed": "Равнина с юртами и горным хребтом на заднем плане.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:19:57.477Z",
+      "analyzed_at": "2026-07-10T16:33:22.828Z",
       "model": "gpt-4o"
     },
     {
@@ -528,61 +509,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A herd of horses in a vast grassy plain with mountains in the background under a clear blue sky.",
-      "foreground": "A grassy plain with patches of dirt and small yellow flowers.",
-      "midground": "A herd of horses, including different colors, moving across the plain.",
-      "background": "Distant mountains under a clear blue sky with a few clouds.",
+      "visual_summary": "На изображении показано стадо лошадей на открытой равнине с холмами на заднем плане.",
+      "foreground": "Травянистая равнина с небольшими цветами.",
+      "midground": "Стадо лошадей, состоящее из нескольких особей, движется по равнине.",
+      "background": "Холмы и голубое небо с облаками.",
       "visible_elements": {
-        "terrain": "Grassy plain with some dirt patches.",
-        "vegetation": "Sparse grass and small yellow flowers.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Clear blue with a few white clouds.",
-        "people": "None visible.",
-        "animals": "A herd of horses.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Равнина с травой и цветами.",
+        "vegetation": "Трава и небольшие цветы.",
+        "water": "Отсутствует.",
+        "snow": "Отсутствует.",
+        "sky": "Голубое небо с облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Лошади.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Herd of horses",
+      "dominant_subject": "Стадо лошадей.",
       "secondary_subjects": [
-        "Grass",
-        "Mountains",
-        "Sky"
+        "Холмы",
+        "Облака"
       ],
       "scene_type": "meadow",
       "people_count": 0,
       "animal_count": 15,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "Яркий солнечный свет.",
+      "weather": "Ясная погода.",
       "composition": {
-        "framing": "Wide shot capturing the herd and landscape.",
-        "depth": "Good depth with foreground, midground, and background elements.",
-        "balance": "Balanced with horses on the left and open space on the right.",
-        "visual_anchor": "Herd of horses in the midground.",
-        "horizon": "Visible and level.",
-        "distractions": "None significant."
+        "framing": "Центральное расположение стада лошадей.",
+        "depth": "Глубина создается за счет расположения лошадей на фоне холмов.",
+        "balance": "Сбалансированное распределение объектов по кадру.",
+        "visual_anchor": "Стадо лошадей в центре кадра.",
+        "horizon": "Четко видимая линия горизонта.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with vibrant greens and blues.",
-        "motion_blur": "None visible.",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
         "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.75,
-      "location_reason": "The visual elements of a grassy plain with a herd of horses and distant mountains align with the typical landscape around Lake Son-Kul, known for its vast meadows and nomadic herding.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На изображении нет уникальных объектов, которые могли бы однозначно указать на конкретную точку маршрута. Открытая равнина с холмами и стадо лошадей могут встречаться в нескольких местах маршрута.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact number of horses due to distance."
+        "Точное количество лошадей может быть не совсем точным."
       ],
-      "caption_seed": "A herd of horses grazing in a vast meadow with mountains in the distance.",
-      "needs_fact_check": [
-        "Verify if the landscape matches the typical scenery around Lake Son-Kul.",
-        "Confirm the presence of similar herds in the area during the time of observation."
-      ],
+      "caption_seed": "Стадо лошадей на открытой равнине с холмами на заднем плане.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:20:14.273Z",
+      "analyzed_at": "2026-07-10T16:33:29.298Z",
       "model": "gpt-4o"
     },
     {
@@ -593,61 +570,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A vast open grassland under a clear blue sky with distant mountains.",
-      "foreground": "A grassy field with sparse vegetation and small rocks.",
-      "midground": "Continuation of the grassy field leading to a distant lake or water body.",
-      "background": "Distant mountain range under a clear blue sky with scattered clouds.",
+      "visual_summary": "Фотография открытого пространства с равниной и горами на горизонте.",
+      "foreground": "Травянистая равнина с редкими цветами и растительностью.",
+      "midground": "Продолжение равнины, переходящее в линию горизонта.",
+      "background": "Горный хребет на горизонте под ясным небом с облаками.",
       "visible_elements": {
-        "terrain": "Flat grassy field.",
-        "vegetation": "Sparse grass and small wildflowers.",
-        "water": "Distant water body, possibly a lake.",
-        "snow": "None visible.",
-        "sky": "Clear blue with scattered clouds.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Равнина с травой и цветами.",
+        "vegetation": "Низкая трава и редкие цветы.",
+        "water": "Не видно.",
+        "snow": "Не видно.",
+        "sky": "Ясное голубое небо с облаками.",
+        "people": "Не видно.",
+        "animals": "Не видно.",
+        "structures": "Не видно.",
+        "road_vehicle": "Не видно."
       },
-      "dominant_subject": "Open grassland",
+      "dominant_subject": "Равнина с травой.",
       "secondary_subjects": [
-        "Distant mountains",
-        "Clouds"
+        "Горный хребет",
+        "Облака"
       ],
       "scene_type": "meadow",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с небольшими облаками.",
       "composition": {
-        "framing": "Wide shot with open space",
-        "depth": "Foreground grass leading to distant mountains",
-        "balance": "Balanced with sky and land",
-        "visual_anchor": "Central cloud",
-        "horizon": "Low and straight",
-        "distractions": "None"
+        "framing": "Горизонтальная композиция с равниной на переднем плане и горами на заднем.",
+        "depth": "Глубина создается за счет перехода от равнины к горам.",
+        "balance": "Сбалансированная композиция с равномерным распределением элементов.",
+        "visual_anchor": "Горный хребет на горизонте.",
+        "horizon": "Четко виден на уровне верхней трети кадра.",
+        "distractions": "Нет заметных отвлекающих элементов."
       },
       "technical_quality": {
-        "sharpness": "Good",
-        "exposure": "Well-exposed",
-        "color": "Natural",
-        "motion_blur": "None",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
         "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.75,
-      "location_reason": "The visual summary of a vast open grassland with distant mountains and a water body aligns with the typical landscape around Lake Son-Kul, known for its expansive meadows and surrounding mountain ranges.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На фотографии видна равнина с горным хребтом на горизонте, что может соответствовать нескольким точкам маршрута. Отсутствие уникальных объектов, таких как озеро или специфические строения, не позволяет точно определить местоположение.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact distance to mountains",
-        "Presence of small animals"
+        "Отсутствие видимых животных или людей."
       ],
-      "caption_seed": "A wide shot of a grassy field leading to distant mountains under a clear sky.",
-      "needs_fact_check": [
-        "Presence of a lake or water body near the observed location.",
-        "Exact identification of the mountain range in the background."
-      ],
+      "caption_seed": "Равнина с травой и цветами на переднем плане, горный хребет на горизонте под ясным небом с облаками.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:20:22.876Z",
+      "analyzed_at": "2026-07-10T16:33:37.098Z",
       "model": "gpt-4o"
     },
     {
@@ -658,60 +631,58 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A person on horseback by a lakeside with mountains in the distance.",
-      "foreground": "A person on a horse standing on a pebbly shore.",
-      "midground": "Calm lake water extending towards the horizon.",
-      "background": "Distant mountains under a partly cloudy sky.",
+      "visual_summary": "Фотография с человеком на лошади у берега водоёма.",
+      "foreground": "Человек на лошади стоит на берегу, покрытом галькой и травой.",
+      "midground": "Водоём с прозрачной водой, виден берег.",
+      "background": "Горы на горизонте и голубое небо с облаками.",
       "visible_elements": {
-        "terrain": "Pebbly shore and grassy patches.",
-        "vegetation": "Sparse grass near the shore.",
-        "water": "Calm lake water, clear and blue.",
-        "snow": "None visible.",
-        "sky": "Partly cloudy with blue sky.",
-        "people": "One person on horseback.",
-        "animals": "One horse.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Галечный берег с травой.",
+        "vegetation": "Небольшие участки травы на берегу.",
+        "water": "Прозрачная вода водоёма.",
+        "snow": "Отсутствует.",
+        "sky": "Голубое небо с облаками.",
+        "people": "Один человек на лошади.",
+        "animals": "Одна лошадь.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Person on horseback by the lake.",
+      "dominant_subject": "Человек на лошади.",
       "secondary_subjects": [
-        "Lake",
-        "Mountains",
-        "Sky"
+        "Водоём",
+        "Горы",
+        "Небо"
       ],
       "scene_type": "lake",
       "people_count": 1,
       "animal_count": 1,
-      "light": "Bright daylight with clear visibility.",
-      "weather": "Clear with some clouds.",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с облаками.",
       "composition": {
-        "framing": "The person and horse are positioned on the left, leading the eye towards the lake and mountains.",
-        "depth": "Good depth with foreground, midground, and background elements.",
-        "balance": "Balanced with the person and horse on one side and open water on the other.",
-        "visual_anchor": "Person on horseback.",
-        "horizon": "Visible and level, dividing the lake and sky.",
-        "distractions": "None significant."
+        "framing": "Человек на лошади в левой части кадра.",
+        "depth": "Глубина создаётся за счёт водоёма и гор на горизонте.",
+        "balance": "Сбалансированное распределение объектов по кадру.",
+        "visual_anchor": "Человек на лошади.",
+        "horizon": "Горизонтальная линия на уровне гор.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Sharp throughout the image.",
-        "exposure": "Well-exposed with good lighting.",
-        "color": "Natural and vibrant colors.",
-        "motion_blur": "None, image is still.",
-        "score": 8.5
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 4.5
       },
       "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.75,
-      "location_reason": "The visual elements such as the calm lake, pebbly shore, and distant mountains align with the known geography of озеро Сон-Куль, which is part of the provided route.",
+      "location_confidence": 0.6,
+      "location_reason": "На фотографии виден водоём с прозрачной водой и горы на горизонте, что соответствует описанию озера Сон-Куль на маршруте.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the scene."
+        "Точное определение местности."
       ],
-      "caption_seed": "A person on horseback by a tranquil lakeside with mountains in the distance.",
-      "needs_fact_check": [
-        "Ensure the visual description matches the known geography of озеро Сон-Куль."
-      ],
+      "caption_seed": "Человек на лошади у берега озера с горами на горизонте.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:20:32.486Z",
+      "analyzed_at": "2026-07-10T16:33:43.424Z",
       "model": "gpt-4o"
     },
     {
@@ -722,60 +693,58 @@
       "width": 3072,
       "height": 4096,
       "orientation": "vertical",
-      "visual_summary": "A serene lakeside scene with people engaged in an activity on a grassy field.",
-      "foreground": "Two people sitting on the grass with various items around them, including a washing machine and buckets.",
-      "midground": "A large, calm lake stretches across the image.",
-      "background": "Mountain range with patches of snow under a clear blue sky with scattered clouds.",
+      "visual_summary": "На изображении открытая местность с людьми, занимающимися стиркой на фоне гор и озера.",
+      "foreground": "На переднем плане два человека сидят на траве, рядом с ними тазики и неясное оборудование.",
+      "midground": "Средний план занят травянистой равниной, переходящей в озеро.",
+      "background": "На заднем плане видны горы с заснеженными вершинами и облачное небо.",
       "visible_elements": {
-        "terrain": "Grassy field",
-        "vegetation": "Sparse grass and small flowers",
-        "water": "Large, calm lake",
-        "snow": "Patches on distant mountains",
-        "sky": "Clear blue with scattered clouds",
-        "people": "Two people sitting on the grass",
-        "animals": "None visible",
-        "structures": "Portable washing machine",
-        "road_vehicle": "None visible"
+        "terrain": "Травянистая равнина.",
+        "vegetation": "Низкая трава с цветами.",
+        "water": "Озеро на среднем плане.",
+        "snow": "Заснеженные вершины гор на заднем плане.",
+        "sky": "Ясное с облаками.",
+        "people": "Два человека на переднем плане.",
+        "animals": "Отсутствуют.",
+        "structures": "Неясное оборудование на переднем плане.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Two people sitting on the grass with a washing machine and buckets.",
+      "dominant_subject": "Люди, занимающиеся стиркой на природе.",
       "secondary_subjects": [
-        "Lake",
-        "Mountains"
+        "Озеро",
+        "Горы",
+        "Облака"
       ],
-      "scene_type": "lake",
+      "scene_type": "meadow",
       "people_count": 2,
       "animal_count": 0,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с облаками.",
       "composition": {
-        "framing": "Centered with people in the lower third",
-        "depth": "Foreground with people, midground with lake, background with mountains",
-        "balance": "Balanced with people on one side and open space on the other",
-        "visual_anchor": "People and washing machine",
-        "horizon": "Visible, dividing lake and mountains",
-        "distractions": "None"
+        "framing": "Центральное расположение людей.",
+        "depth": "Глубина создается за счет перехода от переднего плана к горам.",
+        "balance": "Сбалансированное распределение объектов по кадру.",
+        "visual_anchor": "Люди на переднем плане.",
+        "horizon": "Четко виден на уровне гор.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good",
-        "exposure": "Well-exposed",
-        "color": "Natural and vibrant",
-        "motion_blur": "None",
-        "score": 8.5
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 4.5
       },
       "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.85,
-      "location_reason": "The scene features a large, calm lake with a mountainous backdrop, which aligns with the known geography of озеро Сон-Куль. The presence of a grassy field and sparse vegetation further supports this location.",
+      "location_confidence": 0.7,
+      "location_reason": "На изображении видны горы с заснеженными вершинами и озеро, что соответствует описанию озера Сон-Куль на маршруте. Это единственное озеро на маршруте, что позволяет с уверенностью связать кадр с этой точкой.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact activity of the people"
+        "Неясное оборудование на переднем плане."
       ],
-      "caption_seed": "A peaceful lakeside view with two people sitting on the grass near a washing machine, set against a backdrop of mountains and a clear sky.",
-      "needs_fact_check": [
-        "Verify the presence of portable washing machines at озеро Сон-Куль.",
-        "Confirm typical activities of visitors at озеро Сон-Куль."
-      ],
+      "caption_seed": "Люди занимаются стиркой на травянистой равнине у озера, на фоне гор с заснеженными вершинами.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:20:43.389Z",
+      "analyzed_at": "2026-07-10T16:33:50.339Z",
       "model": "gpt-4o"
     },
     {
@@ -786,61 +755,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A serene landscape with a lake and mountains under a clear sky.",
-      "foreground": "A grassy field with a few scattered objects, possibly rocks or small plants.",
-      "midground": "A calm lake reflecting sunlight, with gentle waves visible.",
-      "background": "Distant mountains under a clear blue sky with scattered clouds.",
+      "visual_summary": "Пейзаж с озером и горами на заднем плане.",
+      "foreground": "Травянистая равнина с редкими кустами и небольшим столбом.",
+      "midground": "Озеро с блестящей поверхностью.",
+      "background": "Горный хребет и голубое небо с облаками.",
       "visible_elements": {
-        "terrain": "Grassy field",
-        "vegetation": "Sparse grass",
-        "water": "Calm lake",
-        "snow": "None",
-        "sky": "Clear blue with scattered clouds",
-        "people": "None",
-        "animals": "None",
-        "structures": "A single vertical pole",
-        "road_vehicle": "None"
+        "terrain": "Равнина с травой.",
+        "vegetation": "Редкие кусты на равнине.",
+        "water": "Озеро с блестящей поверхностью.",
+        "snow": "Отсутствует.",
+        "sky": "Голубое небо с облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Небольшой столб на переднем плане.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Lake",
+      "dominant_subject": "Озеро и горы.",
       "secondary_subjects": [
-        "Mountains",
-        "Sky",
-        "Grass"
+        "Травянистая равнина",
+        "Облака"
       ],
       "scene_type": "lake",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "Яркий солнечный свет.",
+      "weather": "Ясная погода.",
       "composition": {
-        "framing": "Wide landscape",
-        "depth": "Foreground, midground, and background layers",
-        "balance": "Balanced with lake and mountains",
-        "visual_anchor": "Lake",
-        "horizon": "Centered",
-        "distractions": "None"
+        "framing": "Горизонтальное кадрирование с акцентом на озеро и горы.",
+        "depth": "Глубина создается за счет чередования планов: равнина, озеро, горы.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Озеро и горы на заднем плане.",
+        "horizon": "Четко видимая линия горизонта.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good",
-        "exposure": "Well-exposed",
-        "color": "Natural",
-        "motion_blur": "None",
-        "score": 8.5
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 4.5
       },
       "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.85,
-      "location_reason": "The visual elements of a serene lake surrounded by mountains under a clear sky closely match the known characteristics of озеро Сон-Куль, which is part of the provided route.",
+      "location_confidence": 0.7,
+      "location_reason": "На маршруте Кочкор → озеро Сон-Куль → Жумгал → Кызыл-Ой единственным озером является Сон-Куль, что соответствует видимому озеру на фотографии.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact nature of objects in the foreground"
+        "Точный характер столба на переднем плане."
       ],
-      "caption_seed": "A tranquil lake with distant mountains under a clear sky.",
-      "needs_fact_check": [
-        "Ensure the lake's characteristics match those of озеро Сон-Куль.",
-        "Verify the presence of similar landscapes along the specified route."
-      ],
+      "caption_seed": "Озеро с блестящей поверхностью на фоне горного хребта и голубого неба с облаками.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:20:50.566Z",
+      "analyzed_at": "2026-07-10T16:33:57.740Z",
       "model": "gpt-4o"
     },
     {
@@ -851,60 +816,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A serene landscape with a lake and mountains under a clear sky.",
-      "foreground": "Rolling green hills with scattered rocks.",
-      "midground": "A blue lake with a distant shoreline.",
-      "background": "Mountain range under a clear blue sky with some clouds.",
+      "visual_summary": "Пейзаж с озером и горами на заднем плане.",
+      "foreground": "Зеленые холмы с редкими камнями.",
+      "midground": "Озеро с голубой водой.",
+      "background": "Горный хребет и небо с облаками.",
       "visible_elements": {
-        "terrain": "Rolling green hills with some rocky outcrops.",
-        "vegetation": "Sparse grass covering the hills.",
-        "water": "A large blue lake in the midground.",
-        "snow": "None visible.",
-        "sky": "Clear blue with a few scattered clouds.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Холмистая местность.",
+        "vegetation": "Трава на холмах.",
+        "water": "Озеро в центре кадра.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное небо с облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Lake with surrounding hills and mountains.",
+      "dominant_subject": "Озеро",
       "secondary_subjects": [
-        "Clouds in the sky",
-        "Distant mountains"
+        "Холмы",
+        "Горы"
       ],
       "scene_type": "lake",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight with clear visibility.",
-      "weather": "Clear with a few clouds.",
+      "light": "Естественное дневное освещение.",
+      "weather": "Ясная погода с небольшими облаками.",
       "composition": {
-        "framing": "Wide shot capturing the lake and surrounding landscape.",
-        "depth": "Good depth with foreground hills leading to the lake and mountains.",
-        "balance": "Balanced with the lake centered and hills on either side.",
-        "visual_anchor": "The blue lake in the center.",
-        "horizon": "Visible and level, dividing the lake and mountains.",
-        "distractions": "None."
+        "framing": "Горизонтальное кадрирование с акцентом на озеро.",
+        "depth": "Глубина создается за счет чередования планов: холмы, озеро, горы.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Озеро в центре кадра.",
+        "horizon": "Горизонтальная линия четко видна.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Sharp throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with vibrant blues and greens.",
-        "motion_blur": "None.",
-        "score": 9.5
+        "sharpness": "Высокая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.85,
-      "location_reason": "The visual description of a serene landscape with a lake surrounded by rolling green hills and distant mountains matches the characteristics of озеро Сон-Куль, which is known for its picturesque setting in Kyrgyzstan.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На изображении видны озеро и горы, которые могут соответствовать нескольким точкам маршрута. Уникальных ориентиров, позволяющих точно определить местоположение, нет.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the landscape."
+        "Точное определение географического местоположения."
       ],
-      "caption_seed": "A tranquil view of a lake surrounded by hills and mountains under a clear sky.",
-      "needs_fact_check": [
-        "Ensure the visual elements match the known features of озеро Сон-Куль.",
-        "Verify the route includes a stop at озеро Сон-Куль."
-      ],
+      "caption_seed": "Пейзаж с озером и горами на заднем плане. Зеленые холмы с редкими камнями на переднем плане.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:20:59.691Z",
+      "analyzed_at": "2026-07-10T16:34:03.302Z",
       "model": "gpt-4o"
     },
     {
@@ -915,59 +877,57 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "A scenic landscape featuring a grassy plain, colorful hills, and a clear blue sky.",
-      "foreground": "Grassy plain with sparse vegetation and a dirt path.",
-      "midground": "Colorful hills with distinct layers and textures.",
-      "background": "Distant mountains under a clear blue sky with a few clouds.",
+      "visual_summary": "Изображение показывает горный пейзаж с травянистой равниной на переднем плане и горами на заднем.",
+      "foreground": "Травянистая равнина с редкими кустарниками.",
+      "midground": "Горные склоны с различными оттенками коричневого и серого.",
+      "background": "Горы на горизонте с ясным голубым небом.",
       "visible_elements": {
-        "terrain": "Grassy plain and layered hills.",
-        "vegetation": "Sparse grass and small bushes.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Clear blue with a few clouds.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Горный ландшафт с равниной.",
+        "vegetation": "Трава и редкие кустарники на переднем плане.",
+        "water": "Отсутствует.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное голубое небо с небольшими облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Colorful hills with distinct layers.",
+      "dominant_subject": "Горные склоны.",
       "secondary_subjects": [
-        "Grassy plain",
-        "Distant mountains"
+        "Травянистая равнина",
+        "Голубое небо"
       ],
       "scene_type": "mountain",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Natural daylight with clear visibility.",
-      "weather": "Clear with a few clouds.",
+      "light": "Естественное дневное освещение.",
+      "weather": "Ясная погода.",
       "composition": {
-        "framing": "Wide shot capturing the landscape.",
-        "depth": "Foreground, midground, and background layers create depth.",
-        "balance": "Balanced with hills on the right and mountains in the background.",
-        "visual_anchor": "Colorful hills in the midground.",
-        "horizon": "Visible and slightly above the center.",
-        "distractions": "None significant."
+        "framing": "Горизонтальная ориентация с акцентом на горы.",
+        "depth": "Хорошая глубина за счёт слоистости планов.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Горные склоны в центре кадра.",
+        "horizon": "Чёткий горизонт.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with good lighting.",
-        "color": "Natural colors with emphasis on earth tones.",
-        "motion_blur": "None visible.",
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
         "score": 8.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.7,
-      "location_reason": "The visual elements such as grassy plains, colorful hills, and distant mountains align with the typical landscape around озеро Сон-Куль, known for its scenic beauty and similar terrain.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Изображение не содержит уникальных объектов, которые могли бы однозначно указать на конкретную точку маршрута. Горный пейзаж с травянистой равниной может быть характерен для нескольких участков маршрута.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the landscape."
+        "Отсутствие видимых животных или людей."
       ],
-      "caption_seed": "A scenic landscape with colorful hills and a grassy plain under a clear blue sky.",
-      "needs_fact_check": [
-        "Verify if the landscape features match the typical scenery around озеро Сон-Куль."
-      ],
+      "caption_seed": "Горный пейзаж с травянистой равниной на переднем плане и горами на заднем фоне под ясным голубым небом.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:21:08.662Z",
+      "analyzed_at": "2026-07-10T16:34:10.016Z",
       "model": "gpt-4o"
     },
     {
@@ -978,60 +938,57 @@
       "width": 3264,
       "height": 2448,
       "orientation": "horizontal",
-      "visual_summary": "A vast mountainous landscape under a clear blue sky.",
-      "foreground": "A grassy slope with patches of dirt and rocks.",
-      "midground": "Rolling hills and valleys with varying shades of green and brown.",
-      "background": "Distant mountain ranges with a few clouds in the sky.",
+      "visual_summary": "Фотография горного пейзажа с ясным небом.",
+      "foreground": "Травянистый склон с редкой растительностью.",
+      "midground": "Горные хребты с разнообразными оттенками зелёного и коричневого.",
+      "background": "Горные вершины на горизонте и голубое небо с облаками.",
       "visible_elements": {
-        "terrain": "Hilly and mountainous terrain with grassy slopes.",
-        "vegetation": "Sparse grass on the slopes.",
-        "water": "None visible.",
-        "snow": "None visible.",
-        "sky": "Clear blue sky with a few clouds.",
-        "people": "None visible.",
-        "animals": "None visible.",
-        "structures": "None visible.",
-        "road_vehicle": "None visible."
+        "terrain": "Горные хребты и травянистый склон.",
+        "vegetation": "Редкая трава на переднем плане.",
+        "water": "Отсутствует.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное голубое небо с небольшими облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
       },
-      "dominant_subject": "Mountainous landscape",
+      "dominant_subject": "Горные хребты.",
       "secondary_subjects": [
-        "Grassy slope",
-        "Clouds"
+        "Травянистый склон",
+        "Облака на небе"
       ],
       "scene_type": "mountain",
       "people_count": 0,
       "animal_count": 0,
-      "light": "Bright daylight",
-      "weather": "Clear",
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода.",
       "composition": {
-        "framing": "The slope in the foreground leads the eye into the midground and background.",
-        "depth": "Good depth with layers of hills and mountains.",
-        "balance": "Balanced with the slope on the left and open sky on the right.",
-        "visual_anchor": "The grassy slope in the foreground.",
-        "horizon": "Visible and slightly above the center.",
-        "distractions": "None"
+        "framing": "Горизонтальная ориентация с акцентом на горы.",
+        "depth": "Хорошая глубина за счёт чередования планов.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Горные хребты в центре кадра.",
+        "horizon": "Чёткий горизонт.",
+        "distractions": "Отсутствуют."
       },
       "technical_quality": {
-        "sharpness": "Good sharpness throughout the image.",
-        "exposure": "Well-exposed with no overexposed areas.",
-        "color": "Natural colors with a dominance of greens and blues.",
-        "motion_blur": "None",
-        "score": 8.5
+        "sharpness": "Высокая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 4.5
       },
-      "likely_location": "озеро Сон-Куль",
-      "location_confidence": 0.7,
-      "location_reason": "The visual summary and terrain description match the typical landscape around озеро Сон-Куль, known for its mountainous surroundings and grassy slopes.",
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "На фотографии отсутствуют уникальные ориентиры, которые могли бы точно указать на конкретную точку маршрута. Видимые горные хребты и травянистый склон могут быть характерны для нескольких участков маршрута.",
       "observation_confidence": 0.95,
       "uncertainties": [
-        "Exact location of the landscape."
+        "Отсутствие видимых объектов для точного определения местности."
       ],
-      "caption_seed": "A vast mountainous landscape with grassy slopes under a clear blue sky.",
-      "needs_fact_check": [
-        "Ensure the visual elements match the typical landscape around озеро Сон-Куль.",
-        "Verify the absence of water in the image aligns with the location's characteristics."
-      ],
+      "caption_seed": "Горные хребты на фоне ясного неба с облаками.",
+      "needs_fact_check": [],
       "analysis_source": "vision-v2-separated-observation-geography",
-      "analyzed_at": "2026-07-10T16:21:18.414Z",
+      "analyzed_at": "2026-07-10T16:34:16.929Z",
       "model": "gpt-4o"
     }
   ],
@@ -1040,7 +997,6 @@
     "story": [
       "IMG20260710120436_f2q5ut",
       "IMG20260710132521_vjyrad",
-      "IMG20260710133035_cgmqm2",
       "IMG20260710143639_vzq1ky",
       "IMG20260710144250_swvxhb",
       "IMG20260710151843_w72qb0",
@@ -1048,120 +1004,117 @@
       "IMG20260710190904_xxoa1i"
     ],
     "backstage": [
-      "IMG20260710114937_yfixn9",
+      "IMG20260710133035_cgmqm2",
       "IMG20260710132852_zwlmwu",
-      "IMG20260710162438_b7fmfg",
-      "IMG20260710172717_wtwx7v"
-    ],
-    "skip": [
-      "IMG20260710133123_audcsd",
       "IMG20260710150850_whs5r4",
       "IMG20260710162415_std2jx"
+    ],
+    "skip": [
+      "IMG20260710114937_yfixn9",
+      "IMG20260710133123_audcsd",
+      "IMG20260710162438_b7fmfg",
+      "IMG20260710172717_wtwx7v"
     ],
     "decisions": {
       "IMG20260710120436_f2q5ut": {
         "status": "story",
-        "reason": "Strong depth and composition with the road leading into the horizon, setting the journey's tone.",
-        "visual_function": "road",
-        "duplicate_group": "road"
+        "reason": "Кадр с дорогой создаёт перспективу и вводит в серию, но не является центральным.",
+        "visual_function": "введение",
+        "duplicate_group": "дорога"
       },
       "IMG20260710114937_yfixn9": {
-        "status": "backstage",
-        "reason": "Similar to IMG20260710120436_f2q5ut but lacks the dynamic leading line of the road.",
-        "visual_function": "mountain",
-        "duplicate_group": "road"
+        "status": "skip",
+        "reason": "Слабая композиция и низкий технический балл по сравнению с другими кадрами.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "горы"
       },
       "IMG20260710132521_vjyrad": {
         "status": "story",
-        "reason": "Captures the cultural aspect with yurts, adding diversity to the series.",
-        "visual_function": "settlement",
-        "duplicate_group": "yurts"
+        "reason": "Юрты на фоне гор создают атмосферу и соответствуют теме.",
+        "visual_function": "жилище",
+        "duplicate_group": "юрты"
       },
       "IMG20260710140254_l7tj7j": {
         "status": "hero",
-        "reason": "Perfectly encapsulates the central theme of vastness and tranquility with the lake and mountains.",
-        "visual_function": "lake",
-        "duplicate_group": "lake"
+        "reason": "Кадр с озером и горами идеально передаёт простор и тишину, соответствуя центральной мысли.",
+        "visual_function": "главная сцена",
+        "duplicate_group": "озеро"
       },
       "IMG20260710133035_cgmqm2": {
-        "status": "story",
-        "reason": "The dirt path and lake provide a strong visual narrative, complementing the hero image.",
-        "visual_function": "meadow",
-        "duplicate_group": "lake"
+        "status": "backstage",
+        "reason": "Повторяет тему озера, но менее выразителен.",
+        "visual_function": "озеро",
+        "duplicate_group": "озеро"
       },
       "IMG20260710143639_vzq1ky": {
         "status": "story",
-        "reason": "The herd of horses aligns with the editorial focus on animals and open spaces.",
-        "visual_function": "meadow",
-        "duplicate_group": "horses"
+        "reason": "Стадо лошадей на фоне гор соответствует финальной сцене и эмоциональной кривой.",
+        "visual_function": "животные",
+        "duplicate_group": "лошади"
       },
       "IMG20260710132852_zwlmwu": {
         "status": "backstage",
-        "reason": "Similar to IMG20260710132521_vjyrad but with less impactful composition.",
-        "visual_function": "settlement",
-        "duplicate_group": "yurts"
+        "reason": "Повторяет тему юрт, но менее выразителен.",
+        "visual_function": "жилище",
+        "duplicate_group": "юрты"
       },
       "IMG20260710133123_audcsd": {
         "status": "skip",
-        "reason": "Redundant with other yurt images and lacks unique elements.",
-        "visual_function": "settlement",
-        "duplicate_group": "yurts"
+        "reason": "Слабая композиция и низкий технический балл по сравнению с другими кадрами.",
+        "visual_function": "жилище",
+        "duplicate_group": "юрты"
       },
       "IMG20260710144250_swvxhb": {
         "status": "story",
-        "reason": "Dynamic composition with the herd of horses, enhancing the series' rhythm.",
-        "visual_function": "meadow",
-        "duplicate_group": "horses"
+        "reason": "Стадо лошадей на равнине усиливает тему простора и тишины.",
+        "visual_function": "животные",
+        "duplicate_group": "лошади"
       },
       "IMG20260710150850_whs5r4": {
-        "status": "skip",
-        "reason": "Lacks distinct elements or narrative strength compared to other meadow images.",
-        "visual_function": "meadow",
-        "duplicate_group": "meadow"
+        "status": "backstage",
+        "reason": "Повторяет тему равнины, но менее выразителен.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "равнина"
       },
       "IMG20260710151843_w72qb0": {
         "status": "story",
-        "reason": "Adds a personal touch with the person on horseback, enriching the narrative.",
-        "visual_function": "lake",
-        "duplicate_group": "lake"
+        "reason": "Человек на лошади добавляет динамику и разнообразие в серию.",
+        "visual_function": "человек и животное",
+        "duplicate_group": "человек и лошадь"
       },
       "IMG20260710162438_b7fmfg": {
-        "status": "backstage",
-        "reason": "Interesting human element but less visually compelling than other lake scenes.",
-        "visual_function": "lake",
-        "duplicate_group": "lake"
+        "status": "skip",
+        "reason": "Сцена стирки не соответствует основной теме и эмоциональной кривой.",
+        "visual_function": "быт",
+        "duplicate_group": "люди"
       },
       "IMG20260710162415_std2jx": {
-        "status": "skip",
-        "reason": "Redundant with stronger lake images and lacks unique features.",
-        "visual_function": "lake",
-        "duplicate_group": "lake"
+        "status": "backstage",
+        "reason": "Повторяет тему озера, но менее выразителен.",
+        "visual_function": "озеро",
+        "duplicate_group": "озеро"
       },
       "IMG20260710172738_h3pfwh": {
         "status": "story",
-        "reason": "Strong visual of the lake and surrounding landscape, enhancing the series' depth.",
-        "visual_function": "lake",
-        "duplicate_group": "lake"
+        "reason": "Кадр с озером и холмами усиливает тему простора и тишины.",
+        "visual_function": "озеро",
+        "duplicate_group": "озеро"
       },
       "IMG20260710190904_xxoa1i": {
         "status": "story",
-        "reason": "Unique colorful hills add variety and visual interest to the series.",
-        "visual_function": "mountain",
-        "duplicate_group": "mountain"
+        "reason": "Горный пейзаж усиливает тему простора и тишины.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "горы"
       },
       "IMG20260710172717_wtwx7v": {
-        "status": "backstage",
-        "reason": "Similar to other mountain images but with less impactful composition.",
-        "visual_function": "mountain",
-        "duplicate_group": "mountain"
+        "status": "skip",
+        "reason": "Слабая композиция и низкий технический балл по сравнению с другими кадрами.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "горы"
       }
     },
-    "sequence_note": "The series begins with the journey's road, transitions through cultural and natural landscapes, and culminates with the serene lake and horses, maintaining a rhythm of exploration and tranquility.",
-    "editorial_summary": "The selected images capture the essence of Kyrgyzstan's vast landscapes, cultural elements, and serene beauty, aligning with the editorial focus on space and silence.",
-    "fact_checks": [
-      "Ensure the location of each image is accurately identified as part of the Kyrgyzstan trip.",
-      "Verify the presence of yurts and horses in the specified locations.",
-      "Confirm the weather conditions match the descriptions in the images."
-    ]
+    "sequence_note": "Серия начинается с дороги, вводящей в тему простора, затем переход к юртам и озеру, завершается сценами с лошадьми, усиливающими финальную тему.",
+    "editorial_summary": "Серия фотографий передаёт атмосферу простора и тишины высокогорных лугов Сон-Куля. Основное внимание уделено озеру и стадам лошадей, что соответствует центральной мысли и эмоциональной кривой.",
+    "fact_checks": []
   }
 }
