@@ -4,7 +4,7 @@
   "day": "day07",
   "photos_source": "data/kyrgyzstan-2026/day07-photos.json",
   "context_source": "data/kyrgyzstan-2026/day07-context.json",
-  "generated_at": "2026-07-10T15:48:32.072Z",
+  "generated_at": "2026-07-10T16:04:57.376Z",
   "model": "gpt-4o-mini",
   "items": [
     {
@@ -15,7 +15,7 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении видно широкое пространство высокогорного луга с извивающейся дорогой. Небо ясное с облаками, а вдали виднеются горы.",
+      "visual_summary": "На изображении видно широкое пространство высокогорного луга с проселочной дорогой, уходящей вдаль. Небо ясное с облаками, а на горизонте виднеются горы.",
       "visible_elements": {
         "terrain": "высокогорный луг",
         "vegetation": "трава",
@@ -25,13 +25,13 @@
         "people": "",
         "animals": "",
         "structures": "",
-        "road_vehicle": "грунтовая дорога"
+        "road_vehicle": "проселочная дорога"
       },
-      "dominant_subject": "дорога",
+      "dominant_subject": "луг",
       "scene_type": "meadow",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.7,
+      "observation_confidence": 0.9,
       "uncertainties": [],
       "composition_score": 7,
       "story_score": 6,
@@ -39,11 +39,11 @@
       "technical_score": 7,
       "redundancy_risk": 2,
       "suggested_role": "hero",
-      "caption_seed": "Широкий луг с извивающейся дорогой под ясным небом.",
+      "caption_seed": "Широкий луг с проселочной дорогой и ясным небом.",
       "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:46:57.898Z",
+      "analyzed_at": "2026-07-10T16:03:15.715Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -82,7 +82,7 @@
       "editor_note": "Кадр подчеркивает величие горного пейзажа и открытость пространства.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:04.212Z",
+      "analyzed_at": "2026-07-10T16:03:21.865Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -106,22 +106,22 @@
         "road_vehicle": ""
       },
       "dominant_subject": "юрты",
-      "scene_type": "settlement",
+      "scene_type": "meadow",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.7,
+      "observation_confidence": 0.9,
       "uncertainties": [],
       "composition_score": 7,
       "story_score": 6,
       "emotional_score": 8,
       "technical_score": 7,
       "redundancy_risk": 2,
-      "suggested_role": "story",
+      "suggested_role": "hero",
       "caption_seed": "Юрты на фоне ясного неба",
-      "editor_note": "Кадр подчеркивает атмосферу высокогорного поселения.",
+      "editor_note": "Кадр подчеркивает простоту и простор высокогорного ландшафта.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:08.472Z",
+      "analyzed_at": "2026-07-10T16:03:27.133Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -132,10 +132,10 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении видно бескрайнее пространство с зелеными лугами на переднем плане и водоемом на заднем. На горизонте видны горы, а небо ясное с несколькими облаками.",
+      "visual_summary": "На изображении видно бескрайнее пространство с зелеными лугами, на фоне которых расположено озеро и горы. Небо ясное, с несколькими облаками.",
       "visible_elements": {
-        "terrain": "луг",
-        "vegetation": "зелёная трава",
+        "terrain": "луга",
+        "vegetation": "зелёная растительность",
         "water": "озеро",
         "snow": "",
         "sky_weather": "ясное небо с облаками",
@@ -144,23 +144,23 @@
         "structures": "",
         "road_vehicle": ""
       },
-      "dominant_subject": "луг и озеро",
-      "scene_type": "meadow|lake",
+      "dominant_subject": "озеро",
+      "scene_type": "meadow",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.9,
+      "observation_confidence": 0.7,
       "uncertainties": [],
       "composition_score": 7,
       "story_score": 6,
       "emotional_score": 8,
       "technical_score": 7,
-      "redundancy_risk": 1,
+      "redundancy_risk": 2,
       "suggested_role": "hero",
       "caption_seed": "Просторные луга и озеро под ясным небом.",
       "editor_note": "Кадр подчеркивает красоту высокогорного пейзажа и атмосферу спокойствия.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:12.693Z",
+      "analyzed_at": "2026-07-10T16:03:32.529Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -171,35 +171,35 @@
       "width": 3264,
       "height": 2448,
       "orientation": "horizontal",
-      "visual_summary": "На изображении виден просторный зеленый луг с небольшими желтыми цветами, уходящий к горизонту. На заднем плане видны горы, а также озеро, отражающее голубое небо с облаками.",
+      "visual_summary": "На изображении виден просторный зеленый луг, переходящий в водоем. На горизонте видны горы, а небо ясное с облаками.",
       "visible_elements": {
         "terrain": "луг",
-        "vegetation": "зеленая трава, желтые цветы",
-        "water": "озеро",
+        "vegetation": "зеленая трава",
+        "water": "водоем",
         "snow": "",
-        "sky_weather": "голубое небо с облаками",
+        "sky_weather": "ясное небо с облаками",
         "people": "",
         "animals": "",
         "structures": "",
         "road_vehicle": "песчаная дорога"
       },
       "dominant_subject": "луг",
-      "scene_type": "meadow",
+      "scene_type": "meadow|lake",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
       "observation_confidence": 0.9,
       "uncertainties": [],
       "composition_score": 7,
-      "story_score": 8,
-      "emotional_score": 9,
-      "technical_score": 8,
+      "story_score": 6,
+      "emotional_score": 8,
+      "technical_score": 7,
       "redundancy_risk": 2,
       "suggested_role": "hero",
       "caption_seed": "Просторный луг у озера Сон-Куль.",
-      "editor_note": "Кадр подчеркивает величие природы и спокойствие высокогорного ландшафта.",
+      "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:17.723Z",
+      "analyzed_at": "2026-07-10T16:03:37.959Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -238,7 +238,7 @@
       "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:23.169Z",
+      "analyzed_at": "2026-07-10T16:03:44.120Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -249,7 +249,7 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении видны юрты на высокогорном лугу, окружённые зелёной травой. Небо ясное с облаками, создающими контраст с простором вокруг.",
+      "visual_summary": "На изображении видны юрты на высокогорном лугу, окруженные зелеными травами и камнями. Небо ясное с облаками, создающими легкую тень на земле.",
       "visible_elements": {
         "terrain": "высокогорный луг",
         "vegetation": "зелёная трава",
@@ -265,19 +265,19 @@
       "scene_type": "meadow",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.9,
+      "observation_confidence": 0.7,
       "uncertainties": [],
       "composition_score": 7,
-      "story_score": 8,
-      "emotional_score": 9,
-      "technical_score": 8,
-      "redundancy_risk": 1,
-      "suggested_role": "hero",
+      "story_score": 6,
+      "emotional_score": 8,
+      "technical_score": 7,
+      "redundancy_risk": 2,
+      "suggested_role": "story",
       "caption_seed": "Юрты на высокогорном лугу под ясным небом.",
-      "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
+      "editor_note": "Кадр подчеркивает простоту и красоту высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:29.668Z",
+      "analyzed_at": "2026-07-10T16:03:50.945Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -304,19 +304,19 @@
       "scene_type": "meadow",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.7,
+      "observation_confidence": 0.9,
       "uncertainties": [],
       "composition_score": 7,
-      "story_score": 6,
-      "emotional_score": 8,
-      "technical_score": 7,
+      "story_score": 8,
+      "emotional_score": 7,
+      "technical_score": 8,
       "redundancy_risk": 2,
       "suggested_role": "hero",
       "caption_seed": "Юрты на высокогорном лугу под ясным небом.",
-      "editor_note": "Кадр подчеркивает простоту и красоту высокогорного пейзажа.",
+      "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:35.773Z",
+      "analyzed_at": "2026-07-10T16:03:56.971Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -327,13 +327,13 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении видны табуны лошадей, которые движутся по высокогорному лугу. На заднем плане расположены холмы под ясным небом.",
+      "visual_summary": "На изображении видны табуны лошадей, которые движутся по высокогорному лугу. На заднем плане расположены холмы под ясным голубым небом.",
       "visible_elements": {
         "terrain": "высокогорный луг",
         "vegetation": "трава, цветы",
         "water": "",
         "snow": "",
-        "sky_weather": "ясное небо с несколькими облаками",
+        "sky_weather": "ясное небо, несколько облаков",
         "people": "",
         "animals": "лошади",
         "structures": "",
@@ -355,7 +355,7 @@
       "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:40.437Z",
+      "analyzed_at": "2026-07-10T16:04:03.142Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -390,11 +390,11 @@
       "technical_score": 7,
       "redundancy_risk": 2,
       "suggested_role": "hero",
-      "caption_seed": "Бескрайние высокогорные луга под ясным небом.",
+      "caption_seed": "Бескрайние высокогорные луга с горным рельефом на заднем плане.",
       "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:44.622Z",
+      "analyzed_at": "2026-07-10T16:04:10.117Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -405,20 +405,20 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении видно человека, сидящего на лошади у берега водоема. Вода спокойная, а на фоне видны горы и облака на ясном небе.",
+      "visual_summary": "На изображении видно человека на лошади, стоящего у воды. На заднем плане простирается озеро с гористым ландшафтом вдали и ясным небом.",
       "visible_elements": {
-        "terrain": "береговая линия с галькой",
-        "vegetation": "небольшие участки травы",
-        "water": "водоем",
+        "terrain": "горы на горизонте",
+        "vegetation": "трава у берега",
+        "water": "озеро",
         "snow": "",
         "sky_weather": "ясное небо с облаками",
-        "people": "один человек",
-        "animals": "одна лошадь",
+        "people": "1 человек",
+        "animals": "1 лошадь",
         "structures": "",
         "road_vehicle": ""
       },
       "dominant_subject": "человек на лошади",
-      "scene_type": "other",
+      "scene_type": "lake",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
       "observation_confidence": 0.9,
@@ -430,10 +430,10 @@
       "redundancy_risk": 1,
       "suggested_role": "hero",
       "caption_seed": "Человек на лошади у берега озера.",
-      "editor_note": "Кадр подчеркивает связь человека с природой и атмосферу спокойствия.",
+      "editor_note": "Кадр подчеркивает связь человека и природы, акцентируя внимание на просторе и тишине.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:49.753Z",
+      "analyzed_at": "2026-07-10T16:04:16.085Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -444,10 +444,10 @@
       "width": 3072,
       "height": 4096,
       "orientation": "vertical",
-      "visual_summary": "На изображении видно высокогорное озеро с зелеными лугами на переднем плане и горами на заднем. Два человека занимаются каким-то делом на траве, рядом с ними расположены предметы.",
+      "visual_summary": "На изображении видно высокогорное озеро с зелеными лугами на переднем плане и горами на заднем. Два человека занимаются делами на траве, рядом с ними находятся несколько предметов.",
       "visible_elements": {
-        "terrain": "высокогорные луга",
-        "vegetation": "зелёная трава, цветы",
+        "terrain": "горный рельеф",
+        "vegetation": "зелёные луга",
         "water": "озеро",
         "snow": "не видно",
         "sky_weather": "ясное небо с облаками",
@@ -456,25 +456,23 @@
         "structures": "не видно",
         "road_vehicle": "не видно"
       },
-      "dominant_subject": "люди на лугу",
-      "scene_type": "meadow",
+      "dominant_subject": "люди",
+      "scene_type": "meadow|lake",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
       "observation_confidence": 0.9,
-      "uncertainties": [
-        "точное местоположение не установлено"
-      ],
+      "uncertainties": [],
       "composition_score": 7,
       "story_score": 6,
       "emotional_score": 8,
       "technical_score": 7,
       "redundancy_risk": 2,
       "suggested_role": "story",
-      "caption_seed": "Два человека на высокогорном лугу у озера.",
-      "editor_note": "Кадр иллюстрирует взаимодействие человека с природой в высокогорной местности.",
+      "caption_seed": "Два человека на лугу у озера в горах.",
+      "editor_note": "Кадр передает атмосферу спокойствия и простора высокогорного озера.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:54.477Z",
+      "analyzed_at": "2026-07-10T16:04:21.237Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -497,23 +495,23 @@
         "structures": "",
         "road_vehicle": ""
       },
-      "dominant_subject": "луг и озеро",
-      "scene_type": "meadow|lake",
+      "dominant_subject": "луг",
+      "scene_type": "meadow|lake|mountain",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.7,
+      "observation_confidence": 0.9,
       "uncertainties": [],
       "composition_score": 7,
-      "story_score": 6,
-      "emotional_score": 8,
-      "technical_score": 7,
+      "story_score": 8,
+      "emotional_score": 9,
+      "technical_score": 8,
       "redundancy_risk": 1,
       "suggested_role": "hero",
-      "caption_seed": "Просторный луг у озера под ясным небом.",
-      "editor_note": "Кадр передаёт атмосферу простора и тишины, характерную для высокогорных ландшафтов.",
+      "caption_seed": "Просторный луг у озера Сон-Куль.",
+      "editor_note": "Кадр подчеркивает простор и тишину высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:47:59.206Z",
+      "analyzed_at": "2026-07-10T16:04:26.603Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -524,7 +522,7 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении открывается широкий вид на высокогорное озеро, окруженное зелеными лугами и горами на горизонте. Небо ясное с несколькими облаками, создающими легкую текстуру.",
+      "visual_summary": "На изображении виден просторный ландшафт с зелеными лугами, уходящими к озеру и горам на горизонте. Небо ясное с несколькими облаками.",
       "visible_elements": {
         "terrain": "горы, холмы",
         "vegetation": "зелёные луга",
@@ -532,7 +530,7 @@
         "snow": "",
         "sky_weather": "ясное небо с облаками",
         "people": "",
-        "animals": "",
+        "animals": "коровы",
         "structures": "",
         "road_vehicle": ""
       },
@@ -546,13 +544,13 @@
       "story_score": 6,
       "emotional_score": 8,
       "technical_score": 7,
-      "redundancy_risk": 1,
+      "redundancy_risk": 2,
       "suggested_role": "hero",
-      "caption_seed": "Широкий вид на озеро Сон-Куль и окружающие луга.",
-      "editor_note": "Кадр подчеркивает простор и красоту высокогорного пейзажа, соответствуя общей теме путешествия.",
+      "caption_seed": "Просторные луга и озеро на фоне гор.",
+      "editor_note": "Кадр подчеркивает величие природы и спокойствие высокогорного ландшафта.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:48:05.908Z",
+      "analyzed_at": "2026-07-10T16:04:34.917Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -563,7 +561,7 @@
       "width": 4096,
       "height": 3072,
       "orientation": "horizontal",
-      "visual_summary": "На изображении видны высокие горы с полосами различных оттенков, а также обширные луга с низкой растительностью на переднем плане. Небо ясное с несколькими облаками.",
+      "visual_summary": "На изображении видны высокие горы с полосами различных цветов, а также широкие луга с низкой растительностью на переднем плане. Небо ясное с несколькими облаками.",
       "visible_elements": {
         "terrain": "горы",
         "vegetation": "низкая растительность",
@@ -585,13 +583,13 @@
       "story_score": 6,
       "emotional_score": 8,
       "technical_score": 7,
-      "redundancy_risk": 1,
+      "redundancy_risk": 2,
       "suggested_role": "story",
-      "caption_seed": "Высокие горы и обширные луга под ясным небом.",
+      "caption_seed": "Высокие горы и широкие луга под ясным небом.",
       "editor_note": "Кадр передает атмосферу простора и величия горного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:48:11.388Z",
+      "analyzed_at": "2026-07-10T16:04:43.533Z",
       "model": "gpt-4o-mini"
     },
     {
@@ -602,13 +600,13 @@
       "width": 3264,
       "height": 2448,
       "orientation": "horizontal",
-      "visual_summary": "На изображении представлены высокие горы с зелеными склонами и открытым небом. Вдали видны горные цепи с различными оттенками коричневого и зеленого.",
+      "visual_summary": "На изображении представлены высокие горы с зелеными склонами и обширными лугами. Небо ясное, с несколькими облаками на горизонте.",
       "visible_elements": {
         "terrain": "горы",
-        "vegetation": "зелёные склоны",
+        "vegetation": "луг",
         "water": "",
         "snow": "",
-        "sky_weather": "ясное небо",
+        "sky_weather": "ясное небо с облаками",
         "people": "",
         "animals": "",
         "structures": "",
@@ -618,39 +616,39 @@
       "scene_type": "mountain",
       "likely_location": "озеро Сон-Куль",
       "location_confidence": 0.8,
-      "observation_confidence": 0.7,
+      "observation_confidence": 0.9,
       "uncertainties": [],
       "composition_score": 7,
-      "story_score": 6,
-      "emotional_score": 8,
-      "technical_score": 7,
-      "redundancy_risk": 2,
+      "story_score": 8,
+      "emotional_score": 9,
+      "technical_score": 8,
+      "redundancy_risk": 1,
       "suggested_role": "hero",
-      "caption_seed": "Вид на высокие горы и зелёные склоны.",
-      "editor_note": "Кадр подчеркивает величие горного пейзажа и открытость пространства.",
+      "caption_seed": "Высокие горы и бескрайние луга под ясным небом.",
+      "editor_note": "Кадр подчеркивает простор и красоту высокогорного пейзажа.",
       "needs_fact_check": [],
       "analysis_source": "vision-v2-high-detail",
-      "analyzed_at": "2026-07-10T15:48:15.588Z",
+      "analyzed_at": "2026-07-10T16:04:48.994Z",
       "model": "gpt-4o-mini"
     }
   ],
   "recommendation": {
-    "hero": "IMG20260710140254_l7tj7j",
+    "hero": "IMG20260710120436_f2q5ut",
     "story": [
       "IMG20260710132521_vjyrad",
-      "IMG20260710133035_cgmqm2",
       "IMG20260710143639_vzq1ky",
-      "IMG20260710144250_swvxhb",
-      "IMG20260710151843_w72qb0",
-      "IMG20260710162438_b7fmfg"
+      "IMG20260710132852_zwlmwu",
+      "IMG20260710151843_w72qb0"
     ],
     "backstage": [],
     "skip": [
-      "IMG20260710120436_f2q5ut",
       "IMG20260710114937_yfixn9",
-      "IMG20260710132852_zwlmwu",
+      "IMG20260710140254_l7tj7j",
+      "IMG20260710133035_cgmqm2",
       "IMG20260710133123_audcsd",
+      "IMG20260710144250_swvxhb",
       "IMG20260710150850_whs5r4",
+      "IMG20260710162438_b7fmfg",
       "IMG20260710162415_std2jx",
       "IMG20260710172738_h3pfwh",
       "IMG20260710190904_xxoa1i",
@@ -658,72 +656,74 @@
     ],
     "decisions": {
       "IMG20260710120436_f2q5ut": {
-        "status": "skip",
-        "reason": "Кадр не соответствует требованиям для hero, так как не показывает главную тему."
+        "status": "hero",
+        "reason": "Широкое пространство высокогорного луга с проселочной дорогой идеально передает атмосферу простора и тишины."
       },
       "IMG20260710114937_yfixn9": {
         "status": "skip",
-        "reason": "Кадр не соответствует требованиям для hero, так как не показывает главную тему."
+        "reason": "Кадр с горами не соответствует основной теме о лугах и табунах."
       },
       "IMG20260710132521_vjyrad": {
         "status": "story",
-        "reason": "Кадр показывает юрты, что соответствует теме, но не является ключевым."
+        "reason": "Юрты на открытом пространстве добавляют контекст к теме, показывая жизнь на лугах."
       },
       "IMG20260710140254_l7tj7j": {
-        "status": "hero",
-        "reason": "Кадр идеально передает простор и тишину, соответствуя главной теме."
+        "status": "skip",
+        "reason": "Кадр с озером не добавляет нового к теме, уже представленной в других кадрах."
       },
       "IMG20260710133035_cgmqm2": {
-        "status": "story",
-        "reason": "Кадр показывает луг с цветами и озером, что соответствует теме."
+        "status": "skip",
+        "reason": "Кадр дублирует предыдущие по содержанию и не добавляет нового."
       },
       "IMG20260710143639_vzq1ky": {
         "status": "story",
-        "reason": "Кадр с табунами лошадей, что соответствует теме."
+        "reason": "Табуны лошадей на лугу соответствуют основной теме и добавляют динамику."
       },
       "IMG20260710132852_zwlmwu": {
-        "status": "skip",
-        "reason": "Кадр дублирует предыдущие кадры с юртами."
+        "status": "story",
+        "reason": "Юрты на лугу показывают контекст жизни в этом пространстве."
       },
       "IMG20260710133123_audcsd": {
         "status": "skip",
-        "reason": "Кадр дублирует предыдущие кадры с юртами."
+        "reason": "Дублирует предыдущий кадр с юртами."
       },
       "IMG20260710144250_swvxhb": {
-        "status": "story",
-        "reason": "Кадр с табунами лошадей, что соответствует теме."
+        "status": "skip",
+        "reason": "Кадр с лошадьми дублирует предыдущий и не добавляет нового."
       },
       "IMG20260710150850_whs5r4": {
         "status": "skip",
-        "reason": "Кадр не соответствует требованиям для hero, так как не показывает главную тему."
+        "reason": "Кадр с человеком на лошади не соответствует основной теме."
       },
       "IMG20260710151843_w72qb0": {
         "status": "story",
-        "reason": "Кадр с человеком на лошади, что соответствует теме."
+        "reason": "Кадр с человеком на лошади у воды добавляет контекст к теме."
       },
       "IMG20260710162438_b7fmfg": {
-        "status": "story",
-        "reason": "Кадр показывает людей на лугу, что соответствует теме."
+        "status": "skip",
+        "reason": "Кадр с людьми не соответствует основной теме о лугах и табунах."
       },
       "IMG20260710162415_std2jx": {
         "status": "skip",
-        "reason": "Кадр дублирует предыдущие кадры с лугом и озером."
+        "reason": "Дублирует предыдущие кадры по содержанию."
       },
       "IMG20260710172738_h3pfwh": {
         "status": "skip",
-        "reason": "Кадр дублирует предыдущие кадры с озером."
+        "reason": "Кадр с коровами не соответствует основной теме."
       },
       "IMG20260710190904_xxoa1i": {
         "status": "skip",
-        "reason": "Кадр не соответствует требованиям для hero, так как не показывает главную тему."
+        "reason": "Кадр с горами не соответствует основной теме о лугах."
       },
       "IMG20260710172717_wtwx7v": {
         "status": "skip",
-        "reason": "Кадр не соответствует требованиям для hero, так как не показывает главную тему."
+        "reason": "Кадр с горами не соответствует основной теме о лугах."
       }
     },
-    "sequence_note": "Кадры выбраны в соответствии с темой и эмоциональным настроением, с акцентом на простор и тишину высокогорных лугов.",
-    "editorial_summary": "Основное внимание уделено пространству и тишине высокогорных лугов, с акцентом на юрты и табуны лошадей. Кадры выбраны для создания минималистичного и атмосферного повествования.",
-    "fact_checks": []
+    "sequence_note": "Кадры расположены в порядке, соответствующем маршруту и теме.",
+    "editorial_summary": "Основное внимание уделено простору и тишине высокогорных лугов, с акцентом на юрты и табуны лошадей, что создает атмосферу жизни в этом уникальном месте.",
+    "fact_checks": [
+      "Кадры с юртами и лошадьми соответствуют теме о жизни на высокогорных лугах."
+    ]
   }
 }
