@@ -68,7 +68,7 @@ jobs:
           fi
 
       - name: Build observation-grounded AI review
-        run: node build-review-v2.mjs
+        run: node run-build-review-v2.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_TEXT_MODEL: ${{ github.event.inputs.model }}
