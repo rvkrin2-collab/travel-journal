@@ -12,8 +12,8 @@ const schemaVersion = 2;
 if (!apiKey) throw new Error("OPENAI_API_KEY secret is missing");
 
 function normalizeDay(value) {
-  const m = String(value || "").match(/\d+/);
-  return m ? `day${String(Number(m[0])).padStart(2, "0")}` : "day01";
+  const match = String(value || "").match(/\d+/);
+  return match ? `day${String(Number(match[0])).padStart(2, "0")}` : "day01";
 }
 
 async function readJson(path) {
@@ -21,7 +21,12 @@ async function readJson(path) {
 }
 
 async function readJsonIfExists(path) {
-  try { return await readJson(path); } catch (error) { if (error?.code === "ENOENT") return null; throw error; }
+  try {
+    return await readJson(path);
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
 }
 
 function imageUrl(url) {
@@ -30,7 +35,9 @@ function imageUrl(url) {
 
 function extractJson(text) {
   const cleaned = String(text || "").trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
-  try { return JSON.parse(cleaned); } catch (error) {
+  try {
+    return JSON.parse(cleaned);
+  } catch (error) {
     const start = cleaned.indexOf("{");
     const end = cleaned.lastIndexOf("}");
     if (start >= 0 && end > start) return JSON.parse(cleaned.slice(start, end + 1));
@@ -39,8 +46,8 @@ function extractJson(text) {
 }
 
 function num(value) {
-  const n = Number(value);
-  return Number.isFinite(n) ? Math.max(0, Math.min(10, n)) : 0;
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.max(0, Math.min(10, number)) : 0;
 }
 
 async function analyzePhoto(photo, index, total, context) {
@@ -94,21 +101,26 @@ ${JSON.stringify(context || {}, null, 2)}
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
-    headers: {"Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json"},
+    headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
     body: JSON.stringify({
       model,
       temperature: 0.05,
       response_format: {type: "json_object"},
-      messages: [{role: "user", content: [
-        {type: "text", text: prompt},
-        {type: "image_url", image_url: {url: imageUrl(photo.url), detail: "high"}}
-      ]}]
+      messages: [{
+        role: "user",
+        content: [
+          {type: "text", text: prompt},
+          {type: "image_url", image_url: {url: imageUrl(photo.url), detail: "high"}}
+        ]
+      }]
     })
   });
 
   if (!response.ok) throw new Error(`Vision error ${photo.public_id}: ${response.status} ${await response.text()}`);
   const data = await response.json();
-  const raw = extractJson(data.choices?.[0]?.message?.content || "");
+  const choice = data.choices?.[0];
+  if (choice?.finish_reason !== "stop") throw new Error(`Vision response incomplete for ${photo.public_id}: ${choice?.finish_reason || "unknown"}`);
+  const raw = extractJson(choice?.message?.content || "");
 
   return {
     schema_version: schemaVersion,
@@ -131,7 +143,7 @@ ${JSON.stringify(context || {}, null, 2)}
     emotional_score: num(raw.emotional_score),
     technical_score: num(raw.technical_score),
     redundancy_risk: num(raw.redundancy_risk),
-    suggested_role: ["hero","story","backstage","skip"].includes(raw.suggested_role) ? raw.suggested_role : "story",
+    suggested_role: ["hero", "story", "backstage", "skip"].includes(raw.suggested_role) ? raw.suggested_role : "story",
     caption_seed: String(raw.caption_seed || "").trim(),
     editor_note: String(raw.editor_note || "").trim(),
     needs_fact_check: Array.isArray(raw.needs_fact_check) ? raw.needs_fact_check.map(String).filter(Boolean) : [],
@@ -141,53 +153,146 @@ ${JSON.stringify(context || {}, null, 2)}
   };
 }
 
+function recommendationSchema(items) {
+  const properties = Object.fromEntries(items.map(item => [item.public_id, {
+    type: "object",
+    additionalProperties: false,
+    required: ["status", "reason"],
+    properties: {
+      status: {type: "string", enum: ["hero", "story", "backstage", "skip"]},
+      reason: {type: "string", minLength: 1}
+    }
+  }]));
+
+  return {
+    name: "travel_journal_series_recommendation",
+    strict: true,
+    schema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["decisions", "sequence_note", "editorial_summary", "fact_checks"],
+      properties: {
+        decisions: {
+          type: "object",
+          additionalProperties: false,
+          required: items.map(item => item.public_id),
+          properties
+        },
+        sequence_note: {type: "string", minLength: 1},
+        editorial_summary: {type: "string", minLength: 1},
+        fact_checks: {type: "array", items: {type: "string"}}
+      }
+    }
+  };
+}
+
+function validateRecommendation(raw, items) {
+  const decisions = raw?.decisions || {};
+  const expectedIds = items.map(item => item.public_id);
+  const statuses = expectedIds.map(id => decisions[id]?.status);
+
+  for (const id of expectedIds) {
+    if (!decisions[id]) throw new Error(`Series recommendation missing public_id: ${id}`);
+    if (!["hero", "story", "backstage", "skip"].includes(decisions[id].status)) {
+      throw new Error(`Invalid series status for ${id}: ${decisions[id].status}`);
+    }
+  }
+
+  if (statuses.filter(status => status === "hero").length !== 1) {
+    throw new Error("Series recommendation must contain exactly one hero");
+  }
+
+  const result = {
+    hero: expectedIds.find(id => decisions[id].status === "hero"),
+    story: expectedIds.filter(id => decisions[id].status === "story"),
+    backstage: expectedIds.filter(id => decisions[id].status === "backstage"),
+    skip: expectedIds.filter(id => decisions[id].status === "skip"),
+    decisions,
+    sequence_note: String(raw.sequence_note || "").trim(),
+    editorial_summary: String(raw.editorial_summary || "").trim(),
+    fact_checks: Array.isArray(raw.fact_checks) ? raw.fact_checks.map(String).map(value => value.trim()).filter(Boolean) : []
+  };
+
+  const classifiedCount = 1 + result.story.length + result.backstage.length + result.skip.length;
+  if (classifiedCount !== items.length) {
+    throw new Error(`Series recommendation classified ${classifiedCount}/${items.length} photos`);
+  }
+
+  return result;
+}
+
 async function seriesRecommendation(items, context) {
   const compact = items.map(item => ({
     public_id: item.public_id,
     number: item.number,
     visual_summary: item.visual_summary,
     visible_elements: item.visible_elements,
+    dominant_subject: item.dominant_subject,
     scene_type: item.scene_type,
     likely_location: item.likely_location,
     location_confidence: item.location_confidence,
     observation_confidence: item.observation_confidence,
-    scores: {composition:item.composition_score, story:item.story_score, emotional:item.emotional_score, technical:item.technical_score, redundancy:item.redundancy_risk}
+    suggested_role: item.suggested_role,
+    scores: {
+      composition: item.composition_score,
+      story: item.story_score,
+      emotional: item.emotional_score,
+      technical: item.technical_score,
+      redundancy: item.redundancy_risk
+    }
   }));
+
   const prompt = `Ты выпускающий фоторедактор. Сделай предварительный отбор только после чтения визуального анализа всех кадров.
 
 Контекст:
 ${JSON.stringify(context || {}, null, 2)}
 
 Правила:
+- прими решение по каждому public_id;
 - визуальное описание важнее предполагаемой локации;
 - кадры с location_confidence ниже 0.6 нельзя уверенно подписывать названием места;
 - ровно 1 hero;
-- 6-8 story, если кадров достаточно;
+- обычно 6-8 story, если материал это оправдывает;
+- все остальные кадры обязательно получают статус backstage или skip;
 - финал должен соответствовать авторской сцене, но только если фото действительно это показывает;
 - не меняй наблюдаемые луга на пустыню или наоборот;
-- порядок локаций сохраняй.
-
-Верни JSON: {"hero":"public_id","story":["public_id"],"backstage":["public_id"],"skip":["public_id"],"sequence_note":"","editorial_summary":"","fact_checks":[""]}
+- сохраняй реальный порядок локаций;
+- не смешивай разные локации в одном смысловом блоке;
+- не ставь рядом визуальные дубли.
 
 Кадры:
 ${JSON.stringify(compact, null, 2)}`;
+
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
-    headers: {"Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json"},
-    body: JSON.stringify({model, temperature:0.05, response_format:{type:"json_object"}, messages:[{role:"user",content:prompt}]})
+    headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
+    body: JSON.stringify({
+      model,
+      temperature: 0.05,
+      response_format: {type: "json_schema", json_schema: recommendationSchema(items)},
+      messages: [{role: "user", content: prompt}]
+    })
   });
+
   if (!response.ok) throw new Error(`Series analysis error: ${response.status} ${await response.text()}`);
-  return extractJson((await response.json()).choices?.[0]?.message?.content || "");
+  const data = await response.json();
+  const choice = data.choices?.[0];
+  console.log(`Series response finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
+  if (choice?.finish_reason !== "stop") throw new Error(`Series response incomplete: ${choice?.finish_reason || "unknown"}`);
+  return validateRecommendation(JSON.parse(choice?.message?.content || "{}"), items);
 }
 
 const photos = await readJson(inFile);
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${inFile} does not contain photos`);
 const context = await readJsonIfExists(dayContextFile);
 const items = [];
-for (let i=0;i<photos.length;i++) {
-  console.log(`Vision v2 ${i+1}/${photos.length}: ${photos[i].public_id}`);
-  items.push(await analyzePhoto(photos[i], i, photos.length, context));
+
+for (let index = 0; index < photos.length; index++) {
+  console.log(`Vision v2 ${index + 1}/${photos.length}: ${photos[index].public_id}`);
+  items.push(await analyzePhoto(photos[index], index, photos.length, context));
 }
+
+const recommendation = await seriesRecommendation(items, context);
 const result = {
   schema_version: schemaVersion,
   trip,
@@ -197,8 +302,9 @@ const result = {
   generated_at: new Date().toISOString(),
   model,
   items,
-  recommendation: await seriesRecommendation(items, context)
+  recommendation
 };
-await fs.mkdir(outFile.split("/").slice(0,-1).join("/") || ".", {recursive:true});
-await fs.writeFile(outFile, JSON.stringify(result,null,2), "utf8");
-console.log(`Saved observation-first analysis for ${items.length} photos to ${outFile}`);
+
+await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", {recursive: true});
+await fs.writeFile(outFile, JSON.stringify(result, null, 2), "utf8");
+console.log(`Saved observation-first analysis for ${items.length} photos; series recommendation classified all ${items.length} photos to ${outFile}`);
