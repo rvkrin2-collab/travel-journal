@@ -14,7 +14,7 @@ on:
       model:
         description: "OpenAI vision/text model"
         required: false
-        default: "gpt-4o-mini"
+        default: "gpt-4o"
 
 permissions:
   contents: write
