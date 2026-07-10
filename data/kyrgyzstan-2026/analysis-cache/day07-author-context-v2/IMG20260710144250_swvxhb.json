@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710144250_swvxhb",
+  "number": 9,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696951/IMG20260710144250_swvxhb.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены табуны лошадей, движущиеся по бескрайним высокогорным лугам под ясным небом.",
+  "likely_subject": "табуны лошадей",
+  "place_hints": [
+    "высокогорные луга",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 8,
+  "story_score": 9,
+  "emotional_score": 8,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "hero",
+  "caption_seed": "Табуны лошадей на высокогорных лугах Сон-Куля.",
+  "editor_note": "Кадр подчеркивает тему пространства и тишины, что соответствует общей концепции главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:17.678Z",
+  "model": "gpt-4o-mini"
+}

@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710114937_yfixn9",
+  "number": 2,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696924/IMG20260710114937_yfixn9.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается просторный высокогорный ландшафт с зелеными лугами и горными склонами под ясным небом.",
+  "likely_subject": "высокогорные луга",
+  "place_hints": [
+    "Сон-Куль",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": true,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Бескрайние луга высокогорья под ясным небом.",
+  "editor_note": "Кадр хорошо передает атмосферу спокойствия и простора, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:29:40.621Z",
+  "model": "gpt-4o-mini"
+}

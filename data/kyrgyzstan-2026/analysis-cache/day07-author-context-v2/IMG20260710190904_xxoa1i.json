@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710190904_xxoa1i",
+  "number": 15,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696978/IMG20260710190904_xxoa1i.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены высокие горы с яркими полосами цвета, окруженные зелеными лугами под ясным небом.",
+  "likely_subject": "горный ландшафт",
+  "place_hints": [
+    "высокогорные луга",
+    "горы"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Горы, окрашенные в яркие цвета, создают контраст с зелеными лугами.",
+  "editor_note": "Кадр подчеркивает красоту природного ландшафта и может служить связующим элементом в рассказе о просторах Кыргызстана.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:49.310Z",
+  "model": "gpt-4o-mini"
+}

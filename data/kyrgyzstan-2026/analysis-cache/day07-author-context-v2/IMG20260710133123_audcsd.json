@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710133123_audcsd",
+  "number": 8,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696950/IMG20260710133123_audcsd.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены юрты на высокогорных лугах под облачным небом. Просторный пейзаж создает ощущение тишины и покоя.",
+  "likely_subject": "юрты",
+  "place_hints": [
+    "высокогорные луга",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Юрты на бескрайних лугах Сон-Куля.",
+  "editor_note": "Кадр подчеркивает тему пространства и тишины, что соответствует общей концепции главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:11.447Z",
+  "model": "gpt-4o-mini"
+}

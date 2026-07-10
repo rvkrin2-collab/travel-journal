@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710132852_zwlmwu",
+  "number": 7,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696947/IMG20260710132852_zwlmwu.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается бескрайний высокогорный луг с юртами на горизонте и камнями, выложенными в линию.",
+  "likely_subject": "юртa",
+  "place_hints": [
+    "высокогорный луг",
+    "юртa"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 9,
+  "technical_score": 6,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Простор высокогорья с юртами на горизонте.",
+  "editor_note": "Кадр хорошо передает атмосферу спокойствия и простора, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:06.195Z",
+  "model": "gpt-4o-mini"
+}

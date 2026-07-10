@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260710151843_w72qb0",
+  "number": 11,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696974/IMG20260710151843_w72qb0.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображен всадник на лошади, стоящий у берега водоема под ясным небом с облаками.",
+  "likely_subject": "всадник на лошади",
+  "place_hints": [
+    "водоем",
+    "высокогорье"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "hero",
+  "caption_seed": "Всадник на лошади у берега высокогорного водоема.",
+  "editor_note": "Кадр подчеркивает тему спокойствия и простора, что соответствует общей концепции главы.",
+  "needs_fact_check": [
+    "точное название водоема"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:28.160Z",
+  "model": "gpt-4o-mini"
+}

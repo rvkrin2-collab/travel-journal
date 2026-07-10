@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260710140254_l7tj7j",
+  "number": 4,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696937/IMG20260710140254_l7tj7j.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается бескрайний пейзаж с ярким небом и высокогорным озером на горизонте.",
+  "likely_subject": "озеро Сон-Куль",
+  "place_hints": [
+    "высокогорное озеро",
+    "пейзаж Кыргызстана"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Бескрайние просторы озера Сон-Куль.",
+  "editor_note": "Кадр передает ощущение пространства и тишины, что соответствует теме главы.",
+  "needs_fact_check": [
+    "подтвердить название озера на фотографии"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:29:49.673Z",
+  "model": "gpt-4o-mini"
+}

@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710172717_wtwx7v",
+  "number": 16,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696980/IMG20260710172717_wtwx7v.jpg",
+  "width": 3264,
+  "height": 2448,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается широкий вид на высокогорные луга и горные цепи, под ярким голубым небом с легкими облаками.",
+  "likely_subject": "пейзаж высокогорья",
+  "place_hints": [
+    "высокогорные луга",
+    "горные цепи"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Просторы высокогорья, где природа говорит сама за себя.",
+  "editor_note": "Кадр подчеркивает тему пространства и тишины, что соответствует общей концепции главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:54.528Z",
+  "model": "gpt-4o-mini"
+}

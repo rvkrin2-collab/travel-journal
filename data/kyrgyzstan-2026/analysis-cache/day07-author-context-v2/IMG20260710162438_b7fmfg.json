@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260710162438_b7fmfg",
+  "number": 12,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696974/IMG20260710162438_b7fmfg.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены два человека, сидящих на траве у озера с высокими горами на фоне и облаками на небе.",
+  "likely_subject": "люди на берегу озера",
+  "place_hints": [
+    "озеро Сон-Куль",
+    "высокогорные луга"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Спокойствие у озера Сон-Куль.",
+  "editor_note": "Кадр подчеркивает атмосферу тишины и простора, что соответствует теме главы.",
+  "needs_fact_check": [
+    "подтвердить название озера и его географическое расположение"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:33.619Z",
+  "model": "gpt-4o-mini"
+}

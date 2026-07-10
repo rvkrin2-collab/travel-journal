@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260710133035_cgmqm2",
+  "number": 5,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696944/IMG20260710133035_cgmqm2.jpg",
+  "width": 3264,
+  "height": 2448,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается широкий вид на бескрайние высокогорные луга и горный массив на горизонте под ясным небом.",
+  "likely_subject": "пейзаж высокогорья",
+  "place_hints": [
+    "озеро Сон-Куль",
+    "высокогорные луга"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": true,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Бескрайние луга Сон-Куля под ясным небом.",
+  "editor_note": "Кадр хорошо передает атмосферу простора и тишины, что соответствует теме главы.",
+  "needs_fact_check": [
+    "подтвердить, что это озеро Сон-Куль"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:29:55.028Z",
+  "model": "gpt-4o-mini"
+}

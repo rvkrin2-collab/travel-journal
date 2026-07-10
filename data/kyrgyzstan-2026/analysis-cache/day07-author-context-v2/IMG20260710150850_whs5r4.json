@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260710150850_whs5r4",
+  "number": 10,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783696973/IMG20260710150850_whs5r4.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открытое пространство высокогорного луга с редкими облаками на фоне гор.",
+  "likely_subject": "простор лугов Сон-Куля",
+  "place_hints": [
+    "высокогорные луга",
+    "горы на горизонте"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 9,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Бескрайние просторы высокогорья.",
+  "editor_note": "Кадр передает ощущение спокойствия и простора, что соответствует теме главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T15:30:23.512Z",
+  "model": "gpt-4o-mini"
+}
