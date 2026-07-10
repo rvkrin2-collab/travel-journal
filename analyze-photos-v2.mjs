@@ -2,12 +2,14 @@ import fs from "fs/promises";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const visionModel = process.env.OPENAI_VISION_MODEL || "gpt-4o";
+const seriesModel = process.env.OPENAI_SERIES_MODEL || visionModel;
 const textModel = process.env.OPENAI_TEXT_MODEL || "gpt-4o-mini";
 const trip = process.env.TRIP || "kyrgyzstan-2026";
 const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
 const inFile = process.env.IN_FILE || `data/${trip}/${dayTag}-photos.json`;
 const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-analysis.json`;
 const contextFile = process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-context.json`;
+const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
 const schemaVersion = 3;
 const analysisVersion = "combined-vision-v1";
 
@@ -174,7 +176,7 @@ async function analyzePhoto(photo, index, total, context) {
 - неизвестный предмет называй нейтрально, но конкретный предмет можно назвать, если признаки отчётливы;
 - не придумывай назначение предметов, занятия людей и культурный смысл;
 - caption_seed — короткое буквальное описание кадра;
-- editor_note — одно короткое предложение о возможной роли кадра без решения hero/story;
+- editor_note — одно короткое предложение о возможной визуальной функции кадра, без этнографических выводов и без решения hero/story;
 - needs_fact_check содержит только внешний факт для публикации; обычно пустой массив;
 - избегай слов «величие», «гармония», «живописный», «идеально передаёт».
 
@@ -208,6 +210,9 @@ function validateRecommendation(raw, items) {
     if (!decisions[id]) throw new Error(`Series decision missing: ${id}`);
     if (!["hero", "story", "backstage", "skip"].includes(decisions[id].status)) throw new Error(`Invalid status for ${id}`);
     assertRussian(decisions[id].reason, `Series reason ${id}`);
+    if (/IMG\d+_/i.test(decisions[id].duplicate_group || "")) {
+      throw new Error(`duplicate_group must be a semantic group name, not public_id: ${id}`);
+    }
   }
   if (ids.filter(id => decisions[id].status === "hero").length !== 1) throw new Error("Exactly one hero required");
   assertRussian(raw.sequence_note, "Series sequence_note");
@@ -225,14 +230,21 @@ function validateRecommendation(raw, items) {
   };
 }
 
-async function selectSeries(items, context) {
+async function selectSeries(items, context, authorNotes) {
   const compact = items.map(item => ({
     public_id: item.public_id,
     number: item.number,
     orientation: item.orientation,
     visual_summary: item.visual_summary,
+    foreground: item.foreground,
+    midground: item.midground,
+    background: item.background,
+    visible_elements: item.visible_elements,
     dominant_subject: item.dominant_subject,
+    secondary_subjects: item.secondary_subjects,
     scene_type: item.scene_type,
+    people_count: item.people_count,
+    animal_count: item.animal_count,
     composition: item.composition,
     technical_quality: item.technical_quality,
     likely_location: item.likely_location,
@@ -240,28 +252,46 @@ async function selectSeries(items, context) {
     caption_seed: item.caption_seed,
     editor_note: item.editor_note
   }));
-  const prompt = `Сделай редакторский отбор серии тревел-журнала. Пиши только по-русски.
+
+  const prompt = `Сделай профессиональный редакторский отбор серии тревел-журнала. Пиши только по-русски.
+
+Сначала сравни все кадры между собой по визуальной силе, композиции, уникальности функции и ритму. Только после этого учитывай авторские заметки.
 
 Правила:
 - решение обязательно для каждого public_id;
 - ровно 1 hero;
 - обычно 6-8 story;
-- хорошие повторы и второстепенные кадры — backstage;
-- skip только для слабых или худших дублей;
-- сравнивай композицию и визуальную функцию, а не соответствие заранее заданной теме;
-- финальная сцена автора имеет приоритет только при визуальном подтверждении;
-- причины должны быть конкретными;
+- backstage — хорошие, но второстепенные кадры и достойные повторы;
+- skip — технически слабые, лишние или худшие дубли;
+- не исключай кадр лишь потому, что он «не соответствует теме»;
+- тема помогает выстроить историю, но не заменяет визуальное сравнение;
+- человек на лошади, бытовая сцена, юрты, дорога, озеро и цветные горы являются разными визуальными функциями, если реально видны;
+- финальная сцена «лошади» означает порядок завершения истории, а не обязательный выбор лошадей главным кадром;
+- hero выбирай как самый сильный самостоятельный кадр серии;
+- для каждого решения назови конкретное преимущество или недостаток относительно похожих кадров;
+- duplicate_group — короткое смысловое название группы, например «дороги», «юрты», «табун», «озеро»; никогда не помещай туда public_id; если дубля нет, оставь пустую строку;
+- одинаковая duplicate_group допустима только для действительно похожих кадров с одной визуальной функцией;
+- не делай этнографических выводов вроде «кочевой образ жизни», если это не дано автором;
+- не смешивай локации при низкой уверенности;
 - fact_checks только для внешних фактов, обычно пустой массив.
 
-Контекст: ${JSON.stringify(context || {})}
-Кадры: ${JSON.stringify(compact)}`;
-  const raw = await callStructured({model: textModel, prompt, schema: recommendationSchema(items), label: "Series selection"});
+КОНТЕКСТ:
+${JSON.stringify(context || {}, null, 2)}
+
+АВТОРСКИЕ ЗАМЕТКИ:
+${JSON.stringify(authorNotes || {}, null, 2)}
+
+КАДРЫ:
+${JSON.stringify(compact, null, 2)}`;
+
+  const raw = await callStructured({model: seriesModel, prompt, schema: recommendationSchema(items), label: "Series selection"});
   return validateRecommendation(raw, items);
 }
 
 const photos = await readJson(inFile);
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${inFile} does not contain photos`);
 const context = await readJsonIfExists(contextFile);
+const authorNotes = await readJsonIfExists(authorNotesFile);
 const previous = await readJsonIfExists(outFile);
 const previousByKey = new Map((previous?.items || []).map(item => [item.cache_key, item]));
 const items = [];
@@ -282,7 +312,7 @@ for (let index = 0; index < photos.length; index++) {
   }
 }
 
-const recommendation = await selectSeries(items, context);
+const recommendation = await selectSeries(items, context, authorNotes);
 const result = {
   schema_version: schemaVersion,
   analysis_version: analysisVersion,
@@ -290,8 +320,10 @@ const result = {
   day: dayTag,
   photos_source: inFile,
   context_source: context ? contextFile : null,
+  author_notes_source: authorNotes ? authorNotesFile : null,
   generated_at: new Date().toISOString(),
   vision_model: visionModel,
+  series_model: seriesModel,
   text_model: textModel,
   cache: {reused, analyzed},
   items,
