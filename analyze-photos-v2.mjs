@@ -38,6 +38,14 @@ function clamp(value, min, max, fallback = min) {
   return Number.isFinite(number) ? Math.max(min, Math.min(max, number)) : fallback;
 }
 
+function containsLatinText(value) {
+  return /[A-Za-z]{4,}/.test(String(value || ""));
+}
+
+function assertRussian(value, field) {
+  if (containsLatinText(value)) throw new Error(`${field} must be written in Russian`);
+}
+
 async function callStructured({prompt, schema, image, label}) {
   const content = [{type: "text", text: prompt}];
   if (image) content.push({type: "image_url", image_url: {url: image, detail: "high"}});
@@ -68,24 +76,7 @@ const observationSchema = {
   schema: {
     type: "object",
     additionalProperties: false,
-    required: [
-      "visual_summary",
-      "foreground",
-      "midground",
-      "background",
-      "visible_elements",
-      "dominant_subject",
-      "secondary_subjects",
-      "scene_type",
-      "people_count",
-      "animal_count",
-      "light",
-      "weather",
-      "composition",
-      "technical_quality",
-      "observation_confidence",
-      "uncertainties"
-    ],
+    required: ["visual_summary", "foreground", "midground", "background", "visible_elements", "dominant_subject", "secondary_subjects", "scene_type", "people_count", "animal_count", "light", "weather", "composition", "technical_quality", "observation_confidence", "uncertainties"],
     properties: {
       visual_summary: {type: "string", minLength: 1},
       foreground: {type: "string"},
@@ -96,15 +87,7 @@ const observationSchema = {
         additionalProperties: false,
         required: ["terrain", "vegetation", "water", "snow", "sky", "people", "animals", "structures", "road_vehicle"],
         properties: {
-          terrain: {type: "string"},
-          vegetation: {type: "string"},
-          water: {type: "string"},
-          snow: {type: "string"},
-          sky: {type: "string"},
-          people: {type: "string"},
-          animals: {type: "string"},
-          structures: {type: "string"},
-          road_vehicle: {type: "string"}
+          terrain: {type: "string"}, vegetation: {type: "string"}, water: {type: "string"}, snow: {type: "string"}, sky: {type: "string"}, people: {type: "string"}, animals: {type: "string"}, structures: {type: "string"}, road_vehicle: {type: "string"}
         }
       },
       dominant_subject: {type: "string"},
@@ -119,12 +102,7 @@ const observationSchema = {
         additionalProperties: false,
         required: ["framing", "depth", "balance", "visual_anchor", "horizon", "distractions"],
         properties: {
-          framing: {type: "string"},
-          depth: {type: "string"},
-          balance: {type: "string"},
-          visual_anchor: {type: "string"},
-          horizon: {type: "string"},
-          distractions: {type: "string"}
+          framing: {type: "string"}, depth: {type: "string"}, balance: {type: "string"}, visual_anchor: {type: "string"}, horizon: {type: "string"}, distractions: {type: "string"}
         }
       },
       technical_quality: {
@@ -132,11 +110,7 @@ const observationSchema = {
         additionalProperties: false,
         required: ["sharpness", "exposure", "color", "motion_blur", "score"],
         properties: {
-          sharpness: {type: "string"},
-          exposure: {type: "string"},
-          color: {type: "string"},
-          motion_blur: {type: "string"},
-          score: {type: "number", minimum: 0, maximum: 10}
+          sharpness: {type: "string"}, exposure: {type: "string"}, color: {type: "string"}, motion_blur: {type: "string"}, score: {type: "number", minimum: 0, maximum: 10}
         }
       },
       observation_confidence: {type: "number", minimum: 0, maximum: 1},
@@ -167,51 +141,52 @@ async function observePhoto(photo, index, total) {
 
 Кадр ${index + 1} из ${total}.
 
+ПИШИ ТОЛЬКО ПО-РУССКИ во всех текстовых полях.
+
 КРИТИЧЕСКИЕ ПРАВИЛА:
 - Не используй маршрут, время съёмки, имя файла, Public ID и сведения о путешествии.
 - Не определяй географию.
 - Не решай, брать ли фотографию в рассказ.
-- Не повторяй общие слова вроде «простор», «тишина», «красота», если они не описывают конкретный видимый признак.
+- Не используй общие оценки вроде «красивый», «живописный», «величественный», «гармоничный», «безмятежный».
 - Сначала разложи изображение на передний, средний и задний планы.
-- Укажи точное количество видимых людей и животных, если их можно посчитать; иначе дай минимально достоверное число.
-- Отделяй то, что видно, от того, в чём есть сомнение.
+- Укажи конкретные видимые объекты и их положение в кадре.
+- Если предмет не удаётся уверенно распознать, назови его нейтрально: «предмет», «оборудование», «неясный объект».
+- Не называй неясный предмет стиральной машиной, генератором, инструментом или иной конкретной вещью без явных визуальных признаков.
+- Количество людей и животных указывай только настолько точно, насколько позволяет изображение.
+- Отделяй наблюдение от сомнений.
 - Техническое качество оцени по резкости, экспозиции, цвету и смазу.
-- Пиши конкретно: что именно находится в кадре, где оно расположено и как устроена композиция.
+- Не ставь одинаковую оценку автоматически: оцени конкретный кадр.
 
 Верни только наблюдение по изображению.`;
 
-  return callStructured({
-    prompt,
-    schema: observationSchema,
-    image: imageUrl(photo.url),
-    label: `Observation ${photo.public_id}`
-  });
+  const result = await callStructured({prompt, schema: observationSchema, image: imageUrl(photo.url), label: `Observation ${photo.public_id}`});
+  const textValues = [result.visual_summary, result.foreground, result.midground, result.background, result.dominant_subject, result.light, result.weather, ...Object.values(result.visible_elements || {}), ...Object.values(result.composition || {}), ...Object.values(result.technical_quality || {}).filter(value => typeof value === "string"), ...(result.secondary_subjects || []), ...(result.uncertainties || [])];
+  textValues.forEach((value, i) => assertRussian(value, `Observation ${photo.public_id} text ${i}`));
+  return result;
 }
 
 async function inferGeography(photo, observation, context) {
-  const prompt = `Теперь, после завершённого визуального наблюдения, оцени вероятную географию кадра.
+  const prompt = `После завершённого визуального наблюдения оцени вероятную географию кадра.
 
-Правила:
-- Используй только наблюдение и реальный маршрут дня.
+ПИШИ ТОЛЬКО ПО-РУССКИ во всех текстовых полях.
+
+КРИТИЧЕСКИЕ ПРАВИЛА:
+- Используй только наблюдение и маршрут дня.
+- Не используй общие знания о том, «как обычно выглядит» место.
+- Обычные горы, луга, дорога, юрты или табуны сами по себе НЕ являются уникальным признаком конкретной точки маршрута.
+- Если кадр подходит нескольким точкам маршрута или не содержит уникального ориентира, укажи «не определена» и confidence не выше 0.5.
+- Confidence 0.6 и выше допустим только при видимом уникальном объекте, который прямо связывает кадр с одной точкой маршрута, например с единственным озером маршрута, если вода действительно видна.
 - Не меняй визуальное описание под маршрут.
-- Если кадр подходит сразу нескольким точкам или не содержит уникальных признаков, укажи «не определена» и confidence ниже 0.6.
-- Название места допустимо в caption_seed только при confidence >= 0.6.
-- Не добавляй исторические, этнографические или географические факты, которых нет во входных данных.
-- caption_seed должен быть нейтральным и конкретным, без рекламных эпитетов.
+- caption_seed должен описывать видимое. Название места разрешено только при confidence >= 0.6.
+- needs_fact_check включает только внешний факт, который реально понадобится при публикации. Не добавляй проверки видимого, погоды, наличия юрт, лошадей или соответствия фотографии маршруту. Обычно массив пустой.
+- Не придумывай историю, традиции, занятия людей и назначение предметов.
 
 DATA:
-${JSON.stringify({
-  public_id: photo.public_id,
-  observation,
-  route: context?.route || null,
-  actual_route_order: context?.actual_route_order || null
-}, null, 2)}`;
+${JSON.stringify({public_id: photo.public_id, observation, route: context?.route || null}, null, 2)}`;
 
-  return callStructured({
-    prompt,
-    schema: geographySchema,
-    label: `Geography ${photo.public_id}`
-  });
+  const result = await callStructured({prompt, schema: geographySchema, label: `Geography ${photo.public_id}`});
+  [result.likely_location, result.location_reason, result.caption_seed, ...(result.needs_fact_check || [])].forEach((value, i) => assertRussian(value, `Geography ${photo.public_id} text ${i}`));
+  return result;
 }
 
 function recommendationSchema(items) {
@@ -235,12 +210,7 @@ function recommendationSchema(items) {
       additionalProperties: false,
       required: ["decisions", "sequence_note", "editorial_summary", "fact_checks"],
       properties: {
-        decisions: {
-          type: "object",
-          additionalProperties: false,
-          required: items.map(item => item.public_id),
-          properties
-        },
+        decisions: {type: "object", additionalProperties: false, required: items.map(item => item.public_id), properties},
         sequence_note: {type: "string", minLength: 1},
         editorial_summary: {type: "string", minLength: 1},
         fact_checks: {type: "array", items: {type: "string"}}
@@ -256,14 +226,14 @@ function validateRecommendation(raw, items) {
 
   for (const id of expectedIds) {
     if (!decisions[id]) throw new Error(`Series recommendation missing public_id: ${id}`);
-    if (!["hero", "story", "backstage", "skip"].includes(decisions[id].status)) {
-      throw new Error(`Invalid series status for ${id}: ${decisions[id].status}`);
-    }
+    if (!["hero", "story", "backstage", "skip"].includes(decisions[id].status)) throw new Error(`Invalid series status for ${id}: ${decisions[id].status}`);
+    [decisions[id].reason, decisions[id].visual_function, decisions[id].duplicate_group].forEach((value, i) => assertRussian(value, `Series ${id} text ${i}`));
   }
 
-  if (statuses.filter(status => status === "hero").length !== 1) {
-    throw new Error("Series recommendation must contain exactly one hero");
-  }
+  if (statuses.filter(status => status === "hero").length !== 1) throw new Error("Series recommendation must contain exactly one hero");
+  assertRussian(raw.sequence_note, "Series sequence_note");
+  assertRussian(raw.editorial_summary, "Series editorial_summary");
+  for (const fact of raw.fact_checks || []) assertRussian(fact, "Series fact_check");
 
   const result = {
     hero: expectedIds.find(id => decisions[id].status === "hero"),
@@ -277,10 +247,7 @@ function validateRecommendation(raw, items) {
   };
 
   const classifiedCount = 1 + result.story.length + result.backstage.length + result.skip.length;
-  if (classifiedCount !== items.length) {
-    throw new Error(`Series recommendation classified ${classifiedCount}/${items.length} photos`);
-  }
-
+  if (classifiedCount !== items.length) throw new Error(`Series recommendation classified ${classifiedCount}/${items.length} photos`);
   return result;
 }
 
@@ -308,30 +275,30 @@ async function seriesRecommendation(items, context) {
 
   const prompt = `Ты выпускающий фоторедактор авторского журнала. Все фотографии уже отдельно и подробно проанализированы как изображения.
 
+ПИШИ ТОЛЬКО ПО-РУССКИ во всех текстовых полях.
+
 Сначала сравни кадры между собой, затем сделай редакторский отбор.
 
 Правила:
 - прими решение по каждому public_id;
 - ровно 1 hero;
 - обычно 6-8 story, если материал это оправдывает;
-- хорошие, но повторяющиеся или второстепенные кадры отправляй в backstage, а не автоматически в skip;
+- хорошие, но повторяющиеся или второстепенные кадры отправляй в backstage;
 - skip — только технически слабые, действительно лишние или худшие дубли;
-- не выбирай hero только потому, что он первый или соответствует авторской теме;
+- не выбирай hero только потому, что он первый или буквально совпадает с авторской темой;
 - оценивай визуальную силу, композицию, разнообразие функций и ритм серии;
-- укажи duplicate_group для кадров, которые выполняют одну и ту же визуальную функцию;
+- укажи duplicate_group для кадров с одной визуальной функцией;
 - не ставь рядом несколько кадров с одинаковой функцией;
-- сохраняй порядок реальных локаций;
+- сохраняй порядок реальных локаций только там, где location_confidence >= 0.6; остальные кадры не привязывай к точке маршрута;
 - финальная сцена автора имеет высокий приоритет, но должна быть визуально подтверждена;
-- причины должны быть конкретными: чем этот кадр сильнее или слабее соседних.
+- причины должны быть конкретными: чем кадр сильнее или слабее его дублей;
+- не используй общие формулировки «идеально передаёт», «величие», «гармония», «живописный»;
+- fact_checks включают только реальные внешние факты для публикации; не проверяй то, что видно на фотографиях. Обычно массив пустой.
 
 DATA:
 ${JSON.stringify({context, items: compact}, null, 2)}`;
 
-  const raw = await callStructured({
-    prompt,
-    schema: recommendationSchema(items),
-    label: "Series analysis"
-  });
+  const raw = await callStructured({prompt, schema: recommendationSchema(items), label: "Series analysis"});
   return validateRecommendation(raw, items);
 }
 
@@ -367,10 +334,7 @@ for (let index = 0; index < photos.length; index++) {
     light: String(observation.light || "").trim(),
     weather: String(observation.weather || "").trim(),
     composition: observation.composition || {},
-    technical_quality: {
-      ...(observation.technical_quality || {}),
-      score: clamp(observation.technical_quality?.score, 0, 10, 0)
-    },
+    technical_quality: {...(observation.technical_quality || {}), score: clamp(observation.technical_quality?.score, 0, 10, 0)},
     likely_location: String(geography.likely_location || "не определена").trim(),
     location_confidence: clamp(geography.location_confidence, 0, 1, 0),
     location_reason: String(geography.location_reason || "").trim(),
@@ -393,11 +357,11 @@ const result = {
   context_source: context ? dayContextFile : null,
   generated_at: new Date().toISOString(),
   model,
-  analysis_method: "observation_without_context_then_geography_then_series_selection",
+  analysis_method: "observation_without_context_then_conservative_geography_then_series_selection",
   items,
   recommendation
 };
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", {recursive: true});
 await fs.writeFile(outFile, JSON.stringify(result, null, 2), "utf8");
-console.log(`Saved separated visual analysis for ${items.length} photos; series recommendation classified all ${items.length} photos to ${outFile}`);
+console.log(`Saved conservative Russian visual analysis for ${items.length} photos to ${outFile}`);
