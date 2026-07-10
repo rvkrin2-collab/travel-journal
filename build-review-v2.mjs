@@ -16,43 +16,26 @@ function normalizeDay(value){const m=String(value||"").match(/\d+/);return m?`da
 async function readJson(path){return JSON.parse(await fs.readFile(path,"utf8"));}
 async function readJsonIfExists(path){try{return await readJson(path);}catch(error){if(error?.code==="ENOENT")return null;throw error;}}
 function extractJson(text){const c=String(text||"").trim().replace(/^```json\s*/i,"").replace(/^```\s*/i,"").replace(/```$/i,"").trim();try{return JSON.parse(c);}catch(error){const s=c.indexOf("{"),e=c.lastIndexOf("}");if(s>=0&&e>s)return JSON.parse(c.slice(s,e+1));throw error;}}
-
-function compactAnalysis(analysis){
-  return (analysis.items||[]).map(item=>({
-    public_id:item.public_id,
-    number:item.number,
-    orientation:item.orientation,
-    visual_summary:item.visual_summary,
-    visible_elements:item.visible_elements,
-    dominant_subject:item.dominant_subject,
-    scene_type:item.scene_type,
-    likely_location:item.likely_location,
-    location_confidence:item.location_confidence,
-    observation_confidence:item.observation_confidence,
-    uncertainties:item.uncertainties,
-    suggested_role:item.suggested_role,
-    composition_score:item.composition_score,
-    story_score:item.story_score,
-    emotional_score:item.emotional_score,
-    technical_score:item.technical_score,
-    redundancy_risk:item.redundancy_risk,
-    caption_seed:item.caption_seed,
-    editor_note:item.editor_note,
-    needs_fact_check:item.needs_fact_check
-  }));
-}
+function compactAnalysis(analysis){return (analysis.items||[]).map(item=>({public_id:item.public_id,number:item.number,orientation:item.orientation,visual_summary:item.visual_summary,visible_elements:item.visible_elements,dominant_subject:item.dominant_subject,scene_type:item.scene_type,likely_location:item.likely_location,location_confidence:item.location_confidence,observation_confidence:item.observation_confidence,uncertainties:item.uncertainties,suggested_role:item.suggested_role,composition_score:item.composition_score,story_score:item.story_score,emotional_score:item.emotional_score,technical_score:item.technical_score,redundancy_risk:item.redundancy_risk,caption_seed:item.caption_seed,editor_note:item.editor_note,needs_fact_check:item.needs_fact_check}));}
 
 function validate(review, photos){
   const ids=new Set(photos.map(p=>p.public_id));
   if(!Array.isArray(review?.items))throw new Error("Review items missing");
+  if(review.items.length!==photos.length)throw new Error(`Review must contain all photos: got ${review.items.length}, expected ${photos.length}`);
   const seen=new Set();
   for(const item of review.items){
     if(!ids.has(item.public_id))throw new Error(`Unknown public_id: ${item.public_id}`);
     if(seen.has(item.public_id))throw new Error(`Duplicate public_id: ${item.public_id}`);
     seen.add(item.public_id);
     if(!["hero","story","backstage","skip"].includes(item.status))throw new Error(`Invalid status: ${item.status}`);
+    if(!String(item.label||"").trim())throw new Error(`Empty label: ${item.public_id}`);
   }
   if(review.items.filter(i=>i.status==="hero").length!==1)throw new Error("Exactly one hero required");
+  for(const id of ids){if(!seen.has(id))throw new Error(`Missing public_id: ${id}`);}
+  const chapter=review.chapter||{};
+  for(const field of ["title","subtitle","eyebrow","route_note","theme","central_thought","intro"]){if(!String(chapter[field]||"").trim())throw new Error(`Empty chapter field: ${field}`);}
+  chapter.fact_checks=Array.isArray(chapter.fact_checks)?chapter.fact_checks.map(String).map(s=>s.trim()).filter(Boolean):[];
+  review.chapter=chapter;
   return review;
 }
 
@@ -67,43 +50,28 @@ const payload={trip,day:dayTag,context,author_notes:authorNotes,recommendation:a
 const prompt=`Ты создаёшь предварительное заполнение редактора авторского тревел-журнала.
 
 ЖЁСТКИЕ ПРАВИЛА:
+- Верни КАЖДУЮ фотографию из photos ровно один раз. Количество items должно точно совпадать с количеством photos.
 - Основа подписи — visual_summary и visible_elements.
 - Нельзя противоречить наблюдаемому: зелёные луга нельзя назвать пустыней, снег нельзя игнорировать, птицу нельзя заменить пейзажем.
 - likely_location можно использовать в label только при location_confidence >= 0.6.
 - При низкой уверенности используй нейтральную подпись без названия места.
 - Авторские заметки определяют смысл и финал, но не меняют содержание фотографии.
 - Ровно 1 hero. Обычно 6-8 story. Остальные backstage или skip.
+- Финальная сцена автора должна быть в story, если фотография визуально ей соответствует.
 - Порядок локаций следует actual_route_order.
 - Не придумывай факты.
-- В note объясняй роль кадра в истории, но сначала уважай его реальное содержание.
+- Все поля chapter обязательны и не могут быть пустыми.
 
 Верни только JSON:
-{
-  "trip":"${trip}",
-  "day":"${dayTag}",
-  "status":"ai_review",
-  "analysis_schema_version":2,
-  "updated_at":"ISO_DATE",
-  "chapter":{"title":"","subtitle":"","eyebrow":"","route_note":"","theme":"","central_thought":"","intro":"","fact_checks":[""]},
-  "items":[{"public_id":"","number":1,"status":"hero|story|backstage|skip","label":"","note":""}]
-}
+{"trip":"${trip}","day":"${dayTag}","status":"ai_review","analysis_schema_version":2,"updated_at":"ISO_DATE","chapter":{"title":"","subtitle":"","eyebrow":"","route_note":"","theme":"","central_thought":"","intro":"","fact_checks":[]},"items":[{"public_id":"","number":1,"status":"hero|story|backstage|skip","label":"","note":""}]}
 
 DATA:
 ${JSON.stringify(payload,null,2)}`;
 
 const response=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},body:JSON.stringify({model,temperature:0.05,response_format:{type:"json_object"},messages:[{role:"user",content:prompt}]})});
 if(!response.ok)throw new Error(`Review v2 error: ${response.status} ${await response.text()}`);
-const raw=extractJson((await response.json()).choices?.[0]?.message?.content||"");
-const review=validate(raw,photos);
-review.trip=trip;
-review.day=dayTag;
-review.photos_source=photosFile;
-review.analysis_source=analysisFile;
-review.context_source=contextFile;
-review.author_notes_source=authorNotesFile;
-review.status="ai_review";
-review.analysis_schema_version=2;
-review.updated_at=new Date().toISOString();
+const review=validate(extractJson((await response.json()).choices?.[0]?.message?.content||""),photos);
+review.trip=trip;review.day=dayTag;review.photos_source=photosFile;review.analysis_source=analysisFile;review.context_source=contextFile;review.author_notes_source=authorNotesFile;review.status="ai_review";review.analysis_schema_version=2;review.updated_at=new Date().toISOString();
 await fs.mkdir(outFile.split("/").slice(0,-1).join("/")||".",{recursive:true});
 await fs.writeFile(outFile,JSON.stringify(review,null,2),"utf8");
-console.log(`Saved observation-grounded AI review to ${outFile}`);
+console.log(`Saved complete observation-grounded AI review to ${outFile}`);
