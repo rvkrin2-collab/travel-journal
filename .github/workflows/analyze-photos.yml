@@ -55,6 +55,18 @@ jobs:
           IN_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-photos.json
           OUT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
 
+      - name: Commit verified visual and series analysis
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
+          if git diff --cached --quiet; then
+            echo "No analysis changes"
+          else
+            git commit -m "Analyze all photos and series for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+            git push origin HEAD:main
+          fi
+
       - name: Build observation-grounded AI review
         run: node build-review-v2.mjs
         env:
@@ -63,14 +75,14 @@ jobs:
           TRIP: ${{ github.event.inputs.trip }}
           DAY_TAG: ${{ github.event.inputs.day_tag }}
 
-      - name: Commit analysis and AI review
+      - name: Commit AI review
         run: |
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add data/
+          git add data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-ai-review.json
           if git diff --cached --quiet; then
-            echo "No changes"
+            echo "No AI review changes"
             exit 0
           fi
-          git commit -m "Analyze photos and build AI review v2 for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          git commit -m "Build AI review for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
           git push origin HEAD:main
