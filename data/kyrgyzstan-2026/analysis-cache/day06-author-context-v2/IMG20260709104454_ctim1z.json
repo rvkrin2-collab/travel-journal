@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260709104454_ctim1z",
+  "number": 7,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783655501/IMG20260709104454_ctim1z.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображён всадник в традиционной одежде, сидящий на лошади на фоне зелёных лугов и гор.",
+  "likely_subject": "всадник на лошади",
+  "place_hints": [
+    "луга",
+    "горы"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Всадник на лошади, символизирующий связь человека с природой.",
+  "editor_note": "Кадр подчеркивает тему взаимодействия человека и природы, что соответствует центральной мысли главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T04:54:57.553Z",
+  "model": "gpt-4o-mini"
+}

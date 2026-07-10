@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260709175339_wkxofm",
+  "number": 14,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783655523/IMG20260709175339_wkxofm.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены зелёные луга с горным пейзажем на фоне. Облака создают интересную текстуру на небе.",
+  "likely_subject": "горный пейзаж",
+  "place_hints": [
+    "Кыргызстан",
+    "горные луга"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 8,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "backstage",
+  "caption_seed": "Спокойствие горных лугов Кыргызстана.",
+  "editor_note": "Кадр подчеркивает гармонию природы и может служить фоном для размышлений о взаимодействии человека и окружающей среды.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T04:55:35.630Z",
+  "model": "gpt-4o-mini"
+}

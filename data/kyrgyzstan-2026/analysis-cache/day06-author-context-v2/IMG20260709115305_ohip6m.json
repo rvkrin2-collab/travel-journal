@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260709115305_ohip6m",
+  "number": 6,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783655500/IMG20260709115305_ohip6m.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены пустынные горы с характерными рельефами и голубым небом, создающими ощущение безмятежности.",
+  "likely_subject": "пустынные горы",
+  "place_hints": [
+    "Кыргызстан",
+    "пустынные ландшафты"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 6,
+  "emotional_score": 7,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Пустынные горы Кыргызстана, где природа раскрывает свою суровую красоту.",
+  "editor_note": "Этот кадр важен для передачи атмосферы пустынных гор и контраста с другими сценами дня.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T04:54:51.657Z",
+  "model": "gpt-4o-mini"
+}

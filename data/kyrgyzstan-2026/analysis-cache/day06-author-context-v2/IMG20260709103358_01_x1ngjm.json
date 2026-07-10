@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260709103358_01_x1ngjm",
+  "number": 2,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783655482/IMG20260709103358_01_x1ngjm.jpg",
+  "width": 1080,
+  "height": 1920,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображён беркут, сидящий на земле с зелёными лугами на фоне и горными склонами. Вдали виден человек, наблюдающий за птицей.",
+  "likely_subject": "беркут",
+  "place_hints": [
+    "луга",
+    "горы"
+  ],
+  "people": true,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 8,
+  "story_score": 9,
+  "emotional_score": 7,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "hero",
+  "caption_seed": "Беркут — символ силы и свободы в горах Кыргызстана.",
+  "editor_note": "Этот кадр подчеркивает центральную тему дня — взаимодействие человека и природы через образ беркута.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T04:54:30.617Z",
+  "model": "gpt-4o-mini"
+}

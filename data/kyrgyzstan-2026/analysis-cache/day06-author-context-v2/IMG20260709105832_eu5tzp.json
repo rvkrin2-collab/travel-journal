@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260709105832_eu5tzp",
+  "number": 12,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783655519/IMG20260709105832_eu5tzp.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии открывается широкий вид на зелёные луга, окружённые величественными горами под облачным небом.",
+  "likely_subject": "пейзаж с лугами и горами",
+  "place_hints": [
+    "Кыргызстан",
+    "горный ландшафт"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Просторные луга под горным небом Кыргызстана.",
+  "editor_note": "Кадр хорошо иллюстрирует тему отношений человека и природы, подчеркивая красоту ландшафта и спокойствие момента.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T04:55:24.510Z",
+  "model": "gpt-4o-mini"
+}

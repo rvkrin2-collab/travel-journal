@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260709170111_w4rab0",
+  "number": 11,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783655519/IMG20260709170111_w4rab0.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображены юрты на зелёном лугу, окружённые горами и облаками.",
+  "likely_subject": "юрты",
+  "place_hints": [
+    "Кыргызстан",
+    "горный ландшафт"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 6,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Юрты на лугу, где природа и традиции встречаются.",
+  "editor_note": "Кадр подчеркивает гармонию между человеком и природой, что соответствует центральной мысли главы.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-10T04:55:19.606Z",
+  "model": "gpt-4o-mini"
+}
