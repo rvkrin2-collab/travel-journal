@@ -12,7 +12,7 @@ on:
         required: true
         default: "day06"
       model:
-        description: "OpenAI vision model"
+        description: "OpenAI vision/text model"
         required: false
         default: "gpt-4o-mini"
 
@@ -55,7 +55,15 @@ jobs:
           IN_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-photos.json
           OUT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
 
-      - name: Commit photo analysis
+      - name: Build observation-grounded AI review
+        run: node build-review-v2.mjs
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_TEXT_MODEL: ${{ github.event.inputs.model }}
+          TRIP: ${{ github.event.inputs.trip }}
+          DAY_TAG: ${{ github.event.inputs.day_tag }}
+
+      - name: Commit analysis and AI review
         run: |
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
@@ -64,5 +72,5 @@ jobs:
             echo "No changes"
             exit 0
           fi
-          git commit -m "Analyze photos v2 for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          git commit -m "Analyze photos and build AI review v2 for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
           git push origin HEAD:main
