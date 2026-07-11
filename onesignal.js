@@ -1,6 +1,7 @@
 (() => {
   const APP_ID = "d19328c8-3ac8-4d2a-b495-3906dbca349c";
   const SDK_URL = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
+  const isHomePage = location.pathname === "/" || location.pathname === "/index.html";
 
   if (!window.isSecureContext || !("serviceWorker" in navigator) || !("Notification" in window)) return;
 
@@ -17,6 +18,7 @@
   };
 
   const createButton = () => {
+    if (!isHomePage) return null;
     addStyles();
     let button = document.getElementById("travel-push-button");
     if (button) return button;
@@ -31,13 +33,14 @@
   };
 
   const setLabel = (button, text, disabled = false) => {
+    if (!button) return;
     button.querySelector(".travel-push-button__label").textContent = text;
     button.disabled = disabled;
   };
 
   const start = () => {
     const button = createButton();
-    setLabel(button, "Подключение…", true);
+    if (button) setLabel(button, "Подключение…", true);
 
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     window.OneSignalDeferred.push(async function(OneSignal) {
@@ -56,32 +59,40 @@
         });
 
         const refresh = async () => {
+          const subscribed = Boolean(OneSignal.User?.PushSubscription?.optedIn);
+          if (subscribed) {
+            if (button) button.hidden = true;
+            return;
+          }
+          if (!button) return;
+          button.hidden = false;
           if (Notification.permission === "denied") {
             setLabel(button, "Уведомления заблокированы", true);
             return;
           }
-          const subscribed = Boolean(OneSignal.User?.PushSubscription?.optedIn);
-          setLabel(button, subscribed ? "Уведомления включены" : "Получать новые главы", false);
+          setLabel(button, "Получать новые главы", false);
         };
 
-        button.onclick = async () => {
-          try {
-            setLabel(button, "Подключение…", true);
-            const permission = await OneSignal.Notifications.requestPermission();
-            if (permission) await OneSignal.User.PushSubscription.optIn();
-          } catch (error) {
-            console.error("OneSignal subscription failed", error);
-          } finally {
-            await refresh();
-          }
-        };
+        if (button) {
+          button.onclick = async () => {
+            try {
+              setLabel(button, "Подключение…", true);
+              const permission = await OneSignal.Notifications.requestPermission();
+              if (permission) await OneSignal.User.PushSubscription.optIn();
+            } catch (error) {
+              console.error("OneSignal subscription failed", error);
+            } finally {
+              await refresh();
+            }
+          };
+        }
 
         OneSignal.User.PushSubscription.addEventListener("change", refresh);
         OneSignal.Notifications.addEventListener("permissionChange", refresh);
         await refresh();
       } catch (error) {
         console.error("OneSignal initialization failed", error);
-        setLabel(button, "Уведомления недоступны", true);
+        if (button) setLabel(button, "Уведомления недоступны", true);
       }
     });
 
@@ -91,7 +102,9 @@
       script.defer = true;
       script.async = true;
       script.crossOrigin = "anonymous";
-      script.onerror = () => setLabel(button, "Уведомления недоступны", true);
+      script.onerror = () => {
+        if (button) setLabel(button, "Уведомления недоступны", true);
+      };
       document.head.appendChild(script);
     }
   };
