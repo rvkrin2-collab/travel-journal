@@ -1,4 +1,4 @@
-const VERSION = "travel-journal-v7";
+const VERSION = "travel-journal-v8";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
