@@ -5,8 +5,9 @@
   "ai_review_source": "data/kyrgyzstan-2026/day08-ai-review.json",
   "author_review_source": "data/kyrgyzstan-2026/day08-author-review.json",
   "author_notes_source": "data/kyrgyzstan-2026/day08-author-notes.json",
+  "preview_notes_source": "data/kyrgyzstan-2026/day08-preview-author-notes.json",
   "status": "final_review",
-  "updated_at": "2026-07-11T11:45:00.000Z",
+  "updated_at": "2026-07-11T11:58:00.000Z",
   "chapter": {
     "title": "Пора домой",
     "subtitle": "День 8: Кызыл-Ой → Сулуторские озёра → Международный аэропорт «Манас»",
@@ -27,7 +28,7 @@
       "number": 1,
       "status": "story",
       "label": "Могила друга Кожомкула",
-      "note": "В селе Кожомкул находится каменная могила, которую, по рассказу местных, силач Кожомкул сложил для своего друга."
+      "note": "Остановились у каменной могилы. По рассказу местных, её сложил живший в XX веке великан Кожомкул для своего друга."
     },
     {
       "public_id": "IMG20260711102751_uinoh2",
@@ -41,7 +42,7 @@
       "number": 3,
       "status": "story",
       "label": "Серпантин",
-      "note": "Автодорога-серпантин, увиденная с тропы по пути к озёрам."
+      "note": "С тропы к озёрам виден серпантин. Дальше дорога осталась внизу, а впереди раскрылась горная долина."
     },
     {
       "public_id": "IMG20260711103014_ctzlun",
