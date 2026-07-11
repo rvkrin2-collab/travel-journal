@@ -9,6 +9,7 @@ on:
       - "trips/*/index.html"
       - "pwa.js"
       - "gallery.js"
+      - "onesignal.js"
       - "manifest.webmanifest"
       - ".github/workflows/ensure-pwa-pages.yml"
 
@@ -40,6 +41,7 @@ jobs:
           '''
           pwa_script = '  <script src="/pwa.js" defer></script>\n'
           gallery_script = '  <script src="/gallery.js" defer></script>\n'
+          onesignal_script = '  <script src="/onesignal.js" defer></script>\n'
 
           for path in pages:
               if not path.exists():
@@ -57,6 +59,10 @@ jobs:
 
               if 'src="/gallery.js"' not in text and "</body>" in text:
                   text = text.replace("</body>", gallery_script + "</body>", 1)
+                  changed = True
+
+              if 'src="/onesignal.js"' not in text and "</body>" in text:
+                  text = text.replace("</body>", onesignal_script + "</body>", 1)
                   changed = True
 
               if changed:
