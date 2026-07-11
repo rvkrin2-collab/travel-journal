@@ -1,0 +1,138 @@
+name: Send publication notification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "data/notifications/latest.json"
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "Notification title"
+        required: true
+        default: "Новая глава журнала"
+      message:
+        description: "Notification text"
+        required: true
+      url:
+        description: "Published chapter URL"
+        required: true
+      icon:
+        description: "Optional absolute image URL"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: onesignal-publication-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    env:
+      ONESIGNAL_APP_ID: d19328c8-3ac8-4d2a-b495-3906dbca349c
+      ONESIGNAL_REST_API_KEY: ${{ secrets.ONESIGNAL_REST_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read notification data
+        id: notification
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TITLE='${{ inputs.title }}'
+            MESSAGE='${{ inputs.message }}'
+            URL='${{ inputs.url }}'
+            ICON='${{ inputs.icon }}'
+          else
+            FILE="data/notifications/latest.json"
+            TITLE=$(jq -r '.title' "$FILE")
+            MESSAGE=$(jq -r '.message' "$FILE")
+            URL=$(jq -r '.url' "$FILE")
+            ICON=$(jq -r '.icon // empty' "$FILE")
+          fi
+
+          [[ -n "$TITLE" && "$TITLE" != "null" ]] || { echo "Notification title is missing" >&2; exit 1; }
+          [[ -n "$MESSAGE" && "$MESSAGE" != "null" ]] || { echo "Notification message is missing" >&2; exit 1; }
+          [[ "$URL" == https://owntravel.ru/* ]] || { echo "Notification URL must use https://owntravel.ru/" >&2; exit 1; }
+
+          {
+            echo "title<<EOF"
+            echo "$TITLE"
+            echo "EOF"
+            echo "message<<EOF"
+            echo "$MESSAGE"
+            echo "EOF"
+            echo "url=$URL"
+            echo "icon=$ICON"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check OneSignal secret
+        shell: bash
+        run: |
+          if [[ -z "$ONESIGNAL_REST_API_KEY" ]]; then
+            echo "Repository secret ONESIGNAL_REST_API_KEY is missing." >&2
+            exit 1
+          fi
+
+      - name: Build request
+        env:
+          TITLE: ${{ steps.notification.outputs.title }}
+          MESSAGE: ${{ steps.notification.outputs.message }}
+          TARGET_URL: ${{ steps.notification.outputs.url }}
+          ICON: ${{ steps.notification.outputs.icon }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -n \
+            --arg app_id "$ONESIGNAL_APP_ID" \
+            --arg title "$TITLE" \
+            --arg message "$MESSAGE" \
+            --arg url "$TARGET_URL" \
+            --arg icon "$ICON" \
+            '{
+              app_id: $app_id,
+              included_segments: ["Subscribed Users"],
+              headings: {ru: $title, en: $title},
+              contents: {ru: $message, en: $message},
+              url: $url,
+              web_url: $url,
+              chrome_web_icon: (if $icon == "" then "https://owntravel.ru/icons/icon-192.png" else $icon end)
+            }' > notification-payload.json
+
+      - name: Send to all subscribers
+        shell: bash
+        run: |
+          set -euo pipefail
+          HTTP_CODE=$(curl --silent --show-error \
+            --output response.json \
+            --write-out "%{http_code}" \
+            --request POST \
+            --url "https://api.onesignal.com/notifications" \
+            --header "Authorization: Key $ONESIGNAL_REST_API_KEY" \
+            --header "Content-Type: application/json; charset=utf-8" \
+            --data-binary @notification-payload.json)
+
+          cat response.json
+          if [[ "$HTTP_CODE" -lt 200 || "$HTTP_CODE" -ge 300 ]]; then
+            echo "OneSignal returned HTTP $HTTP_CODE" >&2
+            exit 1
+          fi
+
+          ERRORS=$(jq -r 'if .errors then (.errors | tostring) else "" end' response.json)
+          if [[ -n "$ERRORS" ]]; then
+            echo "OneSignal returned errors: $ERRORS" >&2
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          echo "### Push sent" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Title:** ${{ steps.notification.outputs.title }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**URL:** ${{ steps.notification.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
