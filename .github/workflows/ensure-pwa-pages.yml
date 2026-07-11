@@ -1,0 +1,69 @@
+name: Ensure PWA on public pages
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "index.html"
+      - "day*.html"
+      - "trips/*/index.html"
+      - "pwa.js"
+      - "manifest.webmanifest"
+      - ".github/workflows/ensure-pwa-pages.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Add PWA metadata and loader
+        shell: python
+        run: |
+          from pathlib import Path
+
+          pages = [Path("index.html"), *sorted(Path(".").glob("day*.html")), *sorted(Path("trips").glob("*/index.html"))]
+          head_markup = '''  <meta name="theme-color" content="#263c34">
+          <meta name="application-name" content="Журнал путешествий">
+          <meta name="mobile-web-app-capable" content="yes">
+          <link rel="manifest" href="/manifest.webmanifest">
+          <link rel="icon" type="image/png" href="/icons/icon-192.png">
+          <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+          '''
+          script_markup = '  <script src="/pwa.js" defer></script>\n'
+
+          for path in pages:
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding="utf-8")
+              changed = False
+
+              if 'rel="manifest"' not in text and "</head>" in text:
+                  text = text.replace("</head>", head_markup + "</head>", 1)
+                  changed = True
+
+              if 'src="/pwa.js"' not in text and "</body>" in text:
+                  text = text.replace("</body>", script_markup + "</body>", 1)
+                  changed = True
+
+              if changed:
+                  path.write_text(text, encoding="utf-8")
+
+      - name: Commit wiring
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add index.html day*.html trips/*/index.html
+          if git diff --cached --quiet; then
+            echo "Public pages are already PWA-ready"
+            exit 0
+          fi
+          git commit -m "Wire PWA into public pages"
+          git push origin HEAD:main
