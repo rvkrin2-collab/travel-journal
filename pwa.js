@@ -1,6 +1,6 @@
 (() => {
   const manifestHref = "/manifest.webmanifest";
-  const iconHref = "/icons/icon-192.svg";
+  const iconHref = "/icons/icon-192.png";
 
   function ensureHeadLinks() {
     if (!document.querySelector('link[rel="manifest"]')) {
@@ -27,9 +27,16 @@
     if (!document.querySelector('link[rel="icon"]')) {
       const icon = document.createElement("link");
       icon.rel = "icon";
-      icon.type = "image/svg+xml";
+      icon.type = "image/png";
       icon.href = iconHref;
       document.head.appendChild(icon);
+    }
+
+    if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+      const appleIcon = document.createElement("link");
+      appleIcon.rel = "apple-touch-icon";
+      appleIcon.href = "/icons/apple-touch-icon.png";
+      document.head.appendChild(appleIcon);
     }
   }
 
