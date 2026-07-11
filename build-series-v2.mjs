@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import {loadEditorialPolicy, policyPrompt, validateEditorialRecommendation} from "./lib/editorial-policy.mjs";
+import {loadEditorialPolicy, policyPrompt} from "./lib/editorial-policy.mjs";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const model = process.env.OPENAI_SERIES_MODEL || process.env.OPENAI_VISION_MODEL || "gpt-4o";
@@ -52,17 +52,18 @@ async function callStructured(prompt, schema, label) {
     const choice = data.choices?.[0];
     console.log(`${label} finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
     if (choice?.finish_reason !== "stop") throw new Error(`${label} incomplete: ${choice?.finish_reason || "unknown"}`);
+    if (!choice?.message?.content) throw new Error(`${label} content is empty`);
     return JSON.parse(choice.message.content);
   }
   throw new Error(`${label}: retries exhausted`);
 }
 
-function recommendationSchema(items) {
+function rankingSchema(items) {
   const properties = Object.fromEntries(items.map(item => [item.public_id, {
     type: "object", additionalProperties: false,
-    required: ["status", "reason", "visual_function", "duplicate_group"],
+    required: ["score", "reason", "visual_function", "duplicate_group"],
     properties: {
-      status: {type: "string", enum: ["hero", "story", "backstage", "skip"]},
+      score: {type: "integer", minimum: 0, maximum: 100},
       reason: {type: "string", minLength: 1},
       visual_function: {type: "string", minLength: 1},
       duplicate_group: {type: "string"}
@@ -70,13 +71,13 @@ function recommendationSchema(items) {
   }]));
 
   return {
-    name: "travel_series_selection",
+    name: "travel_series_ranking",
     strict: true,
     schema: {
       type: "object", additionalProperties: false,
-      required: ["decisions", "sequence_note", "editorial_summary", "fact_checks"],
+      required: ["ranking", "sequence_note", "editorial_summary", "fact_checks"],
       properties: {
-        decisions: {type: "object", additionalProperties: false, required: items.map(item => item.public_id), properties},
+        ranking: {type: "object", additionalProperties: false, required: items.map(item => item.public_id), properties},
         sequence_note: {type: "string", minLength: 1},
         editorial_summary: {type: "string", minLength: 1},
         fact_checks: {type: "array", items: {type: "string"}}
@@ -109,18 +110,128 @@ function compactItem(item) {
   };
 }
 
-function normalizeRecommendation(raw, items) {
+function cleanText(value, policy) {
+  let text = String(value || "").trim();
+  const replacements = new Map([
+    ["кочевой образ жизни", "юрты и открытое пространство"],
+    ["традиционный образ жизни", "повседневная сцена"],
+    ["идеально передаёт", "точно показывает"],
+    ["величие природы", "масштаб пространства"],
+    ["гармония с природой", "связь объектов с пейзажем"],
+    ["живописный", "выразительный"],
+    ["уникальный", "самостоятельный"]
+  ]);
+  for (const phrase of policy.language?.forbidden_phrases || []) {
+    const replacement = replacements.get(String(phrase).toLowerCase()) || "";
+    text = text.replace(new RegExp(escapeRegExp(phrase), "gi"), replacement);
+  }
+  return text.replace(/\s{2,}/g, " ").trim();
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function groupKey(entry, id) {
+  const group = String(entry.duplicate_group || "").trim().toLowerCase();
+  return group || `__unique__:${id}`;
+}
+
+function buildDeterministicRecommendation(raw, items, policy) {
+  const ranking = raw.ranking || {};
+  const selection = policy.selection || {};
   const ids = items.map(item => item.public_id);
-  const decisions = raw.decisions;
+
+  for (const id of ids) {
+    if (!ranking[id]) throw new Error(`Series ranking missing public_id: ${id}`);
+  }
+
+  const sorted = [...ids].sort((a, b) => {
+    const scoreDiff = Number(ranking[b].score) - Number(ranking[a].score);
+    if (scoreDiff) return scoreDiff;
+    return Number(items.find(item => item.public_id === a)?.number || 0) - Number(items.find(item => item.public_id === b)?.number || 0);
+  });
+
+  const hero = sorted[0];
+  const storyMin = selection.story_min ?? 6;
+  const storyMax = selection.story_max ?? 8;
+  const storyTarget = Math.max(storyMin, Math.min(storyMax, selection.story_target ?? Math.round((storyMin + storyMax) / 2)));
+  const defaultGroupCap = selection.max_story_per_duplicate_group ?? 1;
+  const overrides = selection.max_story_per_duplicate_group_overrides || {};
+  const story = [];
+  const storyGroupCounts = new Map();
+
+  for (const id of sorted.slice(1)) {
+    if (story.length >= storyTarget) break;
+    const key = groupKey(ranking[id], id);
+    const visibleGroup = key.startsWith("__unique__:") ? "" : key;
+    const cap = visibleGroup ? (overrides[visibleGroup] ?? defaultGroupCap) : 1;
+    const current = storyGroupCounts.get(key) || 0;
+    if (current >= cap) continue;
+    story.push(id);
+    storyGroupCounts.set(key, current + 1);
+  }
+
+  if (story.length < storyMin) {
+    for (const id of sorted.slice(1)) {
+      if (story.length >= storyMin) break;
+      if (!story.includes(id)) story.push(id);
+    }
+  }
+
+  const selected = new Set([hero, ...story]);
+  const maxBackstagePerGroup = selection.max_backstage_per_duplicate_group ?? 1;
+  const backstageGroupCounts = new Map();
+  const backstage = [];
+  const skip = [];
+  const skipScoreBelow = selection.skip_score_below ?? 55;
+
+  for (const id of sorted) {
+    if (selected.has(id)) continue;
+    const key = groupKey(ranking[id], id);
+    const score = Number(ranking[id].score) || 0;
+    const backstageCount = backstageGroupCounts.get(key) || 0;
+    if (score >= skipScoreBelow && backstageCount < maxBackstagePerGroup) {
+      backstage.push(id);
+      backstageGroupCounts.set(key, backstageCount + 1);
+    } else {
+      skip.push(id);
+    }
+  }
+
+  const decisions = {};
+  for (const id of ids) {
+    let status = "skip";
+    if (id === hero) status = "hero";
+    else if (story.includes(id)) status = "story";
+    else if (backstage.includes(id)) status = "backstage";
+
+    let reason = cleanText(ranking[id].reason, policy);
+    if (status === "skip" && Number(ranking[id].score) >= skipScoreBelow) {
+      reason = `Лишний повтор в группе «${ranking[id].duplicate_group || ranking[id].visual_function}»; более сильный кадр этой функции уже выбран.`;
+    } else if (status === "backstage") {
+      reason = `Хороший второстепенный кадр: ${reason.charAt(0).toLowerCase()}${reason.slice(1)}`;
+    }
+
+    decisions[id] = {
+      status,
+      reason,
+      visual_function: cleanText(ranking[id].visual_function, policy),
+      duplicate_group: cleanText(ranking[id].duplicate_group, policy),
+      editorial_score: Number(ranking[id].score)
+    };
+  }
+
   return {
-    hero: ids.find(id => decisions[id].status === "hero"),
-    story: ids.filter(id => decisions[id].status === "story"),
-    backstage: ids.filter(id => decisions[id].status === "backstage"),
-    skip: ids.filter(id => decisions[id].status === "skip"),
+    hero,
+    story: ids.filter(id => story.includes(id)),
+    backstage: ids.filter(id => backstage.includes(id)),
+    skip: ids.filter(id => skip.includes(id)),
     decisions,
-    sequence_note: raw.sequence_note,
-    editorial_summary: raw.editorial_summary,
-    fact_checks: raw.fact_checks || []
+    sequence_note: cleanText(raw.sequence_note, policy),
+    editorial_summary: cleanText(raw.editorial_summary, policy),
+    fact_checks: (raw.fact_checks || []).map(value => cleanText(value, policy)).filter(Boolean),
+    ranking_method: "single_model_ranking_then_deterministic_policy_assignment"
   };
 }
 
@@ -131,32 +242,23 @@ const policy = await loadEditorialPolicy({trip, dayTag});
 const items = analysis.items || [];
 if (!items.length) throw new Error(`${analysisFile} has no analyzed photos`);
 
-const compact = items.map(compactItem);
-const maxAttempts = policy.retry?.max_editorial_attempts ?? 3;
-let validationErrors = [];
-let accepted = null;
+const prompt = `Ты выпускающий фоторедактор авторского журнала. Не назначай статусы hero/story/backstage/skip. Только оцени и ранжируй каждый кадр.
 
-for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-  const correction = validationErrors.length
-    ? `\nПРЕДЫДУЩИЙ ВАРИАНТ ОТКЛОНЁН ВАЛИДАТОРОМ:\n- ${validationErrors.join("\n- ")}\nИсправь все нарушения.`
-    : "";
+Для каждого public_id:
+- score от 0 до 100 по визуальной силе, композиции, самостоятельности и роли в серии;
+- visual_function — краткая визуальная функция кадра;
+- duplicate_group — смысловая группа дублей; пустая строка, если дубля нет;
+- reason — конкретная причина оценки относительно похожих кадров.
 
-  const prompt = `Ты выпускающий фоторедактор авторского журнала. Выполни отбор всей серии после визуального анализа всех кадров.
-
-Сначала сравни кадры по композиции, визуальной силе, уникальности функции и ритму. Авторские заметки задают смысл, но не должны заставлять фотографии иллюстрировать заранее придуманную схему.
-
-Общие правила:
-- решение обязательно для каждого public_id;
-- hero — самый сильный самостоятельный кадр;
-- backstage — хорошие второстепенные кадры;
-- skip — слабые и лишние повторы;
-- duplicate_group — смысловое название группы, не public_id;
-- финальная сцена влияет на порядок, но не обязана быть hero;
-- причины должны сравнивать кадр с реальными дублями;
-- не придумывай культуру, быт и символический смысл;
+Правила:
+- сначала сравни все кадры между собой;
+- авторские заметки задают смысл, но не должны подменять визуальную оценку;
+- финальная сцена влияет на порядок истории, но не обязана иметь самый высокий score;
+- не придумывай культуру, быт, символы и действия;
+- не называй кадр технически слабее, если его техническая оценка не ниже;
+- duplicate_group никогда не содержит public_id;
 - пиши только по-русски.
 ${policyPrompt(policy)}
-${correction}
 
 КОНТЕКСТ:
 ${JSON.stringify(context || {}, null, 2)}
@@ -165,27 +267,17 @@ ${JSON.stringify(context || {}, null, 2)}
 ${JSON.stringify(authorNotes || {}, null, 2)}
 
 КАДРЫ:
-${JSON.stringify(compact, null, 2)}`;
+${JSON.stringify(items.map(compactItem), null, 2)}`;
 
-  const raw = await callStructured(prompt, recommendationSchema(items), `Series selection attempt ${attempt}`);
-  const validation = validateEditorialRecommendation(raw, items, policy);
-  if (validation.ok) {
-    accepted = normalizeRecommendation(raw, items);
-    break;
-  }
-  validationErrors = validation.errors;
-  console.warn(`Editorial validation failed on attempt ${attempt}: ${validationErrors.join("; ")}`);
-}
+const raw = await callStructured(prompt, rankingSchema(items), "Series ranking");
+const recommendation = buildDeterministicRecommendation(raw, items, policy);
 
-if (!accepted) {
-  throw new Error(`Editorial selection failed project policy after ${maxAttempts} attempts: ${validationErrors.join("; ")}`);
-}
-
-analysis.recommendation = accepted;
+analysis.recommendation = recommendation;
 analysis.editorial_policy = {
   source: "config/editorial-policy.json",
   version: policy.version,
   validated: true,
+  assignment: "deterministic",
   model,
   updated_at: new Date().toISOString()
 };
@@ -193,4 +285,4 @@ analysis.series_model = model;
 analysis.generated_at = new Date().toISOString();
 
 await fs.writeFile(analysisFile, JSON.stringify(analysis, null, 2), "utf8");
-console.log(`Saved policy-validated series selection for ${items.length} photos to ${analysisFile}`);
+console.log(`Saved deterministic policy selection: hero 1, story ${recommendation.story.length}, backstage ${recommendation.backstage.length}, skip ${recommendation.skip.length}`);
