@@ -1,4 +1,4 @@
-const VERSION = "travel-journal-v5";
+const VERSION = "travel-journal-v6";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -23,6 +23,7 @@ const APP_SHELL = [
   "/day05.html",
   "/day06.html",
   "/day07.html",
+  "/day08.html",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
   "/icons/icon-maskable-512.png",
