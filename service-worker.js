@@ -1,4 +1,6 @@
-const VERSION = "travel-journal-v8";
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+
+const VERSION = "travel-journal-v9";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -15,7 +17,6 @@ const APP_SHELL = [
   "/gallery.js",
   "/onesignal.js",
   "/service-worker.js",
-  "/push/onesignal/OneSignalSDKWorker.js",
   "/data/trips.json",
   "/trips/kyrgyzstan-2026/",
   "/day01.html",
