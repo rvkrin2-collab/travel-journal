@@ -1,4 +1,4 @@
-const VERSION = "travel-journal-v1";
+const VERSION = "travel-journal-v2";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -19,16 +19,21 @@ const APP_SHELL = [
   "/day05.html",
   "/day06.html",
   "/day07.html",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png",
-  "/icons/icon-maskable-512.png",
-  "/icons/apple-touch-icon.png"
+  "/icons/icon-192.svg",
+  "/icons/icon-512.svg",
+  "/icons/icon-maskable-512.svg"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(APP_CACHE)
-      .then(cache => cache.addAll(APP_SHELL))
+      .then(cache => Promise.all(APP_SHELL.map(async url => {
+        try {
+          await cache.add(url);
+        } catch (error) {
+          console.warn("Precache skipped", url, error);
+        }
+      })))
       .then(() => self.skipWaiting())
   );
 });
@@ -116,7 +121,7 @@ self.addEventListener("fetch", event => {
   }
 
   if (request.destination === "image") {
-    event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.png")));
+    event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.svg")));
     return;
   }
 
