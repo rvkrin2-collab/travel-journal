@@ -1,0 +1,45 @@
+name: Generate PWA icons
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "icons/*.svg"
+      - ".github/workflows/generate-pwa-icons.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Install SVG renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Generate PNG icons
+        run: |
+          rsvg-convert -w 192 -h 192 icons/icon-192.svg -o icons/icon-192.png
+          rsvg-convert -w 512 -h 512 icons/icon-512.svg -o icons/icon-512.png
+          rsvg-convert -w 512 -h 512 icons/icon-maskable-512.svg -o icons/icon-maskable-512.png
+          rsvg-convert -w 180 -h 180 icons/icon-192.svg -o icons/apple-touch-icon.png
+
+      - name: Commit generated icons
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add icons/*.png
+          if git diff --cached --quiet; then
+            echo "Icons are up to date"
+            exit 0
+          fi
+          git commit -m "Generate PWA PNG icons"
+          git push origin HEAD:main
