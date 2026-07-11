@@ -1,4 +1,4 @@
-const VERSION = "travel-journal-v6";
+const VERSION = "travel-journal-v7";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -13,7 +13,9 @@ const APP_SHELL = [
   "/manifest.webmanifest",
   "/pwa.js",
   "/gallery.js",
+  "/onesignal.js",
   "/service-worker.js",
+  "/push/onesignal/OneSignalSDKWorker.js",
   "/data/trips.json",
   "/trips/kyrgyzstan-2026/",
   "/day01.html",
