@@ -101,7 +101,6 @@ jobs:
               included_segments: ["Active Subscriptions"],
               headings: {ru: $title, en: $title},
               contents: {ru: $message, en: $message},
-              url: $url,
               web_url: $url,
               chrome_web_icon: (if $icon == "" then "https://owntravel.ru/icons/icon-192.png" else $icon end)
             }' > notification-payload.json
