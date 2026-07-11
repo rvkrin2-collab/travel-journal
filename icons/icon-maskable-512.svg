@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Журнал путешествий">
+  <rect width="512" height="512" fill="#263c34"/>
+  <circle cx="352" cy="154" r="34" fill="#c7a77c"/>
+  <path d="M92 354 L185 206 L268 312 L337 238 L420 354" fill="none" stroke="#fff8ec" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M150 312 C197 361 267 402 372 362" fill="none" stroke="#c7a77c" stroke-width="15" stroke-linecap="round"/>
+  <path d="M92 377 H420" stroke="#fff8ec" stroke-opacity=".72" stroke-width="8" stroke-linecap="round"/>
+</svg>
