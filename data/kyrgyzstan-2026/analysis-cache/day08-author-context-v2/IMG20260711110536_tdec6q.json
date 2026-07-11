@@ -1,0 +1,36 @@
+{
+  "public_id": "IMG20260711110536_tdec6q",
+  "number": 6,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765910/IMG20260711110536_tdec6q.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображено озеро, окруженное зелеными склонами и горами на фоне ясного неба.",
+  "likely_subject": "Сулуторские озёра",
+  "place_hints": [
+    "горы",
+    "озеро",
+    "Кыргызстан"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Спокойствие Сулуторских озёр в последний день путешествия.",
+  "editor_note": "Кадр хорошо передает атмосферу завершения путешествия и подходит для финальной части главы.",
+  "needs_fact_check": [
+    "подтвердить название Сулуторские озёра"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:44:53.144Z",
+  "model": "gpt-4o-mini"
+}

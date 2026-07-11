@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260711090520_tgj16q",
+  "number": 1,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765906/IMG20260711090520_tgj16q.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображена традиционная киргизская юрта с характерной крышей и куполом, окруженная зелеными пастбищами и горами на заднем плане.",
+  "likely_subject": "юрта",
+  "place_hints": [
+    "Кыргызстан",
+    "горный ландшафт"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": true,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Традиционная юрта на фоне гор.",
+  "editor_note": "Кадр подчеркивает культурное наследие Кыргызстана и создает атмосферу путешествия по стране.",
+  "needs_fact_check": [
+    "подтвердить точное местоположение юрты"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:44:25.572Z",
+  "model": "gpt-4o-mini"
+}

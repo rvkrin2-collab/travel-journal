@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260711112826_qecyvz",
+  "number": 9,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765911/IMG20260711112826_qecyvz.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены горные склоны с яркой зеленью и скалистыми образованиями на переднем плане. На заднем плане виднеются горы с характерными формами.",
+  "likely_subject": "скалистое образование",
+  "place_hints": [
+    "горы Кыргызстана",
+    "пейзаж Сулуторских озёр"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 6,
+  "emotional_score": 5,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Скалы на пути к Сулуторским озёрам.",
+  "editor_note": "Этот кадр подчеркивает природную красоту и разнообразие ландшафта, что важно для завершения рассказа о путешествии.",
+  "needs_fact_check": [
+    "подтвердить название географических объектов на заднем плане"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:45:12.608Z",
+  "model": "gpt-4o-mini"
+}

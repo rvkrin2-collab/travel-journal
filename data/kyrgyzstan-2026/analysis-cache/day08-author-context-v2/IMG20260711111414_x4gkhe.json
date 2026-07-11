@@ -1,0 +1,35 @@
+{
+  "public_id": "IMG20260711111414_x4gkhe",
+  "number": 7,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765911/IMG20260711111414_x4gkhe.jpg",
+  "width": 3072,
+  "height": 4096,
+  "orientation": "vertical",
+  "visual_summary": "На фотографии изображены горы с зелеными склонами и небольшое озеро на фоне. На переднем плане пасутся лошади.",
+  "likely_subject": "озеро и горы",
+  "place_hints": [
+    "Кыргызстан",
+    "Сулуторские озёра"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": true,
+  "composition_score": 7,
+  "story_score": 8,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Спокойствие природы у Сулуторских озёр.",
+  "editor_note": "Кадр подчеркивает атмосферу последнего дня путешествия, передавая ощущение завершенности и спокойствия.",
+  "needs_fact_check": [
+    "подтвердить название озера и его географическое положение"
+  ],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:44:59.875Z",
+  "model": "gpt-4o-mini"
+}

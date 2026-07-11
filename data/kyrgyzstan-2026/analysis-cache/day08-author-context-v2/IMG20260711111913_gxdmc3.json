@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260711111913_gxdmc3",
+  "number": 8,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765911/IMG20260711111913_gxdmc3.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображён зелёный холм, поднимающийся к горной гряде на фоне ясного голубого неба.",
+  "likely_subject": "холм",
+  "place_hints": [
+    "горы",
+    "пастбища"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 7,
+  "story_score": 5,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 3,
+  "suggested_role": "story",
+  "caption_seed": "Спокойствие горного пейзажа на пути к Сулуторским озёрам.",
+  "editor_note": "Этот кадр подчеркивает атмосферу последней прогулки и завершения путешествия, создавая контраст с усталостью.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:45:05.033Z",
+  "model": "gpt-4o-mini"
+}

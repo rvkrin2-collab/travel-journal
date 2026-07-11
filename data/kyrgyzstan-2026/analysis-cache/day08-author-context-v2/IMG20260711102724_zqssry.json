@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260711102724_zqssry",
+  "number": 3,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765907/IMG20260711102724_zqssry.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии виден извивающийся горный путь, окружённый зелёными склонами и высокими горами на фоне ясного неба.",
+  "likely_subject": "горный путь",
+  "place_hints": [
+    "горы Кыргызстана",
+    "пейзаж"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": true,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 8,
+  "redundancy_risk": 2,
+  "suggested_role": "story",
+  "caption_seed": "Извивающийся путь ведёт к новым открытиям.",
+  "editor_note": "Этот кадр подчеркивает атмосферу путешествия и завершение маршрута, создавая ощущение движения и открытости.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:44:37.622Z",
+  "model": "gpt-4o-mini"
+}

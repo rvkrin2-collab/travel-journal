@@ -1,0 +1,33 @@
+{
+  "public_id": "IMG20260711103014_ctzlun",
+  "number": 4,
+  "url": "https://res.cloudinary.com/tftagnuy/image/upload/v1783765909/IMG20260711103014_ctzlun.jpg",
+  "width": 4096,
+  "height": 3072,
+  "orientation": "horizontal",
+  "visual_summary": "На фотографии изображено цветущее поле с разнообразными цветами на фоне ясного голубого неба.",
+  "likely_subject": "цветы на поле",
+  "place_hints": [
+    "высокогорье",
+    "пастбища Кыргызстана"
+  ],
+  "people": false,
+  "landscape": true,
+  "architecture": false,
+  "interior": false,
+  "vehicle_or_road": false,
+  "food": false,
+  "animal": false,
+  "composition_score": 8,
+  "story_score": 7,
+  "emotional_score": 6,
+  "technical_score": 7,
+  "redundancy_risk": 2,
+  "suggested_role": "hero",
+  "caption_seed": "Цветы, символизирующие завершение путешествия.",
+  "editor_note": "Этот кадр подчеркивает финальную сцену и завершение путешествия, создавая спокойное настроение.",
+  "needs_fact_check": [],
+  "analysis_source": "vision",
+  "analyzed_at": "2026-07-11T10:44:42.671Z",
+  "model": "gpt-4o-mini"
+}
