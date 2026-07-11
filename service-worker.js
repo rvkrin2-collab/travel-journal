@@ -1,4 +1,4 @@
-const VERSION = "travel-journal-v2";
+const VERSION = "travel-journal-v3";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -10,6 +10,7 @@ const APP_SHELL = [
   "/style.css",
   "/manifest.webmanifest",
   "/pwa.js",
+  "/service-worker.js",
   "/data/trips.json",
   "/trips/kyrgyzstan-2026/",
   "/day01.html",
@@ -84,7 +85,7 @@ async function staleWhileRevalidate(request) {
       return response;
     })
     .catch(() => null);
-  return cached || network;
+  return cached || network || Response.error();
 }
 
 async function trimCache(cacheName, maxItems) {
@@ -117,6 +118,11 @@ self.addEventListener("fetch", event => {
 
   if (request.mode === "navigate") {
     if (isPublicNavigation(url)) event.respondWith(networkFirst(request));
+    return;
+  }
+
+  if (url.origin === self.location.origin && url.pathname === "/data/trips.json") {
+    event.respondWith(staleWhileRevalidate(request));
     return;
   }
 
