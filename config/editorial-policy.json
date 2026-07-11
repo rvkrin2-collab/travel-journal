@@ -1,17 +1,18 @@
 {
-  "version": 1,
+  "version": 2,
   "selection": {
     "hero_count": 1,
     "story_min": 6,
+    "story_target": 7,
     "story_max": 8,
-    "allow_story_overflow_only_with_reason": false,
     "prefer_distinct_visual_functions": true,
     "max_story_per_duplicate_group": 1,
     "max_story_per_duplicate_group_overrides": {
       "лошади": 2,
       "табун": 2
     },
-    "require_skip_when_redundancy_exists": true,
+    "max_backstage_per_duplicate_group": 1,
+    "skip_score_below": 55,
     "backstage_for_good_secondary_frames": true,
     "skip_for_weak_or_redundant_frames": true
   },
@@ -31,8 +32,5 @@
   "geography": {
     "minimum_confidence_for_named_location": 0.6,
     "keep_low_confidence_frames_unassigned": true
-  },
-  "retry": {
-    "max_editorial_attempts": 3
   }
 }
