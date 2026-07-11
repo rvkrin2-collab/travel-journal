@@ -116,7 +116,7 @@ function escapeRegExp(value) {
 
 function cleanText(value, policy) {
   let text = String(value || "").trim();
-  const exactReplacements = new Map([
+  const exact = new Map([
     ["кочевой образ жизни", "юрты и открытое пространство"],
     ["традиционный образ жизни", "повседневная сцена"],
     ["идеально передаёт", "точно показывает"],
@@ -127,35 +127,46 @@ function cleanText(value, policy) {
   ]);
 
   for (const phrase of policy.language?.forbidden_phrases || []) {
-    const replacement = exactReplacements.get(String(phrase).toLowerCase()) || "";
-    text = text.replace(new RegExp(escapeRegExp(phrase), "gi"), replacement);
+    text = text.replace(new RegExp(escapeRegExp(phrase), "gi"), exact.get(String(phrase).toLowerCase()) || "");
   }
 
-  const patternReplacements = policy.language?.pattern_replacements || {};
+  const replacements = policy.language?.pattern_replacements || {};
   for (const pattern of policy.language?.forbidden_patterns || []) {
-    text = text.replace(new RegExp(pattern, "giu"), patternReplacements[pattern] || "");
+    text = text.replace(new RegExp(pattern, "giu"), replacements[pattern] || "");
   }
 
-  return text
-    .replace(/\s+([,.;:!?])/g, "$1")
-    .replace(/\s{2,}/g, " ")
-    .trim();
+  return text.replace(/\s+([,.;:!?])/g, "$1").replace(/\s{2,}/g, " ").trim();
 }
 
 function primarySubject(item) {
-  const text = `${item.dominant_subject || ""} ${item.visual_summary || ""}`.toLowerCase();
+  const dominant = String(item.dominant_subject || "").toLowerCase();
+  const summary = String(item.visual_summary || "").toLowerCase();
+  const combined = `${dominant} ${summary}`;
   const people = Number(item.people_count || 0);
   const animals = Number(item.animal_count || 0);
 
+  // Главный объект имеет приоритет над второстепенным присутствием людей.
+  if (/юрт/.test(dominant)) return "юрты";
+  if (/лошад|табун|конь/.test(dominant)) return people > 0 ? "человек-и-животное" : "лошади";
+  if (/дорог|трасс|путь/.test(dominant)) return "дорога";
+  if (/озер|вод|берег/.test(dominant)) return "озеро";
+  if (/гор|хребет|склон/.test(dominant)) return "горы";
+  if (/луг|поле|степ|равнин/.test(dominant)) return "луг";
+  if (/человек|люд|всадник/.test(dominant)) {
+    if (animals > 0) return "человек-и-животное";
+    if (/техник|машин|аппарат|оборудован|стирал/.test(combined)) return "люди-и-техника";
+    return "люди";
+  }
+
+  if (/юрт/.test(summary)) return "юрты";
   if (people > 0 && animals > 0) return "человек-и-животное";
-  if (people > 0 && /техник|машин|аппарат|оборудован|стирал/.test(text)) return "люди-и-техника";
+  if (people > 0 && /техник|машин|аппарат|оборудован|стирал/.test(combined)) return "люди-и-техника";
+  if (/лошад|табун|конь/.test(summary)) return "лошади";
+  if (/дорог|трасс|путь/.test(summary)) return "дорога";
+  if (/озер|вод|берег/.test(summary) || item.scene_type === "lake") return "озеро";
+  if (/гор|хребет|склон/.test(summary) || item.scene_type === "mountain") return "горы";
+  if (/луг|поле|степ|равнин/.test(summary) || item.scene_type === "meadow") return "луг";
   if (people > 0) return "люди";
-  if (/лошад|табун|конь/.test(text)) return "лошади";
-  if (/юрт/.test(text)) return "юрты";
-  if (/дорог|трасс|путь/.test(text)) return "дорога";
-  if (/озер|вод|берег/.test(text) || item.scene_type === "lake") return "озеро";
-  if (/гор|хребет|склон/.test(text) || item.scene_type === "mountain") return "горы";
-  if (/луг|поле|степ|равнин/.test(text) || item.scene_type === "meadow") return "луг";
   return String(item.scene_type || "другое").toLowerCase();
 }
 
@@ -173,8 +184,7 @@ function visualFunctionClass(entry) {
 }
 
 function canonicalDuplicateGroup(entry, item) {
-  const proposed = String(entry.duplicate_group || "").trim().toLowerCase();
-  if (!proposed) return "";
+  if (!String(entry.duplicate_group || "").trim()) return "";
   return `${primarySubject(item)} · ${visualFunctionClass(entry)}`;
 }
 
@@ -186,7 +196,6 @@ function groupKey(entry, id) {
 function normalizeRanking(raw, items, policy) {
   const byId = new Map(items.map(item => [item.public_id, item]));
   const ranking = {};
-
   for (const [id, entry] of Object.entries(raw.ranking || {})) {
     const item = byId.get(id);
     if (!item) continue;
@@ -197,7 +206,6 @@ function normalizeRanking(raw, items, policy) {
       duplicate_group: canonicalDuplicateGroup(entry, item)
     };
   }
-
   return {
     ...raw,
     ranking,
@@ -211,10 +219,7 @@ function buildRecommendation(raw, items, policy) {
   const ranking = raw.ranking || {};
   const selection = policy.selection || {};
   const ids = items.map(item => item.public_id);
-
-  for (const id of ids) {
-    if (!ranking[id]) throw new Error(`Series ranking missing public_id: ${id}`);
-  }
+  for (const id of ids) if (!ranking[id]) throw new Error(`Series ranking missing public_id: ${id}`);
 
   const byNumber = new Map(items.map(item => [item.public_id, Number(item.number || 0)]));
   const sorted = [...ids].sort((a, b) => Number(ranking[b].score) - Number(ranking[a].score) || byNumber.get(a) - byNumber.get(b));
@@ -224,47 +229,36 @@ function buildRecommendation(raw, items, policy) {
   const defaultCap = selection.max_story_per_duplicate_group ?? 1;
   const overrides = selection.max_story_per_duplicate_group_overrides || {};
   const story = [];
-  const groupCounts = new Map([[groupKey(ranking[hero], hero), 1]]);
+  const counts = new Map([[groupKey(ranking[hero], hero), 1]]);
 
-  function groupCap(id) {
+  function cap(id) {
     const key = groupKey(ranking[id], id);
     if (key.startsWith("__unique__:")) return 1;
     const subject = key.split("·")[0].trim();
     return overrides[subject] ?? overrides[key] ?? defaultCap;
   }
-
-  function canAdd(id) {
-    const key = groupKey(ranking[id], id);
-    return (groupCounts.get(key) || 0) < groupCap(id);
-  }
-
-  function addStory(id) {
-    story.push(id);
-    const key = groupKey(ranking[id], id);
-    groupCounts.set(key, (groupCounts.get(key) || 0) + 1);
-  }
+  function canAdd(id) { const key = groupKey(ranking[id], id); return (counts.get(key) || 0) < cap(id); }
+  function add(id) { story.push(id); const key = groupKey(ranking[id], id); counts.set(key, (counts.get(key) || 0) + 1); }
 
   for (const id of sorted.slice(1)) {
     if (story.length >= storyMin) break;
-    if (canAdd(id)) addStory(id);
+    if (canAdd(id)) add(id);
   }
-
   if (story.length < storyMin) {
     for (const id of sorted.slice(1)) {
       if (story.length >= storyMin) break;
-      if (!story.includes(id)) addStory(id);
+      if (!story.includes(id)) add(id);
     }
   }
 
   const extension = selection.story_extension || {};
   if (extension.enabled !== false && story.length < storyMax) {
-    const heroScore = Number(ranking[hero].score) || 0;
-    const threshold = Math.max(Number(extension.absolute_score_floor ?? 78), heroScore - Number(extension.max_score_drop_from_hero ?? 12));
+    const threshold = Math.max(Number(extension.absolute_score_floor ?? 78), Number(ranking[hero].score) - Number(extension.max_score_drop_from_hero ?? 12));
     for (const id of sorted.slice(1)) {
       if (story.length >= storyMax) break;
       if (story.includes(id) || Number(ranking[id].score) < threshold) continue;
       if (extension.require_group_capacity !== false && !canAdd(id)) continue;
-      addStory(id);
+      add(id);
     }
   }
 
@@ -282,23 +276,22 @@ function buildRecommendation(raw, items, policy) {
     if (Number(ranking[id].score) >= skipFloor && count < maxBackstage) {
       backstage.push(id);
       backstageCounts.set(key, count + 1);
-    } else {
-      skip.push(id);
-    }
+    } else skip.push(id);
   }
 
   const decisions = {};
   for (const id of ids) {
     const status = id === hero ? "hero" : story.includes(id) ? "story" : backstage.includes(id) ? "backstage" : "skip";
     let reason = ranking[id].reason;
-    if (status === "skip" && Number(ranking[id].score) >= skipFloor) {
-      reason = `Лишний повтор в группе «${ranking[id].duplicate_group || ranking[id].visual_function}»; более сильный кадр этой функции уже выбран.`;
-    } else if (status === "backstage") {
-      reason = `Хороший второстепенный кадр: ${reason.charAt(0).toLowerCase()}${reason.slice(1)}`;
-    }
-    decisions[id] = {...ranking[id], status, editorial_score: Number(ranking[id].score)};
-    delete decisions[id].score;
-    decisions[id].reason = cleanText(reason, policy);
+    if (status === "skip" && Number(ranking[id].score) >= skipFloor) reason = `Лишний повтор в группе «${ranking[id].duplicate_group || ranking[id].visual_function}»; более сильный кадр этой функции уже выбран.`;
+    else if (status === "backstage") reason = `Хороший второстепенный кадр: ${reason.charAt(0).toLowerCase()}${reason.slice(1)}`;
+    decisions[id] = {
+      reason: cleanText(reason, policy),
+      visual_function: cleanText(ranking[id].visual_function, policy),
+      duplicate_group: ranking[id].duplicate_group,
+      status,
+      editorial_score: Number(ranking[id].score)
+    };
   }
 
   return {
@@ -307,10 +300,10 @@ function buildRecommendation(raw, items, policy) {
     backstage: ids.filter(id => backstage.includes(id)),
     skip: ids.filter(id => skip.includes(id)),
     decisions,
-    sequence_note: raw.sequence_note,
-    editorial_summary: raw.editorial_summary,
-    fact_checks: raw.fact_checks,
-    ranking_method: "single_model_ranking_then_subject_function_duplicate_normalization"
+    sequence_note: cleanText(raw.sequence_note, policy),
+    editorial_summary: cleanText(raw.editorial_summary, policy),
+    fact_checks: (raw.fact_checks || []).map(value => cleanText(value, policy)).filter(Boolean),
+    ranking_method: "single_model_ranking_then_dominant_subject_function_normalization"
   };
 }
 
@@ -323,17 +316,14 @@ if (!items.length) throw new Error(`${analysisFile} has no analyzed photos`);
 
 const prompt = `Ты выпускающий фоторедактор авторского журнала. Не назначай статусы hero/story/backstage/skip. Только оцени и ранжируй каждый кадр.
 
-Для каждого public_id:
-- score от 0 до 100 по визуальной силе, композиции, самостоятельности и роли в серии;
-- visual_function — буквальная визуальная функция кадра;
-- duplicate_group — только реальная группа визуальных дублей;
-- reason — конкретная причина оценки относительно похожих кадров.
+Для каждого public_id укажи score 0-100, буквальную visual_function, реальную duplicate_group и конкретную reason.
 
 Правила:
 - сначала сравни все кадры между собой;
-- используй всю шкалу: 90-100 редкие сильные кадры, 80-89 основной рассказ, 70-79 хорошие второстепенные, ниже 70 слабые или лишние;
+- 90-100 — редкие сильные кадры, 80-89 — основной рассказ, 70-79 — хорошие второстепенные, ниже 70 — слабые или лишние;
 - одинаковая duplicate_group допустима только при совпадении главного объекта, композиции и визуальной функции;
 - общий фон сам по себе не создаёт дубль;
+- главный объект важнее присутствия второстепенного человека;
 - человек на животном, бытовая сцена у воды и пустой пейзаж с водой — разные сцены;
 - авторские заметки задают смысл, но не подменяют визуальную оценку;
 - не придумывай культуру, уклад, быт, символы и действия;
@@ -360,7 +350,7 @@ analysis.editorial_policy = {
   source: "config/editorial-policy.json",
   version: policy.version,
   validated: true,
-  assignment: "dynamic_7_to_10_with_subject_function_groups",
+  assignment: "dynamic_7_to_10_with_dominant_subject_groups",
   model,
   updated_at: new Date().toISOString()
 };
