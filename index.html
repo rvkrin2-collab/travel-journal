@@ -3,8 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#263c34">
+  <meta name="application-name" content="Журнал путешествий">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Журнал путешествий</title>
   <meta name="description" content="Авторский журнал путешествий: отдельные поездки, главы, маршруты и фотографии.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg">
   <link rel="stylesheet" href="style.css">
   <style>
     body{margin:0;background:#f4eee4;color:#251f19}.hero{min-height:72svh;display:flex;align-items:flex-end;position:relative;color:#fff8ec;background:url('https://res.cloudinary.com/tftagnuy/image/upload/f_auto,q_auto,w_2200/IMG20260710143639_vzq1ky.jpg') center/cover}.hero:after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.08) 68%)}.hero__inner{position:relative;z-index:1;padding:0 20px 42px;max-width:1180px;width:100%;margin:auto}.hero small,.section-label{display:block;font:500 11px/1.1 Inter,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#9c7d5c;margin-bottom:12px}.hero small{color:rgba(255,248,236,.72)}.hero h1{font:300 clamp(54px,14vw,124px)/.88 Georgia,serif;letter-spacing:-.055em;margin:0 0 16px}.hero p{font:300 clamp(17px,4vw,25px)/1.15 Georgia,serif;margin:0;max-width:760px;color:rgba(255,248,236,.9)}main{max-width:1180px;margin:auto;padding:54px 18px 70px}.intro{max-width:820px;margin-bottom:38px}.intro h2{font:300 clamp(34px,8vw,72px)/.96 Georgia,serif;letter-spacing:-.04em;margin:0 0 14px}.intro p{font:300 20px/1.35 Georgia,serif;margin:0;color:#3b3229}.trips{display:grid;gap:28px}.trip-card{display:grid;gap:16px;color:inherit;text-decoration:none}.trip-card img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover}.trip-card__text{display:grid;gap:8px}.trip-card h3{font:300 clamp(38px,8vw,76px)/.94 Georgia,serif;letter-spacing:-.04em;margin:0}.trip-card p{font:300 18px/1.3 Georgia,serif;margin:0;max-width:720px;color:#3b3229}.trip-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.trip-meta span{display:inline-flex;padding:7px 10px;border-radius:999px;border:1px solid rgba(37,31,25,.16);background:#fff8ec;color:#5f5247;font:500 12px/1 Inter,system-ui,sans-serif}.empty{padding:24px;border:1px solid rgba(37,31,25,.14);background:#fff8ec;border-radius:22px}@media(min-width:840px){.hero__inner{padding:0 34px 54px}.trip-card{grid-template-columns:1.2fr .8fr;align-items:end}.trip-card img{min-height:62vh}.trip-card__text{padding-bottom:18px}}
@@ -29,5 +34,6 @@
       })
       .catch(error=>{root.innerHTML=`<div class="empty">Не удалось загрузить список путешествий: ${esc(error.message)}</div>`});
   </script>
+  <script src="/pwa.js" defer></script>
 </body>
 </html>
