@@ -1,6 +1,6 @@
 (() => {
   const manifestHref = "/manifest.webmanifest";
-  const iconHref = "/icons/icon-192.png";
+  const iconHref = "/icons/icon-192.svg";
 
   function ensureHeadLinks() {
     if (!document.querySelector('link[rel="manifest"]')) {
@@ -17,16 +17,17 @@
       document.head.appendChild(theme);
     }
 
-    if (!document.querySelector('link[rel="apple-touch-icon"]')) {
-      const appleIcon = document.createElement("link");
-      appleIcon.rel = "apple-touch-icon";
-      appleIcon.href = "/icons/apple-touch-icon.png";
-      document.head.appendChild(appleIcon);
+    if (!document.querySelector('meta[name="mobile-web-app-capable"]')) {
+      const capable = document.createElement("meta");
+      capable.name = "mobile-web-app-capable";
+      capable.content = "yes";
+      document.head.appendChild(capable);
     }
 
     if (!document.querySelector('link[rel="icon"]')) {
       const icon = document.createElement("link");
       icon.rel = "icon";
+      icon.type = "image/svg+xml";
       icon.href = iconHref;
       document.head.appendChild(icon);
     }
