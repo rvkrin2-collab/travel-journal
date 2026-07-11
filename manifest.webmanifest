@@ -1,0 +1,50 @@
+{
+  "id": "/",
+  "name": "Журнал путешествий",
+  "short_name": "Путешествия",
+  "description": "Авторский журнал путешествий: фотографии, маршруты и главы из разных поездок.",
+  "lang": "ru",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4eee4",
+  "theme_color": "#263c34",
+  "categories": ["travel", "photography", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Кыргызстан 2026",
+      "short_name": "Кыргызстан",
+      "description": "Открыть журнал путешествия по Кыргызстану",
+      "url": "/trips/kyrgyzstan-2026/",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
