@@ -5,15 +5,15 @@
       "id": "kyrgyzstan-2026",
       "title": "Кыргызстан 2026",
       "subtitle": "Горы, вода и дорога по кругу",
-      "description": "Июльская поездка через Чуйскую долину, Иссык-Куль, Каракол, Алтын-Арашан, Сон-Куль и Кокомерен.",
+      "description": "Июльская поездка через Чуйскую долину, Иссык-Куль, Каракол, Алтын-Арашан, Сон-Куль и Сулуторские озёра.",
       "period": "Июль 2026",
       "cover_url": "https://res.cloudinary.com/tftagnuy/image/upload/f_auto,q_auto,w_2200/IMG20260710143639_vzq1ky.jpg",
       "public_path": "trips/kyrgyzstan-2026/",
-      "published_days": 7,
+      "published_days": 8,
       "total_days": 8,
       "cloudinary_tag": "kyrgyzstan-2026",
       "data_path": "data/kyrgyzstan-2026",
-      "status": "active"
+      "status": "completed"
     }
   ],
   "rules": {
