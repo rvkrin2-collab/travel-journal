@@ -1,7 +1,9 @@
-const VERSION = "travel-journal-v4";
+const VERSION = "travel-journal-v5";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
+const CLOUDINARY_MARKER = "/image/upload/";
+const CLOUDINARY_TRANSFORM_TOKEN = /^(?:a|ac|af|ar|b|bo|c|co|cs|d|dl|dn|dpr|du|e|eo|f|fl|fn|fps|g|h|if|ki|l|o|p|pg|q|r|so|sp|t|u|vc|vs|w|x|y|z)_/i;
 
 const APP_SHELL = [
   "/",
@@ -10,6 +12,7 @@ const APP_SHELL = [
   "/style.css",
   "/manifest.webmanifest",
   "/pwa.js",
+  "/gallery.js",
   "/service-worker.js",
   "/data/trips.json",
   "/trips/kyrgyzstan-2026/",
@@ -64,6 +67,14 @@ function isPublicNavigation(url) {
     /^\/day\d+\.html$/i.test(url.pathname) ||
     /^\/trips\/[a-z0-9-]+\/?$/i.test(url.pathname)
   );
+}
+
+function isUntransformedCloudinaryImage(url) {
+  if (url.hostname !== "res.cloudinary.com" || !url.pathname.includes(CLOUDINARY_MARKER)) return false;
+  const remainder = url.pathname.split(CLOUDINARY_MARKER)[1] || "";
+  const firstSegment = remainder.split("/").filter(Boolean)[0] || "";
+  if (!firstSegment || /^v\d+$/i.test(firstSegment)) return true;
+  return !firstSegment.split(",").every(token => CLOUDINARY_TRANSFORM_TOKEN.test(token));
 }
 
 async function networkFirst(request) {
@@ -128,7 +139,11 @@ self.addEventListener("fetch", event => {
   }
 
   if (request.destination === "image") {
-    event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.png")));
+    if (isUntransformedCloudinaryImage(url)) {
+      event.respondWith(fetch(request));
+    } else {
+      event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.png")));
+    }
     return;
   }
 
