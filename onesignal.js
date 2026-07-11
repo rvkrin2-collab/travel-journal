@@ -10,7 +10,50 @@
     await OneSignal.init({
       appId: APP_ID,
       serviceWorkerPath: "push/onesignal/OneSignalSDKWorker.js",
-      serviceWorkerParam: { scope: "/push/onesignal/" }
+      serviceWorkerParam: { scope: "/push/onesignal/" },
+      autoResubscribe: true,
+      notifyButton: {
+        enable: true,
+        size: "small",
+        position: "bottom-right",
+        showCredit: false,
+        text: {
+          "tip.state.unsubscribed": "Получать новые главы",
+          "tip.state.subscribed": "Уведомления включены",
+          "tip.state.blocked": "Уведомления заблокированы",
+          "message.prenotify": "Нажмите, чтобы получать новые главы",
+          "message.action.subscribed": "Уведомления включены",
+          "message.action.resubscribed": "Уведомления снова включены",
+          "message.action.unsubscribed": "Уведомления отключены",
+          "dialog.main.title": "Уведомления о новых главах",
+          "dialog.main.button.subscribe": "Получать",
+          "dialog.main.button.unsubscribe": "Отключить",
+          "dialog.blocked.title": "Уведомления заблокированы",
+          "dialog.blocked.message": "Разрешите уведомления для owntravel.ru в настройках браузера."
+        }
+      },
+      promptOptions: {
+        slidedown: {
+          prompts: [{
+            type: "push",
+            autoPrompt: true,
+            delay: {
+              pageViews: 1,
+              timeDelay: 3
+            },
+            text: {
+              actionMessage: "Получать уведомления о новых главах?",
+              acceptButton: "Получать",
+              cancelButton: "Не сейчас"
+            }
+          }]
+        }
+      },
+      welcomeNotification: {
+        title: "Журнал путешествий",
+        message: "Уведомления о новых главах включены.",
+        url: "https://owntravel.ru/"
+      }
     });
   });
 
