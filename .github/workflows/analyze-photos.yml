@@ -54,12 +54,10 @@ jobs:
           node-version: 20
 
       - name: Analyze photos with cached high-detail vision
-        run: node analyze-photos-v2.mjs
+        run: node analyze-photos-only-v3.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_VISION_MODEL: ${{ github.event.inputs.vision_model }}
-          OPENAI_SERIES_MODEL: ${{ github.event.inputs.text_model }}
-          OPENAI_TEXT_MODEL: ${{ github.event.inputs.text_model }}
           TRIP: ${{ github.event.inputs.trip }}
           DAY_TAG: ${{ github.event.inputs.day_tag }}
           IN_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-photos.json
