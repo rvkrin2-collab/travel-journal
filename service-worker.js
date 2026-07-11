@@ -1,4 +1,4 @@
-const VERSION = "travel-journal-v3";
+const VERSION = "travel-journal-v4";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -20,9 +20,10 @@ const APP_SHELL = [
   "/day05.html",
   "/day06.html",
   "/day07.html",
-  "/icons/icon-192.svg",
-  "/icons/icon-512.svg",
-  "/icons/icon-maskable-512.svg"
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/icons/icon-maskable-512.png",
+  "/icons/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {
@@ -127,7 +128,7 @@ self.addEventListener("fetch", event => {
   }
 
   if (request.destination === "image") {
-    event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.svg")));
+    event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.png")));
     return;
   }
 
