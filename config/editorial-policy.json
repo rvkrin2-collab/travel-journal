@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "selection": {
     "hero_count": 1,
     "story_min": 7,
@@ -19,7 +19,10 @@
     "max_backstage_per_duplicate_group": 1,
     "skip_score_below": 55,
     "backstage_for_good_secondary_frames": true,
-    "skip_for_weak_or_redundant_frames": true
+    "skip_for_weak_or_redundant_frames": true,
+    "duplicate_group_requires_same_primary_subject": true,
+    "duplicate_group_requires_same_visual_function": true,
+    "background_only_never_creates_duplicate": true
   },
   "language": {
     "required": "ru",
@@ -32,6 +35,22 @@
       "живописный",
       "уникальный"
     ],
+    "forbidden_patterns": [
+      "кочев\\w*\\s+(?:образ|уклад|быт)",
+      "традицион\\w*\\s+(?:образ|уклад|быт)",
+      "культурн\\w*\\s+контекст",
+      "гармони\\w*\\s+с\\s+природ",
+      "величественн\\w*",
+      "уникальн\\w*"
+    ],
+    "pattern_replacements": {
+      "кочев\\w*\\s+(?:образ|уклад|быт)": "юрты и открытое пространство",
+      "традицион\\w*\\s+(?:образ|уклад|быт)": "повседневная сцена",
+      "культурн\\w*\\s+контекст": "деталь места",
+      "гармони\\w*\\s+с\\s+природ": "связь с пейзажем",
+      "величественн\\w*": "масштабный",
+      "уникальн\\w*": "самостоятельный"
+    },
     "forbid_technical_comparison_without_score_difference": true
   },
   "geography": {
