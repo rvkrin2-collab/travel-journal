@@ -1,4 +1,4 @@
-name: Ensure PWA on public pages
+name: Ensure public page features
 
 on:
   workflow_dispatch:
@@ -8,6 +8,7 @@ on:
       - "day*.html"
       - "trips/*/index.html"
       - "pwa.js"
+      - "gallery.js"
       - "manifest.webmanifest"
       - ".github/workflows/ensure-pwa-pages.yml"
 
@@ -24,7 +25,7 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Add PWA metadata and loader
+      - name: Add public page metadata and loaders
         shell: python
         run: |
           from pathlib import Path
@@ -37,7 +38,8 @@ jobs:
           <link rel="icon" type="image/png" href="/icons/icon-192.png">
           <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
           '''
-          script_markup = '  <script src="/pwa.js" defer></script>\n'
+          pwa_script = '  <script src="/pwa.js" defer></script>\n'
+          gallery_script = '  <script src="/gallery.js" defer></script>\n'
 
           for path in pages:
               if not path.exists():
@@ -50,7 +52,11 @@ jobs:
                   changed = True
 
               if 'src="/pwa.js"' not in text and "</body>" in text:
-                  text = text.replace("</body>", script_markup + "</body>", 1)
+                  text = text.replace("</body>", pwa_script + "</body>", 1)
+                  changed = True
+
+              if 'src="/gallery.js"' not in text and "</body>" in text:
+                  text = text.replace("</body>", gallery_script + "</body>", 1)
                   changed = True
 
               if changed:
@@ -62,8 +68,8 @@ jobs:
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add index.html day*.html trips/*/index.html
           if git diff --cached --quiet; then
-            echo "Public pages are already PWA-ready"
+            echo "Public pages are already wired"
             exit 0
           fi
-          git commit -m "Wire PWA into public pages"
+          git commit -m "Wire public page features"
           git push origin HEAD:main
