@@ -98,7 +98,7 @@ jobs:
             --arg icon "$ICON" \
             '{
               app_id: $app_id,
-              included_segments: ["Subscribed Users"],
+              included_segments: ["Active Subscriptions"],
               headings: {ru: $title, en: $title},
               contents: {ru: $message, en: $message},
               url: $url,
