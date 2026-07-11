@@ -32,7 +32,7 @@
       "number": 3,
       "status": "story",
       "label": "Юрты на равнине под голубым небом.",
-      "note": "Юрты на фоне гор создают атмосферу повседневная сцена, добавляя деталь места."
+      "note": "Юрты на фоне гор добавляют в серию человеческое присутствие и деталь места."
     },
     {
       "public_id": "IMG20260710140254_l7tj7j",
@@ -134,7 +134,7 @@
   "author_notes_source": "data/kyrgyzstan-2026/day07-author-notes.json",
   "status": "ai_review",
   "analysis_schema_version": 3,
-  "updated_at": "2026-07-11T07:00:47.051Z",
+  "updated_at": "2026-07-11T07:05:00.000Z",
   "generation": {
     "model": "gpt-4o-mini",
     "chapter_requests": 1,
