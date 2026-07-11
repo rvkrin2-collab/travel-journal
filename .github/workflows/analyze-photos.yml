@@ -58,12 +58,21 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_VISION_MODEL: ${{ github.event.inputs.vision_model }}
-          OPENAI_SERIES_MODEL: ${{ github.event.inputs.series_model }}
+          OPENAI_SERIES_MODEL: ${{ github.event.inputs.text_model }}
           OPENAI_TEXT_MODEL: ${{ github.event.inputs.text_model }}
           TRIP: ${{ github.event.inputs.trip }}
           DAY_TAG: ${{ github.event.inputs.day_tag }}
           IN_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-photos.json
           OUT_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
+
+      - name: Build and validate series with project editorial policy
+        run: node build-series-v2.mjs
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_SERIES_MODEL: ${{ github.event.inputs.series_model }}
+          TRIP: ${{ github.event.inputs.trip }}
+          DAY_TAG: ${{ github.event.inputs.day_tag }}
+          ANALYSIS_FILE: data/${{ github.event.inputs.trip }}/${{ github.event.inputs.day_tag }}-analysis.json
 
       - name: Commit verified visual and series analysis
         run: |
