@@ -5,6 +5,7 @@ const template = document.querySelector("#chapter-template");
 const preview = document.querySelector("#preview");
 const saveState = document.querySelector("#save-state");
 const coverInput = document.querySelector("#cover");
+const serviceState = document.querySelector("#photo-service-state");
 let cover = { name: "", type: "", size: 0 };
 
 const transliterate = value => String(value || "").toLowerCase().split("").map(character => ({а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",ю:"yu",я:"ya",ь:"",ъ:""}[character] ?? character)).join("");
@@ -91,3 +92,15 @@ form.addEventListener("submit", event => {
   saveState.textContent = "Заявка скачана — отправьте файл редактору";
 });
 restore();
+
+import("./lib/photo-services-config.mjs").then(async ({ photoServicesReady, validatePhotoServicesConfig }) => {
+  const response = await fetch("./config/photo-services.json", { cache: "no-store" });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const config = validatePhotoServicesConfig(await response.json());
+  if (photoServicesReady(config)) {
+    serviceState.textContent = "Google Фото и хранилище подключены.";
+    serviceState.classList.add("ready");
+  } else {
+    serviceState.textContent = "Google OAuth подключён. Осталось настроить хранилище фотографий Cloudflare R2.";
+  }
+}).catch(error => { serviceState.textContent = `Настройка Google Фото не загружена: ${error.message}`; });

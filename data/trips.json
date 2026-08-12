@@ -14,6 +14,19 @@
       "cloudinary_tag": "kyrgyzstan-2026",
       "data_path": "data/kyrgyzstan-2026",
       "status": "completed"
+    },
+    {
+      "id": "kolskiy-mezhdu-beregom-i-morem",
+      "title": "Кольский. Между берегом и морем",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "description": "Три разных эпизода на берегу Баренцева моря. Дайвинг у полуострова Немецкий, один день в Териберке и несколько дней на базе у Титовки — с выходами в море, рыбалкой, погружениями и прогулками.",
+      "period": "Лето 2026",
+      "cover_url": "",
+      "public_path": "trips/kolskiy-mezhdu-beregom-i-morem/",
+      "published_days": 0,
+      "total_days": 0,
+      "data_path": "data/kolskiy-mezhdu-beregom-i-morem",
+      "status": "hidden"
     }
   ],
   "rules": {
