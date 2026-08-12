@@ -49,21 +49,31 @@ async function listMediaItems(sessionId, token) {
 export function createGooglePhotosPicker() {
   return {
     async pick({ trip, chapter }) {
-      const config = await fetch("./config/photo-services.json", { cache: "no-store" }).then(response => response.json());
-      const token = await accessToken(config.google_client_id, config.google_photos_scope);
-      const session = await request(`${PICKER_API}/sessions`, token, { method: "POST", body: "{}" });
-      const popup = window.open(session.pickerUri, "google-photos-picker", "popup,width=760,height=760");
+      // Reserve the window during the click itself. Browsers block window.open
+      // after the asynchronous OAuth/session requests have completed.
+      const popup = window.open("about:blank", "google-photos-picker", "popup,width=760,height=760");
       if (!popup) throw new Error("Разрешите всплывающие окна для выбора фотографий");
-      await waitForSelection(session.id, token);
-      popup.close();
-      const mediaItems = await listMediaItems(session.id, token);
-      const response = await fetch(`${config.upload_api_url.replace(/\/$/, "")}/import`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ trip, chapter, mediaItems: mediaItems.map(item => ({ id: item.id, baseUrl: item.mediaFile?.baseUrl, filename: item.mediaFile?.filename, mimeType: item.mediaFile?.mimeType })) })
-      });
-      if (!response.ok) throw new Error(`Импорт фотографий: HTTP ${response.status}`);
-      return (await response.json()).photos;
+      popup.document.title = "Google Фото";
+      popup.document.body.textContent = "Подключаем Google Фото…";
+      try {
+        const config = await fetch("./config/photo-services.json", { cache: "no-store" }).then(response => response.json());
+        const token = await accessToken(config.google_client_id, config.google_photos_scope);
+        const session = await request(`${PICKER_API}/sessions`, token, { method: "POST", body: "{}" });
+        popup.location.replace(session.pickerUri);
+        await waitForSelection(session.id, token);
+        popup.close();
+        const mediaItems = await listMediaItems(session.id, token);
+        const response = await fetch(`${config.upload_api_url.replace(/\/$/, "")}/import`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ trip, chapter, mediaItems: mediaItems.map(item => ({ id: item.id, baseUrl: item.mediaFile?.baseUrl, filename: item.mediaFile?.filename, mimeType: item.mediaFile?.mimeType })) })
+        });
+        if (!response.ok) throw new Error(`Импорт фотографий: HTTP ${response.status}`);
+        return (await response.json()).photos;
+      } catch (error) {
+        popup.close();
+        throw error;
+      }
     }
   };
 }
