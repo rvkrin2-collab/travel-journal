@@ -34,6 +34,13 @@
   ],
   "shortcuts": [
     {
+      "name": "Новое путешествие",
+      "short_name": "Создать",
+      "description": "Открыть авторскую мастерскую",
+      "url": "/author.html",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
       "name": "Кыргызстан 2026",
       "short_name": "Кыргызстан",
       "description": "Открыть журнал путешествия по Кыргызстану",
