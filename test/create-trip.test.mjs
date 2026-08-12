@@ -15,12 +15,13 @@ test("createTripFromRequest consumes a mobile author request", async () => {
   await fs.mkdir(path.join(directory, "data"));
   await fs.writeFile(path.join(directory, "data/trips.json"), JSON.stringify({ trips: [] }));
   const requestPath = path.join(directory, "request.json");
-  await fs.writeFile(requestPath, JSON.stringify({ type: "new_trip_request", trip: { id: "georgia-2027", title: "Грузия" }, chapters: [{ title: "Тбилиси", themes: ["Города"], places: ["Тбилиси"], photos: [{ name: "one.jpg" }] }] }));
+  await fs.writeFile(requestPath, JSON.stringify({ type: "new_trip_request", trip: { id: "georgia-2027", title: "Грузия" }, chapters: [{ title: "Тбилиси", themes: ["Города"], places: ["Тбилиси"], photo_source_url: "https://photos.app.goo.gl/example", photos: [{ name: "one.jpg" }] }] }));
   await createTripFromRequest(requestPath, directory);
   const data = JSON.parse(await fs.readFile(path.join(directory, "data/georgia-2027/trip.json")));
   assert.equal(data.views[0].items[0].title, "Тбилиси");
   assert.equal(data.views[1].items[0].title, "Города");
   assert.equal(data.photo_manifest[0].name, "one.jpg");
+  assert.equal(data.photo_sources[0].url, "https://photos.app.goo.gl/example");
 });
 
 test("createTrip registers and scaffolds a trip", async () => {

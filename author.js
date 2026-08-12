@@ -37,13 +37,14 @@ function collect() {
   const values = Object.fromEntries(new FormData(form).entries());
   const chapters = [...chaptersRoot.children].map((chapter, index) => {
     const get = name => chapter.querySelector(`[data-field="${name}"]`).value.trim();
-    return { id: slugify(get("title")) || `chapter-${index + 1}`, title: get("title"), description: get("description"), themes: splitTags(get("themes")), places: splitTags(get("places")), photos: JSON.parse(chapter.dataset.photos || "[]") };
-  }).filter(chapter => chapter.title || chapter.description || chapter.photos.length);
+    return { id: slugify(get("title")) || `chapter-${index + 1}`, title: get("title"), description: get("description"), themes: splitTags(get("themes")), places: splitTags(get("places")), photo_source_url: get("photo_source_url"), photos: JSON.parse(chapter.dataset.photos || "[]") };
+  }).filter(chapter => chapter.title || chapter.description || chapter.photo_source_url || chapter.photos.length);
   return { schema_version: 1, type: "new_trip_request", created_at: new Date().toISOString(), trip: { id: slugify(values.title), title: values.title?.trim() || "Без названия", subtitle: values.subtitle?.trim() || "", period: values.period?.trim() || "", description: values.description?.trim() || "", cover }, chapters };
 }
 
 function renderPreview(data = collect()) {
-  preview.innerHTML = `<small>${escapeHtml(data.trip.period || "Период пока не указан")}</small><h3>${escapeHtml(data.trip.title)}</h3><p>${escapeHtml(data.trip.subtitle || data.trip.description || "Добавьте короткое описание")}</p><strong>${data.chapters.length} ${data.chapters.length === 1 ? "глава" : "глав"} · ${data.chapters.reduce((sum, chapter) => sum + chapter.photos.length, 0)} фото выбрано</strong>`;
+  const albums = data.chapters.filter(chapter => chapter.photo_source_url).length;
+  preview.innerHTML = `<small>${escapeHtml(data.trip.period || "Период пока не указан")}</small><h3>${escapeHtml(data.trip.title)}</h3><p>${escapeHtml(data.trip.subtitle || data.trip.description || "Добавьте короткое описание")}</p><strong>${data.chapters.length} ${data.chapters.length === 1 ? "глава" : "глав"} · ${data.chapters.reduce((sum, chapter) => sum + chapter.photos.length, 0)} файлов · ${albums} альбомов Google Фото</strong>`;
 }
 
 function changed() {

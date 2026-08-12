@@ -64,7 +64,7 @@ export async function createTrip(options, baseDirectory = root) {
     title: label,
     description: `Материалы: ${chapters.filter(chapter => chapter[field]?.includes(label)).map(chapter => chapter.title).join(", ")}`
   }));
-  const tripData = { schema_version: 1, trip: id, photo_manifest: chapters.flatMap(chapter => chapter.photos || []), views: [
+  const tripData = { schema_version: 1, trip: id, photo_sources: chapters.filter(chapter => chapter.photo_source_url).map(chapter => ({ chapter_id: chapter.id || slugify(chapter.title), url: chapter.photo_source_url })), photo_manifest: chapters.flatMap(chapter => chapter.photos || []), views: [
     { id: "chapters", label: "Главы", items: chapters.map(chapter => ({ id: chapter.id || slugify(chapter.title), title: chapter.title, description: chapter.description || "", href: chapter.href || "" })) },
     { id: "themes", label: "По темам", items: grouped("themes", "theme") },
     { id: "places", label: "По местам", items: grouped("places", "place") }
