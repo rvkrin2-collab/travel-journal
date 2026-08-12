@@ -11,9 +11,10 @@ async function request(url, token, options = {}) {
   return response.json();
 }
 
-function accessToken(clientId, scope) {
+async function accessToken(clientId, scope) {
+  for (let attempt = 0; attempt < 50 && !globalThis.google?.accounts?.oauth2; attempt += 1) await sleep(100);
   return new Promise((resolve, reject) => {
-    if (!globalThis.google?.accounts?.oauth2) return reject(new Error("Google OAuth ещё не загружен"));
+    if (!globalThis.google?.accounts?.oauth2) return reject(new Error("Не удалось загрузить Google OAuth. Проверьте блокировщик рекламы и обновите страницу"));
     const client = google.accounts.oauth2.initTokenClient({
       client_id: clientId,
       scope,

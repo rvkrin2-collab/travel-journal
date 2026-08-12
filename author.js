@@ -1,4 +1,4 @@
-import { createGooglePhotosPicker } from "./google-photos-picker.js";
+import { createGooglePhotosPicker } from "./google-photos-picker.js?v=19.1";
 
 const STORAGE_KEY = "travel-journal-author-draft-v1";
 const form = document.querySelector("#trip-form");
