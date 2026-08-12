@@ -7,6 +7,7 @@ const saveState = document.querySelector("#save-state");
 const coverInput = document.querySelector("#cover");
 const serviceState = document.querySelector("#photo-service-state");
 let cover = { name: "", type: "", size: 0 };
+let googlePhotosPicker;
 
 const transliterate = value => String(value || "").toLowerCase().split("").map(character => ({а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",ю:"yu",я:"ya",ь:"",ъ:""}[character] ?? character)).join("");
 const slugify = value => transliterate(value).normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `trip-${new Date().getFullYear()}`;
@@ -25,6 +26,23 @@ function addChapter(data = {}) {
     chapter.dataset.photos = JSON.stringify(photos);
     renderPhotoNames(chapter, photos);
     changed();
+  };
+  chapter.querySelector("[data-google-photos]").onclick = async event => {
+    const state = chapter.querySelector("[data-picker-state]");
+    event.currentTarget.disabled = true;
+    state.textContent = "Открываем Google Фото…";
+    try {
+      googlePhotosPicker ||= (await import("./google-photos-picker.js")).createGooglePhotosPicker();
+      const photos = await googlePhotosPicker.pick({ trip: slugify(form.elements.title.value), chapter: slugify(chapter.querySelector('[data-field="title"]').value) });
+      chapter.dataset.photos = JSON.stringify([...(JSON.parse(chapter.dataset.photos || "[]")), ...photos]);
+      renderPhotoNames(chapter, JSON.parse(chapter.dataset.photos));
+      state.textContent = `Добавлено из Google Фото: ${photos.length}`;
+      changed();
+    } catch (error) {
+      state.textContent = `Не удалось выбрать фотографии: ${error.message}`;
+    } finally {
+      event.currentTarget.disabled = false;
+    }
   };
   renderPhotoNames(chapter, data.photos || []);
   chaptersRoot.append(chapter);
