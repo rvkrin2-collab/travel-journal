@@ -1,6 +1,6 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-const VERSION = "travel-journal-v16";
+const VERSION = "travel-journal-v19";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -14,6 +14,9 @@ const APP_SHELL = [
   "/author.html",
   "/author.css",
   "/author.js",
+  "/author.js?v=19.1",
+  "/google-photos-picker.js",
+  "/google-photos-picker.js?v=19.1",
   "/config/photo-services.json",
   "/lib/photo-services-config.mjs",
   "/style.css",
@@ -153,6 +156,13 @@ self.addEventListener("fetch", event => {
     } else {
       event.respondWith(cacheFirstImage(request).catch(() => caches.match("/icons/icon-192.png")));
     }
+    return;
+  }
+
+  // Authoring code must never wait for a second reload before controls work.
+  // Keep v19 for the published cache migration, but fetch its scripts first.
+  if (url.origin === self.location.origin && ["/author.js", "/google-photos-picker.js"].includes(url.pathname)) {
+    event.respondWith(networkFirst(request));
     return;
   }
 

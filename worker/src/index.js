@@ -47,6 +47,29 @@ async function upload(request, env, cors) {
   return json({ key, url: `${env.PUBLIC_BASE_URL.replace(/\/$/, "")}/${key}`, size: file.size, type: file.type }, 201, cors);
 }
 
+async function importPhotos(request, env, cors) {
+  const tokenInfo = await authorize(request, env);
+  const { trip, chapter, mediaItems } = await request.json();
+  if (!Array.isArray(mediaItems) || !mediaItems.length || mediaItems.length > 100) return json({ error: "mediaItems must contain 1–100 items" }, 400, cors);
+  const prefix = `${safeSegment(trip, "unassigned")}/${safeSegment(chapter, "chapter")}`;
+  const photos = [];
+  for (const item of mediaItems) {
+    let source;
+    try { source = new URL(item.baseUrl); } catch { return json({ error: "invalid media item URL" }, 400, cors); }
+    if (source.protocol !== "https:" || source.hostname !== "lh3.googleusercontent.com") return json({ error: "invalid media item host" }, 400, cors);
+    const response = await fetch(`${source.href}=d`, { headers: { Authorization: request.headers.get("Authorization") } });
+    if (!response.ok) return json({ error: `Google media download failed: ${response.status}` }, 502, cors);
+    const size = Number(response.headers.get("Content-Length") || 0);
+    const type = response.headers.get("Content-Type")?.split(";")[0] || item.mimeType;
+    if (!ALLOWED_TYPES.has(type) || size > MAX_FILE_SIZE) return json({ error: "unsupported or oversized Google photo" }, 415, cors);
+    const extension = ({ "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/heic": "heic", "image/heif": "heif" })[type];
+    const key = `${prefix}/${crypto.randomUUID()}.${extension}`;
+    await env.PHOTOS.put(key, response.body, { httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000, immutable" }, customMetadata: { originalName: String(item.filename || item.id || "photo").slice(0, 200), googleUser: tokenInfo.sub || "" } });
+    photos.push({ name: item.filename || "Google Photo", type, size, key, url: `${env.PUBLIC_BASE_URL.replace(/\/$/, "")}/${key}` });
+  }
+  return json({ photos }, 201, cors);
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -57,6 +80,7 @@ export default {
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin is not allowed" }, 403, cors);
     try {
       if (request.method === "POST" && url.pathname === "/upload") return await upload(request, env, cors);
+      if (request.method === "POST" && url.pathname === "/import") return await importPhotos(request, env, cors);
       return json({ error: "not found" }, 404, cors);
     } catch (error) {
       if (error instanceof Response) return new Response(error.body, { status: error.status, headers: cors });
