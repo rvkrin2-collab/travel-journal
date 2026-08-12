@@ -1,6 +1,6 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-const VERSION = "travel-journal-v16";
+const VERSION = "travel-journal-v19";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -14,6 +14,7 @@ const APP_SHELL = [
   "/author.html",
   "/author.css",
   "/author.js",
+  "/google-photos-picker.js",
   "/config/photo-services.json",
   "/lib/photo-services-config.mjs",
   "/style.css",
