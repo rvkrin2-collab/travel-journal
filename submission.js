@@ -14,13 +14,14 @@ async function refresh() {
   const chapters = tripData.views?.find(view => ["chapters", "days"].includes(view.id))?.items || [];
   const states = await Promise.all(chapters.map(async chapter => {
     const base = `data/${trip}/${chapter.id}`;
-    const [photos, analysis, ai] = await Promise.all([get(`${base}-photos.json`), get(`${base}-analysis.json`), get(`${base}-ai-review.json`)]);
+    const [photos, analysis, ai, author, storyboard, approval] = await Promise.all([get(`${base}-photos.json`), get(`${base}-analysis.json`), get(`${base}-ai-review.json`), get(`${base}-author-review.json`), get(`${base}-storyboard.json`), get(`${base}-approval.json`)]);
     const ready = Boolean(photos && analysis && ai && photos.photos_fingerprint === analysis.photos_fingerprint && photos.photos_fingerprint === ai.photos_fingerprint);
-    return { chapter, photos, analysis, ai, ready };
+    const previewReady = Boolean(ready && author && storyboard && photos.photos_fingerprint === author.photos_fingerprint && photos.photos_fingerprint === storyboard.photos_fingerprint);
+    return { chapter, photos, analysis, ai, author, storyboard, approval, ready, previewReady };
   }));
   const readyCount = states.filter(state => state.ready).length;
   summary.textContent = readyCount === states.length && states.length ? "Предварительный анализ готов. Откройте редакторы и утвердите фотографии." : `Готово редакторов: ${readyCount} из ${states.length}. Страница обновится автоматически.`;
-  root.innerHTML = `<div class="panel-title"><b>✓</b><div><h2>Главы</h2><p>AI-отбор является только предложением.</p></div></div>${states.map(({ chapter, photos, analysis, ai, ready }) => `<article class="chapter"><div class="chapter-head"><strong>${escapeHtml(chapter.title)}</strong><span>${ready ? "Готово" : "Обрабатывается"}</span></div><p>${photos ? `${photos.photo_count ?? photos.items?.length ?? 0} фотографий зарегистрировано` : "Создаём список фотографий"} · ${analysis ? "анализ готов" : "анализ ожидается"} · ${ai ? "отбор готов" : "отбор ожидается"}</p>${ready ? `<a class="primary status-link" href="editor.html?trip=${trip}&chapter=${chapter.id}">Открыть редактор</a>` : ""}</article>`).join("")}`;
+  root.innerHTML = `<div class="panel-title"><b>✓</b><div><h2>Главы</h2><p>AI-отбор является только предложением.</p></div></div>${states.map(({ chapter, photos, analysis, ai, author, approval, ready, previewReady }) => `<article class="chapter"><div class="chapter-head"><strong>${escapeHtml(chapter.title)}</strong><span>${approval ? "Оба этапа утверждены" : previewReady ? "Preview готов" : author ? "Собираем preview" : ready ? "Ждёт утверждения фото" : "Обрабатывается"}</span></div><p>${photos ? `${photos.photo_count ?? photos.items?.length ?? 0} фотографий зарегистрировано` : "Создаём список фотографий"} · ${analysis ? "анализ готов" : "анализ ожидается"} · ${ai ? "отбор готов" : "отбор ожидается"}</p>${approval ? `<p>Глава готова к отдельной команде публикации.</p>` : previewReady ? `<a class="primary status-link" href="preview.html?trip=${trip}&chapter=${chapter.id}">Открыть и утвердить preview</a>` : ready && !author ? `<a class="primary status-link" href="editor.html?trip=${trip}&chapter=${chapter.id}">Открыть редактор фотографий</a>` : ""}</article>`).join("")}`;
 }
 document.querySelector("#refresh").onclick = refresh;
 refresh(); setInterval(refresh, 15000);

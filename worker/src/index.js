@@ -117,6 +117,21 @@ async function submitTrip(request, env, cors) {
   return json({ accepted: true, trip, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
 }
 
+async function dispatchEditorial(request, env, cors, eventType) {
+  await authorize(request, env);
+  if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
+  const input = await request.json();
+  const trip = safeSegment(input.trip, ""); const chapter = safeSegment(input.chapter, "");
+  if (!trip || trip !== input.trip || !chapter || chapter !== input.chapter) return json({ error: "Invalid editorial target" }, 400, cors);
+  if (eventType === "photo_selection_approved") {
+    if (input.schema_version !== 2 || input.approval !== "photo_selection_approved" || !Array.isArray(input.items) || input.items.filter(item => item.status === "hero").length !== 1 || input.items.some(item => !["hero", "story", "backstage", "skip"].includes(item.status))) return json({ error: "Invalid author review" }, 400, cors);
+  }
+  if (eventType === "preview_approved" && (input.status !== "preview_approved" || !input.photos_fingerprint)) return json({ error: "Invalid preview approval" }, 400, cors);
+  const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "travel-journal-uploader", "X-GitHub-Api-Version": "2022-11-28" }, body: JSON.stringify({ event_type: eventType, client_payload: { artifact: input } }) });
+  if (!response.ok) return json({ error: "Editorial automation did not accept the approval" }, 502, cors);
+  return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, preview_url: `https://owntravel.ru/preview.html?trip=${trip}&chapter=${chapter}` }, 202, cors);
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
@@ -124,6 +139,14 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2" }, 200, cors);
+    if (request.method === "GET" && url.pathname.startsWith("/media/")) {
+      const key = decodeURIComponent(url.pathname.slice(7));
+      if (!key || key.includes("..")) return new Response("Invalid media key", { status: 400 });
+      const object = await env.PHOTOS.get(key);
+      if (!object) return new Response("Not found", { status: 404 });
+      const headers = new Headers(); object.writeHttpMetadata(headers); headers.set("ETag", object.httpEtag); headers.set("Cache-Control", "public, max-age=31536000, immutable"); headers.set("Access-Control-Allow-Origin", "*");
+      return new Response(object.body, { headers });
+    }
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin is not allowed" }, 403, cors);
     try {
       if (request.method === "GET" && url.pathname === "/whoami") {
@@ -135,6 +158,8 @@ export default {
       if (request.method === "POST" && url.pathname === "/upload") return await upload(request, env, cors);
       if (request.method === "POST" && url.pathname === "/import") return await importGooglePhoto(request, env, cors);
       if (request.method === "POST" && url.pathname === "/submit") return await submitTrip(request, env, cors);
+      if (request.method === "POST" && url.pathname === "/approve-photos") return await dispatchEditorial(request, env, cors, "photo_selection_approved");
+      if (request.method === "POST" && url.pathname === "/approve-preview") return await dispatchEditorial(request, env, cors, "preview_approved");
       return json({ error: "not found" }, 404, cors);
     } catch (error) {
       if (error instanceof Response) return new Response(error.body, { status: error.status, headers: cors });

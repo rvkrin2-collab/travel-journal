@@ -82,6 +82,24 @@ export class GooglePhotosPicker {
     return result;
   }
 
+  async approvePhotos(review) {
+    const token = await this.token();
+    const response = await fetch(`${this.config.upload_api_url}/approve-photos`, {
+      method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(review)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Утверждение фотографий: HTTP ${response.status}`);
+    return result;
+  }
+
+  async approvePreview(approval) {
+    const token = await this.token();
+    const response = await fetch(`${this.config.upload_api_url}/approve-preview`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(approval) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Утверждение preview: HTTP ${response.status}`);
+    return result;
+  }
+
   async pick({ tripId, chapterId, onProgress }) {
     const token = await this.token();
     const session = await googleRequest(`${API}/sessions`, token, { method: "POST", body: "{}" });

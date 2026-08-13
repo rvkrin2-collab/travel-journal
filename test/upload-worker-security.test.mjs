@@ -86,3 +86,22 @@ test("author workshop submission dispatches the editorial workflow", async () =>
   assert.equal(dispatch.event_type, "author_trip_submitted");
   assert.equal(dispatch.client_payload.request.trip.id, trip);
 });
+
+test("approved photo selection dispatches storyboard automation", async () => {
+  let dispatch;
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url).startsWith("https://oauth2.googleapis.com/")) return Response.json({ aud: "client-id", email: "author@example.com", email_verified: "true", scope });
+    dispatch = JSON.parse(options.body); return new Response(null, { status: 204 });
+  };
+  const artifact = { schema_version: 2, trip: "sample-trip", chapter: "coast", approval: "photo_selection_approved", photos_fingerprint: "abc", items: [{ photo_id: "one", status: "hero", label: "Coast" }] };
+  const response = await worker.fetch(new Request("https://upload.example.test/approve-photos", { method: "POST", headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token", "Content-Type": "application/json" }, body: JSON.stringify(artifact) }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  assert.equal(response.status, 202);
+  assert.equal(dispatch.event_type, "photo_selection_approved");
+});
+
+test("R2 media fallback serves an uploaded image to the editor", async () => {
+  const response = await worker.fetch(new Request("https://upload.example.test/media/trip/chapter/photo.jpg"), { PHOTOS: { get: async key => key === "trip/chapter/photo.jpg" ? { body: new Uint8Array([1, 2, 3]), httpEtag: '"etag"', writeHttpMetadata(headers) { headers.set("Content-Type", "image/jpeg"); } } : null } });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("Content-Type"), "image/jpeg");
+  assert.equal(response.headers.get("Access-Control-Allow-Origin"), "*");
+});
