@@ -1,20 +1,16 @@
 import fs from "fs/promises";
 import {loadEditorialPolicy, policyPrompt} from "./lib/editorial-policy.mjs";
+import { resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const model = process.env.OPENAI_SERIES_MODEL || process.env.OPENAI_VISION_MODEL || "gpt-4o";
-const trip = process.env.TRIP || "kyrgyzstan-2026";
-const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
-const analysisFile = process.env.ANALYSIS_FILE || `data/${trip}/${dayTag}-analysis.json`;
-const contextFile = process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-context.json`;
-const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
+const target = resolveEditorialTarget(); const trip = target.trip; const chapter = target.chapter;
+const analysisFile = process.env.ANALYSIS_FILE || target.analysis;
+const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${chapter}-context.json`;
+const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${chapter}-author-notes.json`;
 
 if (!apiKey) throw new Error("OPENAI_API_KEY secret is missing");
 
-function normalizeDay(value) {
-  const match = String(value || "").match(/\d+/);
-  return match ? `day${String(Number(match[0])).padStart(2, "0")}` : "day01";
-}
 
 async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
@@ -310,7 +306,7 @@ function buildRecommendation(raw, items, policy) {
 const analysis = await readJson(analysisFile);
 const context = await readJsonIfExists(contextFile);
 const authorNotes = await readJsonIfExists(authorNotesFile);
-const policy = await loadEditorialPolicy({trip, dayTag});
+const policy = await loadEditorialPolicy({trip, dayTag: chapter, chapter});
 const items = analysis.items || [];
 if (!items.length) throw new Error(`${analysisFile} has no analyzed photos`);
 
@@ -350,7 +346,7 @@ analysis.editorial_policy = {
   source: "config/editorial-policy.json",
   version: policy.version,
   validated: true,
-  assignment: "dynamic_7_to_10_with_dominant_subject_groups",
+  assignment: "chapter_visual_selection_with_dominant_subject_groups",
   model,
   updated_at: new Date().toISOString()
 };

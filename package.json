@@ -1,8 +1,13 @@
 {
+  "type": "module",
   "scripts": {
-    "sync:photos": "node sync-cloudinary.mjs",
-    "analyze:photos": "node analyze-photos.mjs",
-    "build:ai-review": "node build-review.mjs",
+    "test": "node --test",
+    "trip:new": "node create-trip.mjs",
+    "trip:process": "node process-trip-requests.mjs",
+    "trip:validate": "node validate-trip-request.mjs",
+    "validate:chapter": "node validate-editorial-chapter.mjs",
+    "analyze:photos": "node analyze-photos-only-v3.mjs",
+    "build:ai-review": "node build-review-v2.mjs",
     "build:final-review": "node build-final-review.mjs",
     "build:storyboard": "node build-storyboard.mjs",
     "validate:storyboard": "node validate-storyboard.mjs",
