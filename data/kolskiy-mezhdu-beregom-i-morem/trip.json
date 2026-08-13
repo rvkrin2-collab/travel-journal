@@ -5,20 +5,6 @@
     "chapter_id": "teriberka-na-krayu-zemli",
     "status": "pending_photo_selection"
   },
-  "photo_sources": [
-    {
-      "chapter_id": "pod-vodoy",
-      "url": "https://photos.app.goo.gl/pZM8efJAYLZhY3rx8"
-    },
-    {
-      "chapter_id": "teriberka-na-krayu-zemli",
-      "url": "https://photos.app.goo.gl/595U2j517oiNWLD56"
-    },
-    {
-      "chapter_id": "titovka-i-p-ov-nemetskiy-zhizn-u-morya",
-      "url": "https://photos.app.goo.gl/f4tTsfLPnWBEckiZ6"
-    }
-  ],
   "photo_manifest": [],
   "views": [
     {
@@ -29,22 +15,19 @@
           "id": "pod-vodoy",
           "title": "Под водой.",
           "description": "Дайвинг у полуострова Немецкий. Холодная вода, подводный рельеф и жизнь Баренцева моря.",
-          "href": "chapters/pod-vodoy.html",
-          "photo_source_url": "https://photos.app.goo.gl/pZM8efJAYLZhY3rx8"
+          "href": "chapters/pod-vodoy.html"
         },
         {
           "id": "teriberka-na-krayu-zemli",
           "title": "Териберка. На краю земли",
           "description": "Один день в Териберке. Остановка между двумя морскими частями путешествия — с селом, побережьем и прогулкой по северному ландшафту.",
-          "href": "chapters/teriberka-na-krayu-zemli.html",
-          "photo_source_url": "https://photos.app.goo.gl/595U2j517oiNWLD56"
+          "href": "chapters/teriberka-na-krayu-zemli.html"
         },
         {
           "id": "titovka-i-p-ov-nemetskiy-zhizn-u-morya",
           "title": "Титовка и п-ов Немецкий. Жизнь у моря",
           "description": "Базы у воды становятся точкой выхода к морю. Морская рыбалка, лодки, прогулки и несколько дней жизни в одном месте без необходимости постоянно двигаться дальше.",
-          "href": "chapters/titovka-i-p-ov-nemetskiy-zhizn-u-morya.html",
-          "photo_source_url": "https://photos.app.goo.gl/f4tTsfLPnWBEckiZ6"
+          "href": "chapters/titovka-i-p-ov-nemetskiy-zhizn-u-morya.html"
         }
       ]
     },
