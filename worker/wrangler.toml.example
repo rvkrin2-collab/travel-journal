@@ -1,0 +1,14 @@
+name = "travel-journal-upload"
+main = "src/index.js"
+compatibility_date = "2026-08-12"
+
+[vars]
+ALLOWED_ORIGIN = "https://owntravel.ru"
+PUBLIC_BASE_URL = "https://photos.owntravel.ru"
+GOOGLE_CLIENT_ID = "1068102637854-ag8pdb54sumdmeabkkduh2co5cnc1eqn.apps.googleusercontent.com"
+# Comma-separated Google account emails allowed to upload.
+ALLOWED_GOOGLE_EMAILS = "you@gmail.com"
+
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "travel-journal-photos"
