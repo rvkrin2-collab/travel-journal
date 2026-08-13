@@ -1,0 +1,402 @@
+{
+  "schema_version": 3,
+  "analysis_version": "combined-vision-v1",
+  "trip": "kolskiy",
+  "chapter": "teriberka",
+  "day": "teriberka",
+  "photos_source": "data/kolskiy/teriberka-photos.json",
+  "photos_fingerprint": "578ffeb036764c45769418ce263870638ad4f872dee3bfd6aec82d200447055c",
+  "context_source": null,
+  "generated_at": "2026-08-13T20:24:01.548Z",
+  "vision_model": "gpt-4o",
+  "cache": {
+    "reused": 0,
+    "analyzed": 5
+  },
+  "items": [
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg|https://photos.owntravel.ru/kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg|0|0",
+      "public_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "number": 1,
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Сельская местность с несколькими зданиями на фоне ясного неба.",
+      "foreground": "Песчаная почва с редкой растительностью.",
+      "midground": "Несколько зданий, включая белое здание и строения с признаками заброшенности.",
+      "background": "Голубое небо с небольшими облаками и холмы на горизонте.",
+      "visible_elements": {
+        "terrain": "Песчаная почва с редкой растительностью.",
+        "vegetation": "Редкая трава и кустарники.",
+        "water": "Отсутствует.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное голубое небо с небольшими облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Несколько зданий, включая белое здание и строения с признаками заброшенности.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Здания на фоне ясного неба.",
+      "secondary_subjects": [
+        "Песчаная почва",
+        "Редкая растительность"
+      ],
+      "scene_type": "settlement",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода.",
+      "composition": {
+        "framing": "Центральное расположение зданий.",
+        "depth": "Средняя глубина с акцентом на зданиях.",
+        "balance": "Сбалансированная композиция с равномерным распределением объектов.",
+        "visual_anchor": "Белое здание в центре.",
+        "horizon": "Чёткий горизонт.",
+        "distractions": "Отсутствуют."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 7.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное назначение зданий"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, однозначно связанных с конкретной точкой маршрута.",
+      "caption_seed": "Здания на фоне ясного неба в сельской местности.",
+      "editor_note": "Фотография передаёт атмосферу заброшенности и простора.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:37.686Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg|https://photos.owntravel.ru/kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg|0|0",
+      "public_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "number": 2,
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Изображение каньона с крутыми скалами и ясным небом.",
+      "foreground": "Крупные камни и скалы.",
+      "midground": "Крутые скалы с небольшими растениями.",
+      "background": "Голубое небо с облаками.",
+      "visible_elements": {
+        "terrain": "Скалистая местность.",
+        "vegetation": "Небольшие растения на скалах.",
+        "water": "Маленький ручей внизу каньона.",
+        "snow": "Отсутствует.",
+        "sky": "Ясное голубое небо с облаками.",
+        "people": "Несколько человек на вершине скалы.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Скалы каньона.",
+      "secondary_subjects": [
+        "Люди на вершине скалы",
+        "Облака на небе"
+      ],
+      "scene_type": "canyon",
+      "people_count": 2,
+      "animal_count": 0,
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода.",
+      "composition": {
+        "framing": "Горизонтальная ориентация с акцентом на скалы.",
+        "depth": "Глубокая перспектива с видимым дном каньона.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Скалы слева.",
+        "horizon": "Небо занимает верхнюю часть кадра.",
+        "distractions": "Отсутствуют."
+      },
+      "technical_quality": {
+        "sharpness": "Высокая резкость деталей.",
+        "exposure": "Хорошо экспонировано.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное местоположение каньона"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, однозначно указывающих на конкретное место.",
+      "caption_seed": "Крутые скалы каньона под ясным небом.",
+      "editor_note": "Фотография передает величие и масштаб скалистой местности.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:42.893Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg|https://photos.owntravel.ru/kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg|0|0",
+      "public_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "number": 3,
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография с видом на море с двумя лодками и скалистым берегом.",
+      "foreground": "Скалистый берег.",
+      "midground": "Красная лодка на воде.",
+      "background": "Голубое небо с облаками и вторая лодка вдали.",
+      "visible_elements": {
+        "terrain": "Скалистый берег.",
+        "vegetation": "Отсутствует.",
+        "water": "Море.",
+        "snow": "Отсутствует.",
+        "sky": "Голубое небо с облаками.",
+        "people": "Не видно.",
+        "animals": "Отсутствуют.",
+        "structures": "Лодки.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Красная лодка на воде.",
+      "secondary_subjects": [
+        "Скалистый берег",
+        "Вторая лодка вдали"
+      ],
+      "scene_type": "lake",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода с небольшими облаками.",
+      "composition": {
+        "framing": "Центрированная композиция с лодкой в центре.",
+        "depth": "Хорошая глубина за счёт расположения лодок на разных планах.",
+        "balance": "Сбалансированная композиция с лодкой и берегом.",
+        "visual_anchor": "Красная лодка.",
+        "horizon": "Горизонтальная линия на уровне верхней трети кадра.",
+        "distractions": "Отсутствуют."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Насыщенные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное местоположение не определено."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Лодка на фоне моря и скалистого берега.",
+      "editor_note": "Фокус на лодке создаёт динамику в спокойной морской сцене.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:47.513Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg|https://photos.owntravel.ru/kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg|0|0",
+      "public_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "number": 4,
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография с видом на море и скалистый берег.",
+      "foreground": "Скалы с растительностью.",
+      "midground": "Море с лодкой.",
+      "background": "Горизонт с облаками.",
+      "visible_elements": {
+        "terrain": "Скалы",
+        "vegetation": "Небольшие кусты и трава",
+        "water": "Море",
+        "snow": "Отсутствует",
+        "sky": "Ясное с облаками",
+        "people": "Отсутствуют",
+        "animals": "Отсутствуют",
+        "structures": "Лодка",
+        "road_vehicle": "Отсутствуют"
+      },
+      "dominant_subject": "Море",
+      "secondary_subjects": [
+        "Скалы",
+        "Лодка"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Яркий дневной свет",
+      "weather": "Ясная погода",
+      "composition": {
+        "framing": "Горизонтальная",
+        "depth": "Средняя",
+        "balance": "Сбалансированная",
+        "visual_anchor": "Лодка",
+        "horizon": "Прямой",
+        "distractions": "Отсутствуют"
+      },
+      "technical_quality": {
+        "sharpness": "Высокая",
+        "exposure": "Хорошая",
+        "color": "Насыщенные",
+        "motion_blur": "Отсутствует",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров.",
+      "caption_seed": "Скалы и море с лодкой на горизонте.",
+      "editor_note": "Фотография передает спокойствие и простор морского пейзажа.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:51.526Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg|https://photos.owntravel.ru/kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg|0|0",
+      "public_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "number": 5,
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография с видом на скалистый берег и море.",
+      "foreground": "Скалистая поверхность с зеленью.",
+      "midground": "Скалы, спускающиеся к морю.",
+      "background": "Море и небо.",
+      "visible_elements": {
+        "terrain": "Скалистая местность с зеленью.",
+        "vegetation": "Низкая трава и мох.",
+        "water": "Спокойное море.",
+        "snow": "Отсутствует.",
+        "sky": "Чистое с небольшими облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Скалистый берег.",
+      "secondary_subjects": [
+        "Море",
+        "Зелень"
+      ],
+      "scene_type": "mountain",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Яркий дневной свет.",
+      "weather": "Ясная погода.",
+      "composition": {
+        "framing": "Горизонтальная ориентация с акцентом на берег.",
+        "depth": "Хорошая глубина с передним и задним планами.",
+        "balance": "Сбалансированная композиция с равномерным распределением элементов.",
+        "visual_anchor": "Скалы на переднем плане.",
+        "horizon": "Чёткий горизонт.",
+        "distractions": "Отсутствуют."
+      },
+      "technical_quality": {
+        "sharpness": "Высокая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Насыщенные естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение не определено."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Скалистый берег у моря.",
+      "editor_note": "Фотография передаёт спокойствие и величие природы.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:56.385Z",
+      "model": "gpt-4o"
+    }
+  ],
+  "recommendation": {
+    "hero": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+    "story": [
+      "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg"
+    ],
+    "backstage": [],
+    "skip": [],
+    "decisions": {
+      "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg": {
+        "reason": "Фотография передаёт атмосферу заброшенности и простора, но не выделяется среди других кадров.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "settlement · пейзаж",
+        "status": "story",
+        "editorial_score": 70
+      },
+      "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg": {
+        "reason": "Сильная композиция с акцентом на величие скал и присутствие людей добавляет динамику.",
+        "visual_function": "пейзаж с людьми",
+        "duplicate_group": "люди · пейзаж-с-людьми",
+        "status": "story",
+        "editorial_score": 85
+      },
+      "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg": {
+        "reason": "Динамичная сцена с лодкой на воде, создающая интересный контраст с неподвижным берегом.",
+        "visual_function": "морской пейзаж",
+        "duplicate_group": "озеро · морской-пейзаж",
+        "status": "hero",
+        "editorial_score": 88
+      },
+      "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg": {
+        "reason": "Спокойная морская сцена с лодкой, создающая атмосферу простора и умиротворения.",
+        "visual_function": "морской пейзаж",
+        "duplicate_group": "озеро · морской-пейзаж",
+        "status": "story",
+        "editorial_score": 80
+      },
+      "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg": {
+        "reason": "Сбалансированная композиция с акцентом на скалистый берег и море, передающая спокойствие.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "озеро · пейзаж",
+        "status": "story",
+        "editorial_score": 82
+      }
+    },
+    "sequence_note": "Кадры с лодками и скалами выделяются как основные элементы серии, создавая разнообразие в визуальных функциях.",
+    "editorial_summary": "Серия фотографий передаёт разнообразие природных ландшафтов, от скалистых берегов до морских пейзажей, с акцентом на динамику и спокойствие.",
+    "fact_checks": [
+      "Все кадры имеют высокую техническую оценку.",
+      "Кадры с лодками и скалами имеют разные визуальные функции и не создают дубли."
+    ],
+    "ranking_method": "single_model_ranking_then_dominant_subject_function_normalization"
+  },
+  "editorial_policy": {
+    "source": "config/editorial-policy.json",
+    "version": 6,
+    "validated": true,
+    "assignment": "chapter_visual_selection_with_dominant_subject_groups",
+    "model": "gpt-4o",
+    "updated_at": "2026-08-13T20:24:01.548Z"
+  },
+  "series_model": "gpt-4o"
+}

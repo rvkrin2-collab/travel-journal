@@ -1,0 +1,49 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy",
+  "chapter": {
+    "title": "",
+    "subtitle": "",
+    "route_note": "",
+    "fact_checks": [
+      "Все кадры имеют хорошую резкость и правильную экспозицию.",
+      "Кадры не содержат значительных отвлекающих элементов."
+    ]
+  },
+  "day": "kray-zemli",
+  "photos_source": "data/kolskiy/kray-zemli-photos.json",
+  "analysis_source": "data/kolskiy/kray-zemli-analysis.json",
+  "photos_fingerprint": "5295b3ec0a94d9795be4b16dd0f8db7933deb16b7ab607c6a2675a409f9e52a4",
+  "status": "ai_review",
+  "approval": "not_author_approved",
+  "updated_at": "2026-08-13T20:22:55.171Z",
+  "items": [
+    {
+      "public_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "photo_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "number": 1,
+      "status": "story",
+      "label": "Суровый прибрежный пейзаж с каменистыми берегами и облачным небом.",
+      "note": "Кадр передаёт атмосферу суровой природы и спокойствия, с хорошей композицией и техническим качеством.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "photo_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "number": 2,
+      "status": "hero",
+      "label": "Пляж с лодками и флагами на фоне гор и моря.",
+      "note": "Интересная композиция с флагами и лодками, добавляющими динамику и акцент на пляже.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "photo_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "number": 3,
+      "status": "story",
+      "label": "Фотография с видом на береговую линию с домами и облачным небом.",
+      "note": "Спокойная сцена с домами на берегу, но не выделяется среди других кадров.",
+      "observation_only": true
+    }
+  ]
+}
