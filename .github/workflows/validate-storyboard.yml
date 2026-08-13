@@ -7,8 +7,8 @@ on:
         description: "Canonical trip id. Example: kyrgyzstan-2026"
         required: true
         default: "kyrgyzstan-2026"
-      day_tag:
-        description: "Day tag. Example: day05"
+      chapter:
+        description: "Chapter slug. Legacy dayNN values are supported"
         required: true
         default: "day05"
 
@@ -33,4 +33,4 @@ jobs:
         run: node validate-storyboard.mjs
         env:
           TRIP: ${{ github.event.inputs.trip }}
-          DAY_TAG: ${{ github.event.inputs.day_tag }}
+          CHAPTER: ${{ github.event.inputs.chapter }}

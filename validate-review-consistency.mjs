@@ -1,7 +1,7 @@
 import fs from "fs/promises";
+import { assertSamePhotoSet, inventoryItems, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
-const trip = process.env.TRIP || "kyrgyzstan-2026";
-const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
+const target = resolveEditorialTarget(); const trip = target.trip; const dayTag = target.chapter;
 const photosFile = process.env.PHOTOS_FILE || `data/${trip}/${dayTag}-photos.json`;
 const authorReviewFile = process.env.AUTHOR_REVIEW_FILE || `data/${trip}/${dayTag}-author-review.json`;
 const finalReviewFile = process.env.FINAL_REVIEW_FILE || `data/${trip}/${dayTag}-final-review.json`;
@@ -25,8 +25,9 @@ function sameText(a, b) {
   return String(a || "").trim() === String(b || "").trim();
 }
 
-const photos = await readJson(photosFile);
+const inventory = await readJson(photosFile); const photos = inventoryItems(inventory);
 const authorReview = await readJson(authorReviewFile);
+assertSamePhotoSet(inventory, authorReview, "author-review");
 const finalReview = await readJsonIfExists(finalReviewFile);
 const errors = [];
 
@@ -38,6 +39,7 @@ for (const item of authorReview.items || []) {
 }
 
 if (finalReview) {
+  assertSamePhotoSet(inventory, finalReview, "final-review");
   for (const item of finalReview.items || []) {
     if (!knownPhotoIds.has(item.public_id)) errors.push(`final-review uses unknown public_id: ${item.public_id}`);
     const authorItem = authorItems.get(item.public_id);

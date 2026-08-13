@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "editorial_status": "photo_inventory_ready",
+  "author_approved": false,
+  "cover_selection": {
+    "status": "not_selected",
+    "photo_url": ""
+  },
+  "photo_manifest": [],
+  "views": [
+    {
+      "id": "chapters",
+      "label": "Главы",
+      "items": [
+        {
+          "id": "kray-zemli",
+          "title": "Край земли",
+          "description": "Берег, тундра и пейзажи северо-запада Кольского. Полуостров Немецкий, жизнь на берегу и несколько дней у Титовки.",
+          "href": "days/kray-zemli.html"
+        },
+        {
+          "id": "pod-vodoy-barentseva-morya",
+          "title": "Под водой Баренцева моря",
+          "description": "Подводный рельеф, водоросли, морская жизнь.",
+          "href": "days/pod-vodoy-barentseva-morya.html"
+        },
+        {
+          "id": "teriberka",
+          "title": "Териберка",
+          "description": "Один день на другом берегу: полузабытое село и прогулка по местам вокруг Териберки.",
+          "href": "days/teriberka.html"
+        }
+      ]
+    }
+  ]
+}
