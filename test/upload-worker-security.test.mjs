@@ -37,6 +37,15 @@ test("upload authorization accepts an allowlisted Google account", async () => {
   assert.equal(identity.sub, "author-1");
 });
 
+test("whoami returns the verified Google user ID before allowlist setup", async () => {
+  globalThis.fetch = async () => Response.json({ aud: "client-id", sub: "author-1", scope });
+  const response = await worker.fetch(new Request("https://upload.example.test/whoami", {
+    headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token" }
+  }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_ORIGIN: "https://owntravel.ru" });
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { google_user_id: "author-1" });
+});
+
 test("Google import rejects non-Google source URLs before downloading", async () => {
   globalThis.fetch = async url => {
     if (String(url).startsWith("https://oauth2.googleapis.com/")) return Response.json({ aud: "client-id", sub: "author-1", scope });

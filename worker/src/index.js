@@ -21,7 +21,7 @@ function safeSegment(value, fallback) {
   return result || fallback;
 }
 
-export async function authorize(request, env) {
+export async function verifyGoogleToken(request, env) {
   const token = request.headers.get("Authorization")?.match(/^Bearer\s+(.+)$/i)?.[1];
   if (!token) throw new Response("Missing bearer token", { status: 401 });
   const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(token)}`);
@@ -30,6 +30,11 @@ export async function authorize(request, env) {
   if (info.aud !== env.GOOGLE_CLIENT_ID) throw new Response("Wrong token audience", { status: 403 });
   const scopes = new Set(String(info.scope || "").split(/\s+/));
   if (!scopes.has("https://www.googleapis.com/auth/photospicker.mediaitems.readonly")) throw new Response("Missing Picker scope", { status: 403 });
+  return info;
+}
+
+export async function authorize(request, env) {
+  const info = await verifyGoogleToken(request, env);
   const allowedUsers = new Set(String(env.ALLOWED_GOOGLE_USER_IDS || "").split(",").map(value => value.trim()).filter(Boolean));
   const userId = String(info.sub || info.user_id || "");
   if (!allowedUsers.size) throw new Response("Uploader allowlist is not configured", { status: 503 });
@@ -83,6 +88,10 @@ export default {
     if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2" }, 200, cors);
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin is not allowed" }, 403, cors);
     try {
+      if (request.method === "GET" && url.pathname === "/whoami") {
+        const info = await verifyGoogleToken(request, env);
+        return json({ google_user_id: String(info.sub || info.user_id || "") }, 200, cors);
+      }
       if (request.method === "POST" && url.pathname === "/upload") return await upload(request, env, cors);
       if (request.method === "POST" && url.pathname === "/import") return await importGooglePhoto(request, env, cors);
       return json({ error: "not found" }, 404, cors);
