@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: process-trip-requests
+  group: process-trip-requests-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -43,8 +43,10 @@ jobs:
       - name: Test
         run: npm test
       - name: Commit generated drafts
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         shell: bash
         run: |
+          set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add data/trips.json data/*/trip.json trips/*/index.html trips/*/chapters/*.html
@@ -53,4 +55,6 @@ jobs:
             exit 0
           fi
           git commit -m "Create trip drafts from author requests"
-          git push
+          branch="${GITHUB_REF_NAME}"
+          git pull --rebase origin "$branch"
+          git push origin "HEAD:$branch"
