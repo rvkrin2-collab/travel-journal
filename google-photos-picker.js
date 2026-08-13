@@ -24,6 +24,13 @@ export class GooglePhotosPicker {
     });
   }
 
+  async identify() {
+    const token = await this.token();
+    const response = await fetch(`${this.config.upload_api_url}/whoami`, { headers: { Authorization: `Bearer ${token}` } });
+    if (!response.ok) throw new Error(`Проверка аккаунта: HTTP ${response.status}`);
+    return response.json();
+  }
+
   async pick({ tripId, chapterId, onProgress }) {
     const token = await this.token();
     const session = await googleRequest(`${API}/sessions`, token, { method: "POST", body: "{}" });

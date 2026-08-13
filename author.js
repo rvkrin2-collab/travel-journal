@@ -6,6 +6,7 @@ const preview = document.querySelector("#preview");
 const saveState = document.querySelector("#save-state");
 const coverInput = document.querySelector("#cover");
 const serviceState = document.querySelector("#photo-service-state");
+const showGoogleUserId = document.querySelector("#show-google-user-id");
 let cover = { name: "", type: "", size: 0 };
 let photoPicker;
 
@@ -105,16 +106,25 @@ form.addEventListener("submit", event => {
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs"), import("./google-photos-picker.js")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=19.1"), import("./google-photos-picker.js?v=19.1")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());
   if (photoServicesReady(config)) {
     photoPicker = new GooglePhotosPicker(config);
     document.querySelectorAll("[data-google-photos]").forEach(button => { button.disabled = false; });
+    showGoogleUserId.hidden = false;
     serviceState.textContent = "Google Фото и хранилище подключены.";
     serviceState.classList.add("ready");
   } else {
     serviceState.textContent = "Google OAuth подключён. Осталось настроить хранилище фотографий Cloudflare R2.";
   }
 }).catch(error => { serviceState.textContent = `Настройка Google Фото не загружена: ${error.message}`; });
+
+showGoogleUserId.onclick = async () => {
+  try {
+    serviceState.textContent = "Проверяем Google-аккаунт…";
+    const identity = await photoPicker.identify();
+    serviceState.textContent = `Ваш Google user ID: ${identity.google_user_id}. Скопируйте его в ALLOWED_GOOGLE_USER_IDS в настройках Worker.`;
+  } catch (error) { serviceState.textContent = `Не удалось получить Google user ID: ${error.message}`; }
+};
