@@ -14,6 +14,19 @@
       "cloudinary_tag": "kyrgyzstan-2026",
       "data_path": "data/kyrgyzstan-2026",
       "status": "completed"
+    },
+    {
+      "id": "kolskiy-u-vody-i-pod-vodoy",
+      "title": "Кольский. У воды и под водой",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "description": "Три разных эпизода на берегу Баренцева моря. Дайвинг у полуострова Немецкий, один день в Териберке и несколько дней на базе у Титовки — с выходами в море, рыбалкой, погружениями и прогулками.",
+      "period": "Лето 2026",
+      "cover_url": "https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/teriberka/d5d80edb-823e-4396-bd79-cd49131db263.jpg",
+      "public_path": "trips/kolskiy-u-vody-i-pod-vodoy/",
+      "published_days": 0,
+      "total_days": 0,
+      "data_path": "data/kolskiy-u-vody-i-pod-vodoy",
+      "status": "hidden"
     }
   ],
   "rules": {
