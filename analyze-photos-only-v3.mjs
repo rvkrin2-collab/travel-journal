@@ -1,21 +1,18 @@
 import fs from "fs/promises";
+import { inventoryFingerprint, inventoryItems, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const visionModel = process.env.OPENAI_VISION_MODEL || "gpt-4o";
-const trip = process.env.TRIP || "kyrgyzstan-2026";
-const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
-const inFile = process.env.IN_FILE || `data/${trip}/${dayTag}-photos.json`;
-const outFile = process.env.OUT_FILE || `data/${trip}/${dayTag}-analysis.json`;
-const contextFile = process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-context.json`;
+const target = resolveEditorialTarget();
+const trip = target.trip;
+const chapter = target.chapter;
+const inFile = process.env.IN_FILE || target.photos;
+const outFile = process.env.OUT_FILE || target.analysis;
+const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${chapter}-context.json`;
 const schemaVersion = 3;
 const analysisVersion = "combined-vision-v1";
 
 if (!apiKey) throw new Error("OPENAI_API_KEY secret is missing");
-
-function normalizeDay(value) {
-  const match = String(value || "").match(/\d+/);
-  return match ? `day${String(Number(match[0])).padStart(2, "0")}` : "day01";
-}
 
 async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
@@ -169,8 +166,10 @@ async function analyzePhoto(photo, index, total, context) {
   };
 }
 
-const photos = await readJson(inFile);
+const inventory = await readJson(inFile);
+const photos = inventoryItems(inventory);
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${inFile} does not contain photos`);
+const photosFingerprint = inventoryFingerprint(inventory);
 const context = await readJsonIfExists(contextFile);
 const previous = await readJsonIfExists(outFile);
 const previousByKey = new Map((previous?.items || []).map(item => [item.cache_key, item]));
@@ -196,8 +195,10 @@ const result = {
   schema_version: schemaVersion,
   analysis_version: analysisVersion,
   trip,
-  day: dayTag,
+  chapter,
+  day: chapter,
   photos_source: inFile,
+  photos_fingerprint: photosFingerprint,
   context_source: context ? contextFile : null,
   generated_at: new Date().toISOString(),
   vision_model: visionModel,

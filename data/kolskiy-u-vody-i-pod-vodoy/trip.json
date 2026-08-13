@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "editorial_status": "awaiting_visual_review",
+  "author_approved": false,
+  "cover_selection": {
+    "status": "not_selected",
+    "photo_url": ""
+  },
+  "photo_manifest": [],
+  "views": [
+    {
+      "id": "days",
+      "label": "Дни",
+      "items": [
+        {
+          "id": "kray-zemli",
+          "title": "Край земли",
+          "description": "Маршрут и сцены будут восстановлены после визуального разбора корректных фотографий.",
+          "href": "days/kray-zemli.html"
+        },
+        {
+          "id": "pod-vodoy-barentseva-morya",
+          "title": "Под водой Баренцева моря",
+          "description": "Подводная история будет собрана только из проверенных кадров и заметок автора.",
+          "href": "days/pod-vodoy-barentseva-morya.html"
+        },
+        {
+          "id": "teriberka",
+          "title": "Териберка",
+          "description": "Последовательность дня и финальная сцена пока не установлены.",
+          "href": "days/teriberka.html"
+        }
+      ]
+    }
+  ]
+}
