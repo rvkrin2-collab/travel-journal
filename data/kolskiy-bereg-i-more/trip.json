@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-bereg-i-more",
+  "cover_selection": {
+    "chapter_id": "",
+    "status": "not_selected"
+  },
+  "photo_manifest": [],
+  "views": [
+    {
+      "id": "chapters",
+      "label": "Главы",
+      "items": [
+        {
+          "id": "kray-zemli",
+          "title": "Край земли",
+          "description": "Берег, тундра и пейзажи северо-запада Кольского полуострова.",
+          "href": "chapters/kray-zemli.html"
+        },
+        {
+          "id": "v-holodnyh-vodah",
+          "title": "В холодных водах",
+          "description": "Погружения в холодном море: подводный рельеф, водоросли, морская жизнь.",
+          "href": "chapters/v-holodnyh-vodah.html"
+        },
+        {
+          "id": "teriberka",
+          "title": "Териберка",
+          "description": "Один день в окрестностях полузаброшенного села, открытое побережье и прогулка по местам вокруг Териберки.",
+          "href": "chapters/teriberka.html"
+        }
+      ]
+    },
+    {
+      "id": "themes",
+      "label": "По темам",
+      "items": [
+        {
+          "id": "theme-peyzazhi",
+          "title": "пейзажи",
+          "description": "Материалы: Край земли, Териберка"
+        },
+        {
+          "id": "theme-tundra",
+          "title": "тундра",
+          "description": "Материалы: Край земли"
+        },
+        {
+          "id": "theme-barentsevo-more",
+          "title": "Баренцево море",
+          "description": "Материалы: Край земли, В холодных водах"
+        },
+        {
+          "id": "theme-sever",
+          "title": "Север",
+          "description": "Материалы: Край земли"
+        },
+        {
+          "id": "theme-poberezhe",
+          "title": "побережье",
+          "description": "Материалы: Край земли, Териберка"
+        },
+        {
+          "id": "theme-dayving",
+          "title": "дайвинг",
+          "description": "Материалы: В холодных водах"
+        },
+        {
+          "id": "theme-podvodnyy-mir",
+          "title": "подводный мир",
+          "description": "Материалы: В холодных водах"
+        },
+        {
+          "id": "theme-teriberka",
+          "title": "Териберка",
+          "description": "Материалы: Териберка"
+        },
+        {
+          "id": "theme-severnoe-selo",
+          "title": "северное село",
+          "description": "Материалы: Териберка"
+        }
+      ]
+    },
+    {
+      "id": "places",
+      "label": "По местам",
+      "items": [
+        {
+          "id": "place-poluostrov-nemetskiy",
+          "title": "полуостров Немецкий",
+          "description": "Материалы: Край земли, В холодных водах"
+        },
+        {
+          "id": "place-titovka",
+          "title": "Титовка",
+          "description": "Материалы: Край земли"
+        },
+        {
+          "id": "place-teriberka",
+          "title": "Териберка",
+          "description": "Материалы: Териберка"
+        }
+      ]
+    }
+  ]
+}
