@@ -1,7 +1,7 @@
 const API = "https://photospicker.googleapis.com/v1";
+const TOKEN_KEY = "travel-journal-google-oauth-token-v1";
+const EXPIRY_MARGIN_MS = 60 * 1000;
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
-const TOKEN_KEY = "travel-journal-google-photos-token-v1";
-const TOKEN_EXPIRY_MARGIN = 30000;
 
 async function googleRequest(url, token, options = {}) {
   const response = await fetch(url, { ...options, headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...options.headers } });
@@ -10,31 +10,55 @@ async function googleRequest(url, token, options = {}) {
 }
 
 export class GooglePhotosPicker {
-  constructor(config) { this.config = config; }
+  constructor(config) {
+    this.config = config;
+    this.accessToken = null;
+    this.tokenRequest = null;
+    this.authorizedThisSession = false;
+  }
+
+  cachedToken() {
+    if (this.accessToken?.expiresAt > Date.now() + EXPIRY_MARGIN_MS) return this.accessToken.value;
+    try {
+      const saved = JSON.parse(globalThis.sessionStorage?.getItem(TOKEN_KEY) || "null");
+      if (saved?.value && saved.expiresAt > Date.now() + EXPIRY_MARGIN_MS) {
+        this.accessToken = saved;
+        this.authorizedThisSession = true;
+        return saved.value;
+      }
+      if (saved?.value) this.authorizedThisSession = true;
+      globalThis.sessionStorage?.removeItem(TOKEN_KEY);
+    } catch {
+      // Continue with in-memory OAuth when sessionStorage is blocked or corrupt.
+    }
+    return "";
+  }
+
+  rememberToken(response) {
+    const expiresIn = Math.max(0, Number(response.expires_in) || 3600);
+    this.accessToken = { value: response.access_token, expiresAt: Date.now() + expiresIn * 1000 };
+    this.authorizedThisSession = true;
+    try { globalThis.sessionStorage?.setItem(TOKEN_KEY, JSON.stringify(this.accessToken)); }
+    catch { /* The in-memory token still avoids repeated prompts in this page. */ }
+    return this.accessToken.value;
+  }
 
   token() {
-    try {
-      const cached = JSON.parse(sessionStorage.getItem(TOKEN_KEY) || "null");
-      if (cached?.access_token && cached.expires_at > Date.now() + TOKEN_EXPIRY_MARGIN) return Promise.resolve(cached.access_token);
-      sessionStorage.removeItem(TOKEN_KEY);
-    } catch {}
-    return new Promise((resolve, reject) => {
+    const cached = this.cachedToken();
+    if (cached) return Promise.resolve(cached);
+    if (this.tokenRequest) return this.tokenRequest;
+    this.tokenRequest = new Promise((resolve, reject) => {
       const wait = deadline => {
         if (globalThis.google?.accounts?.oauth2) {
           google.accounts.oauth2.initTokenClient({ client_id: this.config.google_client_id, scope: this.config.google_photos_scope,
-            callback: response => {
-              if (response.error) return reject(new Error(response.error));
-              try {
-                sessionStorage.setItem(TOKEN_KEY, JSON.stringify({ access_token: response.access_token, expires_at: Date.now() + Number(response.expires_in || 3600) * 1000 }));
-              } catch {}
-              resolve(response.access_token);
-            },
-            error_callback: error => reject(new Error(error.type || "Google OAuth error")) }).requestAccessToken({ prompt: "consent" });
+            callback: response => response.error ? reject(new Error(response.error)) : resolve(this.rememberToken(response)),
+            error_callback: error => reject(new Error(error.type || "Google OAuth error")) }).requestAccessToken({ prompt: this.authorizedThisSession ? "" : "consent" });
         } else if (Date.now() < deadline) setTimeout(() => wait(deadline), 100);
         else reject(new Error("Google Sign-In не загрузился"));
       };
       wait(Date.now() + 10000);
-    });
+    }).finally(() => { this.tokenRequest = null; });
+    return this.tokenRequest;
   }
 
   async identify() {

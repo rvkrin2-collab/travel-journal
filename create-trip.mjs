@@ -36,6 +36,18 @@ export function validatePhotoSourceUrl(value) {
   return url.toString();
 }
 
+export function normalizeStoredPhoto(photo, chapterId) {
+  const markdownLink = String(photo?.url || "").trim().match(/^\[([^\]]+)]\(([^)]+)\)$/);
+  const value = markdownLink ? markdownLink[2] : String(photo?.url || "").trim();
+  const metadata = { chapter_id: chapterId, key: String(photo?.key || ""), url: "", name: String(photo?.name || "photo"), type: String(photo?.type || "image/jpeg"), size: Number(photo?.size) || 0 };
+  if (!value) return metadata;
+  let url;
+  try { url = new URL(value); }
+  catch { throw new Error(`Некорректный адрес загруженной фотографии: ${value}`); }
+  if (url.protocol !== "https:" || url.hostname !== "photos.owntravel.ru") throw new Error(`Фотография должна находиться в хранилище сайта: ${value}`);
+  return { ...metadata, url: url.toString() };
+}
+
 export function tripPage({ id, title, subtitle, period, description, coverUrl }) {
   return `<!doctype html>
 <html lang="ru">
@@ -83,7 +95,10 @@ export async function createTrip(options, baseDirectory = root) {
   // Source album links are credentials-by-possession. Validate them when supplied,
   // but never copy them into files published by GitHub Pages.
   chapters.forEach(chapter => validatePhotoSourceUrl(chapter.photo_source_url));
-  const tripData = { schema_version: 1, trip: id, cover_selection: { chapter_id: coverChapterId, status: coverChapterId ? "pending_photo_selection" : "not_selected" }, photo_manifest: chapters.flatMap(chapter => chapter.photos || []), views: [
+  const chapterPhotos = new Map(chapters.map(chapter => { const chapterId = chapter.id || slugify(chapter.title); return [chapterId, (chapter.photos || []).map(photo => normalizeStoredPhoto(photo, chapterId))]; }));
+  const coverUrl = coverChapterId ? chapterPhotos.get(coverChapterId)?.[0]?.url || "" : options.cover || "";
+  trip.cover_url = coverUrl;
+  const tripData = { schema_version: 1, trip: id, cover_selection: { chapter_id: coverChapterId, photo_url: coverUrl, status: coverUrl ? "selected" : coverChapterId ? "pending_photo_selection" : "not_selected" }, photo_manifest: [...chapterPhotos.values()].flat(), views: [
     { id: "chapters", label: "Главы", items: chapters.map(chapter => { const chapterId = chapter.id || slugify(chapter.title); return { id: chapterId, title: chapter.title, description: chapter.description || "", href: chapter.href || `chapters/${chapterId}.html` }; }) },
     { id: "themes", label: "По темам", items: grouped("themes", "theme") },
     { id: "places", label: "По местам", items: grouped("places", "place") }
@@ -96,13 +111,15 @@ export async function createTrip(options, baseDirectory = root) {
   await fs.writeFile(path.join(baseDirectory, `trips/${id}/index.html`), tripPage({ ...trip, coverUrl: trip.cover_url }));
   for (const chapter of chapters) {
     const chapterId = chapter.id || slugify(chapter.title);
-    await fs.writeFile(path.join(baseDirectory, `trips/${id}/chapters/${chapterId}.html`), chapterPage({ trip, chapter, chapterId }));
+    await fs.writeFile(path.join(baseDirectory, `trips/${id}/chapters/${chapterId}.html`), chapterPage({ trip, chapter, chapterId, photos: chapterPhotos.get(chapterId) || [] }));
   }
   return trip;
 }
 
-export function chapterPage({ trip, chapter, chapterId }) {
-  return `<!doctype html>\n<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(chapter.title)} · ${escapeHtml(trip.title)}</title><link rel="stylesheet" href="../../../style.css"><style>body{margin:0;background:#f4eee4;color:#251f19}main{max-width:820px;margin:auto;padding:28px 18px 70px}a{color:inherit}.back{display:inline-block;margin-bottom:42px}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#8c684b}h1{font:300 clamp(48px,11vw,88px)/.92 Georgia,serif;letter-spacing:-.05em;margin:10px 0 22px}p{font:20px/1.45 Georgia,serif}.note{margin-top:44px;padding:18px;border:1px dashed #a89987;border-radius:18px;font:14px/1.45 Inter,system-ui,sans-serif;color:#665b50}</style></head><body><main><a class="back" href="../index.html">← ${escapeHtml(trip.title)}</a><div class="eyebrow">Черновик главы · ${escapeHtml(chapterId)}</div><h1>${escapeHtml(chapter.title)}</h1><p>${escapeHtml(chapter.description || "")}</p><div class="note">Фотографии и финальный текст появятся после редакторского отбора. Страница пока скрыта с главной.</div></main></body></html>`;
+export function chapterPage({ trip, chapter, chapterId, photos = [] }) {
+  const publishedPhotos = photos.filter(photo => photo.url);
+  const gallery = publishedPhotos.length ? `<div class="gallery">${publishedPhotos.map(photo => `<figure><img src="${escapeHtml(photo.url)}" alt="" loading="lazy" decoding="async"><figcaption>${escapeHtml(photo.name)}</figcaption></figure>`).join("")}</div>` : `<div class="note">Фотографии пока не добавлены.</div>`;
+  return `<!doctype html>\n<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(chapter.title)} · ${escapeHtml(trip.title)}</title><link rel="stylesheet" href="../../../style.css"><style>body{margin:0;background:#f4eee4;color:#251f19}main{max-width:1100px;margin:auto;padding:28px 18px 70px}a{color:inherit}.back{display:inline-block;margin-bottom:42px}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#8c684b}h1{font:300 clamp(48px,11vw,88px)/.92 Georgia,serif;letter-spacing:-.05em;margin:10px 0 22px}p{font:20px/1.45 Georgia,serif;max-width:820px}.gallery{columns:1;column-gap:14px;margin-top:38px}.gallery figure{break-inside:avoid;margin:0 0 14px}.gallery img{display:block;width:100%;height:auto;border-radius:16px}.gallery figcaption{padding:6px 4px;color:#665b50;font:11px/1.3 Inter,system-ui,sans-serif}.note{margin-top:44px;padding:18px;border:1px dashed #a89987;border-radius:18px;color:#665b50}@media(min-width:650px){.gallery{columns:2}}@media(min-width:980px){.gallery{columns:3}}</style></head><body><main><a class="back" href="../index.html">← ${escapeHtml(trip.title)}</a><div class="eyebrow">Черновик главы · ${escapeHtml(chapterId)}</div><h1>${escapeHtml(chapter.title)}</h1><p>${escapeHtml(chapter.description || "")}</p>${gallery}</main></body></html>`;
 }
 
 function slugify(value) {
