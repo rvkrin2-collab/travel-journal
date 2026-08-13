@@ -106,7 +106,7 @@ form.addEventListener("submit", event => {
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs?v=19.2"), import("./google-photos-picker.js?v=19.2")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=19.3"), import("./google-photos-picker.js?v=19.3")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());
@@ -126,6 +126,7 @@ showGoogleUserId.onclick = async () => {
     if (!photoPicker) throw new Error("Подключение Google Фото ещё не готово");
     serviceState.textContent = "Проверяем Google-аккаунт…";
     const identity = await photoPicker.identify();
-    serviceState.textContent = `Ваш Google user ID: ${identity.google_user_id}. Скопируйте его в ALLOWED_GOOGLE_USER_IDS в настройках Worker.`;
-  } catch (error) { serviceState.textContent = `Не удалось получить Google user ID: ${error.message}`; }
+    if (!identity.google_email) throw new Error("Google не вернул email. Войдите заново и разрешите просмотр email.");
+    serviceState.textContent = `Ваш Google-аккаунт: ${identity.google_email}. Добавьте этот адрес в ALLOWED_GOOGLE_EMAILS в настройках Worker.`;
+  } catch (error) { serviceState.textContent = `Не удалось проверить Google-аккаунт: ${error.message}`; }
 };

@@ -4,7 +4,7 @@ import { photoServicesReady, validatePhotoServicesConfig } from "../lib/photo-se
 
 const config = {
   google_client_id: "1068102637854-ag8pdb54sumdmeabkkduh2co5cnc1eqn.apps.googleusercontent.com",
-  google_photos_scope: "https://www.googleapis.com/auth/photospicker.mediaitems.readonly",
+  google_photos_scope: "https://www.googleapis.com/auth/photospicker.mediaitems.readonly https://www.googleapis.com/auth/userinfo.email",
   upload_api_url: "",
   public_photo_base_url: ""
 };

@@ -35,10 +35,10 @@ export async function verifyGoogleToken(request, env) {
 
 export async function authorize(request, env) {
   const info = await verifyGoogleToken(request, env);
-  const allowedUsers = new Set(String(env.ALLOWED_GOOGLE_USER_IDS || "").split(",").map(value => value.trim()).filter(Boolean));
-  const userId = String(info.sub || info.user_id || "");
-  if (!allowedUsers.size) throw new Response("Uploader allowlist is not configured", { status: 503 });
-  if (!userId || !allowedUsers.has(userId)) throw new Response("Google account is not allowed", { status: 403 });
+  const allowedEmails = new Set(String(env.ALLOWED_GOOGLE_EMAILS || "").split(",").map(value => value.trim().toLowerCase()).filter(Boolean));
+  const email = String(info.email || "").toLowerCase();
+  if (!allowedEmails.size) throw new Response("Uploader email allowlist is not configured", { status: 503 });
+  if (!email || info.email_verified === "false" || !allowedEmails.has(email)) throw new Response("Google account is not allowed", { status: 403 });
   return info;
 }
 
@@ -90,7 +90,9 @@ export default {
     try {
       if (request.method === "GET" && url.pathname === "/whoami") {
         const info = await verifyGoogleToken(request, env);
-        return json({ google_user_id: String(info.sub || info.user_id || "") }, 200, cors);
+        const email = String(info.email || "");
+        if (!email || info.email_verified === "false") return json({ error: "Google did not return a verified email; request userinfo.email scope again" }, 422, cors);
+        return json({ google_email: email }, 200, cors);
       }
       if (request.method === "POST" && url.pathname === "/upload") return await upload(request, env, cors);
       if (request.method === "POST" && url.pathname === "/import") return await importGooglePhoto(request, env, cors);
