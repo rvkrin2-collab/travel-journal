@@ -159,6 +159,13 @@ self.addEventListener("fetch", event => {
     return;
   }
 
+  // Authoring code must never wait for a second reload before controls work.
+  // Keep v19 for the published cache migration, but fetch its scripts first.
+  if (url.origin === self.location.origin && ["/author.js", "/google-photos-picker.js"].includes(url.pathname)) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
   if (url.origin === self.location.origin && ["style", "script", "manifest", "font"].includes(request.destination)) {
     event.respondWith(staleWhileRevalidate(request));
   }
