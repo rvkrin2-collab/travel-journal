@@ -1,9 +1,9 @@
 import fs from "fs/promises";
+import { assertSamePhotoSet, inventoryFingerprint, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const model = process.env.OPENAI_TEXT_MODEL || "gpt-4o-mini";
-const trip = process.env.TRIP || "kyrgyzstan-2026";
-const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
+const target = resolveEditorialTarget(); const trip = target.trip; const dayTag = target.chapter;
 const finalReviewFile = process.env.FINAL_REVIEW_FILE || `data/${trip}/${dayTag}-final-review.json`;
 const authorReviewFile = process.env.AUTHOR_REVIEW_FILE || `data/${trip}/${dayTag}-author-review.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
@@ -116,6 +116,10 @@ ${JSON.stringify(payload, null, 2)}`;
 
 const finalReview = await readJsonIfExists(finalReviewFile);
 const authorReview = await readJsonIfExists(authorReviewFile);
+if (!authorReview) throw new Error(`${authorReviewFile} is required before storyboard`);
+if (authorReview.approval !== "photo_selection_approved" && authorReview.schema_version >= 2) throw new Error("Author photo selection is not approved");
+const inventory = await readJson(process.env.PHOTOS_FILE || target.photos);
+const photosFingerprint = assertSamePhotoSet(inventory, authorReview, "author-review");
 const review = finalReview || authorReview;
 const reviewSourceFile = finalReview ? finalReviewFile : authorReviewFile;
 if (!review) throw new Error(`${finalReviewFile} or ${authorReviewFile} is required to build storyboard`);
@@ -124,6 +128,9 @@ try { authorNotes = await readJson(authorNotesFile); } catch (error) {}
 const storyboard = await buildStoryboard({review, final_review: finalReview, author_review: authorReview, author_notes: authorNotes}, reviewSourceFile);
 storyboard.trip = trip;
 storyboard.day = dayTag;
+storyboard.chapter = storyboard.chapter || {};
+storyboard.chapter_id = dayTag;
+storyboard.photos_fingerprint = photosFingerprint;
 storyboard.status = "storyboard";
 storyboard.final_review_source = reviewSourceFile;
 storyboard.updated_at = new Date().toISOString();

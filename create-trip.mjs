@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createPhotoInventory, normalizePhoto } from "./lib/editorial-artifacts.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
@@ -45,7 +46,7 @@ export function normalizeStoredPhoto(photo, chapterId) {
   try { url = new URL(value); }
   catch { throw new Error(`Некорректный адрес загруженной фотографии: ${value}`); }
   if (url.protocol !== "https:" || url.hostname !== "photos.owntravel.ru") throw new Error(`Фотография должна находиться в хранилище сайта: ${value}`);
-  return { ...metadata, url: url.toString() };
+  return normalizePhoto({ ...metadata, photo_id: metadata.key || photo.google_media_item_id || url.pathname.replace(/^\//, ""), url: url.toString(), source: "google_photos_r2" }, "google_photos_r2");
 }
 
 export function tripPage({ id, title, subtitle, period, description, coverUrl }) {
@@ -95,6 +96,7 @@ export async function createTrip(options, baseDirectory = root) {
   // Source album links are credentials-by-possession. Validate them when supplied,
   // but never copy them into files published by GitHub Pages.
   chapters.forEach(chapter => validatePhotoSourceUrl(chapter.photo_source_url));
+  for (const chapter of chapters) if ((chapter.photos || []).some(photo => !photo.url)) throw new Error(`Глава «${chapter.title}»: фотографии должны быть загружены через Google Photos Picker в R2`);
   const chapterPhotos = new Map(chapters.map(chapter => { const chapterId = chapter.id || slugify(chapter.title); return [chapterId, (chapter.photos || []).map(photo => normalizeStoredPhoto(photo, chapterId))]; }));
   const coverUrl = options.approved_cover_url || "";
   trip.cover_url = coverUrl;
@@ -108,6 +110,10 @@ export async function createTrip(options, baseDirectory = root) {
   await fs.mkdir(path.join(baseDirectory, `trips/${id}/chapters`), { recursive: true });
   await fs.writeFile(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
   await fs.writeFile(path.join(baseDirectory, `data/${id}/trip.json`), `${JSON.stringify(tripData, null, 2)}\n`);
+  for (const [chapterId, photos] of chapterPhotos) {
+    const inventory = createPhotoInventory({ trip: id, chapter: chapterId, photos, source: "google_photos_r2" });
+    await fs.writeFile(path.join(baseDirectory, `data/${id}/${chapterId}-photos.json`), `${JSON.stringify(inventory, null, 2)}\n`);
+  }
   await fs.writeFile(path.join(baseDirectory, `trips/${id}/index.html`), tripPage({ ...trip, coverUrl: trip.cover_url }));
   for (const chapter of chapters) {
     const chapterId = chapter.id || slugify(chapter.title);

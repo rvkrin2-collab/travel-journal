@@ -12,6 +12,7 @@ if (!Array.isArray(request.chapters) || !request.chapters.length) throw new Erro
 for (const [index, chapter] of request.chapters.entries()) {
   if (!chapter.title?.trim()) throw new Error(`Глава ${index + 1}: не указано название`);
   if (chapter.photo_source_url) validatePhotoSourceUrl(chapter.photo_source_url);
+  if ((chapter.photos || []).some(photo => !photo.url || !photo.key)) throw new Error(`Глава ${index + 1}: фотография не загружена в постоянное R2-хранилище`);
 }
 
 console.log(`Заявка корректна: ${request.trip.title}, глав: ${request.chapters.length}`);

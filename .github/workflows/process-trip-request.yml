@@ -49,7 +49,7 @@ jobs:
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add data/trips.json data/*/trip.json trips/*/index.html trips/*/chapters/*.html
+          git add data/trips.json data/*/trip.json data/*/*-photos.json trips/*/index.html trips/*/chapters/*.html
           if git diff --cached --quiet; then
             echo "No generated changes"
             exit 0
