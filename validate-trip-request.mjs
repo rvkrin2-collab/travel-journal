@@ -11,8 +11,9 @@ if (!Array.isArray(request.chapters) || !request.chapters.length) throw new Erro
 
 for (const [index, chapter] of request.chapters.entries()) {
   if (!chapter.title?.trim()) throw new Error(`Глава ${index + 1}: не указано название`);
-  if (!chapter.photo_source_url && !(chapter.photos?.length)) throw new Error(`Глава «${chapter.title}»: не указаны фотографии`);
   if (chapter.photo_source_url) validatePhotoSourceUrl(chapter.photo_source_url);
 }
 
 console.log(`Заявка корректна: ${request.trip.title}, глав: ${request.chapters.length}`);
+const emptyChapters = request.chapters.filter(chapter => !chapter.photo_source_url && !(chapter.photos?.length));
+if (emptyChapters.length) console.warn(`Черновик без фотографий: ${emptyChapters.map(chapter => `«${chapter.title}»`).join(", ")}`);

@@ -1,5 +1,3 @@
-import { createGooglePhotosPicker } from "./google-photos-picker.js?v=19.1";
-
 const STORAGE_KEY = "travel-journal-author-draft-v1";
 const form = document.querySelector("#trip-form");
 const chaptersRoot = document.querySelector("#chapters");
@@ -9,7 +7,7 @@ const saveState = document.querySelector("#save-state");
 const coverInput = document.querySelector("#cover");
 const serviceState = document.querySelector("#photo-service-state");
 let cover = { name: "", type: "", size: 0 };
-const googlePhotosPicker = createGooglePhotosPicker();
+let photoPicker;
 
 const transliterate = value => String(value || "").toLowerCase().split("").map(character => ({а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",ю:"yu",я:"ya",ь:"",ъ:""}[character] ?? character)).join("");
 const slugify = value => transliterate(value).normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `trip-${new Date().getFullYear()}`;
@@ -29,21 +27,17 @@ function addChapter(data = {}) {
     renderPhotoNames(chapter, photos);
     changed();
   };
-  chapter.querySelector("[data-google-photos]").onclick = async event => {
-    const state = chapter.querySelector("[data-picker-state]");
-    event.currentTarget.disabled = true;
-    state.textContent = "Открываем Google Фото…";
+  chapter.querySelector("[data-google-photos]").onclick = async () => {
+    const progress = chapter.querySelector(".photo-progress");
     try {
-      const photos = await googlePhotosPicker.pick({ trip: slugify(form.elements.title.value), chapter: slugify(chapter.querySelector('[data-field="title"]').value) });
-      chapter.dataset.photos = JSON.stringify([...(JSON.parse(chapter.dataset.photos || "[]")), ...photos]);
-      renderPhotoNames(chapter, JSON.parse(chapter.dataset.photos));
-      state.textContent = `Добавлено из Google Фото: ${photos.length}`;
+      if (!photoPicker) throw new Error("Подключение Google Фото ещё не готово");
+      progress.textContent = "Открываем Google Фото…";
+      const photos = await photoPicker.pick({ tripId: slugify(form.elements.title.value), chapterId: slugify(chapter.querySelector('[data-field="title"]').value), onProgress: message => { progress.textContent = message; } });
+      chapter.dataset.photos = JSON.stringify(photos);
+      renderPhotoNames(chapter, photos);
+      progress.textContent = `Загружено: ${photos.length}`;
       changed();
-    } catch (error) {
-      state.textContent = `Не удалось выбрать фотографии: ${error.message}`;
-    } finally {
-      event.currentTarget.disabled = false;
-    }
+    } catch (error) { progress.textContent = `Ошибка: ${error.message}`; }
   };
   renderPhotoNames(chapter, data.photos || []);
   chaptersRoot.append(chapter);
@@ -56,15 +50,14 @@ function renderPhotoNames(chapter, photos) {
 function collect() {
   const values = Object.fromEntries(new FormData(form).entries());
   const chapters = [...chaptersRoot.children].map((chapter, index) => {
-    const get = name => chapter.querySelector(`[data-field="${name}"]`).value.trim();
-    return { id: slugify(get("title")) || `chapter-${index + 1}`, title: get("title"), description: get("description"), themes: splitTags(get("themes")), places: splitTags(get("places")), photo_source_url: get("photo_source_url"), photos: JSON.parse(chapter.dataset.photos || "[]") };
-  }).filter(chapter => chapter.title || chapter.description || chapter.photo_source_url || chapter.photos.length);
+    const get = name => chapter.querySelector(`[data-field="${name}"]`)?.value.trim() || "";
+    return { id: slugify(get("title")) || `chapter-${index + 1}`, title: get("title"), description: get("description"), themes: splitTags(get("themes")), places: splitTags(get("places")), photos: JSON.parse(chapter.dataset.photos || "[]") };
+  }).filter(chapter => chapter.title || chapter.description || chapter.photos.length);
   return { schema_version: 1, type: "new_trip_request", created_at: new Date().toISOString(), trip: { id: slugify(values.title), title: values.title?.trim() || "Без названия", subtitle: values.subtitle?.trim() || "", period: values.period?.trim() || "", description: values.description?.trim() || "", cover }, chapters };
 }
 
 function renderPreview(data = collect()) {
-  const albums = data.chapters.filter(chapter => chapter.photo_source_url).length;
-  preview.innerHTML = `<small>${escapeHtml(data.trip.period || "Период пока не указан")}</small><h3>${escapeHtml(data.trip.title)}</h3><p>${escapeHtml(data.trip.subtitle || data.trip.description || "Добавьте короткое описание")}</p><strong>${data.chapters.length} ${data.chapters.length === 1 ? "глава" : "глав"} · ${data.chapters.reduce((sum, chapter) => sum + chapter.photos.length, 0)} файлов · ${albums} альбомов Google Фото</strong>`;
+  preview.innerHTML = `<small>${escapeHtml(data.trip.period || "Период пока не указан")}</small><h3>${escapeHtml(data.trip.title)}</h3><p>${escapeHtml(data.trip.subtitle || data.trip.description || "Добавьте короткое описание")}</p><strong>${data.chapters.length} ${data.chapters.length === 1 ? "глава" : "глав"} · ${data.chapters.reduce((sum, chapter) => sum + chapter.photos.length, 0)} фотографий</strong>`;
 }
 
 function changed() {
@@ -112,11 +105,13 @@ form.addEventListener("submit", event => {
 });
 restore();
 
-import("./lib/photo-services-config.mjs").then(async ({ photoServicesReady, validatePhotoServicesConfig }) => {
+Promise.all([import("./lib/photo-services-config.mjs"), import("./google-photos-picker.js")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());
   if (photoServicesReady(config)) {
+    photoPicker = new GooglePhotosPicker(config);
+    document.querySelectorAll("[data-google-photos]").forEach(button => { button.disabled = false; });
     serviceState.textContent = "Google Фото и хранилище подключены.";
     serviceState.classList.add("ready");
   } else {

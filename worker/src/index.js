@@ -2,13 +2,14 @@ const MAX_FILE_SIZE = 30 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]);
 
 function corsHeaders(origin, allowedOrigin) {
-  return {
-    "Access-Control-Allow-Origin": origin === allowedOrigin ? origin : allowedOrigin,
+  const headers = {
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     "Access-Control-Allow-Headers": "Authorization,Content-Type",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin"
   };
+  if (origin === allowedOrigin) headers["Access-Control-Allow-Origin"] = origin;
+  return headers;
 }
 
 function json(data, status, cors) {
@@ -20,7 +21,7 @@ function safeSegment(value, fallback) {
   return result || fallback;
 }
 
-async function authorize(request, env) {
+export async function authorize(request, env) {
   const token = request.headers.get("Authorization")?.match(/^Bearer\s+(.+)$/i)?.[1];
   if (!token) throw new Response("Missing bearer token", { status: 401 });
   const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(token)}`);
@@ -29,6 +30,10 @@ async function authorize(request, env) {
   if (info.aud !== env.GOOGLE_CLIENT_ID) throw new Response("Wrong token audience", { status: 403 });
   const scopes = new Set(String(info.scope || "").split(/\s+/));
   if (!scopes.has("https://www.googleapis.com/auth/photospicker.mediaitems.readonly")) throw new Response("Missing Picker scope", { status: 403 });
+  const allowedUsers = new Set(String(env.ALLOWED_GOOGLE_USER_IDS || "").split(",").map(value => value.trim()).filter(Boolean));
+  const userId = String(info.sub || info.user_id || "");
+  if (!allowedUsers.size) throw new Response("Uploader allowlist is not configured", { status: 503 });
+  if (!userId || !allowedUsers.has(userId)) throw new Response("Google account is not allowed", { status: 403 });
   return info;
 }
 
@@ -47,27 +52,26 @@ async function upload(request, env, cors) {
   return json({ key, url: `${env.PUBLIC_BASE_URL.replace(/\/$/, "")}/${key}`, size: file.size, type: file.type }, 201, cors);
 }
 
-async function importPhotos(request, env, cors) {
-  const tokenInfo = await authorize(request, env);
-  const { trip, chapter, mediaItems } = await request.json();
-  if (!Array.isArray(mediaItems) || !mediaItems.length || mediaItems.length > 100) return json({ error: "mediaItems must contain 1–100 items" }, 400, cors);
-  const prefix = `${safeSegment(trip, "unassigned")}/${safeSegment(chapter, "chapter")}`;
-  const photos = [];
-  for (const item of mediaItems) {
-    let source;
-    try { source = new URL(item.baseUrl); } catch { return json({ error: "invalid media item URL" }, 400, cors); }
-    if (source.protocol !== "https:" || source.hostname !== "lh3.googleusercontent.com") return json({ error: "invalid media item host" }, 400, cors);
-    const response = await fetch(`${source.href}=d`, { headers: { Authorization: request.headers.get("Authorization") } });
-    if (!response.ok) return json({ error: `Google media download failed: ${response.status}` }, 502, cors);
-    const size = Number(response.headers.get("Content-Length") || 0);
-    const type = response.headers.get("Content-Type")?.split(";")[0] || item.mimeType;
-    if (!ALLOWED_TYPES.has(type) || size > MAX_FILE_SIZE) return json({ error: "unsupported or oversized Google photo" }, 415, cors);
-    const extension = ({ "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/heic": "heic", "image/heif": "heif" })[type];
-    const key = `${prefix}/${crypto.randomUUID()}.${extension}`;
-    await env.PHOTOS.put(key, response.body, { httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000, immutable" }, customMetadata: { originalName: String(item.filename || item.id || "photo").slice(0, 200), googleUser: tokenInfo.sub || "" } });
-    photos.push({ name: item.filename || "Google Photo", type, size, key, url: `${env.PUBLIC_BASE_URL.replace(/\/$/, "")}/${key}` });
-  }
-  return json({ photos }, 201, cors);
+async function importGooglePhoto(request, env, cors) {
+  await authorize(request, env);
+  const token = request.headers.get("Authorization").replace(/^Bearer\s+/i, "");
+  const input = await request.json();
+  let source;
+  try { source = new URL(input.source_url); } catch { return json({ error: "invalid source URL" }, 400, cors); }
+  if (source.protocol !== "https:" || !(source.hostname === "googleusercontent.com" || source.hostname.endsWith(".googleusercontent.com"))) return json({ error: "source is not Google Photos" }, 400, cors);
+  const downloaded = await fetch(`${source}=d`, { headers: { Authorization: `Bearer ${token}` } });
+  if (!downloaded.ok) return json({ error: "Google photo download failed" }, 502, cors);
+  const type = (downloaded.headers.get("Content-Type") || input.mime_type || "").split(";")[0];
+  if (!ALLOWED_TYPES.has(type)) return json({ error: "unsupported image type" }, 415, cors);
+  const bytes = await downloaded.arrayBuffer();
+  const size = bytes.byteLength;
+  if (size < 1 || size > MAX_FILE_SIZE) return json({ error: "file must be between 1 byte and 30 MB" }, 413, cors);
+  const trip = safeSegment(input.trip, "unassigned");
+  const chapter = safeSegment(input.chapter, "chapter");
+  const extension = ({ "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/heic": "heic", "image/heif": "heif" })[type];
+  const key = `${trip}/${chapter}/${crypto.randomUUID()}.${extension}`;
+  await env.PHOTOS.put(key, bytes, { httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000, immutable" } });
+  return json({ key, url: `${env.PUBLIC_BASE_URL.replace(/\/$/, "")}/${key}`, name: String(input.name || "photo").slice(0, 200), type, size, google_media_item_id: String(input.google_media_item_id || "") }, 201, cors);
 }
 
 export default {
@@ -80,7 +84,7 @@ export default {
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin is not allowed" }, 403, cors);
     try {
       if (request.method === "POST" && url.pathname === "/upload") return await upload(request, env, cors);
-      if (request.method === "POST" && url.pathname === "/import") return await importPhotos(request, env, cors);
+      if (request.method === "POST" && url.pathname === "/import") return await importGooglePhoto(request, env, cors);
       return json({ error: "not found" }, 404, cors);
     } catch (error) {
       if (error instanceof Response) return new Response(error.body, { status: error.status, headers: cors });

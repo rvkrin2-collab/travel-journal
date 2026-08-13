@@ -29,11 +29,11 @@ test("createTripFromRequest consumes a mobile author request", async () => {
   assert.equal(data.views[1].items[0].title, "Города");
   assert.equal(data.views[1].items[0].id, "theme-goroda");
   assert.equal(data.photo_manifest[0].name, "one.jpg");
-  assert.equal(data.photo_sources[0].url, "https://photos.app.goo.gl/example");
+  assert.equal("photo_sources" in data, false);
   assert.equal(data.cover_selection.chapter_id, "tbilisi");
   assert.equal(data.views[0].items[0].href, "chapters/tbilisi.html");
-  assert.match(await fs.readFile(path.join(directory, "trips/georgia-2027/chapters/tbilisi.html"), "utf8"), /Открыть альбом Google Фото/);
-  assert.equal(data.views[0].items[0].photo_source_url, "https://photos.app.goo.gl/example");
+  assert.doesNotMatch(await fs.readFile(path.join(directory, "trips/georgia-2027/chapters/tbilisi.html"), "utf8"), /photos\.app\.goo\.gl|Открыть альбом Google Фото/);
+  assert.equal("photo_source_url" in data.views[0].items[0], false);
   const registry = JSON.parse(await fs.readFile(path.join(directory, "data/trips.json")));
   assert.equal(registry.trips[0].status, "hidden");
   await createTripFromRequest(requestPath, directory);
