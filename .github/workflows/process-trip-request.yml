@@ -29,7 +29,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for request in requests/*.json; do node validate-trip-request.mjs "$request"; done
+          shopt -s nullglob
+          requests=(requests/*.json)
+          if ((${#requests[@]} == 0)); then
+            echo "No private trip requests are committed; nothing to validate"
+          else
+            for request in "${requests[@]}"; do
+              node validate-trip-request.mjs "$request"
+            done
+          fi
       - name: Create missing trip drafts
         run: node process-trip-requests.mjs
       - name: Test
