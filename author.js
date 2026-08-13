@@ -1,3 +1,4 @@
+import { parseChapters } from "./lib/chapter-parser.mjs?v=1";
 const STORAGE_KEY = "travel-journal-author-draft-v1";
 const form = document.querySelector("#trip-form");
 const chaptersRoot = document.querySelector("#chapters");
@@ -30,7 +31,9 @@ function addChapter(data = {}) {
     renderPhotoNames(chapter, photos);
     changed();
   };
-  chapter.querySelector("[data-google-photos]").onclick = async () => {
+  const googlePhotosButton = chapter.querySelector("[data-google-photos]");
+  googlePhotosButton.disabled = !photoPicker;
+  googlePhotosButton.onclick = async () => {
     const progress = chapter.querySelector(".photo-progress");
     try {
       if (!photoPicker) throw new Error("Подключение Google Фото ещё не готово");
@@ -93,6 +96,16 @@ coverInput.addEventListener("change", () => {
   changed();
 });
 document.querySelector("#add-chapter").onclick = () => { addChapter(); changed(); chaptersRoot.lastElementChild.scrollIntoView({ behavior: "smooth" }); };
+document.querySelector("#parse-chapters").onclick = () => {
+  const result = document.querySelector("#parse-result");
+  const parsed = parseChapters(document.querySelector("#chapters-text").value);
+  if (!parsed.length) { result.hidden = false; result.textContent = "Не нашёл главы. Начните каждую с «Глава 1 — Название»."; return; }
+  const existingPhotos = new Map([...chaptersRoot.children].map(chapter => [slugify(chapter.querySelector('[data-field="title"]').value), JSON.parse(chapter.dataset.photos || "[]")]));
+  chaptersRoot.replaceChildren();
+  parsed.forEach(chapter => addChapter({ ...chapter, photos: existingPhotos.get(slugify(chapter.title)) || [] }));
+  result.hidden = false; result.textContent = `Заполнено глав: ${parsed.length}. Уже загруженные фотографии глав с теми же названиями сохранены.`;
+  changed();
+};
 document.querySelector("#reset").onclick = () => { if (confirm("Удалить черновик и начать заново?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
 form.addEventListener("input", changed);
 function downloadBackup(data = collect()) {
@@ -121,7 +134,7 @@ form.addEventListener("submit", async event => {
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs?v=20"), import("./google-photos-picker.js?v=20")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=21"), import("./google-photos-picker.js?v=21")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());

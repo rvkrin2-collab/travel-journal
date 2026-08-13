@@ -3,3 +3,4 @@ fieldset{margin:20px 0 0;padding:16px;border:1px solid var(--line);border-radius
 .service-state{margin:0 0 18px;padding:12px 14px;border-radius:14px;background:#eee1d0;color:var(--muted);font-size:13px}.service-state.ready{background:#dce9df;color:#254735}
 .submission-result{margin-top:16px;padding:16px;border-radius:16px;background:#dce9df;color:#254735}.submission-result a{display:block;margin-top:8px;color:inherit;font-weight:800}.backup{display:block;width:100%;margin-top:8px}.primary:disabled{opacity:.55}
 .status-link{display:block;text-align:center;text-decoration:none;padding:12px}.chapter-head span{color:var(--muted);font-size:12px}
+.bulk-import{margin:0 0 20px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#f8f0e5}.bulk-import summary{cursor:pointer;font-weight:800;color:var(--green)}.bulk-import>p{color:var(--muted);font-size:13px}.bulk-import textarea{min-height:220px}.bulk-import .service-state{margin:12px 0 0}
