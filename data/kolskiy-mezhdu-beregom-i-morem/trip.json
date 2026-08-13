@@ -1,10 +1,12 @@
 {
   "schema_version": 1,
   "trip": "kolskiy-mezhdu-beregom-i-morem",
+  "editorial_status": "awaiting_visual_review",
+  "author_approved": false,
   "cover_selection": {
     "chapter_id": "teriberka-na-krayu-zemli",
     "photo_url": "",
-    "status": "pending_photo_selection"
+    "status": "pending_visual_review"
   },
   "photo_manifest": [],
   "views": [
