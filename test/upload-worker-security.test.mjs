@@ -66,3 +66,23 @@ test("Google import rejects non-Google source URLs before downloading", async ()
   }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru" });
   assert.equal(response.status, 400);
 });
+
+test("author workshop submission dispatches the editorial workflow", async () => {
+  let dispatch;
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url).startsWith("https://oauth2.googleapis.com/")) return Response.json({ aud: "client-id", email: "author@example.com", email_verified: "true", scope });
+    if (String(url).includes("api.github.com/repos/owner/repo/dispatches")) { dispatch = JSON.parse(options.body); return new Response(null, { status: 204 }); }
+    throw new Error(`unexpected URL: ${url}`);
+  };
+  const trip = "sample-trip"; const chapter = "coast"; const key = `${trip}/${chapter}/photo.jpg`;
+  const response = await worker.fetch(new Request("https://upload.example.test/submit", {
+    method: "POST",
+    headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token", "Content-Type": "application/json" },
+    body: JSON.stringify({ schema_version: 1, type: "new_trip_request", trip: { id: trip, title: "Sample" }, chapters: [{ id: chapter, title: "Coast", photos: [{ key, url: `https://photos.owntravel.ru/${key}` }] }] })
+  }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  assert.equal(response.status, 202);
+  const body = await response.json();
+  assert.equal(body.status_url, "https://owntravel.ru/submission.html?trip=sample-trip");
+  assert.equal(dispatch.event_type, "author_trip_submitted");
+  assert.equal(dispatch.client_payload.request.trip.id, trip);
+});

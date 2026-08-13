@@ -16,6 +16,24 @@ test("unapproved Kola draft exposes no photos or cover", async () => {
   assert.equal(registry.trips.find(item => item.id === journal.meta.id).status, "hidden");
 });
 
+test("Kola chapter inventories preserve the submitted R2 photo sets", async () => {
+  const expected = new Map([
+    ["kray-zemli", 14],
+    ["pod-vodoy-barentseva-morya", 12],
+    ["teriberka", 15]
+  ]);
+  for (const [chapter, count] of expected) {
+    const inventory = JSON.parse(await fs.readFile(`data/kolskiy-u-vody-i-pod-vodoy/${chapter}-photos.json`, "utf8"));
+    assert.equal(inventory.chapter, chapter);
+    assert.equal(inventory.source, "google_photos_r2");
+    assert.equal(inventory.photo_count, count);
+    assert.equal(inventory.items.length, count);
+    assert.equal(new Set(inventory.items.map(item => item.photo_id)).size, count);
+    assert.ok(inventory.items.every(item => item.url.startsWith(`https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/${chapter}/`)));
+    assert.match(inventory.photos_fingerprint, /^[a-f0-9]{64}$/);
+  }
+});
+
 test("journal pages use days, navigation, and noindex draft protection", async () => {
   const [index, day, script] = await Promise.all([
     fs.readFile("trips/kolskiy-u-vody-i-pod-vodoy/index.html", "utf8"),

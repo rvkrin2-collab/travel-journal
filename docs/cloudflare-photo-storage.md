@@ -4,10 +4,11 @@
 
 1. Создайте Worker `travel-journal-upload`.
 2. Добавьте R2 binding с именем `PHOTOS` на bucket `travel-journal-photos`.
-3. Добавьте обычные переменные из `worker/wrangler.toml.example`: `ALLOWED_ORIGIN`, `PUBLIC_BASE_URL`, `GOOGLE_CLIENT_ID`, `ALLOWED_GOOGLE_EMAILS`.
-4. Скопируйте код `worker/src/index.js` в редактор Worker и нажмите **Deploy**.
-5. В **Settings → Domains & Routes → Custom Domains** подключите `upload.owntravel.ru`. Не создавайте CNAME на `workers.dev` вручную.
-6. Откройте `https://upload.owntravel.ru/health`. Ожидаемый ответ: `{"ok":true,"storage":"r2"}`.
+3. Добавьте обычные переменные из `worker/wrangler.toml.example`: `ALLOWED_ORIGIN`, `PUBLIC_BASE_URL`, `GOOGLE_CLIENT_ID`, `ALLOWED_GOOGLE_EMAILS`, `GITHUB_REPOSITORY`.
+4. Добавьте encrypted secret `GITHUB_DISPATCH_TOKEN` с fine-grained GitHub token, ограниченным репозиторием журнала и разрешением **Contents: write**.
+5. Скопируйте код `worker/src/index.js` в редактор Worker и нажмите **Deploy**.
+6. В **Settings → Domains & Routes → Custom Domains** подключите `upload.owntravel.ru`. Не создавайте CNAME на `workers.dev` вручную.
+7. Откройте `https://upload.owntravel.ru/health`. Ожидаемый ответ: `{"ok":true,"storage":"r2"}`.
 
 ## Что именно добавить в Cloudflare
 
@@ -19,6 +20,9 @@
 | `PUBLIC_BASE_URL` | `https://photos.owntravel.ru` |
 | `GOOGLE_CLIENT_ID` | `1068102637854-ag8pdb54sumdmeabkkduh2co5cnc1eqn.apps.googleusercontent.com` |
 | `ALLOWED_GOOGLE_EMAILS` | email вашего Google-аккаунта |
+| `GITHUB_REPOSITORY` | `rvkrin2-collab/travel-journal` |
+
+`GITHUB_DISPATCH_TOKEN` добавляется как **Secret**, а не обычная переменная. Он используется Worker только для запуска фонового события `author_trip_submitted` и никогда не возвращается браузеру.
 
 Чтобы узнать последнее значение, сначала опубликуйте актуальный Worker и сайт, откройте `/author.html`, нажмите **«Проверить мой Google-аккаунт»**, войдите в Google и скопируйте показанный email. Затем вернитесь в Variables and Secrets, вставьте email в `ALLOWED_GOOGLE_EMAILS` и нажмите **Save and deploy**. Пароль, access token и Client Secret туда вводить нельзя.
 

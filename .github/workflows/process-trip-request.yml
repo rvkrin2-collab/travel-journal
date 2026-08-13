@@ -1,6 +1,8 @@
 name: Process trip requests
 
 on:
+  repository_dispatch:
+    types: [author_trip_submitted]
   push:
     paths:
       - "requests/*.json"
@@ -25,12 +27,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Receive request from author workshop
+        if: github.event_name == 'repository_dispatch'
+        env:
+          REQUEST_JSON: ${{ toJSON(github.event.client_payload.request) }}
+        run: |
+          mkdir -p /tmp/travel-journal-requests
+          printf '%s' "$REQUEST_JSON" > /tmp/travel-journal-requests/submission.json
       - name: Validate requests
         shell: bash
+        env:
+          REQUESTS_DIR: ${{ github.event_name == 'repository_dispatch' && '/tmp/travel-journal-requests' || 'requests' }}
         run: |
           set -euo pipefail
           shopt -s nullglob
-          requests=(requests/*.json)
+          directory="${REQUESTS_DIR:-requests}"
+          requests=("$directory"/*.json)
           if ((${#requests[@]} == 0)); then
             echo "No private trip requests are committed; nothing to validate"
           else
@@ -40,16 +52,34 @@ jobs:
           fi
       - name: Create missing trip drafts
         run: node process-trip-requests.mjs
+        env:
+          REQUESTS_DIR: ${{ github.event_name == 'repository_dispatch' && '/tmp/travel-journal-requests' || 'requests' }}
+      - name: Analyze every submitted chapter and build AI proposals
+        if: github.event_name == 'repository_dispatch'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          REQUEST_FILE: /tmp/travel-journal-requests/submission.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          trip=$(node -p 'JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)).trip.id')
+          node -e 'const r=JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)); for(const c of r.chapters) console.log(c.id)' | while read -r chapter; do
+            echo "Analyzing $trip / $chapter"
+            TRIP="$trip" CHAPTER="$chapter" node analyze-photos-only-v3.mjs
+            TRIP="$trip" CHAPTER="$chapter" node build-series-v2.mjs
+            TRIP="$trip" CHAPTER="$chapter" node build-review-v2.mjs
+            TRIP="$trip" CHAPTER="$chapter" node validate-editorial-chapter.mjs
+          done
       - name: Test
         run: npm test
       - name: Commit generated drafts
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        if: github.event_name == 'repository_dispatch' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add data/trips.json data/*/trip.json data/*/*-photos.json trips/*/index.html trips/*/chapters/*.html
+          git add data/trips.json data/*/trip.json data/*/*-photos.json data/*/*-analysis.json data/*/*-ai-review.json trips/*/index.html trips/*/chapters/*.html
           if git diff --cached --quiet; then
             echo "No generated changes"
             exit 0

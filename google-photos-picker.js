@@ -70,6 +70,18 @@ export class GooglePhotosPicker {
     return response.json();
   }
 
+  async submit(request) {
+    const token = await this.token();
+    const response = await fetch(`${this.config.upload_api_url}/submit`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(request)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
+    return result;
+  }
+
   async pick({ tripId, chapterId, onProgress }) {
     const token = await this.token();
     const session = await googleRequest(`${API}/sessions`, token, { method: "POST", body: "{}" });

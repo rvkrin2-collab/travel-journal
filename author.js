@@ -7,6 +7,8 @@ const saveState = document.querySelector("#save-state");
 const coverInput = document.querySelector("#cover");
 const serviceState = document.querySelector("#photo-service-state");
 const showGoogleUserId = document.querySelector("#show-google-user-id");
+const submitButton = document.querySelector("#submit-trip");
+const submissionResult = document.querySelector("#submission-result");
 let cover = { name: "", type: "", size: 0 };
 let photoPicker;
 
@@ -93,20 +95,33 @@ coverInput.addEventListener("change", () => {
 document.querySelector("#add-chapter").onclick = () => { addChapter(); changed(); chaptersRoot.lastElementChild.scrollIntoView({ behavior: "smooth" }); };
 document.querySelector("#reset").onclick = () => { if (confirm("Удалить черновик и начать заново?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
 form.addEventListener("input", changed);
-form.addEventListener("submit", event => {
-  event.preventDefault();
-  if (!form.reportValidity()) return;
-  const data = collect();
+function downloadBackup(data = collect()) {
   const link = document.createElement("a");
   link.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
   link.download = `${data.trip.id}-new-trip.json`;
   link.click();
   setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-  saveState.textContent = "Заявка скачана — отправьте файл редактору";
+}
+document.querySelector("#download-backup").onclick = () => downloadBackup();
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!form.reportValidity()) return;
+  const data = collect();
+  if (!photoPicker) { submissionResult.hidden = false; submissionResult.textContent = "Автоматическая отправка пока не готова. Скачайте резервную копию JSON."; return; }
+  const incomplete = data.chapters.filter(chapter => !chapter.photos.length || chapter.photos.some(photo => !photo.url || !photo.key));
+  if (incomplete.length) { submissionResult.hidden = false; submissionResult.textContent = `Сначала загрузите фотографии в R2 для глав: ${incomplete.map(chapter => chapter.title).join(", ")}.`; return; }
+  submitButton.disabled = true; submitButton.textContent = "Отправляем…"; submissionResult.hidden = false; submissionResult.textContent = "Передаём заявку в редакционный процесс…";
+  try {
+    const result = await photoPicker.submit(data);
+    const links = result.chapters.map(chapter => `<a href="${escapeHtml(chapter.editor_url)}">Редактор: ${escapeHtml(data.chapters.find(item => item.id === chapter.id)?.title || chapter.id)}</a>`).join("");
+    submissionResult.innerHTML = `<strong>Заявка принята.</strong><p>Анализ выполняется автоматически. На странице статуса ссылки станут активными после подготовки.</p><a href="${escapeHtml(result.status_url)}">Открыть статус путешествия</a>${links}`;
+    saveState.textContent = "Заявка отправлена — можно закрыть страницу";
+  } catch (error) { submissionResult.textContent = `Не удалось отправить: ${error.message}. Черновик сохранён; можно повторить или скачать резервную копию.`; }
+  finally { submitButton.disabled = false; submitButton.textContent = "Отправить и запустить обработку"; }
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs?v=19.3"), import("./google-photos-picker.js?v=19.3")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=20"), import("./google-photos-picker.js?v=20")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());
