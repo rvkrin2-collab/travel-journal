@@ -1,7 +1,5 @@
 const API = "https://photospicker.googleapis.com/v1";
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
-const TOKEN_KEY = "travel-journal-google-photos-token-v1";
-const TOKEN_EXPIRY_MARGIN = 30000;
 
 async function googleRequest(url, token, options = {}) {
   const response = await fetch(url, { ...options, headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...options.headers } });
@@ -13,22 +11,11 @@ export class GooglePhotosPicker {
   constructor(config) { this.config = config; }
 
   token() {
-    try {
-      const cached = JSON.parse(sessionStorage.getItem(TOKEN_KEY) || "null");
-      if (cached?.access_token && cached.expires_at > Date.now() + TOKEN_EXPIRY_MARGIN) return Promise.resolve(cached.access_token);
-      sessionStorage.removeItem(TOKEN_KEY);
-    } catch {}
     return new Promise((resolve, reject) => {
       const wait = deadline => {
         if (globalThis.google?.accounts?.oauth2) {
           google.accounts.oauth2.initTokenClient({ client_id: this.config.google_client_id, scope: this.config.google_photos_scope,
-            callback: response => {
-              if (response.error) return reject(new Error(response.error));
-              try {
-                sessionStorage.setItem(TOKEN_KEY, JSON.stringify({ access_token: response.access_token, expires_at: Date.now() + Number(response.expires_in || 3600) * 1000 }));
-              } catch {}
-              resolve(response.access_token);
-            },
+            callback: response => response.error ? reject(new Error(response.error)) : resolve(response.access_token),
             error_callback: error => reject(new Error(error.type || "Google OAuth error")) }).requestAccessToken({ prompt: "consent" });
         } else if (Date.now() < deadline) setTimeout(() => wait(deadline), 100);
         else reject(new Error("Google Sign-In не загрузился"));

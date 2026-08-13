@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { createTrip, createTripFromRequest, validatePhotoSourceUrl, validateTripId } from "../create-trip.mjs";
+import { createTrip, createTripFromRequest, normalizeStoredPhoto, validatePhotoSourceUrl, validateTripId } from "../create-trip.mjs";
 
 test("trip id accepts stable slugs and rejects paths", () => {
   assert.equal(validateTripId("georgia-2027"), "georgia-2027");
@@ -15,6 +15,12 @@ test("photo source only accepts HTTPS Google Photos links", () => {
   assert.equal(validatePhotoSourceUrl("[https://photos.app.goo.gl/example](https://photos.app.goo.gl/example)"), "https://photos.app.goo.gl/example");
   assert.throws(() => validatePhotoSourceUrl("http://photos.app.goo.gl/example"), /Google Фото/);
   assert.throws(() => validatePhotoSourceUrl("https://example.com/album"), /Google Фото/);
+});
+
+test("stored photo URLs are normalized and restricted to the site storage", () => {
+  const url = "https://photos.owntravel.ru/trip/chapter/photo.jpg";
+  assert.equal(normalizeStoredPhoto({ url: `[${url}](${url})`, name: "photo.jpg" }, "chapter").url, url);
+  assert.throws(() => normalizeStoredPhoto({ url: "https://example.com/photo.jpg" }, "chapter"), /хранилище сайта/);
 });
 
 test("createTripFromRequest consumes a mobile author request", async () => {
