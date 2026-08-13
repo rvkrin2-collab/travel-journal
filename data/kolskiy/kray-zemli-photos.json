@@ -1,0 +1,47 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy",
+  "chapter": "kray-zemli",
+  "source": "google_photos_r2",
+  "generated_at": "2026-08-13T20:22:31.369Z",
+  "photo_count": 3,
+  "photos_fingerprint": "5295b3ec0a94d9795be4b16dd0f8db7933deb16b7ab607c6a2675a409f9e52a4",
+  "items": [
+    {
+      "photo_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "public_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260722193632.jpg",
+      "type": "image/jpeg",
+      "size": 2820845,
+      "key": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg"
+    },
+    {
+      "photo_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "public_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260722183128.jpg",
+      "type": "image/jpeg",
+      "size": 2307377,
+      "key": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg"
+    },
+    {
+      "photo_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "public_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260722183012.jpg",
+      "type": "image/jpeg",
+      "size": 1002535,
+      "key": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg"
+    }
+  ]
+}

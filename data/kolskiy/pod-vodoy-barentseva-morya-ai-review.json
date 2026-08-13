@@ -1,0 +1,67 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy",
+  "chapter": {
+    "title": "",
+    "subtitle": "",
+    "route_note": "",
+    "fact_checks": [
+      "Кадры не содержат людей или искусственных объектов.",
+      "Все снимки сделаны под водой, что подтверждается описанием и видимыми элементами."
+    ]
+  },
+  "day": "pod-vodoy-barentseva-morya",
+  "photos_source": "data/kolskiy/pod-vodoy-barentseva-morya-photos.json",
+  "analysis_source": "data/kolskiy/pod-vodoy-barentseva-morya-analysis.json",
+  "photos_fingerprint": "1b032673697e545469329454eddf010cbbd7f58767b906d4c4f92e781f0aea9c",
+  "status": "ai_review",
+  "approval": "not_author_approved",
+  "updated_at": "2026-08-13T20:23:32.664Z",
+  "items": [
+    {
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "number": 1,
+      "status": "hero",
+      "label": "Подводная сцена с крупным крабом на морском дне, окружённым водорослями.",
+      "note": "Кадр с крабом выделяется благодаря чёткому фокусу на главном объекте и сбалансированной композиции.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "number": 2,
+      "status": "story",
+      "label": "Подводная сцена с анемоном на камнях.",
+      "note": "Анемон на камнях создаёт интересный акцент, но композиция менее выразительна по сравнению с другими кадрами.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "number": 3,
+      "status": "story",
+      "label": "Подводная сцена с анемоном на камне.",
+      "note": "Похожий на предыдущий кадр с анемоном, но с более холодными оттенками, что добавляет разнообразие.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "number": 4,
+      "status": "story",
+      "label": "Подводная сцена с водорослями.",
+      "note": "Кадр с водорослями интересен, но не выделяется среди других по композиции и фокусу.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "number": 5,
+      "status": "story",
+      "label": "Подводная сцена с медузой на фоне каменистого дна.",
+      "note": "Медуза в центре кадра создаёт динамичный акцент, что делает кадр более выразительным.",
+      "observation_only": true
+    }
+  ]
+}

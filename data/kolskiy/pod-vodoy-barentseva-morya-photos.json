@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "source": "google_photos_r2",
+  "generated_at": "2026-08-13T20:22:31.377Z",
+  "photo_count": 5,
+  "photos_fingerprint": "1b032673697e545469329454eddf010cbbd7f58767b906d4c4f92e781f0aea9c",
+  "items": [
+    {
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG_20260726_00272436.jpeg",
+      "type": "image/jpeg",
+      "size": 1289335,
+      "key": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg"
+    },
+    {
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG_20260801_20202490.jpeg",
+      "type": "image/jpeg",
+      "size": 1266124,
+      "key": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg"
+    },
+    {
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG_20260801_20171603.jpeg",
+      "type": "image/jpeg",
+      "size": 953485,
+      "key": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg"
+    },
+    {
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG_20260801_20150645.jpeg",
+      "type": "image/jpeg",
+      "size": 1254928,
+      "key": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg"
+    },
+    {
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG_20260801_20165622.jpeg",
+      "type": "image/jpeg",
+      "size": 865265,
+      "key": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg"
+    }
+  ]
+}

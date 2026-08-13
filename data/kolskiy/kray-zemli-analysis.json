@@ -1,0 +1,258 @@
+{
+  "schema_version": 3,
+  "analysis_version": "combined-vision-v1",
+  "trip": "kolskiy",
+  "chapter": "kray-zemli",
+  "day": "kray-zemli",
+  "photos_source": "data/kolskiy/kray-zemli-photos.json",
+  "photos_fingerprint": "5295b3ec0a94d9795be4b16dd0f8db7933deb16b7ab607c6a2675a409f9e52a4",
+  "context_source": null,
+  "generated_at": "2026-08-13T20:22:55.071Z",
+  "vision_model": "gpt-4o",
+  "cache": {
+    "reused": 0,
+    "analyzed": 3
+  },
+  "items": [
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg|https://photos.owntravel.ru/kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg|0|0",
+      "public_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "number": 1,
+      "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Суровый прибрежный пейзаж с каменистыми берегами и облачным небом.",
+      "foreground": "Каменистая поверхность с редкой растительностью.",
+      "midground": "Скалы и небольшие водоёмы, переходящие в море.",
+      "background": "Облака и горизонт моря.",
+      "visible_elements": {
+        "terrain": "Каменистая местность с редкой растительностью.",
+        "vegetation": "Скудная, низкорослая растительность.",
+        "water": "Море и небольшие водоёмы среди скал.",
+        "snow": "Отсутствует.",
+        "sky": "Облачно, с плотными облаками.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Кабели или провода на правой стороне кадра.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Каменистый берег и море.",
+      "secondary_subjects": [
+        "Облака",
+        "Кабели или провода"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Мягкий, рассеянный свет.",
+      "weather": "Облачно, без осадков.",
+      "composition": {
+        "framing": "Широкий угол, охватывающий берег и море.",
+        "depth": "Средняя глубина, с акцентом на передний и средний планы.",
+        "balance": "Сбалансированное распределение элементов по кадру.",
+        "visual_anchor": "Каменистый берег на переднем плане.",
+        "horizon": "Чёткий, на уровне верхней трети кадра.",
+        "distractions": "Кабели или провода могут отвлекать."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость на всех планах.",
+        "exposure": "Правильная экспозиция, детали хорошо видны.",
+        "color": "Нейтральные, естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Назначение кабелей или проводов"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, однозначно указывающих на конкретное место.",
+      "caption_seed": "Каменистый берег и море под облачным небом.",
+      "editor_note": "Кадр передаёт атмосферу суровой природы и спокойствия.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:22:39.039Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg|https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg|0|0",
+      "public_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "number": 2,
+      "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Пляж с лодками и флагами на фоне гор и моря.",
+      "foreground": "Песчаный пляж с флагами и скамейкой.",
+      "midground": "Спокойное море с несколькими лодками.",
+      "background": "Горный пейзаж с облачным небом.",
+      "visible_elements": {
+        "terrain": "Песчаный пляж и горы.",
+        "vegetation": "Небольшие кусты на пляже.",
+        "water": "Спокойное море.",
+        "snow": "Отсутствует.",
+        "sky": "Частично облачное небо.",
+        "people": "Два человека на пляже.",
+        "animals": "Отсутствуют.",
+        "structures": "Флаги и скамейка.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Пляж с лодками и флагами.",
+      "secondary_subjects": [
+        "Люди на пляже",
+        "Горы на заднем плане"
+      ],
+      "scene_type": "lake",
+      "people_count": 2,
+      "animal_count": 0,
+      "light": "Естественное дневное освещение.",
+      "weather": "Ясная погода с облаками.",
+      "composition": {
+        "framing": "Горизонтальная композиция с акцентом на пляж и море.",
+        "depth": "Хорошая глубина с передним, средним и задним планами.",
+        "balance": "Сбалансированная композиция с равномерным распределением объектов.",
+        "visual_anchor": "Флаги на переднем плане.",
+        "horizon": "Горизонт на уровне верхней трети кадра.",
+        "distractions": "Нет заметных отвлекающих элементов."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость.",
+        "exposure": "Правильная экспозиция.",
+        "color": "Естественные цвета.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение пляжа."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Пляж с лодками и флагами на фоне гор.",
+      "editor_note": "Флаги добавляют интересный акцент на пляже.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:22:44.667Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg|https://photos.owntravel.ru/kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg|0|0",
+      "public_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "number": 3,
+      "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография с видом на береговую линию с домами и облачным небом.",
+      "foreground": "Вода с небольшими волнами.",
+      "midground": "Береговая линия с домами и скалами.",
+      "background": "Облачное небо с просветами голубого.",
+      "visible_elements": {
+        "terrain": "Скалы и береговая линия.",
+        "vegetation": "Отсутствует или неразличима.",
+        "water": "Спокойная водная поверхность.",
+        "snow": "Отсутствует.",
+        "sky": "Облачно с просветами.",
+        "people": "Неясно, возможно, есть люди на берегу.",
+        "animals": "Отсутствуют.",
+        "structures": "Несколько домов на берегу.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Береговая линия с домами.",
+      "secondary_subjects": [
+        "Облака",
+        "Вода"
+      ],
+      "scene_type": "settlement",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Естественное дневное освещение.",
+      "weather": "Облачно с просветами.",
+      "composition": {
+        "framing": "Горизонтальная композиция с акцентом на береговую линию.",
+        "depth": "Средняя глубина с акцентом на средний план.",
+        "balance": "Сбалансированная композиция с домами и водой.",
+        "visual_anchor": "Береговая линия с домами.",
+        "horizon": "Чёткий горизонт.",
+        "distractions": "Нет значительных отвлекающих элементов."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость на среднем плане.",
+        "exposure": "Правильная экспозиция, но небо немного пересвечено.",
+        "color": "Естественные цвета с преобладанием серых и голубых оттенков.",
+        "motion_blur": "Отсутствует.",
+        "score": 7.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Наличие людей на берегу."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, однозначно указывающих на конкретное место.",
+      "caption_seed": "Береговая линия с домами под облачным небом.",
+      "editor_note": "Фотография передаёт спокойствие и атмосферу удалённого поселения.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:22:50.905Z",
+      "model": "gpt-4o"
+    }
+  ],
+  "recommendation": {
+    "hero": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+    "story": [
+      "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+      "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg"
+    ],
+    "backstage": [],
+    "skip": [],
+    "decisions": {
+      "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg": {
+        "reason": "Кадр передаёт атмосферу суровой природы и спокойствия, с хорошей композицией и техническим качеством.",
+        "visual_function": "пейзаж",
+        "duplicate_group": "озеро · пейзаж",
+        "status": "story",
+        "editorial_score": 85
+      },
+      "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg": {
+        "reason": "Интересная композиция с флагами и лодками, добавляющими динамику и акцент на пляже.",
+        "visual_function": "пляжная сцена",
+        "duplicate_group": "озеро · пляжная-сцена",
+        "status": "hero",
+        "editorial_score": 88
+      },
+      "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg": {
+        "reason": "Спокойная сцена с домами на берегу, но не выделяется среди других кадров.",
+        "visual_function": "поселение",
+        "duplicate_group": "озеро · строения",
+        "status": "story",
+        "editorial_score": 78
+      }
+    },
+    "sequence_note": "Кадры демонстрируют разнообразие прибрежных пейзажей и сцен, от суровых берегов до оживлённых пляжей.",
+    "editorial_summary": "Серия фотографий раскрывает разнообразие прибрежных ландшафтов и сцен, от суровых каменистых берегов до оживлённых пляжей с лодками и флагами. Каждый кадр вносит свой вклад в общее повествование, создавая полное представление о крае земли.",
+    "fact_checks": [
+      "Все кадры имеют хорошую резкость и правильную экспозицию.",
+      "Кадры не содержат значительных отвлекающих элементов."
+    ],
+    "ranking_method": "single_model_ranking_then_dominant_subject_function_normalization"
+  },
+  "editorial_policy": {
+    "source": "config/editorial-policy.json",
+    "version": 6,
+    "validated": true,
+    "assignment": "chapter_visual_selection_with_dominant_subject_groups",
+    "model": "gpt-4o",
+    "updated_at": "2026-08-13T20:22:55.071Z"
+  },
+  "series_model": "gpt-4o"
+}
