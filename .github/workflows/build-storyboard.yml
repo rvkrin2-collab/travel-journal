@@ -7,8 +7,8 @@ on:
         description: "Canonical trip id. Example: kyrgyzstan-2026"
         required: true
         default: "kyrgyzstan-2026"
-      day_tag:
-        description: "Day tag. Example: day02"
+      chapter:
+        description: "Chapter slug. Legacy dayNN values are supported"
         required: true
         default: "day02"
       model:
@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: storyboard-${{ github.event.inputs.trip }}-${{ github.event.inputs.day_tag }}
+  group: storyboard-${{ github.event.inputs.trip }}-${{ github.event.inputs.chapter }}
   cancel-in-progress: false
 
 jobs:
@@ -50,13 +50,18 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_TEXT_MODEL: ${{ github.event.inputs.model }}
           TRIP: ${{ github.event.inputs.trip }}
-          DAY_TAG: ${{ github.event.inputs.day_tag }}
+          CHAPTER: ${{ github.event.inputs.chapter }}
 
       - name: Validate storyboard
         run: node validate-storyboard.mjs
         env:
           TRIP: ${{ github.event.inputs.trip }}
-          DAY_TAG: ${{ github.event.inputs.day_tag }}
+          CHAPTER: ${{ github.event.inputs.chapter }}
+      - name: Validate editorial gates
+        run: node validate-editorial-chapter.mjs
+        env:
+          TRIP: ${{ github.event.inputs.trip }}
+          CHAPTER: ${{ github.event.inputs.chapter }}
 
       - name: Commit storyboard
         run: |
@@ -67,5 +72,5 @@ jobs:
             echo "No changes"
             exit 0
           fi
-          git commit -m "Build storyboard for ${{ github.event.inputs.trip }} ${{ github.event.inputs.day_tag }}"
+          git commit -m "Build storyboard for ${{ github.event.inputs.trip }} ${{ github.event.inputs.chapter }}"
           git push origin HEAD:main
