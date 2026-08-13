@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-mezhdu-beregom-i-morem",
+  "cover_selection": {
+    "chapter_id": "teriberka-na-krayu-zemli",
+    "photo_url": "",
+    "status": "pending_photo_selection"
+  },
+  "photo_manifest": [],
+  "views": [
+    {
+      "id": "chapters",
+      "label": "Главы",
+      "items": [
+        {
+          "id": "pod-vodoy",
+          "title": "Под водой.",
+          "description": "Дайвинг у полуострова Немецкий. Холодная вода, подводный рельеф и жизнь Баренцева моря.",
+          "href": "chapters/pod-vodoy.html"
+        },
+        {
+          "id": "teriberka-na-krayu-zemli",
+          "title": "Териберка. На краю земли",
+          "description": "Один день в Териберке. Остановка между двумя морскими частями путешествия — с селом, побережьем и прогулкой по северному ландшафту.",
+          "href": "chapters/teriberka-na-krayu-zemli.html"
+        },
+        {
+          "id": "titovka-i-p-ov-nemetskiy-zhizn-u-morya",
+          "title": "Титовка и п-ов Немецкий. Жизнь у моря",
+          "description": "Базы у воды становятся точкой выхода к морю. Морская рыбалка, лодки, прогулки и несколько дней жизни в одном месте без необходимости постоянно двигаться дальше.",
+          "href": "chapters/titovka-i-p-ov-nemetskiy-zhizn-u-morya.html"
+        }
+      ]
+    },
+    {
+      "id": "themes",
+      "label": "По темам",
+      "items": [
+        {
+          "id": "theme-dayving",
+          "title": "дайвинг",
+          "description": "Материалы: Под водой."
+        },
+        {
+          "id": "theme-barentsevo-more",
+          "title": "Баренцево море",
+          "description": "Материалы: Под водой., Титовка и п-ов Немецкий. Жизнь у моря"
+        },
+        {
+          "id": "theme-podvodnyy-mir",
+          "title": "подводный мир",
+          "description": "Материалы: Под водой."
+        },
+        {
+          "id": "theme-sever",
+          "title": "Север",
+          "description": "Материалы: Под водой."
+        },
+        {
+          "id": "theme-teriberka",
+          "title": "Териберка",
+          "description": "Материалы: Териберка. На краю земли"
+        },
+        {
+          "id": "theme-poberezhe",
+          "title": "побережье",
+          "description": "Материалы: Териберка. На краю земли"
+        },
+        {
+          "id": "theme-tundra",
+          "title": "тундра",
+          "description": "Материалы: Териберка. На краю земли"
+        },
+        {
+          "id": "theme-severnoe-selo",
+          "title": "северное село",
+          "description": "Материалы: Териберка. На краю земли"
+        },
+        {
+          "id": "theme-morskaya-rybalka",
+          "title": "морская рыбалка",
+          "description": "Материалы: Титовка и п-ов Немецкий. Жизнь у моря"
+        },
+        {
+          "id": "theme-baza",
+          "title": "база",
+          "description": "Материалы: Титовка и п-ов Немецкий. Жизнь у моря"
+        },
+        {
+          "id": "theme-progulki",
+          "title": "прогулки",
+          "description": "Материалы: Титовка и п-ов Немецкий. Жизнь у моря"
+        }
+      ]
+    },
+    {
+      "id": "places",
+      "label": "По местам",
+      "items": [
+        {
+          "id": "place-poluostrov-nemetskiy",
+          "title": "полуостров Немецкий",
+          "description": "Материалы: Под водой."
+        },
+        {
+          "id": "place-teriberka",
+          "title": "Териберка",
+          "description": "Материалы: Териберка. На краю земли"
+        },
+        {
+          "id": "place-titovka",
+          "title": "Титовка",
+          "description": "Материалы: Титовка и п-ов Немецкий. Жизнь у моря"
+        },
+        {
+          "id": "place-p-ov-nemetskiy",
+          "title": "п-ов Немецкий",
+          "description": "Материалы: Титовка и п-ов Немецкий. Жизнь у моря"
+        }
+      ]
+    }
+  ]
+}
