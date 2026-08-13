@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "test": "node --test",
     "trip:new": "node create-trip.mjs",
