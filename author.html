@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#263c34">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Новое путешествие · Авторская мастерская</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="author.css">
+</head>
+<body>
+  <header class="top"><div><span>Авторская мастерская</span><strong id="save-state">Черновик сохраняется на телефоне</strong></div><button id="reset" class="quiet" type="button">Начать заново</button></header>
+  <main>
+    <section class="intro"><p class="step">Новое путешествие</p><h1>Соберите историю без кода</h1><p>Заполните карточку, добавьте главы и фотографии. Можно закрыть страницу и продолжить позже — черновик останется на этом устройстве.</p></section>
+
+    <form id="trip-form">
+      <section class="panel">
+        <div class="panel-title"><b>1</b><div><h2>О путешествии</h2><p>Это будет видно на главной странице журнала.</p></div></div>
+        <label>Название <input name="title" required placeholder="Например, Грузия 2027" autocomplete="off"></label>
+        <div class="two"><label>Период <input name="period" placeholder="Май 2027"></label><label>Короткий подзаголовок <input name="subtitle" placeholder="Тбилиси, горы и море"></label></div>
+        <label>О чём путешествие <textarea name="description" placeholder="Несколько предложений о поездке"></textarea></label>
+        <label class="upload">Обложка с телефона<input id="cover" type="file" accept="image/*"><span id="cover-label">Выбрать фотографию</span></label>
+        <img id="cover-preview" class="cover-preview" alt="Предпросмотр обложки" hidden>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title"><b>2</b><div><h2>Главы и истории</h2><p>Это могут быть дни, места, темы или отдельные впечатления.</p></div></div>
+        <div id="photo-service-state" class="service-state" role="status">Проверяем подключение Google Фото…</div>
+        <button id="show-google-user-id" class="quiet" type="button" hidden>Показать ID моего Google-аккаунта</button>
+        <div id="chapters"></div>
+        <button id="add-chapter" class="add" type="button">＋ Добавить главу</button>
+      </section>
+
+      <section class="panel finish">
+        <div class="panel-title"><b>3</b><div><h2>Передать на публикацию</h2><p>Проверьте карточку ниже. Сайт подготовит один небольшой файл — отправьте его редактору или загрузите в задачу.</p></div></div>
+        <article id="preview" class="preview"></article>
+        <button class="primary" type="submit">Скачать заявку на путешествие</button>
+        <p class="privacy">Фотографии, выбранные через Google Фото, копируются в хранилище сайта. Файлы, выбранные непосредственно на телефоне, пока сохраняются в заявке только по имени.</p>
+      </section>
+    </form>
+  </main>
+  <template id="chapter-template"><article class="chapter"><div class="chapter-head"><strong>Новая глава</strong><button type="button" data-remove aria-label="Удалить главу">Удалить</button></div><label>Название <input data-field="title" placeholder="Например, Старый Тбилиси"></label><label>Короткое описание <textarea data-field="description" placeholder="Что произошло и почему это важно"></textarea></label><div class="two"><label>Темы <input data-field="themes" placeholder="город, архитектура"></label><label>Места <input data-field="places" placeholder="Тбилиси, Сололаки"></label></div><fieldset><legend>Фотографии главы</legend><p>Выберите фотографии через официальный Google Photos Picker. После выбора они будут скопированы в хранилище сайта и появятся в заявке.</p><button type="button" class="add" data-google-photos disabled>Выбрать из Google Фото</button><div class="photo-progress" role="status"></div><div class="or"><span>или</span></div><label class="upload small">Выбрать файлы на телефоне<input data-field="photos" type="file" accept="image/*" multiple><span>Выбрать фотографии</span></label><div class="photo-list"></div></fieldset></article></template>
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script type="module" src="author.js"></script>
+  <script src="/pwa.js" defer></script>
+</body>
+</html>
