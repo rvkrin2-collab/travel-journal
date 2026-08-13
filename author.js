@@ -7,6 +7,8 @@ const saveState = document.querySelector("#save-state");
 const coverInput = document.querySelector("#cover");
 const serviceState = document.querySelector("#photo-service-state");
 const showGoogleUserId = document.querySelector("#show-google-user-id");
+const chapterDescription = document.querySelector("#chapter-description");
+const chapterImportState = document.querySelector("#chapter-import-state");
 let cover = { name: "", type: "", size: 0 };
 let photoPicker;
 
@@ -91,6 +93,18 @@ coverInput.addEventListener("change", () => {
   changed();
 });
 document.querySelector("#add-chapter").onclick = () => { addChapter(); changed(); chaptersRoot.lastElementChild.scrollIntoView({ behavior: "smooth" }); };
+document.querySelector("#import-chapters").onclick = async () => {
+  const { parseChapterDescription } = await import("./lib/chapter-description.mjs?v=20");
+  const chapters = parseChapterDescription(chapterDescription.value);
+  if (!chapters.length) {
+    chapterImportState.textContent = "Не найдены строки вида «Глава 1 — Название».";
+    return;
+  }
+  chaptersRoot.replaceChildren();
+  chapters.forEach(addChapter);
+  chapterImportState.textContent = `Создано глав: ${chapters.length}.`;
+  changed();
+};
 document.querySelector("#reset").onclick = () => { if (confirm("Удалить черновик и начать заново?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } };
 form.addEventListener("input", changed);
 form.addEventListener("submit", event => {
@@ -106,7 +120,7 @@ form.addEventListener("submit", event => {
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs?v=19.3"), import("./google-photos-picker.js?v=19.3")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=20"), import("./google-photos-picker.js?v=20")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());
