@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "trip": "kolskiy",
-  "editorial_status": "awaiting_visual_review",
-  "author_approved": false,
+  "editorial_status": "published",
+  "author_approved": true,
   "cover_selection": {
-    "chapter_id": "",
-    "photo_url": "",
-    "status": "not_selected"
+    "chapter_id": "kray-zemli",
+    "photo_url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+    "status": "author_selected"
   },
   "photo_manifest": [
     {
@@ -174,92 +174,23 @@
         {
           "id": "kray-zemli",
           "title": "Край земли",
-          "description": "Берег, тундра и пейзажи северо-запада Кольского. Полуостров Немецкий, дорога, жизнь на берегу и несколько дней у Титовки.",
-          "href": "chapters/kray-zemli.html"
+          "description": "На этом этапе путешествия мы погружаемся в атмосферу северной природы, где каждый пейзаж рассказывает свою историю.",
+          "href": "chapters/kray-zemli.html",
+          "cover_url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg"
         },
         {
           "id": "pod-vodoy-barentseva-morya",
-          "title": "Под водой Баренцева моря",
-          "description": "Погружения в холодном северном море: подводный рельеф, водоросли, морская жизнь и сам опыт дайвинга на Кольском.",
-          "href": "chapters/pod-vodoy-barentseva-morya.html"
+          "title": "Подводный мир Баренцева моря",
+          "description": "Сегодня мы исследуем подводный мир Баренцева моря, где каждая сцена раскрывает уникальную красоту морской жизни.",
+          "href": "chapters/pod-vodoy-barentseva-morya.html",
+          "cover_url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg"
         },
         {
           "id": "teriberka",
-          "title": "Териберка",
-          "description": "Один день на другом берегу Кольского: село, открытое побережье и прогулка по местам вокруг Териберки.",
-          "href": "chapters/teriberka.html"
-        }
-      ]
-    },
-    {
-      "id": "themes",
-      "label": "По темам",
-      "items": [
-        {
-          "id": "theme-peyzazhi",
-          "title": "пейзажи",
-          "description": "Материалы: Край земли, Териберка"
-        },
-        {
-          "id": "theme-tundra",
-          "title": "тундра",
-          "description": "Материалы: Край земли"
-        },
-        {
-          "id": "theme-barentsevo-more",
-          "title": "Баренцево море",
-          "description": "Материалы: Край земли, Под водой Баренцева моря"
-        },
-        {
-          "id": "theme-sever",
-          "title": "Север",
-          "description": "Материалы: Край земли"
-        },
-        {
-          "id": "theme-poberezhe",
-          "title": "побережье",
-          "description": "Материалы: Край земли, Териберка"
-        },
-        {
-          "id": "theme-dayving",
-          "title": "дайвинг",
-          "description": "Материалы: Под водой Баренцева моря"
-        },
-        {
-          "id": "theme-podvodnyy-mir",
-          "title": "подводный мир",
-          "description": "Материалы: Под водой Баренцева моря"
-        },
-        {
-          "id": "theme-teriberka",
-          "title": "Териберка",
-          "description": "Материалы: Териберка"
-        },
-        {
-          "id": "theme-severnoe-selo",
-          "title": "северное село",
-          "description": "Материалы: Териберка"
-        }
-      ]
-    },
-    {
-      "id": "places",
-      "label": "По местам",
-      "items": [
-        {
-          "id": "place-poluostrov-nemetskiy",
-          "title": "полуостров Немецкий",
-          "description": "Материалы: Край земли, Под водой Баренцева моря"
-        },
-        {
-          "id": "place-titovka",
-          "title": "Титовка",
-          "description": "Материалы: Край земли, Под водой Баренцева моря"
-        },
-        {
-          "id": "place-teriberka",
-          "title": "Териберка",
-          "description": "Материалы: Териберка"
+          "title": "Териберка: На краю земли",
+          "description": "Териберка — это не просто точка на карте, это место, где время останавливается, а природа говорит на своём языке.",
+          "href": "chapters/teriberka.html",
+          "cover_url": "https://photos.owntravel.ru/kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg"
         }
       ]
     }

@@ -1,0 +1,318 @@
+{
+  "schema_version": 3,
+  "meta": {
+    "id": "kolskiy",
+    "title": "Кольский",
+    "subtitle": "Немецкий, Териберка и Титовка",
+    "period": "Лето 2026",
+    "description": "Немецкий, Териберка и Титовка",
+    "route": []
+  },
+  "editorial": {
+    "status": "approved",
+    "approved_by_author": true,
+    "published_at": "2026-08-15T20:11:03.294Z"
+  },
+  "chapters": [
+    {
+      "id": "kray-zemli",
+      "label": "Глава",
+      "title": "Край земли",
+      "summary": "На этом этапе путешествия мы погружаемся в атмосферу северной природы, где каждый пейзаж рассказывает свою историю.",
+      "route": [],
+      "hero": {
+        "photo_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+        "public_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+        "source": "google_photos_r2",
+        "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+        "width": 0,
+        "height": 0,
+        "name": "IMG20260722183128.jpg",
+        "type": "image/jpeg",
+        "size": 2307377,
+        "key": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg"
+      },
+      "scenes": [
+        {
+          "title": "Суровые берега",
+          "text": "Здесь природа проявляет свою силу и красоту.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+              "public_id": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260722193632.jpg",
+              "type": "image/jpeg",
+              "size": 2820845,
+              "key": "kolskiy/kray-zemli/d813da82-577c-41d9-ae37-f57b9a43eff3.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Динамика пляжа",
+          "text": "Лодки и флаги создают живую картину на фоне гор.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+              "public_id": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260722183128.jpg",
+              "type": "image/jpeg",
+              "size": 2307377,
+              "key": "kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Спокойствие на берегу",
+          "text": "Сцена с домами на берегу завершает наш день.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+              "public_id": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260722183012.jpg",
+              "type": "image/jpeg",
+              "size": 1002535,
+              "key": "kolskiy/kray-zemli/66c856bc-396e-4c9f-b6ad-b6c3fd4f7946.jpg"
+            }
+          ]
+        }
+      ],
+      "backstage": []
+    },
+    {
+      "id": "pod-vodoy-barentseva-morya",
+      "label": "Глава",
+      "title": "Подводный мир Баренцева моря",
+      "summary": "Сегодня мы исследуем подводный мир Баренцева моря, где каждая сцена раскрывает уникальную красоту морской жизни.",
+      "route": [],
+      "hero": {
+        "photo_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+        "public_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+        "source": "google_photos_r2",
+        "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+        "width": 0,
+        "height": 0,
+        "name": "IMG_20260726_00272436.jpeg",
+        "type": "image/jpeg",
+        "size": 1289335,
+        "key": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg"
+      },
+      "scenes": [
+        {
+          "title": "Краб на морском дне",
+          "text": "Краб, окружённый водорослями, привлекает внимание своим ярким цветом и четкими формами.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+              "public_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG_20260726_00272436.jpeg",
+              "type": "image/jpeg",
+              "size": 1289335,
+              "key": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Анемон на камнях",
+          "text": "Анемон, расположенный на камнях, добавляет интересный акцент к подводной сцене.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+              "public_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG_20260801_20202490.jpeg",
+              "type": "image/jpeg",
+              "size": 1266124,
+              "key": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Анемон на камне",
+          "text": "Другой анемон, но с холодными оттенками, создаёт разнообразие в подводной палитре.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+              "public_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG_20260801_20171603.jpeg",
+              "type": "image/jpeg",
+              "size": 953485,
+              "key": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Водоросли",
+          "text": "Водоросли, колышущиеся в воде, создают ощущение спокойствия и гармонии.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+              "public_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG_20260801_20150645.jpeg",
+              "type": "image/jpeg",
+              "size": 1254928,
+              "key": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Медуза на фоне каменистого дна",
+          "text": "Медуза, плавающая на фоне камней, добавляет динамику в подводный пейзаж.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+              "public_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG_20260801_20165622.jpeg",
+              "type": "image/jpeg",
+              "size": 865265,
+              "key": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg"
+            }
+          ]
+        }
+      ],
+      "backstage": []
+    },
+    {
+      "id": "teriberka",
+      "label": "Глава",
+      "title": "Териберка: На краю земли",
+      "summary": "Териберка — это не просто точка на карте, это место, где время останавливается, а природа говорит на своём языке.",
+      "route": [],
+      "hero": {
+        "photo_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+        "public_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+        "source": "google_photos_r2",
+        "url": "https://photos.owntravel.ru/kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+        "width": 0,
+        "height": 0,
+        "name": "IMG20260727163236.jpg",
+        "type": "image/jpeg",
+        "size": 2030406,
+        "key": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg"
+      },
+      "scenes": [
+        {
+          "title": "Заброшенные здания",
+          "text": "Сквозь заброшенные постройки ощущается дыхание прошлого.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+              "public_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260727181401.jpg",
+              "type": "image/jpeg",
+              "size": 1238000,
+              "key": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Величие скал",
+          "text": "Крутые скалы, обрамляющие каньон, создают ощущение мощи природы.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+              "public_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260727162754.jpg",
+              "type": "image/jpeg",
+              "size": 4953150,
+              "key": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Лодки на воде",
+          "text": "Две лодки на фоне скалистого берега создают контраст между движением и неподвижностью.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+              "public_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260727163236.jpg",
+              "type": "image/jpeg",
+              "size": 2030406,
+              "key": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Спокойствие моря",
+          "text": "Морская гладь отражает спокойствие и умиротворение.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+              "public_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260727162056.jpg",
+              "type": "image/jpeg",
+              "size": 2423597,
+              "key": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg"
+            }
+          ]
+        },
+        {
+          "title": "Сбалансированная композиция",
+          "text": "Скалистый берег и море в гармонии, передающие ощущение спокойствия.",
+          "photos": [
+            {
+              "photo_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+              "public_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+              "source": "google_photos_r2",
+              "url": "https://photos.owntravel.ru/kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+              "width": 0,
+              "height": 0,
+              "name": "IMG20260727155530.jpg",
+              "type": "image/jpeg",
+              "size": 4617775,
+              "key": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg"
+            }
+          ]
+        }
+      ],
+      "backstage": []
+    }
+  ]
+}

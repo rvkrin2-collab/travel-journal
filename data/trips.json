@@ -34,12 +34,12 @@
       "subtitle": "Немецкий, Териберка и Титовка",
       "description": "Немецкий, Териберка и Титовка",
       "period": "Лето 2026",
-      "cover_url": "",
+      "cover_url": "https://photos.owntravel.ru/kolskiy/kray-zemli/c6e14650-dd3f-4072-aa83-4f06d4d63eda.jpg",
       "public_path": "trips/kolskiy/",
-      "published_days": 0,
-      "total_days": 0,
+      "published_days": 3,
+      "total_days": 3,
       "data_path": "data/kolskiy",
-      "status": "hidden"
+      "status": "completed"
     }
   ],
   "rules": {
