@@ -10,12 +10,12 @@ test("author page cache-busts the picker modules and PWA precaches those URLs", 
     fs.readFile(".github/workflows/process-trip-request.yml", "utf8")
   ]);
 
-  assert.match(html, /href="author\.css\?v=22"/);
-  assert.match(html, /src="author\.js\?v=22"/);
+  assert.match(html, /href="author\.css\?v=23"/);
+  assert.match(html, /src="author\.js\?v=23"/);
   assert.match(html, /id="show-google-user-id"[^>]*disabled/);
   assert.doesNotMatch(html, /id="show-google-user-id"[^>]*hidden/);
-  assert.match(author, /google-photos-picker\.js\?v=22/);
-  assert.match(author, /photo-services-config\.mjs\?v=22/);
+  assert.match(author, /google-photos-picker\.js\?v=23/);
+  assert.match(author, /photo-services-config\.mjs\?v=23/);
   assert.match(author, /showGoogleUserId\.disabled = false/);
   assert.match(author, /photoPicker\.submit\(data\)/);
   assert.match(author, /googlePhotosButton\.disabled = !photoPicker/);
@@ -27,6 +27,6 @@ test("author page cache-busts the picker modules and PWA precaches those URLs", 
   assert.match(workflow, /author_trip_submitted/);
   assert.match(workflow, /Analyze every submitted chapter/);
   for (const asset of ["author.css", "author.js", "google-photos-picker.js", "lib/photo-services-config.mjs"]) {
-    assert.match(worker, new RegExp(`${asset.replaceAll(".", "\\.")}\\?v=22`));
+    assert.match(worker, new RegExp(`${asset.replaceAll(".", "\\.")}\\?v=23`));
   }
 });

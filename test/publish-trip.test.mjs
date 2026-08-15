@@ -1,0 +1,28 @@
+import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import test from "node:test";
+import { promisify } from "node:util";
+import { createPhotoInventory } from "../lib/editorial-artifacts.mjs";
+const exec = promisify(execFile);
+
+test("publishes only a fully approved trip and selects an explicit cover", async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "travel-publish-")); t.after(() => fs.rm(root, { recursive: true, force: true }));
+  await fs.mkdir(path.join(root, "data/sample-trip"), { recursive: true });
+  await fs.writeFile(path.join(root, "data/trips.json"), JSON.stringify({ trips: [{ id: "sample-trip", title: "Sample", subtitle: "Sea", period: "Summer", description: "Story", status: "hidden", cover_url: "" }] }));
+  await fs.writeFile(path.join(root, "data/sample-trip/trip.json"), JSON.stringify({ trip: "sample-trip", editorial_status: "awaiting_visual_review", author_approved: false, views: [{ id: "chapters", items: [{ id: "coast", title: "Coast", description: "At sea" }] }] }));
+  const photo = { photo_id: "sample-trip/coast/one.jpg", key: "sample-trip/coast/one.jpg", url: "https://photos.owntravel.ru/sample-trip/coast/one.jpg" };
+  const inventory = createPhotoInventory({ trip: "sample-trip", chapter: "coast", photos: [photo] }); const fingerprint = inventory.photos_fingerprint;
+  const review = { schema_version: 2, photos_fingerprint: fingerprint, approval: "photo_selection_approved", items: [{ photo_id: photo.photo_id, status: "hero", label: "Sea" }] };
+  const storyboard = { photos_fingerprint: fingerprint, chapter: { title: "Coast", intro: "At sea" }, scenes: [{ title: "Start", text: "Water.", photos: [photo.photo_id] }] };
+  const approval = { status: "preview_approved", photos_fingerprint: fingerprint };
+  for (const [name, value] of [["photos", inventory], ["author-review", review], ["storyboard", storyboard], ["approval", approval]]) await fs.writeFile(path.join(root, `data/sample-trip/coast-${name}.json`), JSON.stringify(value));
+  await exec(process.execPath, [path.resolve("publish-trip.mjs")], { env: { ...process.env, ROOT: root, TRIP: "sample-trip", COVER_CHAPTER: "coast" } });
+  const [registry, trip, journal, page] = await Promise.all(["data/trips.json", "data/sample-trip/trip.json", "data/sample-trip/journal.json", "trips/sample-trip/chapters/coast.html"].map(file => fs.readFile(path.join(root, file), "utf8").then(value => file.endsWith(".json") ? JSON.parse(value) : value)));
+  assert.equal(registry.trips[0].status, "completed"); assert.equal(registry.trips[0].cover_url, photo.url);
+  assert.equal(trip.editorial_status, "published"); assert.equal(trip.cover_selection.chapter_id, "coast");
+  assert.equal(journal.editorial.status, "approved"); assert.equal(journal.chapters[0].hero.key, photo.key);
+  assert.match(page, /data-chapter="coast"/);
+});

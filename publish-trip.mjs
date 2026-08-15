@@ -1,0 +1,40 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import { assertSamePhotoSet, inventoryItems, photoId, safeSlug } from "./lib/editorial-artifacts.mjs";
+
+const root = process.env.ROOT || ".";
+const trip = safeSlug(process.env.TRIP, "trip");
+const coverChapter = safeSlug(process.env.COVER_CHAPTER, "cover chapter");
+const read = file => fs.readFile(path.join(root, file), "utf8").then(JSON.parse);
+const write = (file, value) => fs.writeFile(path.join(root, file), typeof value === "string" ? value : `${JSON.stringify(value, null, 2)}\n`);
+const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
+const registry = await read("data/trips.json");
+const registryTrip = registry.trips.find(item => item.id === trip);
+if (!registryTrip) throw new Error(`Trip ${trip} is not registered`);
+const tripFile = `data/${trip}/trip.json`; const tripData = await read(tripFile);
+const chaptersView = tripData.views.find(view => ["chapters", "days"].includes(view.id));
+if (!chaptersView?.items.length) throw new Error("Trip has no chapters");
+const published = [];
+for (const chapter of chaptersView.items) {
+  const base = `data/${trip}/${chapter.id}`;
+  const [inventory, review, storyboard, approval] = await Promise.all([read(`${base}-photos.json`), read(`${base}-author-review.json`), read(`${base}-storyboard.json`), read(`${base}-approval.json`)]);
+  const fingerprint = assertSamePhotoSet(inventory, review, `${chapter.id} author-review`);
+  if (approval.status !== "preview_approved" || approval.photos_fingerprint !== fingerprint || storyboard.photos_fingerprint !== fingerprint) throw new Error(`${chapter.id} is not approved for publication`);
+  const photos = new Map(inventoryItems(inventory).map(photo => [photoId(photo), photo]));
+  const heroReview = review.items.find(item => item.status === "hero"); const hero = photos.get(photoId(heroReview));
+  if (!hero) throw new Error(`${chapter.id} has no hero`);
+  const scenes = (storyboard.scenes || []).map(scene => ({ title: scene.title || "", text: scene.text || "", photos: (scene.photos || []).map(id => photos.get(id)).filter(Boolean) }));
+  const backstage = review.items.filter(item => item.status === "backstage").map(item => photos.get(photoId(item))).filter(Boolean);
+  published.push({ id: chapter.id, label: "Глава", title: storyboard.chapter?.title || chapter.title, summary: storyboard.chapter?.intro || chapter.description || "", route: [], hero, scenes, backstage });
+}
+const cover = published.find(chapter => chapter.id === coverChapter)?.hero;
+if (!cover) throw new Error("Selected cover chapter is not approved");
+const journal = { schema_version: 3, meta: { id: trip, title: registryTrip.title, subtitle: registryTrip.subtitle, period: registryTrip.period, description: registryTrip.description, route: [] }, editorial: { status: "approved", approved_by_author: true, published_at: new Date().toISOString() }, chapters: published };
+tripData.editorial_status = "published"; tripData.author_approved = true; tripData.cover_selection = { chapter_id: coverChapter, photo_url: cover.url, status: "author_selected" };
+tripData.views = [{ id: "chapters", label: "Главы", items: published.map(chapter => ({ id: chapter.id, title: chapter.title, description: chapter.summary, href: `chapters/${chapter.id}.html`, cover_url: chapter.hero.url })) }];
+Object.assign(registryTrip, { cover_url: cover.url, status: "completed", published_days: published.length, total_days: published.length });
+await fs.mkdir(path.join(root, `trips/${trip}/chapters`), { recursive: true });
+const indexHtml = `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(registryTrip.title)}</title><link rel="stylesheet" href="../../trip-editorial.css"></head><body data-trip-data="../../data/${trip}/journal.json"><main id="journal-content"></main><script src="../../trip-editorial.js"></script></body></html>`;
+const chapterHtml = id => `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(registryTrip.title)}</title><link rel="stylesheet" href="../../../trip-editorial.css"></head><body data-trip-data="../../../data/${trip}/journal.json" data-chapter="${id}"><main id="journal-content"></main><script src="../../../trip-editorial.js"></script></body></html>`;
+await Promise.all([write("data/trips.json", registry), write(tripFile, tripData), write(`data/${trip}/journal.json`, journal), write(`trips/${trip}/index.html`, indexHtml), ...published.map(chapter => write(`trips/${trip}/chapters/${chapter.id}.html`, chapterHtml(chapter.id)))]);
+console.log(`Published ${trip}: ${published.length} chapters, cover from ${coverChapter}`);

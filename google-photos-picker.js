@@ -106,6 +106,13 @@ export class GooglePhotosPicker {
     return result;
   }
 
+  async publishTrip(request) {
+    const response = await fetch(`${this.config.upload_api_url}/publish`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Публикация: HTTP ${response.status}`);
+    return result;
+  }
+
   async pick({ tripId, chapterId, onProgress }) {
     const token = await this.token();
     const session = await googleRequest(`${API}/sessions`, token, { method: "POST", body: "{}" });
