@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy",
+  "chapter": "teriberka",
+  "source": "google_photos_r2",
+  "generated_at": "2026-08-15T19:25:41.938Z",
+  "photo_count": 5,
+  "photos_fingerprint": "578ffeb036764c45769418ce263870638ad4f872dee3bfd6aec82d200447055c",
+  "items": [
+    {
+      "photo_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "public_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260727181401.jpg",
+      "type": "image/jpeg",
+      "size": 1238000,
+      "key": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg"
+    },
+    {
+      "photo_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "public_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260727162754.jpg",
+      "type": "image/jpeg",
+      "size": 4953150,
+      "key": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg"
+    },
+    {
+      "photo_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "public_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260727163236.jpg",
+      "type": "image/jpeg",
+      "size": 2030406,
+      "key": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg"
+    },
+    {
+      "photo_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "public_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260727162056.jpg",
+      "type": "image/jpeg",
+      "size": 2423597,
+      "key": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg"
+    },
+    {
+      "photo_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "public_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260727155530.jpg",
+      "type": "image/jpeg",
+      "size": 4617775,
+      "key": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg"
+    }
+  ]
+}

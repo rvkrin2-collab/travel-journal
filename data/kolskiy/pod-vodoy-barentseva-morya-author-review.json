@@ -1,0 +1,54 @@
+{
+  "ai_review_source": "data/kolskiy/pod-vodoy-barentseva-morya-ai-review.json",
+  "approval": "photo_selection_approved",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "day": "pod-vodoy-barentseva-morya",
+  "items": [
+    {
+      "label": "Подводная сцена с крупным крабом на морском дне, окружённым водорослями.",
+      "note": "Кадр с крабом выделяется благодаря чёткому фокусу на главном объекте и сбалансированной композиции.",
+      "number": 1,
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "status": "hero"
+    },
+    {
+      "label": "Подводная сцена с анемоном на камнях.",
+      "note": "Анемон на камнях создаёт интересный акцент, но композиция менее выразительна по сравнению с другими кадрами.",
+      "number": 2,
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Подводная сцена с анемоном на камне.",
+      "note": "Похожий на предыдущий кадр с анемоном, но с более холодными оттенками, что добавляет разнообразие.",
+      "number": 3,
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Подводная сцена с водорослями.",
+      "note": "Кадр с водорослями интересен, но не выделяется среди других по композиции и фокусу.",
+      "number": 4,
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Подводная сцена с медузой на фоне каменистого дна.",
+      "note": "Медуза в центре кадра создаёт динамичный акцент, что делает кадр более выразительным.",
+      "number": 5,
+      "photo_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "status": "story"
+    }
+  ],
+  "photos_fingerprint": "1b032673697e545469329454eddf010cbbd7f58767b906d4c4f92e781f0aea9c",
+  "photos_source": "data/kolskiy/pod-vodoy-barentseva-morya-photos.json",
+  "schema_version": 2,
+  "status": "author_review",
+  "trip": "kolskiy",
+  "updated_at": "2026-08-15T17:25:09.387Z"
+}

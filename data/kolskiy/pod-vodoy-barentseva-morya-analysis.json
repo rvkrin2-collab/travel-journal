@@ -1,0 +1,399 @@
+{
+  "schema_version": 3,
+  "analysis_version": "combined-vision-v1",
+  "trip": "kolskiy",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "day": "pod-vodoy-barentseva-morya",
+  "photos_source": "data/kolskiy/pod-vodoy-barentseva-morya-photos.json",
+  "photos_fingerprint": "1b032673697e545469329454eddf010cbbd7f58767b906d4c4f92e781f0aea9c",
+  "context_source": null,
+  "generated_at": "2026-08-15T19:25:50.382Z",
+  "vision_model": "gpt-4o",
+  "cache": {
+    "reused": 5,
+    "analyzed": 0
+  },
+  "items": [
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg|https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg|0|0",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "number": 1,
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Подводная сцена с крупным крабом на морском дне, окружённым водорослями.",
+      "foreground": "Крупный краб с шипами на панцире.",
+      "midground": "Морское дно с водорослями.",
+      "background": "Размытые водоросли и песчаное дно.",
+      "visible_elements": {
+        "terrain": "Песчаное морское дно.",
+        "vegetation": "Водоросли красноватого оттенка.",
+        "water": "Прозрачная вода.",
+        "snow": "Отсутствует.",
+        "sky": "Отсутствует.",
+        "people": "Отсутствуют.",
+        "animals": "Краб.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Краб.",
+      "secondary_subjects": [
+        "Водоросли"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 1,
+      "light": "Естественное подводное освещение, слегка приглушённое.",
+      "weather": "Подводная сцена, погода не видна.",
+      "composition": {
+        "framing": "Краб в центре кадра.",
+        "depth": "Неглубокая, с акцентом на крабе.",
+        "balance": "Сбалансированная, краб в центре.",
+        "visual_anchor": "Краб.",
+        "horizon": "Отсутствует.",
+        "distractions": "Нет значительных отвлекающих элементов."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость на крабе.",
+        "exposure": "Корректная экспозиция, детали видны.",
+        "color": "Естественные цвета, с преобладанием зелёных и красных оттенков.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение съёмки."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, связанных с конкретной точкой маршрута.",
+      "caption_seed": "Краб на морском дне среди водорослей.",
+      "editor_note": "Фокус на морской жизни и текстурах подводного мира.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:00.920Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg|https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg|0|0",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "number": 2,
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Подводная сцена с анемоном на камнях.",
+      "foreground": "Анемон, прикреплённый к камню.",
+      "midground": "Камни и песчаное дно.",
+      "background": "Размытые камни и вода.",
+      "visible_elements": {
+        "terrain": "Камни и песчаное дно.",
+        "vegetation": "Отсутствует.",
+        "water": "Подводная сцена.",
+        "snow": "Отсутствует.",
+        "sky": "Отсутствует.",
+        "people": "Отсутствуют.",
+        "animals": "Анемон.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Анемон",
+      "secondary_subjects": [
+        "Камни"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 1,
+      "light": "Искусственное освещение, вероятно, от подводного фонаря.",
+      "weather": "Подводная сцена, погода не видна.",
+      "composition": {
+        "framing": "Центральное расположение анемона.",
+        "depth": "Неглубокая, с фокусом на переднем плане.",
+        "balance": "Сбалансированная, с акцентом на анемоне.",
+        "visual_anchor": "Анемон в центре кадра.",
+        "horizon": "Отсутствует.",
+        "distractions": "Нет значительных отвлекающих факторов."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость на анемоне.",
+        "exposure": "Чуть переэкспонировано из-за яркого освещения.",
+        "color": "Сине-зелёные оттенки, характерные для подводной съёмки.",
+        "motion_blur": "Отсутствует.",
+        "score": 7.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение съёмки."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.4,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Подводный анемон на камнях.",
+      "editor_note": "Фокус на анемоне создаёт интересный подводный кадр.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:06.188Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg|https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg|0|0",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "number": 3,
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Подводная сцена с анемоном на камне.",
+      "foreground": "Крупный план анемона, прикреплённого к камню.",
+      "midground": "Камни и морское дно.",
+      "background": "Голубая вода с неясными очертаниями.",
+      "visible_elements": {
+        "terrain": "Камни под водой.",
+        "vegetation": "Морской анемон.",
+        "water": "Голубая вода.",
+        "snow": "Отсутствует.",
+        "sky": "Отсутствует.",
+        "people": "Отсутствуют.",
+        "animals": "Анемон.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Морской анемон.",
+      "secondary_subjects": [
+        "Камни"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 1,
+      "light": "Рассеянный свет, характерный для подводной съёмки.",
+      "weather": "Под водой, погода не видна.",
+      "composition": {
+        "framing": "Крупный план анемона.",
+        "depth": "Средняя глубина, акцент на переднем плане.",
+        "balance": "Сбалансированная композиция с акцентом на анемоне.",
+        "visual_anchor": "Анемон.",
+        "horizon": "Отсутствует.",
+        "distractions": "Нет отвлекающих элементов."
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая резкость на переднем плане.",
+        "exposure": "Корректная экспозиция для подводной съёмки.",
+        "color": "Холодные оттенки, преобладает голубой цвет.",
+        "motion_blur": "Отсутствует.",
+        "score": 7.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное местоположение съёмки."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, характерных для конкретного места.",
+      "caption_seed": "Подводный анемон на камне.",
+      "editor_note": "Фокус на подводной жизни и текстурах.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:11.555Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg|https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg|0|0",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "number": 4,
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Подводная сцена с водорослями.",
+      "foreground": "Водоросли и морское дно.",
+      "midground": "Продолжение водорослей, уходящих вдаль.",
+      "background": "Размытая водная среда.",
+      "visible_elements": {
+        "terrain": "Морское дно.",
+        "vegetation": "Водоросли.",
+        "water": "Прозрачная вода.",
+        "snow": "Отсутствует.",
+        "sky": "Отсутствует.",
+        "people": "Отсутствуют.",
+        "animals": "Отсутствуют.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Водоросли.",
+      "secondary_subjects": [
+        "Морское дно"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Естественный свет, фильтрованный через воду.",
+      "weather": "Подводная сцена, погода не видна.",
+      "composition": {
+        "framing": "Центральное расположение водорослей.",
+        "depth": "Средняя глубина, с постепенным размытием вдаль.",
+        "balance": "Сбалансированная композиция с равномерным распределением водорослей.",
+        "visual_anchor": "Центральные водоросли.",
+        "horizon": "Отсутствует.",
+        "distractions": "Нет отвлекающих элементов."
+      },
+      "technical_quality": {
+        "sharpness": "Средняя резкость, с размытием на заднем плане.",
+        "exposure": "Хорошая экспозиция для подводной сцены.",
+        "color": "Естественные цвета, с преобладанием зелёных и синих оттенков.",
+        "motion_blur": "Отсутствует.",
+        "score": 7.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное местоположение подводной сцены."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.4,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Подводный вид с водорослями.",
+      "editor_note": "Эффектное изображение подводного мира с водорослями.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:16.573Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg|https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg|0|0",
+      "public_id": "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "number": 5,
+      "url": "https://photos.owntravel.ru/kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Подводная сцена с медузой на фоне каменистого дна.",
+      "foreground": "Медуза с длинными щупальцами.",
+      "midground": "Каменистое дно с водорослями.",
+      "background": "Голубая вода, постепенно темнеющая в глубину.",
+      "visible_elements": {
+        "terrain": "Каменистое дно.",
+        "vegetation": "Водоросли на камнях.",
+        "water": "Голубая вода.",
+        "snow": "Отсутствует.",
+        "sky": "Отсутствует.",
+        "people": "Отсутствуют.",
+        "animals": "Медуза.",
+        "structures": "Отсутствуют.",
+        "road_vehicle": "Отсутствуют."
+      },
+      "dominant_subject": "Медуза.",
+      "secondary_subjects": [
+        "Каменистое дно",
+        "Водоросли"
+      ],
+      "scene_type": "other",
+      "people_count": 0,
+      "animal_count": 1,
+      "light": "Рассеянный свет, типичный для подводной съёмки.",
+      "weather": "Под водой, погода не видна.",
+      "composition": {
+        "framing": "Центральное расположение медузы.",
+        "depth": "Средняя глубина, создающая ощущение пространства.",
+        "balance": "Сбалансированная композиция с акцентом на медузу.",
+        "visual_anchor": "Медуза в центре кадра.",
+        "horizon": "Отсутствует.",
+        "distractions": "Нет отвлекающих элементов."
+      },
+      "technical_quality": {
+        "sharpness": "Средняя резкость, характерная для подводной съёмки.",
+        "exposure": "Хорошая экспозиция для подводной сцены.",
+        "color": "Естественные цвета, с преобладанием голубого.",
+        "motion_blur": "Незначительное размытие, возможно из-за движения воды.",
+        "score": 7.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное местоположение съёмки."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.4,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Подводная медуза среди камней.",
+      "editor_note": "Фокус на медузе создаёт ощущение подводного мира.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-13T20:23:21.994Z",
+      "model": "gpt-4o"
+    }
+  ],
+  "recommendation": {
+    "hero": "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg",
+    "story": [
+      "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg",
+      "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg",
+      "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg",
+      "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg"
+    ],
+    "backstage": [],
+    "skip": [],
+    "decisions": {
+      "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg": {
+        "reason": "Кадр с крабом выделяется благодаря чёткому фокусу на главном объекте и хорошей композиции.",
+        "visual_function": "основной рассказ",
+        "duplicate_group": "озеро · основной-рассказ",
+        "status": "hero",
+        "editorial_score": 85
+      },
+      "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg": {
+        "reason": "Анемон на камнях создаёт интересный подводный кадр, но уступает по выразительности крабу.",
+        "visual_function": "второстепенный рассказ",
+        "duplicate_group": "озеро · второстепенный-рассказ",
+        "status": "story",
+        "editorial_score": 75
+      },
+      "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg": {
+        "reason": "Похож на предыдущий кадр с анемоном, но с более холодными оттенками.",
+        "visual_function": "второстепенный рассказ",
+        "duplicate_group": "озеро · второстепенный-рассказ",
+        "status": "story",
+        "editorial_score": 75
+      },
+      "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg": {
+        "reason": "Кадр с водорослями интересен, но не выделяется среди других.",
+        "visual_function": "второстепенный рассказ",
+        "duplicate_group": "озеро · второстепенный-рассказ",
+        "status": "story",
+        "editorial_score": 70
+      },
+      "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg": {
+        "reason": "Медуза добавляет динамику и разнообразие в серию, выделяется среди других кадров.",
+        "visual_function": "основной рассказ",
+        "duplicate_group": "озеро · основной-рассказ",
+        "status": "story",
+        "editorial_score": 80
+      }
+    },
+    "sequence_note": "Кадры с крабом и медузой выделяются как основные, благодаря чёткому фокусу и выразительности. Анемоны и водоросли дополняют серию, но не доминируют.",
+    "editorial_summary": "Серия подводных снимков демонстрирует разнообразие морской жизни. Кадры с крабом и медузой выделяются как основные, благодаря чёткому фокусу и выразительности. Анемоны и водоросли дополняют серию, но не доминируют.",
+    "fact_checks": [
+      "Краб и медуза являются основными объектами в своих кадрах.",
+      "Анемоны представлены в двух кадрах, но с разными оттенками.",
+      "Водоросли занимают центральное место в одном из кадров."
+    ],
+    "ranking_method": "single_model_ranking_then_dominant_subject_function_normalization"
+  },
+  "editorial_policy": {
+    "source": "config/editorial-policy.json",
+    "version": 6,
+    "validated": true,
+    "assignment": "chapter_visual_selection_with_dominant_subject_groups",
+    "model": "gpt-4o",
+    "updated_at": "2026-08-15T19:25:50.382Z"
+  },
+  "series_model": "gpt-4o"
+}
