@@ -211,7 +211,7 @@ export default {
       if (request.method === "POST" && url.pathname === "/publish") return await dispatchEditorial(request, env, cors, "publish_requested");
       return json({ error: "not found" }, 404, cors);
     } catch (error) {
-      if (error instanceof Response) return new Response(error.body, { status: error.status, headers: cors });
+      if (error instanceof Response) return json({ error: await error.text() || "Request validation failed" }, error.status, cors);
       console.error(error);
       return json({ error: "internal error" }, 500, cors);
     }

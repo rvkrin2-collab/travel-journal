@@ -78,7 +78,8 @@ export class GooglePhotosPicker {
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify(request)
     });
-    const result = await response.json().catch(() => ({}));
+    const fallback = response.clone();
+    const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
     if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
     if (result.author_session) sessionStorage.setItem(AUTHOR_SESSION_KEY, JSON.stringify({ token: result.author_session, expires_at: Date.now() + Number(result.author_session_expires_in || 0) * 1000 }));
     return result;

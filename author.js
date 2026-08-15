@@ -12,6 +12,7 @@ const submitButton = document.querySelector("#submit-trip");
 const submissionResult = document.querySelector("#submission-result");
 let cover = { name: "", type: "", size: 0 };
 let photoPicker;
+let stableTripId = "";
 
 const transliterate = value => String(value || "").toLowerCase().split("").map(character => ({а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",ю:"yu",я:"ya",ь:"",ъ:""}[character] ?? character)).join("");
 const slugify = value => transliterate(value).normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || `trip-${new Date().getFullYear()}`;
@@ -24,6 +25,7 @@ function addChapter(data = {}) {
     if (input.type !== "file") input.value = data[input.dataset.field] || "";
   });
   chapter.dataset.photos = JSON.stringify(data.photos || []);
+  chapter.dataset.chapterId = inferPhotoTarget(data.photos)?.chapter || data.id || "";
   chapter.querySelector("[data-remove]").onclick = () => { chapter.remove(); changed(); };
   chapter.querySelector('[data-field="photos"]').onchange = event => {
     const photos = [...event.target.files].map(file => ({ name: file.name, type: file.type, size: file.size, last_modified: file.lastModified }));
@@ -38,7 +40,9 @@ function addChapter(data = {}) {
     try {
       if (!photoPicker) throw new Error("Подключение Google Фото ещё не готово");
       progress.textContent = "Открываем Google Фото…";
-      const photos = await photoPicker.pick({ tripId: slugify(form.elements.title.value), chapterId: slugify(chapter.querySelector('[data-field="title"]').value), onProgress: message => { progress.textContent = message; } });
+      stableTripId ||= slugify(form.elements.title.value);
+      chapter.dataset.chapterId ||= uniqueChapterId(slugify(chapter.querySelector('[data-field="title"]').value), chapter);
+      const photos = await photoPicker.pick({ tripId: stableTripId, chapterId: chapter.dataset.chapterId, onProgress: message => { progress.textContent = message; } });
       chapter.dataset.photos = JSON.stringify(photos);
       renderPhotoNames(chapter, photos);
       progress.textContent = `Загружено: ${photos.length}`;
@@ -49,6 +53,18 @@ function addChapter(data = {}) {
   chaptersRoot.append(chapter);
 }
 
+function inferPhotoTarget(photos = []) {
+  const parts = String(photos.find(photo => photo.key)?.key || "").split("/");
+  return parts.length >= 3 ? { trip: parts[0], chapter: parts[1] } : null;
+}
+
+function uniqueChapterId(base, current) {
+  const used = new Set([...chaptersRoot.children].filter(chapter => chapter !== current).map(chapter => chapter.dataset.chapterId || slugify(chapter.querySelector('[data-field="title"]').value)));
+  let candidate = base; let suffix = 2;
+  while (used.has(candidate)) candidate = `${base}-${suffix++}`;
+  return candidate;
+}
+
 function renderPhotoNames(chapter, photos) {
   chapter.querySelector(".photo-list").innerHTML = photos.map(photo => `<span>${escapeHtml(photo.name)}</span>`).join("");
 }
@@ -57,9 +73,11 @@ function collect() {
   const values = Object.fromEntries(new FormData(form).entries());
   const chapters = [...chaptersRoot.children].map((chapter, index) => {
     const get = name => chapter.querySelector(`[data-field="${name}"]`)?.value.trim() || "";
-    return { id: slugify(get("title")) || `chapter-${index + 1}`, title: get("title"), description: get("description"), themes: splitTags(get("themes")), places: splitTags(get("places")), photos: JSON.parse(chapter.dataset.photos || "[]") };
+    const photos = JSON.parse(chapter.dataset.photos || "[]");
+    const id = chapter.dataset.chapterId || slugify(get("title")) || `chapter-${index + 1}`;
+    return { id, title: get("title"), description: get("description"), themes: splitTags(get("themes")), places: splitTags(get("places")), photos };
   }).filter(chapter => chapter.title || chapter.description || chapter.photos.length);
-  return { schema_version: 1, type: "new_trip_request", created_at: new Date().toISOString(), trip: { id: slugify(values.title), title: values.title?.trim() || "Без названия", subtitle: values.subtitle?.trim() || "", period: values.period?.trim() || "", description: values.description?.trim() || "", cover }, chapters };
+  return { schema_version: 1, type: "new_trip_request", created_at: new Date().toISOString(), trip: { id: stableTripId || slugify(values.title), title: values.title?.trim() || "Без названия", subtitle: values.subtitle?.trim() || "", period: values.period?.trim() || "", description: values.description?.trim() || "", cover }, chapters };
 }
 
 function renderPreview(data = collect()) {
@@ -76,6 +94,8 @@ function changed() {
 function restore() {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
   if (!saved) return addChapter();
+  const uploadedTarget = (saved.chapters || []).map(chapter => inferPhotoTarget(chapter.photos)).find(Boolean);
+  stableTripId = uploadedTarget?.trip || saved.trip?.id || "";
   for (const [name, value] of Object.entries(saved.trip || {})) {
     const input = form.elements[name];
     if (input && input.type !== "file") input.value = value || "";
@@ -123,6 +143,8 @@ form.addEventListener("submit", async event => {
   if (!photoPicker) { submissionResult.hidden = false; submissionResult.textContent = "Автоматическая отправка пока не готова. Скачайте резервную копию JSON."; return; }
   const incomplete = data.chapters.filter(chapter => !chapter.photos.length || chapter.photos.some(photo => !photo.url || !photo.key));
   if (incomplete.length) { submissionResult.hidden = false; submissionResult.textContent = `Сначала загрузите фотографии в R2 для глав: ${incomplete.map(chapter => chapter.title).join(", ")}.`; return; }
+  const misplaced = data.chapters.flatMap(chapter => chapter.photos.filter(photo => !String(photo.key).startsWith(`${data.trip.id}/${chapter.id}/`)).map(photo => ({ chapter, photo })));
+  if (misplaced.length) { submissionResult.hidden = false; submissionResult.textContent = `Фотографии привязаны к старым идентификаторам. Перезагрузите фото в главах: ${[...new Set(misplaced.map(item => item.chapter.title))].join(", ")}. Сами файлы в R2 не потеряны.`; return; }
   submitButton.disabled = true; submitButton.textContent = "Отправляем…"; submissionResult.hidden = false; submissionResult.textContent = "Передаём заявку в редакционный процесс…";
   try {
     const result = await photoPicker.submit(data);
@@ -134,7 +156,7 @@ form.addEventListener("submit", async event => {
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs?v=23"), import("./google-photos-picker.js?v=23")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=24"), import("./google-photos-picker.js?v=24")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());

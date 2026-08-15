@@ -67,6 +67,20 @@ test("Google import rejects non-Google source URLs before downloading", async ()
   assert.equal(response.status, 400);
 });
 
+test("trip submission explains an R2 path mismatch as JSON", async () => {
+  globalThis.fetch = async url => {
+    if (String(url).startsWith("https://oauth2.googleapis.com/")) return Response.json({ aud: "client-id", email: "author@example.com", email_verified: "true", scope });
+    throw new Error(`unexpected URL: ${url}`);
+  };
+  const response = await worker.fetch(new Request("https://upload.example.test/submit", {
+    method: "POST",
+    headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token", "Content-Type": "application/json" },
+    body: JSON.stringify({ schema_version: 1, type: "new_trip_request", trip: { id: "new-title", title: "New title" }, chapters: [{ id: "coast", title: "Coast", photos: [{ key: "old-title/coast/photo.jpg", url: "https://photos.owntravel.ru/old-title/coast/photo.jpg" }] }] })
+  }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: "Photo is outside this chapter R2 path" });
+});
+
 test("author workshop submission dispatches the editorial workflow", async () => {
   let dispatch;
   globalThis.fetch = async (url, options = {}) => {
