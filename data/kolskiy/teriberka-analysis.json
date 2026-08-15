@@ -7,7 +7,7 @@
   "photos_source": "data/kolskiy/teriberka-photos.json",
   "photos_fingerprint": "578ffeb036764c45769418ce263870638ad4f872dee3bfd6aec82d200447055c",
   "context_source": null,
-  "generated_at": "2026-08-15T19:25:57.361Z",
+  "generated_at": "2026-08-15T20:08:52.232Z",
   "vision_model": "gpt-4o",
   "cache": {
     "reused": 5,
@@ -347,48 +347,44 @@
     "skip": [],
     "decisions": {
       "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg": {
-        "reason": "Кадр с заброшенными зданиями и ясным небом создаёт атмосферу простора, но не выделяется среди других.",
-        "visual_function": "пейзаж с архитектурой",
-        "duplicate_group": "settlement · пейзаж-с-архитектурой",
+        "reason": "Фотография передаёт атмосферу заброшенности и простора, но не выделяется среди других по визуальной силе.",
+        "visual_function": "settlement",
+        "duplicate_group": "settlement · другая-функция",
         "status": "story",
-        "editorial_score": 70
+        "editorial_score": 72
       },
       "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg": {
-        "reason": "Скалы каньона с людьми на вершине создают впечатляющую сцену, подчёркивая масштаб и масштаб пространства.",
-        "visual_function": "пейзаж с людьми",
-        "duplicate_group": "люди · пейзаж-с-людьми",
+        "reason": "Сильная композиция с акцентом на величие скал и присутствие людей добавляет динамику.",
+        "visual_function": "canyon",
+        "duplicate_group": "люди · другая-функция",
         "status": "story",
         "editorial_score": 85
       },
       "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg": {
-        "reason": "Красная лодка на фоне моря и скалистого берега создаёт динамичную и живописную сцену.",
-        "visual_function": "морской пейзаж с лодкой",
-        "duplicate_group": "озеро · морской-пейзаж-с-лодкой",
+        "reason": "Фокус на красной лодке создаёт динамику и выделяет кадр среди других.",
+        "visual_function": "lake",
+        "duplicate_group": "озеро · другая-функция",
         "status": "hero",
         "editorial_score": 88
       },
       "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg": {
-        "reason": "Море и скалистый берег с лодкой создают спокойную и сбалансированную композицию.",
-        "visual_function": "морской пейзаж",
-        "duplicate_group": "озеро · морской-пейзаж",
-        "status": "story",
-        "editorial_score": 82
-      },
-      "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg": {
-        "reason": "Скалистый берег с зеленью и морем создаёт гармоничную и естественную сцену.",
-        "visual_function": "пейзаж с берегом",
-        "duplicate_group": "озеро · пейзаж-с-берегом",
+        "reason": "Спокойный морской пейзаж с лодкой, но менее выразительный по сравнению с другими кадрами.",
+        "visual_function": "other",
+        "duplicate_group": "озеро · другая-функция",
         "status": "story",
         "editorial_score": 80
+      },
+      "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg": {
+        "reason": "Сбалансированная композиция с акцентом на скалистый берег и море, но без яркого акцента.",
+        "visual_function": "mountain",
+        "duplicate_group": "озеро · другая-функция",
+        "status": "story",
+        "editorial_score": 82
       }
     },
-    "sequence_note": "Кадры ранжированы по визуальной выразительности и самостоятельный сцены. Основное внимание уделено композиции и наличию динамичных элементов.",
-    "editorial_summary": "Серия фотографий демонстрирует разнообразие природных и архитектурных пейзажей, подчёркивая как спокойствие, так и динамику окружающей среды.",
-    "fact_checks": [
-      "Все кадры имеют хорошую техническую резкость и правильную экспозицию.",
-      "Кадры с лодками и скалами имеют насыщенные естественные цвета.",
-      "Кадры с людьми на скалах подчёркивают масштаб и масштаб пространства."
-    ],
+    "sequence_note": "Кадры ранжированы по визуальной силе и самостоятельный. Основной акцент на лодке и скалах, которые выделяются среди других.",
+    "editorial_summary": "Серия фотографий передаёт разнообразие природных и архитектурных сцен, с акцентом на скалы и морские пейзажи. Лодка и скалы выделяются как наиболее динамичные и выразительные элементы.",
+    "fact_checks": [],
     "ranking_method": "single_model_ranking_then_dominant_subject_function_normalization"
   },
   "editorial_policy": {
@@ -397,7 +393,7 @@
     "validated": true,
     "assignment": "chapter_visual_selection_with_dominant_subject_groups",
     "model": "gpt-4o",
-    "updated_at": "2026-08-15T19:25:57.361Z"
+    "updated_at": "2026-08-15T20:08:52.232Z"
   },
   "series_model": "gpt-4o"
 }

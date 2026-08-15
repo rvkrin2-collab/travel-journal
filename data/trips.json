@@ -27,6 +27,19 @@
       "total_days": 0,
       "data_path": "data/kolskiy-u-vody-i-pod-vodoy",
       "status": "hidden"
+    },
+    {
+      "id": "kolskiy",
+      "title": "Кольский",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "description": "Немецкий, Териберка и Титовка",
+      "period": "Лето 2026",
+      "cover_url": "",
+      "public_path": "trips/kolskiy/",
+      "published_days": 0,
+      "total_days": 0,
+      "data_path": "data/kolskiy",
+      "status": "hidden"
     }
   ],
   "rules": {
