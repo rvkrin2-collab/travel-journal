@@ -1,11 +1,11 @@
 import fs from "fs/promises";
+import { assertSamePhotoSet, inventoryFingerprint, inventoryItems, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const model = process.env.OPENAI_TEXT_MODEL || process.env.OPENAI_VISION_MODEL || "gpt-4o-mini";
-const trip = process.env.TRIP || "kyrgyzstan-2026";
-const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
+const target = resolveEditorialTarget(); const trip = target.trip; const dayTag = target.chapter;
 
-const photosFile = process.env.PHOTOS_FILE || `data/${trip}/${dayTag}-photos.json`;
+const photosFile = process.env.PHOTOS_FILE || target.photos;
 const aiReviewFile = process.env.AI_REVIEW_FILE || `data/${trip}/${dayTag}-ai-review.json`;
 const authorReviewFile = process.env.AUTHOR_REVIEW_FILE || `data/${trip}/${dayTag}-author-review.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
@@ -128,7 +128,8 @@ ${JSON.stringify(payload, null, 2)}`;
   return extractJson(content);
 }
 
-const photos = await readJsonIfExists(photosFile);
+const inventory = await readJsonIfExists(photosFile);
+const photos = inventoryItems(inventory);
 const aiReview = await readJsonIfExists(aiReviewFile) || await readJsonIfExists(`data/${trip}/${dayTag}-review.json`);
 const authorReview = await readJsonIfExists(authorReviewFile);
 const authorNotes = await readJsonIfExists(authorNotesFile);
@@ -136,6 +137,8 @@ const selectedIdea = await readJsonIfExists(selectedIdeaFile);
 
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${photosFile} does not contain photos`);
 if (!authorReview) throw new Error(`${authorReviewFile} is missing. Export author-review from editor first.`);
+if (authorReview.approval !== "photo_selection_approved" && authorReview.schema_version >= 2) throw new Error("Author photo selection is not approved");
+const photosFingerprint = assertSamePhotoSet(inventory, authorReview, "author-review");
 
 const payload = {trip, day: dayTag, photos, ai_review: aiReview, author_review: authorReview, author_notes: authorNotes, selected_idea: selectedIdea};
 const finalReview = validateReview(await buildFinalReview(payload), photos);
@@ -147,6 +150,8 @@ finalReview.author_review_source = authorReviewFile;
 finalReview.author_notes_source = authorNotesFile;
 finalReview.selected_idea_source = selectedIdeaFile;
 finalReview.status = "final_review";
+finalReview.chapter_id = dayTag;
+finalReview.photos_fingerprint = photosFingerprint;
 finalReview.updated_at = new Date().toISOString();
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", { recursive: true });
