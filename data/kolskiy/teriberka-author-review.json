@@ -1,0 +1,54 @@
+{
+  "ai_review_source": "data/kolskiy/teriberka-ai-review.json",
+  "approval": "photo_selection_approved",
+  "chapter": "teriberka",
+  "day": "teriberka",
+  "items": [
+    {
+      "label": "Сельская местность с несколькими зданиями на фоне ясного неба.",
+      "note": "Фотография передаёт атмосферу заброшенности и простора, но не выделяется среди других кадров.",
+      "number": 1,
+      "photo_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "public_id": "kolskiy/teriberka/c6009c08-77de-41e2-902d-23751d88497c.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Изображение каньона с крутыми скалами и ясным небом.",
+      "note": "Сильная композиция с акцентом на величие скал и присутствие людей добавляет динамику.",
+      "number": 2,
+      "photo_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "public_id": "kolskiy/teriberka/7b89e73a-c65e-4e84-9b84-3435dfd111d9.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Фотография с видом на море с двумя лодками и скалистым берегом.",
+      "note": "Динамичная сцена с лодкой на воде, создающая интересный контраст с неподвижным берегом.",
+      "number": 3,
+      "photo_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "public_id": "kolskiy/teriberka/af78a39b-0e4b-4dc1-b377-5a56a1215b2e.jpg",
+      "status": "hero"
+    },
+    {
+      "label": "Фотография с видом на море и скалистый берег.",
+      "note": "Спокойная морская сцена с лодкой, создающая атмосферу простора и умиротворения.",
+      "number": 4,
+      "photo_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "public_id": "kolskiy/teriberka/404a99fc-719c-4809-83e2-13a7bd4fdb56.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Фотография с видом на скалистый берег и море.",
+      "note": "Сбалансированная композиция с акцентом на скалистый берег и море, передающая спокойствие.",
+      "number": 5,
+      "photo_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "public_id": "kolskiy/teriberka/aa8645c2-fee7-4494-95e0-e2ed0636360a.jpg",
+      "status": "story"
+    }
+  ],
+  "photos_fingerprint": "578ffeb036764c45769418ce263870638ad4f872dee3bfd6aec82d200447055c",
+  "photos_source": "data/kolskiy/teriberka-photos.json",
+  "schema_version": 2,
+  "status": "author_review",
+  "trip": "kolskiy",
+  "updated_at": "2026-08-15T17:24:53.374Z"
+}
