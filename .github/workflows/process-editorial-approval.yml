@@ -1,0 +1,100 @@
+name: Process editorial approval
+
+on:
+  repository_dispatch:
+    types: [photo_selection_approved, preview_approved, publish_requested]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: editorial-approval-${{ github.event.client_payload.artifact.trip }}-${{ github.event.client_payload.artifact.chapter }}
+  cancel-in-progress: false
+
+jobs:
+  storyboard:
+    if: github.event.action == 'photo_selection_approved'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Save approved photo selection
+        env:
+          ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
+        run: |
+          trip=$(node -p 'JSON.parse(process.env.ARTIFACT).trip')
+          chapter=$(node -p 'JSON.parse(process.env.ARTIFACT).chapter')
+          mkdir -p "data/$trip"
+          printf '%s\n' "$ARTIFACT" > "data/$trip/$chapter-author-review.json"
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+          echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+      - name: Validate first author approval
+        run: node validate-editorial-chapter.mjs
+      - name: Build storyboard and text
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node build-storyboard.mjs
+      - name: Validate storyboard and gates
+        run: |
+          node validate-storyboard.mjs
+          node validate-editorial-chapter.mjs
+      - name: Test
+        run: npm test
+      - name: Commit approved selection and preview data
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add "data/$TRIP/$CHAPTER-author-review.json" "data/$TRIP/$CHAPTER-storyboard.json"
+          git commit -m "Build approved storyboard for $TRIP $CHAPTER"
+          git pull --rebase origin main
+          git push origin HEAD:main
+  approve-preview:
+    if: github.event.action == 'preview_approved'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - name: Save second author approval without publishing
+        env:
+          ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
+        run: |
+          trip=$(node -p 'JSON.parse(process.env.ARTIFACT).trip')
+          chapter=$(node -p 'JSON.parse(process.env.ARTIFACT).chapter')
+          printf '%s\n' "$ARTIFACT" > "data/$trip/$chapter-approval.json"
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add "data/$trip/$chapter-approval.json"
+          git commit -m "Approve preview for $trip $chapter"
+          git pull --rebase origin main
+          git push origin HEAD:main
+  publish:
+    if: github.event.action == 'publish_requested'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Validate and build the approved public trip
+        env:
+          ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
+        run: |
+          trip=$(node -p 'JSON.parse(process.env.ARTIFACT).trip')
+          cover=$(node -p 'JSON.parse(process.env.ARTIFACT).cover_chapter')
+          TRIP="$trip" COVER_CHAPTER="$cover" node publish-trip.mjs
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+      - name: Test publication
+        run: npm test
+      - name: Commit and publish
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add data/trips.json "data/$TRIP" "trips/$TRIP"
+          git commit -m "Publish approved trip $TRIP"
+          git pull --rebase origin main
+          git push origin HEAD:main

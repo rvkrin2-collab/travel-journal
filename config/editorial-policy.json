@@ -2,8 +2,8 @@
   "version": 6,
   "selection": {
     "hero_count": 1,
-    "story_min": 7,
-    "story_max": 10,
+    "story_min": 6,
+    "story_max": 8,
     "story_extension": {
       "enabled": true,
       "absolute_score_floor": 78,

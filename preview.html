@@ -39,65 +39,12 @@
         <p class="eyebrow">Рабочие заметки автора</p><h3>Что поправить?</h3>
         <div class="author-grid"><label>Тип правки<select id="noteType"><option value="general">Общее</option><option value="idea">Идея</option><option value="photo_order">Порядок</option><option value="caption">Текст</option><option value="fact">Факт</option><option value="photo_selection">Отбор фото</option></select></label><label>Кадр<input id="notePhoto" type="text" placeholder="public_id или номер"></label></div>
         <textarea id="noteText" placeholder="Напиши замечание обычным языком"></textarea>
-        <div class="author-actions"><button id="saveAuthorNoteBtn" type="button">Добавить</button><button id="exportAuthorNotesBtn" type="button">Экспорт JSON</button><button id="clearAuthorNotesBtn" type="button">Очистить</button></div>
+        <div class="author-actions"><button id="approvePreviewBtn" type="button">Утверждаю preview</button></div>
         <div id="authorNoteStatus"></div><div id="authorHistory"></div>
       </section>
     </section>
   </main>
   <footer id="footerText">Предпросмотр</footer>
-<script>
-const params=new URLSearchParams(location.search);
-const trip=seg(params.get('trip')||'kyrgyzstan-2026','kyrgyzstan-2026');
-const day=norm(params.get('day')||params.get('day_tag')||'day02');
-const rawBase='https://raw.githubusercontent.com/rvkrin2-collab/travel-journal/main/';
-const stamp=params.get('v')||params.get('x')||Date.now();
-const reviews=[`data/${trip}/${day}-final-review.json`,`data/${trip}/${day}-author-review.json`,`data/${trip}/${day}-ai-review.json`,`data/${trip}/${day}-review.json`];
-const storyboardPath=`data/${trip}/${day}-storyboard.json`;
-const photosPath=`data/${trip}/${day}-photos.json`;
-const NOTE_KEY=`${trip}-${day}-preview-author-notes`;
-let diagnostics=[];
-function seg(v,f){return String(v||'').trim().toLowerCase().replace(/[^a-z0-9-]/g,'')||f}
-function norm(v){const m=String(v||'').match(/\d+/);return m?`day${String(+m[0]).padStart(2,'0')}`:seg(v,'day02')}
-function esc(v){return String(v||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function imgUrl(u,w=1800){return u.replace('/image/upload/',`/image/upload/f_auto,q_auto,w_${w}/`)}
-function candidates(path){return [`${rawBase}${path}?v=${encodeURIComponent(stamp)}`,`${path}?v=${encodeURIComponent(stamp)}`]}
-async function jsonUrl(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error(`${url}: ${r.status}`);return r.json()}
-async function loadJson(path){for(const url of candidates(path)){try{const data=await jsonUrl(url);diagnostics.push(`${url}: OK`);return{data,url}}catch(e){diagnostics.push(e.message)}}throw Error(`${path} не загружен`)}
-async function maybe(path){try{return await loadJson(path)}catch(e){return null}}
-async function firstReview(){for(const path of reviews){try{const loaded=await loadJson(path);return{review:loaded.data,path:loaded.url}}catch(e){}}throw Error('review не найден')}
-function rank(review){const r={hero:0,story:1,backstage:2,skip:3};return [...(review.items||[])].sort((a,b)=>(r[a.status]??9)-(r[b.status]??9)||(a.number||0)-(b.number||0))}
-function back(item,photo){const t=item.label||'За кадром';return `<article class="backstage-card"><img src="${imgUrl(photo.url,900)}" alt="${esc(t)}" loading="lazy"><p>${esc(t)}</p></article>`}
-function sceneHtml(scene,map,i){const photos=(scene.photos||[]).map(id=>map.get(id)).filter(Boolean);if(!photos.length)return'';return `<section class="scene"><div class="scene-copy"><p class="eyebrow">${String(i+1).padStart(2,'0')} · ${esc(scene.title||'')}</p><p>${esc(scene.text||'')}</p></div><div class="scene-photos ${photos.length>1?'multi':''}">${photos.map((ph,j)=>`<figure class="scene-photo"><img src="${imgUrl(ph.url,j?1400:1900)}" alt="${esc(scene.title||'')}" loading="${i?'lazy':'eager'}"></figure>`).join('')}</div></section>`}
-function fallback(review,map){return rank(review).filter(x=>x.status==='hero'||x.status==='story').map((x,i)=>sceneHtml({title:x.label,text:x.note,photos:[x.public_id]},map,i)).join('')}
-function readNotes(){try{const d=JSON.parse(localStorage.getItem(NOTE_KEY)||'null');if(d&&Array.isArray(d.notes))return d}catch(e){}return{trip,day,source:'preview.html',updated_at:null,notes:[]}}
-function writeNotes(d){d.updated_at=new Date().toISOString();localStorage.setItem(NOTE_KEY,JSON.stringify(d,null,2));history()}
-function history(){const d=readNotes(),h=document.querySelector('#authorHistory');h.innerHTML=d.notes.length?d.notes.slice().reverse().map(n=>`<p><b>${esc(n.type)}</b>: ${esc(n.text)}</p>`).join(''):'<p>Пока заметок нет.</p>'}
-function saveNote(){const text=document.querySelector('#noteText').value.trim();if(!text)return;const d=readNotes();d.notes.push({type:document.querySelector('#noteType').value,photo:document.querySelector('#notePhoto').value.trim(),text,created_at:new Date().toISOString()});writeNotes(d);document.querySelector('#noteText').value=''}
-function exportNotes(){const d=readNotes(),b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`${day}-preview-author-notes.json`;a.click();URL.revokeObjectURL(a.href)}
-async function init(){
-  const reviewLoaded=await firstReview();
-  const photoLoaded=await loadJson(photosPath);
-  const storyboardLoaded=await maybe(storyboardPath);
-  const review=reviewLoaded.review, photos=photoLoaded.data, storyboard=storyboardLoaded?.data;
-  const map=new Map(photos.map(ph=>[ph.public_id,ph]));
-  const chapter=storyboard?.chapter||review.chapter||{};
-  const items=rank(review), hero=items.find(x=>x.status==='hero')||items[0], heroPhoto=hero&&map.get(hero.public_id);
-  document.title=`Предпросмотр · ${chapter.title||day}`;
-  heroTitle.textContent=chapter.title||day;
-  heroSubtitle.textContent=chapter.subtitle||review.chapter?.subtitle||'';
-  chapterEyebrow.textContent=review.chapter?.eyebrow||chapter.eyebrow||day;
-  chapterTitle.textContent=chapter.title||day;
-  chapterIntro.textContent=chapter.intro||review.chapter?.intro||'';
-  previewNote.textContent=`Источник review: ${reviewLoaded.path}. Storyboard: ${storyboardLoaded?storyboardLoaded.url:'не найден'}. Photos: ${photoLoaded.url}`;
-  heroStats.innerHTML=[review.status,review.chapter?.route_note].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join('');
-  chapterMeta.innerHTML=[review.status,chapter.emotional_curve,review.chapter?.route_note].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join('');
-  if(heroPhoto) heroHeader.style.backgroundImage=`linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.68)),url(${imgUrl(heroPhoto.url,2000)})`;
-  storyPhotos.innerHTML=storyboard?.scenes?.length?storyboard.scenes.map((s,i)=>sceneHtml(s,map,i)).join(''):fallback(review,map);
-  backstagePhotos.innerHTML=items.filter(x=>x.status==='backstage').map(x=>{const ph=map.get(x.public_id);return ph?back(x,ph):''}).join('');
-  const fc=review.chapter?.fact_checks||[];if(fc.length){factBox.hidden=false;factList.innerHTML=fc.map(x=>`<li>${esc(x)}</li>`).join('')}
-  saveAuthorNoteBtn.onclick=saveNote;exportAuthorNotesBtn.onclick=exportNotes;clearAuthorNotesBtn.onclick=()=>{localStorage.removeItem(NOTE_KEY);history()};history();
-}
-init().catch(e=>{storyPhotos.innerHTML=`<div class="loading">${esc(e.message)}<br><br>${esc(diagnostics.join('\n'))}</div>`});
-</script>
+<script src="https://accounts.google.com/gsi/client" async></script><script type="module" src="preview-app.js?v=3"></script>
 </body>
 </html>

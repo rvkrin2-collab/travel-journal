@@ -1,7 +1,7 @@
 import fs from "fs/promises";
+import { inventoryItems, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
-const trip = process.env.TRIP || "kyrgyzstan-2026";
-const dayTag = normalizeDay(process.env.DAY_TAG || "day01");
+const target = resolveEditorialTarget(); const trip = target.trip; const dayTag = target.chapter;
 const storyboardFile = process.env.STORYBOARD_FILE || `data/${trip}/${dayTag}-storyboard.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
 const photosFile = process.env.PHOTOS_FILE || `data/${trip}/${dayTag}-photos.json`;
@@ -64,7 +64,7 @@ function detectPlaceIndex(scene, places) {
 
 const storyboard = await readJson(storyboardFile);
 const authorNotes = await readJsonIfExists(authorNotesFile);
-const photos = await readJsonIfExists(photosFile);
+const inventory = await readJsonIfExists(photosFile); const photos = inventory ? inventoryItems(inventory) : null;
 const review = await readJsonIfExists(reviewFile);
 const errors = [];
 const warnings = [];
