@@ -1,0 +1,86 @@
+{
+  "trip": "kolskiy",
+  "day": "pod-vodoy-barentseva-morya",
+  "status": "storyboard",
+  "updated_at": "2026-08-15T17:25:44.483Z",
+  "final_review_source": "data/kolskiy/pod-vodoy-barentseva-morya-author-review.json",
+  "chapter": {
+    "title": "Подводный мир Баренцева моря",
+    "subtitle": "Исследование подводной жизни",
+    "one_line": "Погружение в глубины Баренцева моря.",
+    "intro": "Сегодня мы исследуем подводный мир Баренцева моря, где каждая сцена раскрывает уникальную красоту морской жизни.",
+    "emotional_curve": "От удивления к спокойствию, от динамики к созерцанию.",
+    "rhythm": "Чередование ярких и спокойных кадров создает гармонию."
+  },
+  "layout_rules": [
+    "Горизонтальные фотографии ставить широкими блоками.",
+    "Вертикальные фотографии использовать как паузы или акценты.",
+    "Не ставить подряд много похожих пейзажей."
+  ],
+  "scenes": [
+    {
+      "id": "1",
+      "place": "Баренцево море",
+      "title": "Краб на морском дне",
+      "text": "Краб, окружённый водорослями, привлекает внимание своим ярким цветом и четкими формами.",
+      "text_mode": "hero",
+      "photos": [
+        "kolskiy/pod-vodoy-barentseva-morya/f6a44054-c0d4-48e2-9617-7321cfb521df.jpg"
+      ],
+      "layout": "hero-wide",
+      "editorial_note": ""
+    },
+    {
+      "id": "2",
+      "place": "Баренцево море",
+      "title": "Анемон на камнях",
+      "text": "Анемон, расположенный на камнях, добавляет интересный акцент к подводной сцене.",
+      "text_mode": "main",
+      "photos": [
+        "kolskiy/pod-vodoy-barentseva-morya/851728ea-c015-48c7-a750-f14847b9d965.jpg"
+      ],
+      "layout": "single-wide",
+      "editorial_note": ""
+    },
+    {
+      "id": "3",
+      "place": "Баренцево море",
+      "title": "Анемон на камне",
+      "text": "Другой анемон, но с холодными оттенками, создаёт разнообразие в подводной палитре.",
+      "text_mode": "main",
+      "photos": [
+        "kolskiy/pod-vodoy-barentseva-morya/7be20799-67cd-43e9-97f9-7129e6bdebd4.jpg"
+      ],
+      "layout": "single-wide",
+      "editorial_note": ""
+    },
+    {
+      "id": "4",
+      "place": "Баренцево море",
+      "title": "Водоросли",
+      "text": "Водоросли, колышущиеся в воде, создают ощущение спокойствия и гармонии.",
+      "text_mode": "pause",
+      "photos": [
+        "kolskiy/pod-vodoy-barentseva-morya/52bbffa5-b9ca-4196-9a67-311cbd3f57d7.jpg"
+      ],
+      "layout": "single-quiet",
+      "editorial_note": ""
+    },
+    {
+      "id": "5",
+      "place": "Баренцево море",
+      "title": "Медуза на фоне каменистого дна",
+      "text": "Медуза, плавающая на фоне камней, добавляет динамику в подводный пейзаж.",
+      "text_mode": "main",
+      "photos": [
+        "kolskiy/pod-vodoy-barentseva-morya/54387ee8-cde7-4e91-93df-848291088ac7.jpg"
+      ],
+      "layout": "single-wide",
+      "editorial_note": ""
+    }
+  ],
+  "backstage_role": "Автор и фотограф",
+  "publication_note": "Публикация о подводной жизни Баренцева моря.",
+  "chapter_id": "pod-vodoy-barentseva-morya",
+  "photos_fingerprint": "1b032673697e545469329454eddf010cbbd7f58767b906d4c4f92e781f0aea9c"
+}
