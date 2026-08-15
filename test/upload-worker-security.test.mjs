@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import worker, { authorize } from "../worker/src/index.js";
+import worker, { authorize, createAuthorSession } from "../worker/src/index.js";
 
 const originalFetch = globalThis.fetch;
 const scope = "https://www.googleapis.com/auth/photospicker.mediaitems.readonly https://www.googleapis.com/auth/userinfo.email";
@@ -79,12 +79,13 @@ test("author workshop submission dispatches the editorial workflow", async () =>
     method: "POST",
     headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token", "Content-Type": "application/json" },
     body: JSON.stringify({ schema_version: 1, type: "new_trip_request", trip: { id: trip, title: "Sample" }, chapters: [{ id: chapter, title: "Coast", photos: [{ key, url: `https://photos.owntravel.ru/${key}` }] }] })
-  }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo", AUTHOR_SESSION_SECRET: "a-secure-test-secret-with-more-than-32-bytes" });
   assert.equal(response.status, 202);
   const body = await response.json();
   assert.equal(body.status_url, "https://owntravel.ru/submission.html?trip=sample-trip");
   assert.equal(dispatch.event_type, "author_trip_submitted");
   assert.equal(dispatch.client_payload.request.trip.id, trip);
+  assert.ok(body.author_session);
 });
 
 test("approved photo selection dispatches storyboard automation", async () => {
@@ -94,9 +95,16 @@ test("approved photo selection dispatches storyboard automation", async () => {
     dispatch = JSON.parse(options.body); return new Response(null, { status: 204 });
   };
   const artifact = { schema_version: 2, trip: "sample-trip", chapter: "coast", approval: "photo_selection_approved", photos_fingerprint: "abc", items: [{ photo_id: "one", status: "hero", label: "Coast" }] };
-  const response = await worker.fetch(new Request("https://upload.example.test/approve-photos", { method: "POST", headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token", "Content-Type": "application/json" }, body: JSON.stringify(artifact) }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  const env = { ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo", AUTHOR_SESSION_SECRET: "a-secure-test-secret-with-more-than-32-bytes" };
+  const session = await createAuthorSession("author@example.com", env);
+  const response = await worker.fetch(new Request("https://upload.example.test/approve-photos", { method: "POST", headers: { Origin: "https://owntravel.ru", Authorization: `Session ${session}`, "Content-Type": "application/json" }, body: JSON.stringify(artifact) }), env);
   assert.equal(response.status, 202);
   assert.equal(dispatch.event_type, "photo_selection_approved");
+});
+
+test("editorial approval rejects a Google token when no author session is supplied", async () => {
+  const response = await worker.fetch(new Request("https://upload.example.test/approve-preview", { method: "POST", headers: { Origin: "https://owntravel.ru", Authorization: "Bearer google-token", "Content-Type": "application/json" }, body: "{}" }), { ALLOWED_ORIGIN: "https://owntravel.ru", AUTHOR_SESSION_SECRET: "a-secure-test-secret-with-more-than-32-bytes", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  assert.equal(response.status, 401);
 });
 
 test("R2 media fallback serves an uploaded image to the editor", async () => {

@@ -1,6 +1,7 @@
 const MAX_FILE_SIZE = 30 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]);
 const MAX_REQUEST_SIZE = 1024 * 1024;
+const AUTHOR_SESSION_SECONDS = 12 * 60 * 60;
 
 function corsHeaders(origin, allowedOrigin) {
   const headers = {
@@ -20,6 +21,29 @@ function json(data, status, cors) {
 function safeSegment(value, fallback) {
   const result = String(value || "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
   return result || fallback;
+}
+
+const base64url = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const decodeBase64url = value => Uint8Array.from(atob(value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4)), character => character.charCodeAt(0));
+
+async function sessionSignature(payload, secret) {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return base64url(new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload))));
+}
+
+export async function createAuthorSession(email, env) {
+  if (!env.AUTHOR_SESSION_SECRET) throw new Response("Author sessions are not configured", { status: 503 });
+  const payload = base64url(new TextEncoder().encode(JSON.stringify({ email: String(email).toLowerCase(), exp: Math.floor(Date.now() / 1000) + AUTHOR_SESSION_SECONDS })));
+  return `${payload}.${await sessionSignature(payload, env.AUTHOR_SESSION_SECRET)}`;
+}
+
+export async function authorizeAuthorSession(request, env) {
+  const token = request.headers.get("Authorization")?.match(/^Session\s+(.+)$/i)?.[1] || "";
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature || !env.AUTHOR_SESSION_SECRET || signature !== await sessionSignature(payload, env.AUTHOR_SESSION_SECRET)) throw new Response("Author session is missing or invalid", { status: 401 });
+  let claims; try { claims = JSON.parse(new TextDecoder().decode(decodeBase64url(payload))); } catch { throw new Response("Author session is invalid", { status: 401 }); }
+  if (!claims.email || Number(claims.exp) <= Math.floor(Date.now() / 1000)) throw new Response("Author session has expired", { status: 401 });
+  return claims;
 }
 
 function safeMediaKey(pathname, prefix) {
@@ -123,7 +147,7 @@ function validateTripRequest(input) {
 }
 
 async function submitTrip(request, env, cors) {
-  await authorize(request, env);
+  const identity = await authorize(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const length = Number(request.headers.get("Content-Length")) || 0;
   if (length > MAX_REQUEST_SIZE) return json({ error: "Trip request is too large" }, 413, cors);
@@ -139,11 +163,11 @@ async function submitTrip(request, env, cors) {
   });
   if (!response.ok) { console.error("GitHub dispatch failed", response.status, await response.text()); return json({ error: "Editorial automation did not accept the request" }, 502, cors); }
   const chapters = input.chapters.map(chapter => ({ id: chapter.id, editor_url: `https://owntravel.ru/editor.html?trip=${trip}&chapter=${chapter.id}` }));
-  return json({ accepted: true, trip, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
+  return json({ accepted: true, trip, author_session: await createAuthorSession(identity.email, env), author_session_expires_in: AUTHOR_SESSION_SECONDS, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
 }
 
 async function dispatchEditorial(request, env, cors, eventType) {
-  await authorize(request, env);
+  await authorizeAuthorSession(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const input = await request.json();
   const trip = safeSegment(input.trip, ""); const chapter = safeSegment(input.chapter, "");
