@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Новое путешествие · Авторская мастерская</title>
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" href="author.css?v=21">
+  <link rel="stylesheet" href="author.css?v=23">
 </head>
 <body>
   <header class="top"><div><span>Авторская мастерская</span><strong id="save-state">Черновик сохраняется на телефоне</strong></div><button id="reset" class="quiet" type="button">Начать заново</button></header>
@@ -51,7 +51,7 @@
   </main>
   <template id="chapter-template"><article class="chapter"><div class="chapter-head"><strong>Новая глава</strong><button type="button" data-remove aria-label="Удалить главу">Удалить</button></div><label>Название <input data-field="title" placeholder="Например, Старый Тбилиси"></label><label>Короткое описание <textarea data-field="description" placeholder="Что произошло и почему это важно"></textarea></label><div class="two"><label>Темы <input data-field="themes" placeholder="город, архитектура"></label><label>Места <input data-field="places" placeholder="Тбилиси, Сололаки"></label></div><fieldset><legend>Фотографии главы</legend><p>Выберите фотографии через официальный Google Photos Picker. После выбора они будут скопированы в хранилище сайта и появятся в заявке.</p><button type="button" class="add" data-google-photos disabled>Выбрать из Google Фото</button><div class="photo-progress" role="status"></div><div class="or"><span>или</span></div><label class="upload small">Выбрать файлы на телефоне<input data-field="photos" type="file" accept="image/*" multiple><span>Выбрать фотографии</span></label><div class="photo-list"></div></fieldset></article></template>
   <script src="https://accounts.google.com/gsi/client" async></script>
-  <script type="module" src="author.js?v=21"></script>
+  <script type="module" src="author.js?v=23"></script>
   <script src="/pwa.js" defer></script>
 </body>
 </html>

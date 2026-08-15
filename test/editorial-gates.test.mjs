@@ -12,6 +12,8 @@ test("editor uses chapter artifacts and blocks incomplete export", async () => {
   assert.match(app, /photos_fingerprint/);
   assert.match(app, /approvePhotos\(review\)/);
   assert.match(app, /Открыть оригинал/);
+  assert.match(app, /\/thumbnail\//);
+  assert.match(app, /decoding = "async"/);
 });
 
 test("preview requires author review and storyboard without AI fallback", async () => {
@@ -23,6 +25,7 @@ test("preview requires author review and storyboard without AI fallback", async 
   assert.match(app, /photo_selection_approved/);
   assert.match(app, /preview_approved/);
   assert.match(app, /approvePreview\(approval\)/);
+  assert.match(app, /\/thumbnail\//);
 });
 
 test("new workflows no longer invoke Cloudinary", async () => {

@@ -11,6 +11,8 @@ ALLOWED_GOOGLE_EMAILS = "you@gmail.com"
 GITHUB_REPOSITORY = "rvkrin2-collab/travel-journal"
 # Add GITHUB_DISPATCH_TOKEN as an encrypted Worker secret. It needs only
 # Contents: write permission for this repository.
+# Add AUTHOR_SESSION_SECRET as another encrypted secret. Generate at least 32
+# random bytes; it signs the 12-hour author session used after Google upload.
 
 [[r2_buckets]]
 binding = "PHOTOS"

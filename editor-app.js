@@ -12,6 +12,7 @@ const saveNote = document.querySelector("#saveNote");
 let inventory, photos, analysis, aiReview, importedUnknown = [];
 let photoPicker;
 let uploadApiUrl = "";
+const DEFAULT_MEDIA_API = "https://upload.owntravel.ru";
 
 const photoId = photo => String(photo.photo_id || photo.public_id || photo.key || "");
 const items = value => Array.isArray(value) ? value : value?.items || [];
@@ -25,9 +26,11 @@ function assertCoverage(label, artifact) {
   if (fingerprint(inventory) !== "legacy-no-fingerprint" && fingerprint(artifact) !== fingerprint(inventory)) throw new Error(`${label}: устаревший fingerprint`);
 }
 function imageUrl(url) { return url.includes("/image/upload/") ? url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_900/") : url; }
+function encodedKey(photo) { return String(photo.key || photoId(photo)).split("/").map(encodeURIComponent).join("/"); }
+function thumbnailUrl(photo, width = 720) { return photo.key ? `${uploadApiUrl || DEFAULT_MEDIA_API}/thumbnail/${encodedKey(photo)}?w=${width}` : imageUrl(photo.url); }
 function card(photo, index) {
   const article = document.createElement("article"); article.className = "card"; article.dataset.publicId = photoId(photo); article.dataset.number = index + 1;
-  const img = document.createElement("img"); img.className = "thumb"; img.src = imageUrl(photo.url); img.alt = `Фото ${index + 1}`; img.loading = "lazy"; img.referrerPolicy = "no-referrer";
+  const img = document.createElement("img"); img.className = "thumb"; img.src = thumbnailUrl(photo); img.alt = `Фото ${index + 1}`; img.loading = index < 6 ? "eager" : "lazy"; img.decoding = "async"; img.fetchPriority = index < 3 ? "high" : "low"; img.referrerPolicy = "no-referrer";
   const info = document.createElement("div"); info.className = "info";
   const imageState = document.createElement("p"); imageState.className = "image-state"; imageState.hidden = true;
   img.onerror = () => { const key = photo.key || photoId(photo); img.dataset.failedKey = key; if (uploadApiUrl && !img.dataset.fallback) { img.dataset.fallback = "worker"; img.src = `${uploadApiUrl}/media/${key.split("/").map(encodeURIComponent).join("/")}`; imageState.hidden = false; imageState.textContent = "Основной адрес недоступен — загружаем через резервный маршрут…"; return; } imageState.hidden = false; imageState.innerHTML = `Фото не загрузилось. <a href="${photo.url}" target="_blank" rel="noreferrer">Открыть оригинал</a>`; };
@@ -56,4 +59,4 @@ document.querySelector("#saveBtn").onclick = save; document.querySelector("#expo
 document.querySelector("#importFile").onchange = async event => { try { const review = JSON.parse(await event.target.files[0].text()); if (review.photos_fingerprint !== fingerprint(inventory) && !(!review.photos_fingerprint && fingerprint(inventory) === "legacy-no-fingerprint")) throw new Error("fingerprint не совпадает"); apply(review); setNote("JSON импортирован; проверьте решения."); } catch (error) { setNote(`Ошибка импорта: ${error.message}`); } };
 document.querySelector("#reloadAiBtn").onclick = () => apply(aiReview); document.querySelector("#clearBtn").onclick = () => { if (confirm("Удалить локальные правки?")) { localStorage.removeItem(storageKey); apply(aiReview); } };
 init().catch(error => { sourceNote.textContent = `Редактор заблокирован: ${error.message}`; grid.replaceChildren(); });
-Promise.all([import("./lib/photo-services-config.mjs?v=21"), import("./google-photos-picker.js?v=21")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => { const response = await fetch("./config/photo-services.json", { cache: "no-store" }); if (!response.ok) throw new Error(`config HTTP ${response.status}`); const config = validatePhotoServicesConfig(await response.json()); uploadApiUrl = config.upload_api_url.replace(/\/$/, ""); photoPicker = new GooglePhotosPicker(config); document.querySelectorAll("img[data-failed-key]:not([data-fallback])").forEach(img => { img.dataset.fallback = "worker"; img.src = `${uploadApiUrl}/media/${img.dataset.failedKey.split("/").map(encodeURIComponent).join("/")}`; }); }).catch(error => setNote(`Автоматическая отправка недоступна: ${error.message}`));
+Promise.all([import("./lib/photo-services-config.mjs?v=23"), import("./google-photos-picker.js?v=23")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => { const response = await fetch("./config/photo-services.json", { cache: "no-store" }); if (!response.ok) throw new Error(`config HTTP ${response.status}`); const config = validatePhotoServicesConfig(await response.json()); uploadApiUrl = config.upload_api_url.replace(/\/$/, ""); photoPicker = new GooglePhotosPicker(config); document.querySelectorAll("img[data-failed-key]:not([data-fallback])").forEach(img => { img.dataset.fallback = "worker"; img.src = `${uploadApiUrl}/media/${img.dataset.failedKey.split("/").map(encodeURIComponent).join("/")}`; }); }).catch(error => setNote(`Автоматическая отправка недоступна: ${error.message}`));

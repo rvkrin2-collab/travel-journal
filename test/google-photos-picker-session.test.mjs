@@ -34,3 +34,23 @@ test("requests a new token when the saved token is expired", async t => {
   assert.equal(await new GooglePhotosPicker(config).token(), "fresh");
   assert.deepEqual(prompts, [""]);
 });
+
+test("editorial approvals reuse the signed author session without Google OAuth", async t => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; delete globalThis.google; delete globalThis.sessionStorage; });
+  installSessionStorage();
+  const prompts = installGoogle([{ access_token: "google-once", expires_in: 3600 }]);
+  const headers = [];
+  globalThis.fetch = async (_url, options = {}) => {
+    headers.push(options.headers?.Authorization);
+    if (headers.length === 1) return Response.json({ accepted: true, author_session: "signed.session", author_session_expires_in: 3600, chapters: [] }, { status: 202 });
+    return Response.json({ accepted: true }, { status: 202 });
+  };
+  const picker = new GooglePhotosPicker({ ...config, upload_api_url: "https://upload.example" });
+  await picker.submit({ trip: { id: "trip" }, chapters: [] });
+  delete globalThis.google;
+  await picker.approvePhotos({ trip: "trip", chapter: "chapter" });
+  await picker.approvePreview({ trip: "trip", chapter: "chapter" });
+  assert.deepEqual(prompts, ["consent"]);
+  assert.deepEqual(headers, ["Bearer google-once", "Session signed.session", "Session signed.session"]);
+});

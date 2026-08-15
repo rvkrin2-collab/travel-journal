@@ -2,7 +2,7 @@ name: Process editorial approval
 
 on:
   repository_dispatch:
-    types: [photo_selection_approved, preview_approved]
+    types: [photo_selection_approved, preview_approved, publish_requested]
 
 permissions:
   contents: write
@@ -70,5 +70,31 @@ jobs:
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add "data/$trip/$chapter-approval.json"
           git commit -m "Approve preview for $trip $chapter"
+          git pull --rebase origin main
+          git push origin HEAD:main
+  publish:
+    if: github.event.action == 'publish_requested'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Validate and build the approved public trip
+        env:
+          ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
+        run: |
+          trip=$(node -p 'JSON.parse(process.env.ARTIFACT).trip')
+          cover=$(node -p 'JSON.parse(process.env.ARTIFACT).cover_chapter')
+          TRIP="$trip" COVER_CHAPTER="$cover" node publish-trip.mjs
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+      - name: Test publication
+        run: npm test
+      - name: Commit and publish
+        run: |
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add data/trips.json "data/$TRIP" "trips/$TRIP"
+          git commit -m "Publish approved trip $TRIP"
           git pull --rebase origin main
           git push origin HEAD:main

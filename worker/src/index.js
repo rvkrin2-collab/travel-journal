@@ -1,6 +1,7 @@
 const MAX_FILE_SIZE = 30 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]);
 const MAX_REQUEST_SIZE = 1024 * 1024;
+const AUTHOR_SESSION_SECONDS = 12 * 60 * 60;
 
 function corsHeaders(origin, allowedOrigin) {
   const headers = {
@@ -20,6 +21,54 @@ function json(data, status, cors) {
 function safeSegment(value, fallback) {
   const result = String(value || "").toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
   return result || fallback;
+}
+
+const base64url = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const decodeBase64url = value => Uint8Array.from(atob(value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4)), character => character.charCodeAt(0));
+
+async function sessionSignature(payload, secret) {
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return base64url(new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload))));
+}
+
+export async function createAuthorSession(email, env) {
+  if (!env.AUTHOR_SESSION_SECRET) throw new Response("Author sessions are not configured", { status: 503 });
+  const payload = base64url(new TextEncoder().encode(JSON.stringify({ email: String(email).toLowerCase(), exp: Math.floor(Date.now() / 1000) + AUTHOR_SESSION_SECONDS })));
+  return `${payload}.${await sessionSignature(payload, env.AUTHOR_SESSION_SECRET)}`;
+}
+
+export async function authorizeAuthorSession(request, env) {
+  const token = request.headers.get("Authorization")?.match(/^Session\s+(.+)$/i)?.[1] || "";
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature || !env.AUTHOR_SESSION_SECRET || signature !== await sessionSignature(payload, env.AUTHOR_SESSION_SECRET)) throw new Response("Author session is missing or invalid", { status: 401 });
+  let claims; try { claims = JSON.parse(new TextDecoder().decode(decodeBase64url(payload))); } catch { throw new Response("Author session is invalid", { status: 401 }); }
+  if (!claims.email || Number(claims.exp) <= Math.floor(Date.now() / 1000)) throw new Response("Author session has expired", { status: 401 });
+  return claims;
+}
+
+function safeMediaKey(pathname, prefix) {
+  const key = decodeURIComponent(pathname.slice(prefix.length));
+  return key && !key.includes("..") && /^[a-z0-9/_\-.]+$/i.test(key) ? key : "";
+}
+
+async function r2Response(env, key) {
+  const object = await env.PHOTOS.get(key);
+  if (!object) return new Response("Not found", { status: 404 });
+  const headers = new Headers(); object.writeHttpMetadata(headers); headers.set("ETag", object.httpEtag); headers.set("Cache-Control", "public, max-age=31536000, immutable"); headers.set("Access-Control-Allow-Origin", "*");
+  return new Response(object.body, { headers });
+}
+
+async function thumbnailResponse(request, env, url, key) {
+  const requestedWidth = Math.min(1600, Math.max(240, Number(url.searchParams.get("w")) || 720));
+  const width = [360, 720, 1200, 1600].find(candidate => candidate >= requestedWidth) || 1600;
+  const source = `${String(env.PUBLIC_BASE_URL || "").replace(/\/$/, "")}/${key}`;
+  if (!source.startsWith("https://")) return r2Response(env, key);
+  try {
+    const resized = await fetch(source, { cf: { image: { width, fit: "scale-down", quality: 72, format: "auto", metadata: "none" }, cacheEverything: true, cacheTtl: 31536000 } });
+    if (!resized.ok) return r2Response(env, key);
+    const headers = new Headers(resized.headers); headers.set("Cache-Control", "public, max-age=31536000, immutable"); headers.set("Access-Control-Allow-Origin", "*"); headers.delete("Set-Cookie");
+    return new Response(resized.body, { status: resized.status, headers });
+  } catch { return r2Response(env, key); }
 }
 
 export async function verifyGoogleToken(request, env) {
@@ -98,7 +147,7 @@ function validateTripRequest(input) {
 }
 
 async function submitTrip(request, env, cors) {
-  await authorize(request, env);
+  const identity = await authorize(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const length = Number(request.headers.get("Content-Length")) || 0;
   if (length > MAX_REQUEST_SIZE) return json({ error: "Trip request is too large" }, 413, cors);
@@ -114,22 +163,23 @@ async function submitTrip(request, env, cors) {
   });
   if (!response.ok) { console.error("GitHub dispatch failed", response.status, await response.text()); return json({ error: "Editorial automation did not accept the request" }, 502, cors); }
   const chapters = input.chapters.map(chapter => ({ id: chapter.id, editor_url: `https://owntravel.ru/editor.html?trip=${trip}&chapter=${chapter.id}` }));
-  return json({ accepted: true, trip, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
+  return json({ accepted: true, trip, author_session: await createAuthorSession(identity.email, env), author_session_expires_in: AUTHOR_SESSION_SECONDS, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
 }
 
 async function dispatchEditorial(request, env, cors, eventType) {
-  await authorize(request, env);
+  await authorizeAuthorSession(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const input = await request.json();
   const trip = safeSegment(input.trip, ""); const chapter = safeSegment(input.chapter, "");
-  if (!trip || trip !== input.trip || !chapter || chapter !== input.chapter) return json({ error: "Invalid editorial target" }, 400, cors);
+  if (!trip || trip !== input.trip || (eventType !== "publish_requested" && (!chapter || chapter !== input.chapter))) return json({ error: "Invalid editorial target" }, 400, cors);
   if (eventType === "photo_selection_approved") {
     if (input.schema_version !== 2 || input.approval !== "photo_selection_approved" || !Array.isArray(input.items) || input.items.filter(item => item.status === "hero").length !== 1 || input.items.some(item => !["hero", "story", "backstage", "skip"].includes(item.status))) return json({ error: "Invalid author review" }, 400, cors);
   }
   if (eventType === "preview_approved" && (input.status !== "preview_approved" || !input.photos_fingerprint)) return json({ error: "Invalid preview approval" }, 400, cors);
+  if (eventType === "publish_requested" && (input.status !== "publish_requested" || safeSegment(input.cover_chapter, "") !== input.cover_chapter)) return json({ error: "Invalid publication request" }, 400, cors);
   const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "travel-journal-uploader", "X-GitHub-Api-Version": "2022-11-28" }, body: JSON.stringify({ event_type: eventType, client_payload: { artifact: input } }) });
   if (!response.ok) return json({ error: "Editorial automation did not accept the approval" }, 502, cors);
-  return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, preview_url: `https://owntravel.ru/preview.html?trip=${trip}&chapter=${chapter}` }, 202, cors);
+  return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, ...(chapter ? { preview_url: `https://owntravel.ru/preview.html?trip=${trip}&chapter=${chapter}` } : {}) }, 202, cors);
 }
 
 export default {
@@ -140,12 +190,10 @@ export default {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2" }, 200, cors);
     if (request.method === "GET" && url.pathname.startsWith("/media/")) {
-      const key = decodeURIComponent(url.pathname.slice(7));
-      if (!key || key.includes("..")) return new Response("Invalid media key", { status: 400 });
-      const object = await env.PHOTOS.get(key);
-      if (!object) return new Response("Not found", { status: 404 });
-      const headers = new Headers(); object.writeHttpMetadata(headers); headers.set("ETag", object.httpEtag); headers.set("Cache-Control", "public, max-age=31536000, immutable"); headers.set("Access-Control-Allow-Origin", "*");
-      return new Response(object.body, { headers });
+      const key = safeMediaKey(url.pathname, "/media/"); return key ? r2Response(env, key) : new Response("Invalid media key", { status: 400 });
+    }
+    if (request.method === "GET" && url.pathname.startsWith("/thumbnail/")) {
+      const key = safeMediaKey(url.pathname, "/thumbnail/"); return key ? thumbnailResponse(request, env, url, key) : new Response("Invalid media key", { status: 400 });
     }
     if (origin !== env.ALLOWED_ORIGIN) return json({ error: "origin is not allowed" }, 403, cors);
     try {
@@ -160,6 +208,7 @@ export default {
       if (request.method === "POST" && url.pathname === "/submit") return await submitTrip(request, env, cors);
       if (request.method === "POST" && url.pathname === "/approve-photos") return await dispatchEditorial(request, env, cors, "photo_selection_approved");
       if (request.method === "POST" && url.pathname === "/approve-preview") return await dispatchEditorial(request, env, cors, "preview_approved");
+      if (request.method === "POST" && url.pathname === "/publish") return await dispatchEditorial(request, env, cors, "publish_requested");
       return json({ error: "not found" }, 404, cors);
     } catch (error) {
       if (error instanceof Response) return new Response(error.body, { status: error.status, headers: cors });

@@ -10,6 +10,7 @@
     "build:ai-review": "node build-review-v2.mjs",
     "build:final-review": "node build-final-review.mjs",
     "build:storyboard": "node build-storyboard.mjs",
+    "publish:trip": "node publish-trip.mjs",
     "validate:storyboard": "node validate-storyboard.mjs",
     "validate:review": "node validate-review-consistency.mjs"
   }

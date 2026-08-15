@@ -1,6 +1,7 @@
 const API = "https://photospicker.googleapis.com/v1";
 const TOKEN_KEY = "travel-journal-google-oauth-token-v1";
 const EXPIRY_MARGIN_MS = 60 * 1000;
+const AUTHOR_SESSION_KEY = "travel-journal-author-session-v1";
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 async function googleRequest(url, token, options = {}) {
@@ -79,13 +80,19 @@ export class GooglePhotosPicker {
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
+    if (result.author_session) sessionStorage.setItem(AUTHOR_SESSION_KEY, JSON.stringify({ token: result.author_session, expires_at: Date.now() + Number(result.author_session_expires_in || 0) * 1000 }));
     return result;
   }
 
+  authorSession() {
+    const value = JSON.parse(sessionStorage.getItem(AUTHOR_SESSION_KEY) || "null");
+    if (!value?.token || Number(value.expires_at) <= Date.now() + EXPIRY_MARGIN_MS) throw new Error("Сеанс автора закончился. Откройте авторскую мастерскую и отправьте путешествие снова.");
+    return value.token;
+  }
+
   async approvePhotos(review) {
-    const token = await this.token();
     const response = await fetch(`${this.config.upload_api_url}/approve-photos`, {
-      method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(review)
+      method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(review)
     });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || `Утверждение фотографий: HTTP ${response.status}`);
@@ -93,10 +100,16 @@ export class GooglePhotosPicker {
   }
 
   async approvePreview(approval) {
-    const token = await this.token();
-    const response = await fetch(`${this.config.upload_api_url}/approve-preview`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(approval) });
+    const response = await fetch(`${this.config.upload_api_url}/approve-preview`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(approval) });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || `Утверждение preview: HTTP ${response.status}`);
+    return result;
+  }
+
+  async publishTrip(request) {
+    const response = await fetch(`${this.config.upload_api_url}/publish`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Публикация: HTTP ${response.status}`);
     return result;
   }
 
