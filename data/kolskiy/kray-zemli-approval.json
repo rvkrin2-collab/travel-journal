@@ -1,0 +1,10 @@
+{
+  "approved_at": "2026-08-15T17:33:01.743Z",
+  "author_review_source": "data/kolskiy/kray-zemli-author-review.json",
+  "chapter": "kray-zemli",
+  "photos_fingerprint": "5295b3ec0a94d9795be4b16dd0f8db7933deb16b7ab607c6a2675a409f9e52a4",
+  "schema_version": 1,
+  "status": "preview_approved",
+  "storyboard_source": "data/kolskiy/kray-zemli-storyboard.json",
+  "trip": "kolskiy"
+}

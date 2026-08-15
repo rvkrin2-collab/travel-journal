@@ -1,0 +1,10 @@
+{
+  "approved_at": "2026-08-15T17:34:24.109Z",
+  "author_review_source": "data/kolskiy/teriberka-author-review.json",
+  "chapter": "teriberka",
+  "photos_fingerprint": "578ffeb036764c45769418ce263870638ad4f872dee3bfd6aec82d200447055c",
+  "schema_version": 1,
+  "status": "preview_approved",
+  "storyboard_source": "data/kolskiy/teriberka-storyboard.json",
+  "trip": "kolskiy"
+}
