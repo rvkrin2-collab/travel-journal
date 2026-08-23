@@ -46,3 +46,10 @@ test("unfinished Kola publication is hidden from the public registry", () => {
   const registry = JSON.parse(read("data/trips.json"));
   assert.equal(registry.trips.find(trip => trip.id === "kolskiy")?.status, "hidden");
 });
+
+test("mutable registry and authoring code are refreshed without stale PWA data", () => {
+  const worker = read("service-worker.js");
+  assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
+  assert.match(read("editor.html"), /editor-app\.js\?v=4/);
+  assert.match(read("preview.html"), /preview-app\.js\?v=4/);
+});

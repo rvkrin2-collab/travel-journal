@@ -1,6 +1,6 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-const VERSION = "travel-journal-v29";
+const VERSION = "travel-journal-v30";
 const APP_CACHE = `${VERSION}-app`;
 const IMAGE_CACHE = `${VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -147,7 +147,7 @@ self.addEventListener("fetch", event => {
   }
 
   if (url.origin === self.location.origin && url.pathname === "/data/trips.json") {
-    event.respondWith(staleWhileRevalidate(request));
+    event.respondWith(networkFirst(request));
     return;
   }
 
