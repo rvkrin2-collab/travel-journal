@@ -16,7 +16,8 @@ async function init() {
   const [inventory, author, final, storyboard] = await Promise.all([load(paths.photos), load(paths.author), load(paths.final, true), load(paths.storyboard)]);
   exact(inventory, author, "author-review"); if (author.schema_version >= 2 && author.approval !== "photo_selection_approved") throw new Error("первое утверждение фотографий отсутствует"); if (final) exact(inventory, final, "final-review");
   const source = final || author; if (storyboard.photos_fingerprint && storyboard.photos_fingerprint !== fp(inventory)) throw new Error("storyboard использует другой набор фотографий");
-  if (![paths.author, paths.final].includes(storyboard.final_review_source || storyboard.review_source)) throw new Error("storyboard не связан с утверждённым author-review");
+  const storyboardReviewSource = storyboard.final_review_source || storyboard.review_source || storyboard.author_review_source;
+  if (![paths.author, paths.final].includes(storyboardReviewSource)) throw new Error("storyboard не связан с утверждённым author-review");
   const map = new Map(items(inventory).map(photo => [photoId(photo), photo])); const selected = new Map(items(source).map(item => [photoId(item), item]));
   const hero = items(source).find(item => item.status === "hero"); if (!hero || !map.has(photoId(hero))) throw new Error("главное фото не найдено");
   const chapterData = storyboard.chapter || {}; document.title = `Предпросмотр · ${chapterData.title || chapter}`; heroTitle.textContent = chapterData.title || chapter; heroSubtitle.textContent = chapterData.subtitle || ""; chapterTitle.textContent = chapterData.title || chapter; chapterIntro.textContent = chapterData.intro || ""; heroHeader.style.backgroundImage = `linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.68)),url(${previewImage(map.get(photoId(hero)), 1600)})`;

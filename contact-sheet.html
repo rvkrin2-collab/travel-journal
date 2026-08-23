@@ -83,7 +83,7 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const trip = cleanSegment(params.get('trip') || 'kyrgyzstan-2026', 'kyrgyzstan-2026');
-    const day = normalizeDay(params.get('day') || params.get('day_tag') || 'day02');
+    const day = normalizeDay(params.get('chapter') || params.get('day') || params.get('day_tag') || 'day02');
     const photoPath = `data/${trip}/${day}-photos.json`;
 
     const pageTitle = document.querySelector('#pageTitle');
