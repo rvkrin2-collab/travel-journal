@@ -40,6 +40,19 @@
       "total_days": 3,
       "data_path": "data/kolskiy",
       "status": "hidden"
+    },
+    {
+      "id": "kolskiy-26",
+      "title": "Кольский 26",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "description": "Очень хорошая поезка",
+      "period": "Лето 2026",
+      "cover_url": "",
+      "public_path": "trips/kolskiy-26/",
+      "published_days": 0,
+      "total_days": 0,
+      "data_path": "data/kolskiy-26",
+      "status": "hidden"
     }
   ],
   "rules": {

@@ -1,0 +1,328 @@
+{
+  "schema_version": 3,
+  "analysis_version": "combined-vision-v1",
+  "trip": "kolskiy-26",
+  "chapter": "testo",
+  "day": "testo",
+  "photos_source": "data/kolskiy-26/testo-photos.json",
+  "photos_fingerprint": "8837db42b60861fa257e60a0e01a3427096573d1ba6c36f88bb10e1e35eaaacb",
+  "context_source": null,
+  "generated_at": "2026-08-24T14:18:48.075Z",
+  "vision_model": "gpt-4o",
+  "cache": {
+    "reused": 0,
+    "analyzed": 4
+  },
+  "items": [
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg|https://photos.owntravel.ru/kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg|0|0",
+      "public_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "number": 1,
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография показывает крупный план стейка на гриле с углями.",
+      "foreground": "На переднем плане находится стейк, лежащий на решетке гриля.",
+      "midground": "Средний план отсутствует, так как кадр сфокусирован на переднем плане.",
+      "background": "Задний план не виден, так как кадр сфокусирован на стейке и углях.",
+      "visible_elements": {
+        "terrain": "Отсутствует",
+        "vegetation": "Отсутствует",
+        "water": "Отсутствует",
+        "snow": "Отсутствует",
+        "sky": "Отсутствует",
+        "people": "Отсутствуют",
+        "animals": "Отсутствуют",
+        "structures": "Гриль",
+        "road_vehicle": "Отсутствуют"
+      },
+      "dominant_subject": "Стейк на гриле",
+      "secondary_subjects": [
+        "Угли"
+      ],
+      "scene_type": "detail",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Искусственное освещение, вероятно, от углей.",
+      "weather": "Неопределимо",
+      "composition": {
+        "framing": "Крупный план",
+        "depth": "Плоская",
+        "balance": "Центрированная",
+        "visual_anchor": "Стейк",
+        "horizon": "Отсутствует",
+        "distractions": "Отсутствуют"
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая",
+        "exposure": "Хорошая",
+        "color": "Насыщенные",
+        "motion_blur": "Отсутствует",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение съёмки"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.3,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Стейк на гриле с углями.",
+      "editor_note": "Фокус на текстуре и цвете стейка.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-24T14:18:14.947Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg|https://photos.owntravel.ru/kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg|0|0",
+      "public_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "number": 2,
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "На фотографии изображён человек, отдыхающий на шезлонге на террасе с современным зданием на заднем плане.",
+      "foreground": "Человек в шезлонге.",
+      "midground": "Часть террасы с деревянным настилом и мебелью.",
+      "background": "Современное здание с металлической облицовкой и окнами.",
+      "visible_elements": {
+        "terrain": "нет",
+        "vegetation": "нет",
+        "water": "нет",
+        "snow": "нет",
+        "sky": "облачно",
+        "people": "один человек",
+        "animals": "нет",
+        "structures": "современное здание",
+        "road_vehicle": "нет"
+      },
+      "dominant_subject": "Человек на шезлонге",
+      "secondary_subjects": [
+        "здание",
+        "терраса"
+      ],
+      "scene_type": "settlement",
+      "people_count": 1,
+      "animal_count": 0,
+      "light": "естественное, рассеянное",
+      "weather": "облачно",
+      "composition": {
+        "framing": "крупный план",
+        "depth": "плоская",
+        "balance": "асимметричная",
+        "visual_anchor": "человек",
+        "horizon": "не виден",
+        "distractions": "нет"
+      },
+      "technical_quality": {
+        "sharpness": "хорошая",
+        "exposure": "правильная",
+        "color": "естественные",
+        "motion_blur": "нет",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "точное местоположение"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.4,
+      "location_reason": "Отсутствие уникальных ориентиров, связанных с конкретной точкой маршрута.",
+      "caption_seed": "Человек отдыхает на террасе с видом на современное здание.",
+      "editor_note": "Фотография передаёт атмосферу отдыха в городской среде.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-24T14:18:21.233Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg|https://photos.owntravel.ru/kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg|0|0",
+      "public_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "number": 3,
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография картины в музее, изображающая мужчину в традиционной одежде на фоне гор.",
+      "foreground": "Картина в раме, изображающая мужчину в шапке и пальто.",
+      "midground": "На картине видны горы и верблюд.",
+      "background": "Стена музея, на которой висит картина.",
+      "visible_elements": {
+        "terrain": "Горы на картине.",
+        "vegetation": "Отсутствует.",
+        "water": "Отсутствует.",
+        "snow": "На горах на картине.",
+        "sky": "На картине, светлый с облаками.",
+        "people": "Изображение мужчины на картине.",
+        "animals": "Верблюд на картине.",
+        "structures": "Рама картины.",
+        "road_vehicle": "Отсутствует."
+      },
+      "dominant_subject": "Картина с изображением мужчины.",
+      "secondary_subjects": [
+        "Горы",
+        "Верблюд"
+      ],
+      "scene_type": "interior",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Искусственное освещение в помещении.",
+      "weather": "Не применимо.",
+      "composition": {
+        "framing": "Центрированная картина в раме.",
+        "depth": "Плоская, так как это картина.",
+        "balance": "Симметричная композиция.",
+        "visual_anchor": "Мужчина на картине.",
+        "horizon": "На картине, горы.",
+        "distractions": "Отсутствуют."
+      },
+      "technical_quality": {
+        "sharpness": "Высокая резкость изображения картины.",
+        "exposure": "Хорошая экспозиция, детали видны.",
+        "color": "Насыщенные цвета на картине.",
+        "motion_blur": "Отсутствует.",
+        "score": 8.5
+      },
+      "observation_confidence": 0.95,
+      "uncertainties": [
+        "Точное местоположение музея."
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.5,
+      "location_reason": "Отсутствие уникальных ориентиров, указывающих на конкретное место.",
+      "caption_seed": "Картина с изображением мужчины в музее.",
+      "editor_note": "Фокус на картине в музейной обстановке.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-24T14:18:35.243Z",
+      "model": "gpt-4o"
+    },
+    {
+      "schema_version": 3,
+      "analysis_version": "combined-vision-v1",
+      "cache_key": "combined-vision-v1|gpt-4o|kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg|https://photos.owntravel.ru/kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg|0|0",
+      "public_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "number": 4,
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "width": 0,
+      "height": 0,
+      "orientation": "square",
+      "visual_summary": "Фотография картины в раме, изображающей абстрактный пейзаж с архитектурными элементами.",
+      "foreground": "Картина в раме с абстрактным изображением.",
+      "midground": "Нет выраженного среднего плана, так как это изображение картины.",
+      "background": "Стена, на которой висит картина.",
+      "visible_elements": {
+        "terrain": "Отсутствует",
+        "vegetation": "Отсутствует",
+        "water": "Отсутствует",
+        "snow": "Отсутствует",
+        "sky": "Отсутствует",
+        "people": "Отсутствуют",
+        "animals": "Отсутствуют",
+        "structures": "Архитектурные элементы на картине",
+        "road_vehicle": "Отсутствуют"
+      },
+      "dominant_subject": "Картина в раме",
+      "secondary_subjects": [
+        "Архитектурные элементы на картине"
+      ],
+      "scene_type": "interior",
+      "people_count": 0,
+      "animal_count": 0,
+      "light": "Искусственное освещение",
+      "weather": "Не применимо",
+      "composition": {
+        "framing": "Центральное расположение картины",
+        "depth": "Плоское изображение",
+        "balance": "Симметричное",
+        "visual_anchor": "Картина",
+        "horizon": "Отсутствует",
+        "distractions": "Нет отвлекающих элементов"
+      },
+      "technical_quality": {
+        "sharpness": "Хорошая",
+        "exposure": "Хорошая",
+        "color": "Насыщенные цвета",
+        "motion_blur": "Отсутствует",
+        "score": 8.5
+      },
+      "observation_confidence": 0.9,
+      "uncertainties": [
+        "Точное содержание картины"
+      ],
+      "likely_location": "не определена",
+      "location_confidence": 0.3,
+      "location_reason": "Отсутствие уникальных ориентиров",
+      "caption_seed": "Картина с абстрактным пейзажем в интерьере.",
+      "editor_note": "Фокус на картине с абстрактным изображением.",
+      "needs_fact_check": [],
+      "analysis_source": "combined-vision-with-conservative-geography",
+      "analyzed_at": "2026-08-24T14:18:42.597Z",
+      "model": "gpt-4o"
+    }
+  ],
+  "recommendation": {
+    "hero": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+    "story": [
+      "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg"
+    ],
+    "backstage": [],
+    "skip": [],
+    "decisions": {
+      "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg": {
+        "reason": "Крупный план стейка на гриле привлекает внимание текстурой и цветом, но не несёт значительной визуальной информации.",
+        "visual_function": "деталь",
+        "duplicate_group": "detail · деталь",
+        "status": "story",
+        "editorial_score": 75
+      },
+      "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg": {
+        "reason": "Фотография передаёт атмосферу отдыха в городской среде, создавая контраст между человеком и архитектурой.",
+        "visual_function": "городская сцена",
+        "duplicate_group": "люди · горы",
+        "status": "hero",
+        "editorial_score": 85
+      },
+      "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg": {
+        "reason": "Картина в музее с изображением человека и гор создаёт интересный контекст, но ограничена рамками картины.",
+        "visual_function": "музейная экспозиция",
+        "duplicate_group": "горы · музейная-экспозиция",
+        "status": "story",
+        "editorial_score": 80
+      },
+      "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg": {
+        "reason": "Абстрактный пейзаж на картине интересен, но не выделяется среди других изображений.",
+        "visual_function": "музейная экспозиция",
+        "duplicate_group": "interior · музейная-экспозиция",
+        "status": "story",
+        "editorial_score": 70
+      }
+    },
+    "sequence_note": "Фотографии ранжированы по их визуальной функции и значимости в контексте серии.",
+    "editorial_summary": "Серия фотографий включает разнообразные сцены, от городской среды до музейных экспозиций, с акцентом на детали и атмосферу.",
+    "fact_checks": [
+      "Все фотографии имеют хорошее техническое качество.",
+      "Фотографии не содержат этнографических обобщений."
+    ],
+    "ranking_method": "single_model_ranking_then_dominant_subject_function_normalization"
+  },
+  "editorial_policy": {
+    "source": "config/editorial-policy.json",
+    "version": 6,
+    "validated": true,
+    "assignment": "chapter_visual_selection_with_dominant_subject_groups",
+    "model": "gpt-4o",
+    "updated_at": "2026-08-24T14:18:48.075Z"
+  },
+  "series_model": "gpt-4o"
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 2,
+  "trip": "kolskiy-26",
+  "chapter": {
+    "title": "",
+    "subtitle": "",
+    "route_note": "",
+    "fact_checks": [
+      "Все фотографии имеют хорошее техническое качество.",
+      "Фотографии не содержат этнографических обобщений."
+    ]
+  },
+  "day": "testo",
+  "photos_source": "data/kolskiy-26/testo-photos.json",
+  "analysis_source": "data/kolskiy-26/testo-analysis.json",
+  "photos_fingerprint": "8837db42b60861fa257e60a0e01a3427096573d1ba6c36f88bb10e1e35eaaacb",
+  "status": "ai_review",
+  "approval": "not_author_approved",
+  "updated_at": "2026-08-24T14:18:48.159Z",
+  "items": [
+    {
+      "public_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "photo_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "number": 1,
+      "status": "story",
+      "label": "Фотография показывает крупный план стейка на гриле с углями.",
+      "note": "Крупный план стейка на гриле привлекает внимание текстурой и цветом, но не несёт значительной визуальной информации.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "photo_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "number": 2,
+      "status": "hero",
+      "label": "На фотографии изображён человек, отдыхающий на шезлонге на террасе с современным зданием на заднем плане.",
+      "note": "Фотография передаёт атмосферу отдыха в городской среде, создавая контраст между человеком и архитектурой.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "photo_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "number": 3,
+      "status": "story",
+      "label": "Фотография картины в музее, изображающая мужчину в традиционной одежде на фоне гор.",
+      "note": "Картина в музее с изображением человека и гор создаёт интересный контекст, но ограничена рамками картины.",
+      "observation_only": true
+    },
+    {
+      "public_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "photo_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "number": 4,
+      "status": "story",
+      "label": "Фотография картины в раме, изображающей абстрактный пейзаж с архитектурными элементами.",
+      "note": "Абстрактный пейзаж на картине интересен, но не выделяется среди других изображений.",
+      "observation_only": true
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-26",
+  "editorial_status": "awaiting_visual_review",
+  "author_approved": false,
+  "cover_selection": {
+    "chapter_id": "",
+    "photo_url": "",
+    "status": "not_selected"
+  },
+  "photo_manifest": [
+    {
+      "photo_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "public_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260815214319.jpg",
+      "type": "image/jpeg",
+      "size": 1971326,
+      "key": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg"
+    },
+    {
+      "photo_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "public_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260822143059.jpg",
+      "type": "image/jpeg",
+      "size": 2436807,
+      "key": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg"
+    },
+    {
+      "photo_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "public_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260822135343.jpg",
+      "type": "image/jpeg",
+      "size": 1432056,
+      "key": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg"
+    },
+    {
+      "photo_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "public_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "source": "google_photos_r2",
+      "url": "https://photos.owntravel.ru/kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "width": 0,
+      "height": 0,
+      "name": "IMG20260822154356.jpg",
+      "type": "image/jpeg",
+      "size": 2609032,
+      "key": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg"
+    }
+  ],
+  "views": [
+    {
+      "id": "chapters",
+      "label": "Главы",
+      "items": [
+        {
+          "id": "testo",
+          "title": "Тесто",
+          "description": "",
+          "href": "chapters/testo.html"
+        }
+      ]
+    },
+    {
+      "id": "themes",
+      "label": "По темам",
+      "items": [
+        {
+          "id": "theme-net",
+          "title": "НЕТ",
+          "description": "Материалы: Тесто"
+        }
+      ]
+    },
+    {
+      "id": "places",
+      "label": "По местам",
+      "items": [
+        {
+          "id": "place-sochi",
+          "title": "сОЧИ",
+          "description": "Материалы: Тесто"
+        }
+      ]
+    }
+  ]
+}
