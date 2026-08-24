@@ -1,0 +1,46 @@
+{
+  "ai_review_source": "data/kolskiy-26/testo-ai-review.json",
+  "approval": "photo_selection_approved",
+  "chapter": "testo",
+  "day": "testo",
+  "items": [
+    {
+      "label": "Фотография показывает крупный план стейка на гриле с углями.",
+      "note": "Крупный план стейка на гриле привлекает внимание текстурой и цветом, но не несёт значительной визуальной информации.",
+      "number": 1,
+      "photo_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "public_id": "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg",
+      "status": "story"
+    },
+    {
+      "label": "На фотографии изображён человек, отдыхающий на шезлонге на террасе с современным зданием на заднем плане.",
+      "note": "Фотография передаёт атмосферу отдыха в городской среде, выделяя человека на фоне современного здания.",
+      "number": 2,
+      "photo_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "public_id": "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg",
+      "status": "hero"
+    },
+    {
+      "label": "Фотография картины в музее, изображающая мужчину в традиционной одежде на фоне гор.",
+      "note": "Картина в музее с изображением мужчины и гор создаёт интересный контраст между искусством и реальностью.",
+      "number": 3,
+      "photo_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "public_id": "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Фотография картины в раме, изображающей абстрактный пейзаж с архитектурными элементами.",
+      "note": "Абстрактный пейзаж на картине не несёт значительной визуальной информации, но может служить фоном для других элементов.",
+      "number": 4,
+      "photo_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "public_id": "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg",
+      "status": "story"
+    }
+  ],
+  "photos_fingerprint": "8837db42b60861fa257e60a0e01a3427096573d1ba6c36f88bb10e1e35eaaacb",
+  "photos_source": "data/kolskiy-26/testo-photos.json",
+  "schema_version": 2,
+  "status": "author_review",
+  "trip": "kolskiy-26",
+  "updated_at": "2026-08-24T14:28:19.999Z"
+}

@@ -1,0 +1,74 @@
+{
+  "trip": "kolskiy-26",
+  "day": "testo",
+  "status": "storyboard",
+  "updated_at": "2026-08-24T14:28:45.576Z",
+  "final_review_source": "data/kolskiy-26/testo-author-review.json",
+  "chapter": {
+    "title": "Тревел-день",
+    "subtitle": "Городские моменты",
+    "one_line": "Погружение в атмосферу современного города.",
+    "intro": "Сегодня мы исследуем городской ландшафт, где искусство и повседневная жизнь переплетаются.",
+    "emotional_curve": "От расслабления к вдохновению.",
+    "rhythm": "Спокойный и размеренный."
+  },
+  "layout_rules": [
+    "Горизонтальные фотографии ставить широкими блоками.",
+    "Вертикальные фотографии использовать как паузы.",
+    "Не ставить подряд много похожих пейзажей."
+  ],
+  "scenes": [
+    {
+      "id": "1",
+      "place": "Городская терраса",
+      "title": "Отдых на террасе",
+      "text": "Мгновение спокойствия на фоне городской суеты.",
+      "text_mode": "main",
+      "photos": [
+        "kolskiy-26/testo/b88d46f1-33a9-4d3e-88e1-a77475296908.jpg"
+      ],
+      "layout": "hero-wide",
+      "editorial_note": ""
+    },
+    {
+      "id": "2",
+      "place": "Ресторан",
+      "title": "Вкусный момент",
+      "text": "Стейк на гриле, символизирующий наслаждение простыми радостями.",
+      "text_mode": "quiet",
+      "photos": [
+        "kolskiy-26/testo/01797d56-baff-40c2-8694-20090f06c4d1.jpg"
+      ],
+      "layout": "single-wide",
+      "editorial_note": "Кадр не несёт значительной визуальной информации."
+    },
+    {
+      "id": "3",
+      "place": "Музей",
+      "title": "Искусство и реальность",
+      "text": "Контраст между традицией и современностью.",
+      "text_mode": "main",
+      "photos": [
+        "kolskiy-26/testo/bd001939-e174-4e9b-939a-02b8dde8af7f.jpg"
+      ],
+      "layout": "single-wide",
+      "editorial_note": ""
+    },
+    {
+      "id": "4",
+      "place": "Музей",
+      "title": "Абстракция",
+      "text": "Погружение в мир абстрактного искусства.",
+      "text_mode": "quiet",
+      "photos": [
+        "kolskiy-26/testo/bc161e55-df5d-4f69-a9c7-1c727b024bfd.jpg"
+      ],
+      "layout": "single-wide",
+      "editorial_note": "Кадр не несёт значительной визуальной информации."
+    }
+  ],
+  "backstage_role": "Автор",
+  "publication_note": "Собранный материал отражает атмосферу дня, сохраняя географическую последовательность.",
+  "chapter_id": "testo",
+  "photos_fingerprint": "8837db42b60861fa257e60a0e01a3427096573d1ba6c36f88bb10e1e35eaaacb"
+}
