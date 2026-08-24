@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /author.html
+Disallow: /editor.html
+Disallow: /preview.html
+Disallow: /submission.html
+Disallow: /photo-import.html
+Disallow: /contact-sheet.html
+
+Sitemap: https://owntravel.ru/sitemap.xml

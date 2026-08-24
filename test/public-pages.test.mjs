@@ -53,3 +53,46 @@ test("mutable registry and authoring code are refreshed without stale PWA data",
   assert.match(read("editor.html"), /editor-app\.js\?v=4/);
   assert.match(read("preview.html"), /preview-app\.js\?v=4/);
 });
+
+test("every discoverable public page has canonical and social metadata", () => {
+  const pages = ["index.html", "trips/kyrgyzstan-2026/index.html", ...Array.from({ length: 8 }, (_, index) => `day${String(index + 1).padStart(2, "0")}.html`)];
+  for (const file of pages) {
+    const html = read(file);
+    assert.match(html, /<meta name="description" content="[^"]+">/, file);
+    assert.match(html, /<link rel="canonical" href="https:\/\/owntravel\.ru\/[^"]*">/, file);
+    assert.match(html, /<meta property="og:title" content="[^"]+">/, file);
+    assert.match(html, /<meta property="og:url" content="https:\/\/owntravel\.ru\/[^"]*">/, file);
+  }
+});
+
+test("static public photographs are responsive and deferred", () => {
+  const pages = ["index.html", "trips/kyrgyzstan-2026/index.html", ...Array.from({ length: 8 }, (_, index) => `day${String(index + 1).padStart(2, "0")}.html`)];
+  for (const file of pages) {
+    const images = [...read(file).matchAll(/<img\b[^>]*>/g)].map(match => match[0]);
+    for (const image of images) {
+      assert.match(image, /loading="lazy"/, `${file}: ${image}`);
+      assert.match(image, /decoding="async"/, `${file}: ${image}`);
+      if (/res\.cloudinary\.com/.test(image)) {
+        assert.match(image, /srcset="[^"]+ 480w,[^"]+ 800w,[^"]+ 1200w,[^"]+ 1600w"/, `${file}: ${image}`);
+        assert.match(image, /sizes="[^"]+"/, `${file}: ${image}`);
+      }
+    }
+  }
+});
+
+test("crawler policy exposes only approved canonical content", () => {
+  const robots = read("robots.txt");
+  assert.match(robots, /Disallow: \/editor\.html/);
+  assert.match(robots, /Sitemap: https:\/\/owntravel\.ru\/sitemap\.xml/);
+  const sitemap = read("sitemap.xml");
+  assert.match(sitemap, /\/trips\/kyrgyzstan-2026\//);
+  assert.doesNotMatch(sitemap, /kolskiy/);
+  assert.doesNotMatch(sitemap, /editor\.html|preview\.html|author\.html/);
+});
+
+test("publisher emits canonical discovery metadata for future trips", () => {
+  const publisher = read("publish-trip.mjs");
+  assert.match(publisher, /const publicHead/);
+  assert.match(publisher, /rel="canonical"/);
+  assert.match(publisher, /\/trips\/\$\{trip\}\/chapters\/\$\{id\}\.html/);
+});

@@ -11,6 +11,7 @@
     "build:final-review": "node build-final-review.mjs",
     "build:storyboard": "node build-storyboard.mjs",
     "publish:trip": "node publish-trip.mjs",
+    "optimize:public": "node optimize-public-pages.mjs",
     "validate:storyboard": "node validate-storyboard.mjs",
     "validate:review": "node validate-review-consistency.mjs"
   }
