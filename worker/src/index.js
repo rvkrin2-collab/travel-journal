@@ -77,7 +77,8 @@ export async function verifyGoogleToken(request, env) {
   const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(token)}`);
   if (!response.ok) throw new Response("Invalid Google token", { status: 401 });
   const info = await response.json();
-  if (info.aud !== env.GOOGLE_CLIENT_ID) throw new Response("Wrong token audience", { status: 403 });
+  const audience = info.aud || info.audience || info.issued_to;
+  if (audience !== env.GOOGLE_CLIENT_ID) throw new Response("Wrong token audience", { status: 403 });
   const scopes = new Set(String(info.scope || "").split(/\s+/));
   if (!scopes.has("https://www.googleapis.com/auth/photospicker.mediaitems.readonly")) throw new Response("Missing Picker scope", { status: 403 });
   return info;

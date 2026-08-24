@@ -18,14 +18,20 @@ export class GooglePhotosPicker {
     this.authorizedThisSession = false;
   }
 
+  hasRequiredScopes(value) {
+    const required = new Set(String(this.config.google_photos_scope || "").split(/\s+/).filter(Boolean));
+    const granted = new Set(String(value || "").split(/\s+/).filter(Boolean));
+    return [...required].every(scope => granted.has(scope));
+  }
+
   cachedToken() {
-    if (this.accessToken?.expires_at > Date.now() + EXPIRY_MARGIN_MS) return this.accessToken.access_token;
+    if (this.accessToken?.expires_at > Date.now() + EXPIRY_MARGIN_MS && this.hasRequiredScopes(this.accessToken.scope)) return this.accessToken.access_token;
     try {
       const saved = JSON.parse(globalThis.sessionStorage?.getItem(TOKEN_KEY) || "null");
       const accessToken = saved?.access_token || saved?.value || "";
       const expiresAt = Number(saved?.expires_at ?? saved?.expiresAt) || 0;
-      if (accessToken && expiresAt > Date.now() + EXPIRY_MARGIN_MS) {
-        this.accessToken = { access_token: accessToken, expires_at: expiresAt };
+      if (accessToken && expiresAt > Date.now() + EXPIRY_MARGIN_MS && this.hasRequiredScopes(saved?.scope)) {
+        this.accessToken = { access_token: accessToken, expires_at: expiresAt, scope: saved.scope };
         this.authorizedThisSession = true;
         return accessToken;
       }
@@ -39,14 +45,18 @@ export class GooglePhotosPicker {
 
   rememberToken(response) {
     const expiresIn = Math.max(0, Number(response.expires_in) || 3600);
-    this.accessToken = { access_token: response.access_token, expires_at: Date.now() + expiresIn * 1000 };
+    this.accessToken = { access_token: response.access_token, expires_at: Date.now() + expiresIn * 1000, scope: response.scope || this.config.google_photos_scope };
     this.authorizedThisSession = true;
     try { globalThis.sessionStorage?.setItem(TOKEN_KEY, JSON.stringify(this.accessToken)); }
     catch { /* The in-memory token still avoids repeated prompts in this page. */ }
     return this.accessToken.access_token;
   }
 
-  token() {
+  token(force = false) {
+    if (force) {
+      this.accessToken = null;
+      try { globalThis.sessionStorage?.removeItem(TOKEN_KEY); } catch { /* Continue with a fresh in-memory request. */ }
+    }
     const cached = this.cachedToken();
     if (cached) return Promise.resolve(cached);
     if (this.tokenRequest) return this.tokenRequest;
@@ -55,7 +65,7 @@ export class GooglePhotosPicker {
         if (globalThis.google?.accounts?.oauth2) {
           google.accounts.oauth2.initTokenClient({ client_id: this.config.google_client_id, scope: this.config.google_photos_scope,
             callback: response => response.error ? reject(new Error(response.error)) : resolve(this.rememberToken(response)),
-            error_callback: error => reject(new Error(error.type || "Google OAuth error")) }).requestAccessToken({ prompt: this.authorizedThisSession ? "" : "consent" });
+            error_callback: error => reject(new Error(error.type || "Google OAuth error")) }).requestAccessToken({ prompt: force || !this.authorizedThisSession ? "consent" : "" });
         } else if (Date.now() < deadline) setTimeout(() => wait(deadline), 100);
         else reject(new Error("Google Sign-In не загрузился"));
       };
@@ -65,10 +75,13 @@ export class GooglePhotosPicker {
   }
 
   async identify() {
-    const token = await this.token();
-    const response = await fetch(`${this.config.upload_api_url}/whoami`, { headers: { Authorization: `Bearer ${token}` } });
-    if (!response.ok) throw new Error(`Проверка аккаунта: HTTP ${response.status}`);
-    return response.json();
+    const request = token => fetch(`${this.config.upload_api_url}/whoami`, { headers: { Authorization: `Bearer ${token}` } });
+    let response = await request(await this.token());
+    if ([401, 403, 422].includes(response.status)) response = await request(await this.token(true));
+    const fallback = response.clone();
+    const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
+    if (!response.ok) throw new Error(result.error || `Проверка аккаунта: HTTP ${response.status}`);
+    return result;
   }
 
   async submit(request) {
