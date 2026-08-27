@@ -1,1 +1,22 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#263c34"><title>Статус путешествия</title><link rel="stylesheet" href="author.css?v=23"></head><body><header class="top"><div><span>Авторская мастерская</span><strong>Путь к публикации</strong></div><a class="quiet" href="author.html">← К мастерской</a></header><main><section class="intro"><p class="step">Одно место для всей работы</p><h1 id="title">Проверяем заявку…</h1><p id="summary">Страница сама покажет единственное следующее действие.</p></section><section id="overall-status" class="panel"></section><section id="chapters-status" class="panel"></section><section id="publish-panel" class="panel finish" hidden></section><section class="panel help"><h2>Как это работает</h2><ol><li>Сайт анализирует фотографии.</li><li>Вы утверждаете отбор каждой главы.</li><li>Сайт собирает текст и preview.</li><li>Вы утверждаете preview каждой главы.</li><li>Появляется кнопка публикации всего путешествия.</li></ol><button id="refresh" class="add" type="button">Обновить сейчас</button></section></main><script type="module" src="submission.js?v=3"></script></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#263c34">
+  <title>Статус путешествия</title>
+  <link rel="stylesheet" href="author.css?v=26">
+</head>
+<body>
+  <header class="top"><div><span>Авторская мастерская</span><strong>Путь к публикации</strong></div><a class="quiet" href="author.html">← К мастерской</a></header>
+  <main>
+    <section class="intro status-intro"><p class="step">Статус обновляется автоматически</p><h1 id="title">Проверяем заявку…</h1><p id="summary">Определяем текущий этап и следующее действие.</p><div class="live-status"><span class="pulse"></span><span id="live-status">Загружаем данные…</span></div></section>
+    <section id="overall-status" class="panel"></section>
+    <section id="chapters-status" class="panel chapters-panel"></section>
+    <section id="publish-panel" class="panel finish" hidden></section>
+    <section class="panel help"><div><h2>Что делать</h2><p>Ориентируйтесь на карточки глав. Зелёная кнопка означает, что нужен ваш шаг. При автоматической обработке страницу можно закрыть: прогресс сохранится.</p></div><button id="refresh" class="add" type="button">Проверить сейчас</button></section>
+  </main>
+  <script type="module" src="submission.js?v=4"></script>
+</body>
+</html>

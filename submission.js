@@ -1,3 +1,5 @@
+import { CHAPTER_STAGES, chapterStatus, overallProgress } from "./lib/submission-status.mjs?v=1";
+
 const params = new URLSearchParams(location.search);
 const safe = value => String(value || "").toLowerCase().replace(/[^a-z0-9-]/g, "");
 const trip = safe(params.get("trip"));
@@ -5,49 +7,80 @@ const root = document.querySelector("#chapters-status");
 const title = document.querySelector("#title");
 const summary = document.querySelector("#summary");
 const overall = document.querySelector("#overall-status");
+const live = document.querySelector("#live-status");
+const refreshButton = document.querySelector("#refresh");
 const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
-let photoPicker;
-async function get(path) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); return response.ok ? response.json() : null; }
-function stateFor(values) {
-  if (values.approval) return { step: 4, label: "Глава утверждена", action: "Ожидает публикации" };
-  if (values.previewReady) return { step: 3, label: "Проверьте готовую главу", action: "Открыть и утвердить preview" };
-  if (values.author) return { step: 2, label: "Собираем текст и preview", action: "Ничего делать не нужно" };
-  if (values.ready) return { step: 1, label: "Нужен ваш отбор фотографий", action: "Открыть редактор фотографий" };
-  return { step: 0, label: "Анализируем фотографии", action: "Ничего делать не нужно" };
+let photoPicker, refreshing = false, secondsToRefresh = 15;
+
+async function get(path) {
+  try {
+    const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  } catch (error) { throw new Error(`Не удалось получить ${path}: ${error.message}`); }
 }
+function dateTime(value) { return value ? new Intl.DateTimeFormat("ru-RU", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)) : "изменений ещё не было"; }
 function renderOverall(states, published) {
-  const approved = states.filter(value => value.approval).length;
-  const stages = ["Фото загружены", "Отбор фотографий", "Сборка глав", "Проверка preview", "Публикация"];
-  overall.innerHTML = `<h2>Путь путешествия</h2><div class="journey-steps">${stages.map((label, index) => `<div class="journey-step ${published || (index < 4 && states.length && states.every(value => stateFor(value).step >= index)) ? "done" : ""}"><b>${index + 1}</b><span>${label}</span></div>`).join("")}</div><p>${published ? "Путешествие опубликовано." : `Полностью утверждено глав: ${approved} из ${states.length}.`}</p>`;
+  const progress = overallProgress(states.map(value => value.status), published);
+  const stalled = states.filter(value => value.status.kind === "stalled").length;
+  const actions = states.filter(value => value.status.kind === "action").length;
+  overall.innerHTML = `<div class="overall-head"><div><span class="status-kicker">Общий прогресс</span><h2>${progress.percent}%</h2></div><span class="live-dot ${stalled ? "problem" : published ? "done" : ""}">${published ? "Опубликовано" : stalled ? "Нужна помощь" : actions ? "Ждёт вашего действия" : "Обработка идёт"}</span></div><div class="overall-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percent}"><i style="width:${progress.percent}%"></i></div><div class="journey-steps">${CHAPTER_STAGES.map((label, index) => `<div class="journey-step ${states.length && states.every(value => value.status.completed[index]) ? "done" : ""}"><b>${index + 1}</b><span>${label}</span></div>`).join("")}<div class="journey-step ${published ? "done" : ""}"><b>7</b><span>Публикация</span></div></div>`;
+}
+function actionFor(value) {
+  const chapter = value.chapter;
+  if (value.status.action === "editor") return `<a class="primary status-link" href="editor.html?trip=${trip}&chapter=${chapter.id}">Выбрать и утвердить фотографии</a>`;
+  if (value.status.action === "preview") return `<a class="primary status-link" href="preview.html?trip=${trip}&chapter=${chapter.id}">Проверить и утвердить preview</a>`;
+  if (value.status.action === "restart") return `<a class="primary status-link restart" href="author.html">Открыть авторскую мастерскую</a><p class="restart-note">Откройте сохранённый черновик и снова нажмите «Отправить и запустить обработку».</p>`;
+  return "";
+}
+function renderChapter(value) {
+  const state = value.status;
+  const stateName = { working: "В работе", action: "Ваше действие", stalled: "Остановлено", done: "Готово" }[state.kind];
+  return `<article class="chapter workflow-card ${state.kind}"><div class="chapter-head"><strong>${escapeHtml(value.chapter.title)}</strong><span class="state-badge">${stateName}</span></div><div class="chapter-progress"><i style="width:${state.percent}%"></i></div><div class="progress-copy"><b>${state.percent}%</b><span>${state.done} из ${state.total} этапов</span></div><h3>${state.label}</h3><p>${state.instruction}</p><p class="last-change">Последнее изменение: ${dateTime(state.lastActivity)}</p>${actionFor(value)}</article>`;
+}
+function renderPublish(states, published) {
+  const panel = document.querySelector("#publish-panel");
+  if (published) { panel.hidden = false; panel.innerHTML = `<h2>Путешествие опубликовано</h2><a class="primary status-link" href="trips/${trip}/">Открыть путешествие</a>`; }
+  else if (states.length && states.every(value => value.status.kind === "done")) {
+    panel.hidden = false; panel.innerHTML = `<h2>Финальный шаг — публикация</h2><p>Выберите главу, главное фото которой станет обложкой путешествия.</p><label>Обложка<select id="cover-chapter">${states.map(value => `<option value="${value.chapter.id}">${escapeHtml(value.chapter.title)}</option>`).join("")}</select></label><label class="publish-confirm"><input id="publish-confirm" type="checkbox"> Я проверил все главы и прямо разрешаю публикацию</label><button id="publish-trip" class="primary" type="button">Опубликовать путешествие</button><div id="publish-result" class="service-state" hidden></div>`; document.querySelector("#publish-trip").onclick = publishTrip;
+  } else panel.hidden = true;
 }
 async function refresh() {
-  if (!trip) { title.textContent = "Не указан идентификатор путешествия"; return; }
-  const [tripData, registry] = await Promise.all([get(`data/${trip}/trip.json`), get("data/trips.json")]);
-  if (!tripData) { title.textContent = "Заявка принята"; summary.textContent = "Создаём черновик и анализируем фотографии. Здесь пока ничего нажимать не нужно."; root.innerHTML = "<p>Подготовка фотоинвентаря…</p>"; return; }
-  const registryTrip = registry?.trips?.find(item => item.id === trip); const published = registryTrip?.status === "completed" && tripData.editorial_status === "published";
-  title.textContent = registryTrip?.title || trip;
-  const chapters = tripData.views?.find(view => ["chapters", "days"].includes(view.id))?.items || [];
-  const states = await Promise.all(chapters.map(async chapter => {
-    const base = `data/${trip}/${chapter.id}`;
-    const [photos, analysis, ai, author, storyboard, approval] = await Promise.all([get(`${base}-photos.json`), get(`${base}-analysis.json`), get(`${base}-ai-review.json`), get(`${base}-author-review.json`), get(`${base}-storyboard.json`), get(`${base}-approval.json`)]);
-    const ready = Boolean(photos && analysis && ai && photos.photos_fingerprint === analysis.photos_fingerprint && photos.photos_fingerprint === ai.photos_fingerprint);
-    const previewReady = Boolean(ready && author && storyboard && photos.photos_fingerprint === author.photos_fingerprint && photos.photos_fingerprint === storyboard.photos_fingerprint);
-    const approvalValid = Boolean(previewReady && approval?.status === "preview_approved" && approval.photos_fingerprint === photos.photos_fingerprint);
-    return { chapter, photos, analysis, ai, author, storyboard, approval: approvalValid ? approval : null, ready, previewReady };
-  }));
-  renderOverall(states, published);
-  const next = states.find(value => !value.approval); summary.textContent = published ? "Готово — путешествие доступно читателям." : next ? `Следующее действие: ${stateFor(next).action}.` : "Все главы утверждены. Выберите обложку и опубликуйте путешествие.";
-  root.innerHTML = states.map(value => { const state = stateFor(value); const chapter = value.chapter; const action = value.previewReady && !value.approval ? `<a class="primary status-link" href="preview.html?trip=${trip}&chapter=${chapter.id}">Открыть и утвердить preview</a>` : value.ready && !value.author ? `<a class="primary status-link" href="editor.html?trip=${trip}&chapter=${chapter.id}">Выбрать фотографии</a>` : ""; return `<article class="chapter workflow-card"><div class="chapter-head"><strong>${escapeHtml(chapter.title)}</strong><span>Шаг ${state.step + 1} из 5</span></div><div class="progress"><i style="width:${(state.step + 1) * 20}%"></i></div><h3>${state.label}</h3><p>${state.action}</p>${action}</article>`; }).join("");
-  const publish = document.querySelector("#publish-panel");
-  if (published) { publish.hidden = false; publish.innerHTML = `<h2>Путешествие опубликовано</h2><a class="primary status-link" href="trips/${trip}/">Открыть путешествие</a>`; }
-  else if (states.length && states.every(value => value.approval)) { publish.hidden = false; publish.innerHTML = `<h2>Финальный шаг — публикация</h2><p>Выберите главу, главное фото которой станет обложкой путешествия.</p><label>Обложка<select id="cover-chapter">${states.map(value => `<option value="${value.chapter.id}">${escapeHtml(value.chapter.title)}</option>`).join("")}</select></label><label class="publish-confirm"><input id="publish-confirm" type="checkbox"> Я проверил все главы и прямо разрешаю публикацию</label><button id="publish-trip" class="primary" type="button">Опубликовать путешествие</button><div id="publish-result" class="service-state" hidden></div>`; document.querySelector("#publish-trip").onclick = publishTrip; }
-  else publish.hidden = true;
+  if (refreshing) return;
+  refreshing = true; refreshButton.disabled = true; live.classList.remove("error"); live.textContent = "Проверяем изменения…";
+  try {
+    if (!trip) { title.textContent = "Не указан идентификатор путешествия"; summary.textContent = "Откройте страницу статуса из авторской мастерской."; return; }
+    const [tripData, registry] = await Promise.all([get(`data/${trip}/trip.json`), get("data/trips.json")]);
+    if (!tripData) { title.textContent = "Заявка принята"; summary.textContent = "Черновик ещё не появился. Обычно это занимает несколько минут."; overall.innerHTML = `<div class="waiting-block"><span class="spinner"></span><div><h2>Создаём путешествие</h2><p>Страница обновляется автоматически. Пока ничего нажимать не нужно.</p></div></div>`; root.innerHTML = ""; return; }
+    const registryTrip = registry?.trips?.find(item => item.id === trip);
+    const published = registryTrip?.status === "completed" && tripData.editorial_status === "published";
+    title.textContent = registryTrip?.title || trip;
+    const chapters = tripData.views?.find(view => ["chapters", "days"].includes(view.id))?.items || [];
+    const states = await Promise.all(chapters.map(async chapter => {
+      const base = `data/${trip}/${chapter.id}`;
+      const [photos, analysis, ai, author, storyboard, approval] = await Promise.all(["photos", "analysis", "ai-review", "author-review", "storyboard", "approval"].map(type => get(`${base}-${type}.json`)));
+      return { chapter, status: chapterStatus({ photos, analysis, ai, author, storyboard, approval }) };
+    }));
+    renderOverall(states, published);
+    root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${states.map(renderChapter).join("")}`;
+    const stalled = states.filter(value => value.status.kind === "stalled"), actions = states.filter(value => value.status.kind === "action"), working = states.filter(value => value.status.kind === "working");
+    if (published) summary.textContent = "Готово — путешествие опубликовано.";
+    else if (stalled.length) summary.textContent = `Обработка остановилась в ${stalled.length} ${stalled.length === 1 ? "главе" : "главах"}. Ниже указано, как запустить её снова.`;
+    else if (actions.length) summary.textContent = `Сейчас нужен ваш шаг: ${actions[0].status.instruction}`;
+    else if (working.length) summary.textContent = "Обработка идёт автоматически. Страницу можно закрыть и вернуться позже.";
+    else summary.textContent = "Все главы утверждены. Осталось выбрать обложку и опубликовать путешествие.";
+    renderPublish(states, published);
+    live.textContent = `Проверено ${new Intl.DateTimeFormat("ru-RU", { timeStyle: "medium" }).format(new Date())}. Следующая проверка через 15 секунд.`; secondsToRefresh = 15;
+  } catch (error) { live.textContent = error.message; live.classList.add("error"); }
+  finally { refreshing = false; refreshButton.disabled = false; }
 }
 async function publishTrip() {
   const result = document.querySelector("#publish-result"); result.hidden = false;
   if (!document.querySelector("#publish-confirm").checked) { result.textContent = "Сначала подтвердите, что проверили все главы."; return; }
-  try { if (!photoPicker) throw new Error("Сеанс публикации ещё загружается"); result.textContent = "Отправляем прямую команду публикации…"; const response = await photoPicker.publishTrip({ schema_version: 1, trip, status: "publish_requested", cover_chapter: document.querySelector("#cover-chapter").value, requested_at: new Date().toISOString() }); result.textContent = "Публикация запущена. Страница обновится автоматически."; setTimeout(refresh, 5000); } catch (error) { result.textContent = `Не удалось опубликовать: ${error.message}`; }
+  try { if (!photoPicker) throw new Error("Сеанс публикации ещё загружается"); result.textContent = "Отправляем прямую команду публикации…"; await photoPicker.publishTrip({ schema_version: 1, trip, status: "publish_requested", cover_chapter: document.querySelector("#cover-chapter").value, requested_at: new Date().toISOString() }); result.textContent = "Публикация запущена. Страница обновится автоматически."; setTimeout(refresh, 5000); } catch (error) { result.textContent = `Не удалось опубликовать: ${error.message}`; }
 }
-document.querySelector("#refresh").onclick = refresh;
-Promise.all([import("./lib/photo-services-config.mjs?v=24"), import("./google-photos-picker.js?v=24")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => { const response = await fetch("./config/photo-services.json", { cache: "no-store" }); photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json())); }).catch(() => {});
-refresh(); setInterval(() => { if (!document.hidden) refresh(); }, 15000);
+refreshButton.onclick = refresh;
+Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=25")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => { const response = await fetch("./config/photo-services.json", { cache: "no-store" }); photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json())); }).catch(() => {});
+refresh();
+setInterval(() => { if (document.hidden || refreshing) return; secondsToRefresh--; if (secondsToRefresh <= 0) refresh(); else if (!live.classList.contains("error")) live.textContent = live.textContent.replace(/Следующая проверка через \d+ секунд\./, `Следующая проверка через ${secondsToRefresh} секунд.`); }, 1000);
