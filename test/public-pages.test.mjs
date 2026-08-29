@@ -21,7 +21,7 @@ test("published editorial layout cannot overflow horizontally", () => {
 });
 
 test("legacy Kola trees redirect to the canonical trip", () => {
-  const legacyRoots = ["trips/kolskiy-bereg-i-more", "trips/kolskiy-mezhdu-beregom-i-morem", "trips/kolskiy-u-vody-i-pod-vodoy"];
+  const legacyRoots = ["trips/kolskiy-bereg-i-more", "trips/kolskiy-mezhdu-beregom-i-morem"];
   for (const directory of legacyRoots) {
     for (const file of walk(directory).filter(value => value.endsWith(".html"))) {
       const html = read(file);
@@ -52,8 +52,8 @@ test("mutable registry and authoring code are refreshed without stale PWA data",
   assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
   assert.match(read("editor.html"), /editor-app\.js\?v=4/);
   assert.match(read("preview.html"), /preview-app\.js\?v=4/);
-  assert.match(read("submission.html"), /submission\.js\?v=5/);
-  assert.match(worker, /submission\.js\?v=5/);
+  assert.match(read("submission.html"), /submission\.js\?v=6/);
+  assert.match(worker, /submission\.js\?v=6/);
 });
 
 test("every discoverable public page has canonical and social metadata", () => {

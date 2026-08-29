@@ -11,6 +11,25 @@ const live = document.querySelector("#live-status");
 const refreshButton = document.querySelector("#refresh");
 const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
 let photoPicker, refreshing = false, secondsToRefresh = 15;
+const PROCESSING_KEY = `travel-journal-processing-${trip}`;
+const PROCESSING_WINDOW_MS = 20 * 60 * 1000;
+
+function processingAttempt() {
+  try {
+    const value = JSON.parse(localStorage.getItem(PROCESSING_KEY) || "null");
+    if (!value?.started_at || Date.now() - Date.parse(value.started_at) > PROCESSING_WINDOW_MS) {
+      localStorage.removeItem(PROCESSING_KEY);
+      return null;
+    }
+    return value;
+  } catch { return null; }
+}
+
+function rememberProcessing() {
+  const value = { started_at: new Date().toISOString() };
+  localStorage.setItem(PROCESSING_KEY, JSON.stringify(value));
+  return value;
+}
 
 async function get(path) {
   try {
@@ -57,11 +76,18 @@ async function refresh() {
     const published = registryTrip?.status === "completed" && tripData.editorial_status === "published";
     title.textContent = registryTrip?.title || trip;
     const chapters = tripData.views?.find(view => ["chapters", "days"].includes(view.id))?.items || [];
-    const states = await Promise.all(chapters.map(async chapter => {
+    let states = await Promise.all(chapters.map(async chapter => {
       const base = `data/${trip}/${chapter.id}`;
       const [photos, analysis, ai, author, storyboard, approval] = await Promise.all(["photos", "analysis", "ai-review", "author-review", "storyboard", "approval"].map(type => get(`${base}-${type}.json`)));
       return { chapter, status: chapterStatus({ photos, analysis, ai, author, storyboard, approval }) };
     }));
+    const attempt = processingAttempt();
+    if (attempt) {
+      const startedAt = Date.parse(attempt.started_at);
+      const hasNewResult = states.some(value => Date.parse(value.status.lastActivity || 0) > startedAt);
+      if (hasNewResult) localStorage.removeItem(PROCESSING_KEY);
+      else states = states.map(value => value.status.kind === "stalled" ? { ...value, status: { ...value.status, kind: "working", action: null, label: "Обработка выполняется", instruction: "Анализируем фотографии и готовим редакторский отбор. Обычно это занимает несколько минут." } } : value);
+    }
     renderOverall(states, published);
     root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${states.map(renderChapter).join("")}`;
     document.querySelectorAll("[data-retry-processing]").forEach(button => { button.onclick = retryProcessing; });
@@ -87,6 +113,7 @@ async function retryProcessing() {
   try {
     if (!photoPicker) throw new Error("Подключение Google ещё загружается");
     await photoPicker.retryProcessing(trip);
+    rememberProcessing();
     summary.textContent = "Повторная обработка запущена. Первые результаты обычно появляются в течение нескольких минут.";
     live.textContent = "Команда принята. Проверяем появление результатов каждые 15 секунд.";
     document.querySelectorAll(".workflow-card.stalled").forEach(card => { card.classList.remove("stalled"); card.classList.add("working"); card.querySelector(".state-badge").textContent = "Запускается"; card.querySelector("h3").textContent = "Обработка запускается"; });
