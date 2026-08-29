@@ -4,15 +4,9 @@ import { inventoryItems, resolveEditorialTarget } from "./lib/editorial-artifact
 const target = resolveEditorialTarget(); const trip = target.trip; const dayTag = target.chapter;
 const storyboardFile = process.env.STORYBOARD_FILE || `data/${trip}/${dayTag}-storyboard.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
+const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-context.json`;
 const photosFile = process.env.PHOTOS_FILE || `data/${trip}/${dayTag}-photos.json`;
 const reviewFile = process.env.REVIEW_FILE || `data/${trip}/${dayTag}-author-review.json`;
-
-function normalizeDay(value) {
-  const raw = String(value || "").trim().toLowerCase();
-  const number = raw.match(/\d+/);
-  if (number) return `day${String(Number(number[0])).padStart(2, "0")}`;
-  return raw.replace(/[^a-z0-9-]/g, "") || "day01";
-}
 
 async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
@@ -35,20 +29,16 @@ function sceneText(scene) {
   return normalizeText([scene.place, scene.title, scene.text, scene.editorial_note].filter(Boolean).join(" "));
 }
 
-function routePlaces(authorNotes) {
+function routePlaces(authorNotes, chapterContext) {
   const order = authorNotes?.actual_route_order || [];
   if (Array.isArray(order) && order.length) return order.map(String);
-  return String(authorNotes?.route || "")
+  if (Array.isArray(chapterContext?.route) && chapterContext.route.length) return chapterContext.route.map(String);
+  if (Array.isArray(chapterContext?.route_context) && chapterContext.route_context.length) return chapterContext.route_context.map(String);
+  const route = authorNotes?.route || chapterContext?.route || "";
+  return String(route)
     .split("→")
     .map(item => item.trim())
     .filter(Boolean);
-}
-
-function knownPhotoIds(photos, review) {
-  return new Set([
-    ...(Array.isArray(photos) ? photos.map(photo => photo.public_id) : []),
-    ...((review?.items || []).map(item => item.public_id))
-  ]);
 }
 
 function detectPlaceIndex(scene, places) {
@@ -64,19 +54,33 @@ function detectPlaceIndex(scene, places) {
 
 const storyboard = await readJson(storyboardFile);
 const authorNotes = await readJsonIfExists(authorNotesFile);
-const inventory = await readJsonIfExists(photosFile); const photos = inventory ? inventoryItems(inventory) : null;
+const chapterContext = await readJsonIfExists(contextFile);
+const inventory = await readJsonIfExists(photosFile);
+const photos = inventory ? inventoryItems(inventory) : null;
 const review = await readJsonIfExists(reviewFile);
 const errors = [];
 const warnings = [];
 
-const ids = knownPhotoIds(photos, review);
+const inventoryIds = new Set((photos || []).map(photo => photo.public_id));
+const approvedItems = review?.items || [];
+const approvedStoryIds = new Set(approvedItems.filter(item => item.status === "hero" || item.status === "story").map(item => item.public_id));
+const seen = new Set();
+
 for (const scene of storyboard.scenes || []) {
+  if (!Array.isArray(scene.photos) || !scene.photos.length) errors.push(`Scene has no photos: ${scene.id || scene.title || "untitled"}`);
   for (const id of scene.photos || []) {
-    if (!ids.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);
+    if (inventoryIds.size && !inventoryIds.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);
+    if (approvedStoryIds.size && !approvedStoryIds.has(id)) errors.push(`Storyboard contains a photo not approved for story: ${id}`);
+    if (seen.has(id)) errors.push(`Storyboard duplicates public_id: ${id}`);
+    seen.add(id);
   }
 }
 
-const places = routePlaces(authorNotes);
+if (approvedStoryIds.size) {
+  for (const id of approvedStoryIds) if (!seen.has(id)) errors.push(`Storyboard omitted approved story photo: ${id}`);
+}
+
+const places = routePlaces(authorNotes, chapterContext);
 if (places.length) {
   let lastPlaceIndex = -1;
   for (const scene of storyboard.scenes || []) {
