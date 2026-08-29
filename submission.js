@@ -123,6 +123,12 @@ async function retryProcessing() {
   if (result) { result.hidden = false; result.textContent = "Подключаем Google и отправляем команду…"; }
   try {
     if (!photoPicker) await loadPhotoPicker();
+    if (typeof photoPicker.retryProcessing !== "function") {
+      photoPicker = null;
+      photoPickerPromise = null;
+      await loadPhotoPicker();
+    }
+    if (typeof photoPicker.retryProcessing !== "function") throw new Error("Модуль запуска устарел. Обновите страницу и повторите попытку.");
     await photoPicker.retryProcessing(trip);
     rememberProcessing();
     summary.textContent = "Повторная обработка запущена. Первые результаты обычно появляются в течение нескольких минут.";
@@ -140,7 +146,7 @@ async function retryProcessing() {
 
 async function loadPhotoPicker() {
   if (photoPicker) return photoPicker;
-  if (!photoPickerPromise) photoPickerPromise = Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=25")])
+  if (!photoPickerPromise) photoPickerPromise = Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=26")])
     .then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
       const response = await fetch("./config/photo-services.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`Настройки подключения: HTTP ${response.status}`);

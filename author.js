@@ -156,7 +156,7 @@ form.addEventListener("submit", async event => {
 });
 restore();
 
-Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=25")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=26")]).then(async ([{ photoServicesReady, validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const config = validatePhotoServicesConfig(await response.json());

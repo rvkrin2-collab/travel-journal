@@ -52,8 +52,8 @@ test("mutable registry and authoring code are refreshed without stale PWA data",
   assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
   assert.match(read("editor.html"), /editor-app\.js\?v=4/);
   assert.match(read("preview.html"), /preview-app\.js\?v=4/);
-  assert.match(read("submission.html"), /submission\.js\?v=8/);
-  assert.match(worker, /submission\.js\?v=8/);
+  assert.match(read("submission.html"), /submission\.js\?v=9/);
+  assert.match(worker, /submission\.js\?v=9/);
 });
 
 test("every discoverable public page has canonical and social metadata", () => {

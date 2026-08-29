@@ -14,7 +14,7 @@ test("author page cache-busts the picker modules and PWA precaches those URLs", 
   assert.match(html, /src="author\.js\?v=25"/);
   assert.match(html, /id="show-google-user-id"[^>]*disabled/);
   assert.doesNotMatch(html, /id="show-google-user-id"[^>]*hidden/);
-  assert.match(author, /google-photos-picker\.js\?v=25/);
+  assert.match(author, /google-photos-picker\.js\?v=26/);
   assert.match(author, /photo-services-config\.mjs\?v=25/);
   assert.match(author, /showGoogleUserId\.disabled = false/);
   assert.match(author, /photoPicker\.submit\(data\)/);
@@ -27,7 +27,6 @@ test("author page cache-busts the picker modules and PWA precaches those URLs", 
   assert.match(workflow, /author_trip_submitted/);
   assert.match(workflow, /Analyze every submitted chapter/);
   assert.ok(workflow.indexOf("Commit generated drafts") < workflow.indexOf("- name: Test"), "generated results must be saved before unrelated regression tests");
-  for (const asset of ["author.css", "author.js", "google-photos-picker.js", "lib/photo-services-config.mjs"]) {
-    assert.match(worker, new RegExp(`${asset.replaceAll(".", "\\.")}\\?v=25`));
-  }
+  for (const asset of ["author.css", "author.js", "lib/photo-services-config.mjs"]) assert.match(worker, new RegExp(`${asset.replaceAll(".", "\\.")}\\?v=25`));
+  assert.match(worker, /google-photos-picker\.js\?v=26/);
 });
