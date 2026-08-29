@@ -168,7 +168,7 @@ async function submitTrip(request, env, cors) {
 }
 
 async function retryProcessing(request, env, cors) {
-  await authorize(request, env);
+  await authorizeAuthorSession(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const input = await request.json();
   const trip = safeSegment(input.trip, "");
