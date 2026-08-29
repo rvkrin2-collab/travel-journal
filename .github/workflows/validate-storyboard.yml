@@ -1,6 +1,9 @@
 name: Validate storyboard
 
 on:
+  push:
+    paths:
+      - "data/*/*-storyboard.json"
   workflow_dispatch:
     inputs:
       trip:
@@ -23,14 +26,35 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 2
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      - name: Resolve storyboard target
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            trip="${{ github.event.inputs.trip }}"
+            chapter="${{ github.event.inputs.chapter }}"
+          else
+            changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^data/[^/]+/[^/]+-storyboard\.json$' | head -n 1)
+            test -n "$changed" || { echo "No storyboard change found"; exit 1; }
+            trip=$(printf '%s' "$changed" | cut -d/ -f2)
+            file=$(basename "$changed")
+            chapter=${file%-storyboard.json}
+          fi
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+          echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+
       - name: Validate storyboard
         run: node validate-storyboard.mjs
-        env:
-          TRIP: ${{ github.event.inputs.trip }}
-          CHAPTER: ${{ github.event.inputs.chapter }}
+
+      - name: Validate editorial gates
+        run: node validate-editorial-chapter.mjs
+
+      - name: Test repository
+        run: npm test
