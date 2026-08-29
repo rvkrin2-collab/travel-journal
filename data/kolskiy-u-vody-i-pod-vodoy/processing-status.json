@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "status": "failed",
+  "code": "openai_rate_limit",
+  "message": "OpenAI API временно ограничил число запросов. Подождите несколько минут и повторите запуск.",
+  "failed_at": "2026-08-29T20:01:53.959Z",
+  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33271790379"
+}
