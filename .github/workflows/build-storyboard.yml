@@ -1,26 +1,25 @@
 name: Build storyboard
 
 on:
+  push:
+    paths:
+      - "data/*/*-author-review.json"
   workflow_dispatch:
     inputs:
       trip:
-        description: "Canonical trip id. Example: kyrgyzstan-2026"
+        description: "Canonical trip id"
         required: true
         default: "kyrgyzstan-2026"
       chapter:
         description: "Chapter slug. Legacy dayNN values are supported"
         required: true
         default: "day02"
-      model:
-        description: "OpenAI text model for storyboard"
-        required: false
-        default: "gpt-4o-mini"
 
 permissions:
   contents: write
 
 concurrency:
-  group: storyboard-${{ github.event.inputs.trip }}-${{ github.event.inputs.chapter }}
+  group: storyboard-main
   cancel-in-progress: false
 
 jobs:
@@ -44,33 +43,53 @@ jobs:
         with:
           node-version: 20
 
+      - name: Resolve storyboard target
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            trip="${{ github.event.inputs.trip }}"
+            chapter="${{ github.event.inputs.chapter }}"
+          else
+            changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^data/[^/]+/[^/]+-author-review\.json$' | head -n 1)
+            test -n "$changed" || { echo "No author-review change found"; exit 1; }
+            trip=$(printf '%s' "$changed" | cut -d/ -f2)
+            file=$(basename "$changed")
+            chapter=${file%-author-review.json}
+          fi
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+          echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+          echo "Building storyboard for $trip / $chapter"
+
+      - name: Validate durable author approval
+        run: node validate-editorial-chapter.mjs
+
       - name: Build storyboard
         run: node build-storyboard.mjs
         env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_TEXT_MODEL: ${{ github.event.inputs.model }}
-          TRIP: ${{ github.event.inputs.trip }}
-          CHAPTER: ${{ github.event.inputs.chapter }}
+          AI_PROVIDER_ORDER: anthropic,openai
 
       - name: Validate storyboard
         run: node validate-storyboard.mjs
-        env:
-          TRIP: ${{ github.event.inputs.trip }}
-          CHAPTER: ${{ github.event.inputs.chapter }}
+
       - name: Validate editorial gates
         run: node validate-editorial-chapter.mjs
-        env:
-          TRIP: ${{ github.event.inputs.trip }}
-          CHAPTER: ${{ github.event.inputs.chapter }}
+
+      - name: Test
+        run: npm test
 
       - name: Commit storyboard
         run: |
+          set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add data/
+          git add "data/$TRIP/$CHAPTER-storyboard.json"
           if git diff --cached --quiet; then
-            echo "No changes"
+            echo "No storyboard changes"
             exit 0
           fi
-          git commit -m "Build storyboard for ${{ github.event.inputs.trip }} ${{ github.event.inputs.chapter }}"
+          git commit -m "Build storyboard for $TRIP $CHAPTER"
+          git pull --rebase origin main
           git push origin HEAD:main
