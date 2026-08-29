@@ -78,8 +78,10 @@ jobs:
           printf '%s' "$trip" > /tmp/processing-trip-id
           while read -r chapter; do
             echo "Analyzing $trip / $chapter"
+            TRIP="$trip" CHAPTER="$chapter" node ensure-editorial-context.mjs
             TRIP="$trip" CHAPTER="$chapter" node analyze-photos-only-v3.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-series-v2.mjs
+            TRIP="$trip" CHAPTER="$chapter" node normalize-series-groups.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-review-v2.mjs
             TRIP="$trip" CHAPTER="$chapter" node validate-editorial-chapter.mjs
           done < /tmp/chapters.txt 2>&1 | tee /tmp/processing.log
@@ -90,12 +92,21 @@ jobs:
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
+          trip=""
           if [[ -f /tmp/processing-trip-id ]]; then
             trip=$(cat /tmp/processing-trip-id)
             rm -f "data/$trip/processing-status.json"
           fi
-          git add data/trips.json data/*/trip.json data/*/*-photos.json data/*/*-analysis.json data/*/*-ai-review.json trips/*/index.html trips/*/chapters/*.html
-          if [[ -n "${trip:-}" ]]; then git add -A -- "data/$trip/processing-status.json"; fi
+
+          # Stage directories, not a possibly absent status file. This safely records
+          # status deletion plus analysis/review/context checkpoints in one operation.
+          git add -A -- data/trips.json trips
+          if [[ -n "$trip" ]]; then
+            git add -A -- "data/$trip"
+          else
+            git add -A -- data
+          fi
+
           if git diff --cached --quiet; then
             echo "No generated changes"
             exit 0
@@ -144,7 +155,12 @@ jobs:
           checkpoint=/tmp/processing-checkpoint
           mkdir -p "$checkpoint"
           shopt -s nullglob
-          artifacts=("data/$trip"/*-analysis.json "data/$trip"/*-ai-review.json)
+          artifacts=(
+            "data/$trip"/*-analysis.json
+            "data/$trip"/*-ai-review.json
+            "data/$trip"/*-context.json
+            "data/$trip"/*-author-notes.json
+          )
           for artifact in "${artifacts[@]}"; do
             mkdir -p "$checkpoint/$(dirname "$artifact")"
             cp "$artifact" "$checkpoint/$artifact"
@@ -164,8 +180,7 @@ jobs:
           NODE
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add "data/$trip/processing-status.json"
-          git add -- "data/$trip"/*-analysis.json "data/$trip"/*-ai-review.json 2>/dev/null || true
+          git add -A -- "data/$trip"
           if git diff --cached --quiet; then
             echo "No failure status or completed checkpoints to publish"
             exit 0
