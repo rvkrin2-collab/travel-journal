@@ -43,7 +43,18 @@ if (storyboard) {
   const authorApproved = author && (author.approval === "photo_selection_approved" || (!author.schema_version && author.status === "author_review"));
   if (!authorApproved) throw new Error("storyboard exists without approved author-review");
   if (storyboard.photos_fingerprint && storyboard.photos_fingerprint !== fingerprint) throw new Error("storyboard uses a stale photos fingerprint");
+  if (!String(storyboard.updated_at || "").trim()) throw new Error("storyboard has no revision timestamp");
 }
 const approval = await optional(target.approval);
-if (approval && (approval.status !== "preview_approved" || approval.photos_fingerprint !== fingerprint || !storyboard)) throw new Error("preview approval is invalid or stale");
+if (approval) {
+  const valid = approval.status === "preview_approved"
+    && Number(approval.schema_version || 0) >= 2
+    && approval.photos_fingerprint === fingerprint
+    && Boolean(storyboard)
+    && approval.storyboard_source === target.storyboard
+    && approval.storyboard_updated_at === storyboard?.updated_at
+    && approval.author_review_source === target.authorReview
+    && approval.author_review_updated_at === (author?.updated_at || "");
+  if (!valid) throw new Error("preview approval is invalid or stale");
+}
 console.log(`${target.trip}/${target.chapter}: ${photos.length} photos, fingerprint ${fingerprint}`);
