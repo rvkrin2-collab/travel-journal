@@ -1,0 +1,126 @@
+{
+  "ai_review_source": "data/kolskiy-u-vody-i-pod-vodoy/kray-zemli-ai-review.json",
+  "approval": "photo_selection_approved",
+  "chapter": "kray-zemli",
+  "day": "kray-zemli",
+  "items": [
+    {
+      "label": "Береговой пейзаж с галечным пляжем, скалистыми берегами и видом на холмистый полуостров через залив",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 1,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/c7f65518-acea-44d9-97ac-53e7552ba2a7.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/c7f65518-acea-44d9-97ac-53e7552ba2a7.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Ржавый металлический механизм на скальном выступе у берега моря",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 2,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/2b68676d-78d1-47c5-9f75-7e8379d972e7.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/2b68676d-78d1-47c5-9f75-7e8379d972e7.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Скалистый берег с валунами, островками и морским заливом, ясное небо с облаками",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 3,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/e8d7071d-fb02-402b-9b46-6cc553677113.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/e8d7071d-fb02-402b-9b46-6cc553677113.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Скалистый берег с валунами и островками, морской пейзаж с облачным небом",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 4,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/26c0d03b-694c-4f88-8139-d19f8dc4a44a.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/26c0d03b-694c-4f88-8139-d19f8dc4a44a.jpg",
+      "status": "skip"
+    },
+    {
+      "label": "Скалистый морской берег с низкой травянистой растительностью, островами и спокойным морем",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 5,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/78fb4712-008c-4974-b1ee-ace71e6130dd.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/78fb4712-008c-4974-b1ee-ace71e6130dd.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Вид сквозь окно развалившегося каменного строения на морскую акваторию, скалистый берег и ландшафт с низкорослой растительностью",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 6,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/37e991eb-b8fe-43e7-b16d-ed0400d4156e.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/37e991eb-b8fe-43e7-b16d-ed0400d4156e.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Скалистый пейзаж с низкорослой растительностью и небольшими водоёмами, морским заливом и облачным небом",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 7,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/6b3c73e0-02b4-4905-8a20-52ca79a8906e.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/6b3c73e0-02b4-4905-8a20-52ca79a8906e.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Песчаный пляж защищённой бухты с причалом, флагом, лодками и скалистыми берегами",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 8,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/7de03117-4aae-4a00-8533-95dcfb423c6f.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/7de03117-4aae-4a00-8533-95dcfb423c6f.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Прибрежное поселение с деревянными домами на скалистом берегу, вид с воды",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 9,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/505cf4e1-a2d6-49f3-93a5-e4a4c1cca554.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/505cf4e1-a2d6-49f3-93a5-e4a4c1cca554.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Бетонная конструкция с кириллическими надписями в лесу",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 10,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/d7dbc5c7-ab66-4813-9a20-e712a37578fc.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/d7dbc5c7-ab66-4813-9a20-e712a37578fc.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Закат на Титовке с каменистым берегом и гряды гор по берегам",
+      "note": "Ключевой визуальный кадр серии.",
+      "number": 11,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/e13d6097-70a0-4b4c-9bcf-a3263375f194.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/e13d6097-70a0-4b4c-9bcf-a3263375f194.jpg",
+      "status": "hero"
+    },
+    {
+      "label": "Титовка в тумане с рыбацким катером и скалистые берега",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 12,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/c7efc3c9-2129-40fd-a52e-8209300b8de3.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/c7efc3c9-2129-40fd-a52e-8209300b8de3.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Вид на акваторию с низкогорным берегом, низкорослой растительностью и облачным небом",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 13,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/3f16563a-3446-4a78-ae2e-d0a6f39bfdc8.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/3f16563a-3446-4a78-ae2e-d0a6f39bfdc8.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Морские животные и морская растительность на деревянном настиле причала",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 14,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/d92a46cb-58b8-45a3-9e83-c6955b7711f3.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/kray-zemli/d92a46cb-58b8-45a3-9e83-c6955b7711f3.jpg",
+      "status": "backstage"
+    }
+  ],
+  "photos_fingerprint": "af86b6483ef601ef949b355fecd01775f936d7766f4c46c1b50dee65177007df",
+  "photos_source": "data/kolskiy-u-vody-i-pod-vodoy/kray-zemli-photos.json",
+  "schema_version": 2,
+  "status": "author_review",
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "updated_at": "2026-08-29T20:45:14.795Z"
+}
