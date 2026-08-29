@@ -35,14 +35,25 @@ test("author feedback rebuilds storyboard and enforces one photo with one captio
   assert.match(builder, /Each storyboard photo must have its own non-empty caption/);
 });
 
-test("storyboard grounding guard rejects invented caption facts and unsupported places", () => {
+test("storyboard grounding guard rejects invented facts while allowing grounded rephrasing", () => {
   const builder = read("build-storyboard.mjs");
   assert.match(builder, /function enforcePhotoGrounding/);
   assert.match(builder, /captionIsGrounded/);
-  assert.match(builder, /scene\.text = String\(record\.label/);
+  assert.match(builder, /sensitiveUnsupported/);
+  assert.match(builder, /unsupportedNumbers/);
+  assert.match(builder, /unsupportedCapitalizedTerms/);
+  assert.match(builder, /scene\.text = safeCaptionFallback\(record\.label\)/);
   assert.match(builder, /placeIsGrounded/);
   assert.match(builder, /scene\.place = ""/);
   assert.match(builder, /route_context никогда не является достаточным основанием/);
+});
+
+test("storyboard preserves supplied author chapter copy instead of inventing a new intro", () => {
+  const builder = read("build-storyboard.mjs");
+  assert.match(builder, /function preserveAuthorChapterCopy/);
+  assert.match(builder, /authorNotes\?\.provided\?\.description/);
+  assert.match(builder, /storyboard\.chapter\.intro = description/);
+  assert.match(builder, /storyboard\.chapter\.one_line = firstSentence/);
 });
 
 test("preview renders every approved photo as its own figure with an individual caption", () => {
