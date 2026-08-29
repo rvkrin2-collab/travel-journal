@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "chapter": "teriberka",
+  "notes": [
+    {
+      "type": "general",
+      "photo": "",
+      "text": "Переписать тексты как журнальную историю, а не технические подписи к фотографиям. Не пересказывать очевидное в кадре; если текст ничего не добавляет, убрать его.",
+      "photos_fingerprint": "08de778ad4481db604ee3f602bc789495d877bb1192bd497944df61db406d1ef",
+      "author_review_updated_at": "2026-08-29T20:47:16.169Z",
+      "storyboard_updated_at": "2026-08-29T20:48:40.000Z",
+      "submitted_at": "2026-08-29T21:22:03Z"
+    }
+  ],
+  "updated_at": "2026-08-29T21:22:03Z"
+}
