@@ -13,7 +13,7 @@ const APP_SHELL = [
   "/offline.html",
   "/author.html",
   "/submission.html",
-  "/submission.js?v=9",
+  "/submission.js?v=10",
   "/lib/submission-status.mjs?v=1",
   "/author.css?v=25",
   "/author.js?v=25",
