@@ -200,7 +200,7 @@ export default {
     const cors = corsHeaders(origin, env.ALLOWED_ORIGIN);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
-    if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2" }, 200, cors);
+    if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2", version: "2026-08-29-retry-v1" }, 200, cors);
     if (request.method === "GET" && url.pathname.startsWith("/media/")) {
       const key = safeMediaKey(url.pathname, "/media/"); return key ? r2Response(env, key) : new Response("Invalid media key", { status: 400 });
     }
