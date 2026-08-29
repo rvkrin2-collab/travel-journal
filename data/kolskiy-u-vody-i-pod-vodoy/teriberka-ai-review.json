@@ -13,7 +13,7 @@
   "photos_fingerprint": "08de778ad4481db604ee3f602bc789495d877bb1192bd497944df61db406d1ef",
   "status": "ai_review",
   "approval": "not_author_approved",
-  "updated_at": "2026-08-29T20:13:09.224Z",
+  "updated_at": "2026-08-29T20:26:07.333Z",
   "fact_checks_deferred_to_text_stage": true,
   "items": [
     {
@@ -39,7 +39,7 @@
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/40da0623-f2eb-4a24-baf8-6696b5290b1b.jpg",
       "number": 3,
       "status": "story",
-      "label": "Деревянный настил на пляже с белыми костями крупного морского животного, ресторан и вид на море с островами",
+      "label": "Деревянный настил на пляже с белыми костями крупного морского животного, здание и вид на море с островами",
       "note": "Кадр для основного визуального рассказа.",
       "observation_only": true
     },
@@ -84,7 +84,7 @@
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/f390a84b-cf6c-40a0-a996-efdeb6522b05.jpg",
       "number": 8,
       "status": "backstage",
-      "label": "Кладбище заброшенных лодок и хозяйственных построек у подножия горы",
+      "label": "Старые лодки и хозяйственные постройки у подножия горы",
       "note": "Дополнительный кадр для блока «За кадром».",
       "observation_only": true
     },
@@ -93,7 +93,7 @@
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/f6c4ca26-cde9-496c-a44f-9645099ebf26.jpg",
       "number": 9,
       "status": "story",
-      "label": "Красное рыболовное судно на фоне спокойного моря с облачным небом и скалистым берегом слева",
+      "label": "Красное судно на фоне спокойного моря с облачным небом и скалистым берегом слева",
       "note": "Кадр для основного визуального рассказа.",
       "observation_only": true
     },
@@ -110,9 +110,9 @@
       "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/5c9c5816-2b06-4094-a0fd-e240a587ad82.jpg",
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/5c9c5816-2b06-4094-a0fd-e240a587ad82.jpg",
       "number": 11,
-      "status": "backstage",
+      "status": "story",
       "label": "Скалистый берег с мхом и травой, вид на спокойное море с небольшими островками",
-      "note": "Дополнительный кадр для блока «За кадром».",
+      "note": "Кадр для основного визуального рассказа.",
       "observation_only": true
     },
     {
@@ -120,7 +120,7 @@
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/3b438071-e2b3-4dc7-91ad-55aeeab14411.jpg",
       "number": 12,
       "status": "backstage",
-      "label": "Скалистый морской берег с видом на залив, окружённый тундровой растительностью и отдалёнными скалистыми возвышениями",
+      "label": "Скалистый морской берег с видом на залив, окружённый низкорослой растительностью и отдалёнными скалистыми возвышениями",
       "note": "Дополнительный кадр для блока «За кадром».",
       "observation_only": true
     },
@@ -137,9 +137,9 @@
       "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/bf07fd9d-280c-4c82-8c4d-66c2dac49c11.jpg",
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/bf07fd9d-280c-4c82-8c4d-66c2dac49c11.jpg",
       "number": 14,
-      "status": "story",
-      "label": "Скальное ущелье с валунами и небольшой водоём, окружённый крупными гранитными глыбами",
-      "note": "Кадр для основного визуального рассказа.",
+      "status": "backstage",
+      "label": "Скальное ущелье с валунами и небольшой водоём, окружённый крупными каменными глыбами",
+      "note": "Дополнительный кадр для блока «За кадром».",
       "observation_only": true
     },
     {
@@ -147,7 +147,7 @@
       "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/8fa8fc5f-d43f-4612-b01e-7a2f0f7b1907.jpg",
       "number": 15,
       "status": "backstage",
-      "label": "Заброшенный деревянный дом на скальном плато с тундровой растительностью",
+      "label": "Заброшенный деревянный дом на скальном плато с низкорослой растительностью",
       "note": "Дополнительный кадр для блока «За кадром».",
       "observation_only": true
     }
