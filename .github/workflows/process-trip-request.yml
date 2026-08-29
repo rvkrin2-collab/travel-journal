@@ -118,7 +118,7 @@ jobs:
           log=$(cat /tmp/processing.log 2>/dev/null || true)
           code="processing_failed"
           message="Автоматическая обработка завершилась ошибкой. Повторите запуск или обратитесь к администратору."
-          if grep -Eq "output_config\.format\.schema|invalid.*schema|schema.*not supported" <<< "$log"; then
+          if grep -Eqi "output_config\.format\.schema|invalid.*schema|schema.*not supported|compiled grammar is too large|grammar is too large" <<< "$log"; then
             code="ai_schema_incompatible"
             message="Провайдер ИИ отклонил формат ответа. Требуется обновление обработчика, повторный запуск не поможет."
           elif grep -Eq 'must be written in Russian' <<< "$log"; then
@@ -140,9 +140,22 @@ jobs:
             code="openai_authentication_failed"
             message="OpenAI API отклонил ключ доступа. Проверьте секрет OPENAI_API_KEY и повторите запуск."
           fi
+
+          checkpoint=/tmp/processing-checkpoint
+          mkdir -p "$checkpoint"
+          shopt -s nullglob
+          artifacts=("data/$trip"/*-analysis.json "data/$trip"/*-ai-review.json)
+          for artifact in "${artifacts[@]}"; do
+            mkdir -p "$checkpoint/$(dirname "$artifact")"
+            cp "$artifact" "$checkpoint/$artifact"
+          done
+
           branch="${GITHUB_REF_NAME}"
           git fetch origin "$branch"
           git reset --hard "origin/$branch"
+          if [[ -d "$checkpoint/data/$trip" ]]; then
+            cp -f "$checkpoint/data/$trip"/* "data/$trip/"
+          fi
           mkdir -p "data/$trip"
           TRIP="$trip" CODE="$code" MESSAGE="$message" node - <<'NODE'
           const fs = require("fs");
@@ -152,5 +165,10 @@ jobs:
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add "data/$trip/processing-status.json"
+          git add -- "data/$trip"/*-analysis.json "data/$trip"/*-ai-review.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No failure status or completed checkpoints to publish"
+            exit 0
+          fi
           git commit -m "Record processing failure for $trip"
           git push origin "HEAD:$branch"
