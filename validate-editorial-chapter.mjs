@@ -8,10 +8,29 @@ const inventory = await read(process.env.PHOTOS_FILE || target.photos);
 const photos = inventoryItems(inventory);
 if (!photos.length) throw new Error(`${target.photos} contains no photos`);
 const fingerprint = inventoryFingerprint(inventory);
+const artifacts = {};
 for (const [label, file] of [["analysis", target.analysis], ["ai-review", target.aiReview], ["author-review", target.authorReview], ["final-review", target.finalReview]]) {
-  const artifact = await optional(file); if (artifact) assertSamePhotoSet(inventory, artifact, label);
+  const artifact = await optional(file);
+  artifacts[label] = artifact;
+  if (artifact) assertSamePhotoSet(inventory, artifact, label);
 }
-const author = await optional(target.authorReview);
+
+const aiReview = artifacts["ai-review"];
+if (aiReview) {
+  const statuses = aiReview.items.map(item => item.status);
+  if (statuses.some(status => !["hero", "story", "backstage", "skip"].includes(status))) throw new Error("ai-review contains an unresolved photo status");
+  if (statuses.filter(status => status === "hero").length !== 1) throw new Error("ai-review must contain exactly one hero");
+  if (Number(aiReview.schema_version || 0) >= 3) {
+    const speculation = /\b(скорее всего|предположительно|вероятно|возможно|по[- ]видимому|может быть|напомина\w*|похож\w*)\b/iu;
+    for (const item of aiReview.items) {
+      const label = String(item.label || "").trim();
+      if (!label) throw new Error(`ai-review observation label is empty: ${item.public_id || item.photo_id}`);
+      if (speculation.test(label) || /[()]/u.test(label) || /\sили\s/iu.test(label)) throw new Error(`ai-review observation label contains unsupported interpretation: ${item.public_id || item.photo_id}`);
+    }
+  }
+}
+
+const author = artifacts["author-review"];
 if (author) {
   const statuses = author.items.map(item => item.status);
   if (statuses.some(status => !["hero", "story", "backstage", "skip"].includes(status))) throw new Error("author-review contains an unresolved photo status");
