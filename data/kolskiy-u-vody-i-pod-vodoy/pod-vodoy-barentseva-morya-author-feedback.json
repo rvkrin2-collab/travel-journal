@@ -2,6 +2,7 @@
   "schema_version": 1,
   "trip": "kolskiy-u-vody-i-pod-vodoy",
   "chapter": "pod-vodoy-barentseva-morya",
+  "revision": 2,
   "notes": [
     {
       "type": "general",
