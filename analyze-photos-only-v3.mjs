@@ -33,11 +33,26 @@ function containsLatinText(value) {
   const cleaned = String(value || "")
     .replace(/https?:\/\/\S+/gi, " ")
     .replace(/\bIMG\d+_[A-Za-z0-9]+\b/g, " ");
-  return /[A-Za-z]{4,}/.test(cleaned);
+  const latinLetters = (cleaned.match(/[A-Za-z]/g) || []).length;
+  const cyrillicLetters = (cleaned.match(/[А-Яа-яЁё]/g) || []).length;
+  if (latinLetters < 4) return false;
+  if (cyrillicLetters === 0) return true;
+  return latinLetters > 16 && latinLetters > cyrillicLetters;
 }
 
-function assertRussian(value, field) {
-  if (containsLatinText(value)) throw new Error(`${field} must be written in Russian`);
+function textValues(raw) {
+  return [raw.visual_summary, raw.foreground, raw.midground, raw.background, raw.dominant_subject, raw.light, raw.weather, raw.likely_location, raw.location_reason, raw.caption_seed, raw.editor_note, ...Object.values(raw.visible_elements || {}), ...Object.values(raw.composition || {}), ...Object.values(raw.technical_quality || {}).filter(value => typeof value === "string"), ...(raw.secondary_subjects || []), ...(raw.uncertainties || []), ...(raw.needs_fact_check || [])];
+}
+
+function findRussianViolation(raw, photo) {
+  const values = textValues(raw);
+  const index = values.findIndex(containsLatinText);
+  return index === -1 ? null : `Photo ${photo.public_id} text ${index}`;
+}
+
+function assertRussian(raw, photo) {
+  const field = findRussianViolation(raw, photo);
+  if (field) throw new Error(`${field} must be written in Russian`);
 }
 
 const photoSchema = {
@@ -103,14 +118,25 @@ async function analyzePhoto(photo, index, total, context) {
 - caption_seed — короткое буквальное описание кадра;
 - editor_note — одно короткое предложение о визуальной функции без решения hero/story;
 - needs_fact_check содержит только внешний факт для публикации; обычно пустой массив;
-- техническую оценку ставь сравнительно и конкретно, не используй одинаковую оценку автоматически.
+- техническую оценку ставь сравнительно и конкретно, не используй одинаковую оценку автоматически;
+- не используй английские фотографические термины: переводи их на русский и не пиши латиницей.
 
 Кадр ${index + 1} из ${total}.`;
 
-  const response = await callStructured({prompt, schema: photoSchema, image: imageUrl(photo.url), label: `Photo analysis ${photo.public_id}`});
-  const raw = response.value;
-  const textValues = [raw.visual_summary, raw.foreground, raw.midground, raw.background, raw.dominant_subject, raw.light, raw.weather, raw.likely_location, raw.location_reason, raw.caption_seed, raw.editor_note, ...Object.values(raw.visible_elements || {}), ...Object.values(raw.composition || {}), ...Object.values(raw.technical_quality || {}).filter(value => typeof value === "string"), ...(raw.secondary_subjects || []), ...(raw.uncertainties || []), ...(raw.needs_fact_check || [])];
-  textValues.forEach((value, i) => assertRussian(value, `Photo ${photo.public_id} text ${i}`));
+  let response = await callStructured({prompt, schema: photoSchema, image: imageUrl(photo.url), label: `Photo analysis ${photo.public_id}`});
+  let raw = response.value;
+  const violation = findRussianViolation(raw, photo);
+  if (violation) {
+    console.warn(`${violation} contains mostly Latin text; retrying once in Russian`);
+    response = await callStructured({
+      prompt: `${prompt}\n\nПредыдущий ответ содержал англоязычное поле. Повтори анализ. Все свободные текстовые поля должны быть написаны по-русски кириллицей; не используй английские слова и фотографические термины латиницей.`,
+      schema: photoSchema,
+      image: imageUrl(photo.url),
+      label: `Photo analysis ${photo.public_id} Russian retry`
+    });
+    raw = response.value;
+  }
+  assertRussian(raw, photo);
 
   return {
     schema_version: schemaVersion,
