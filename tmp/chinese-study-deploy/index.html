@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#f5f0e8" />
+  <title>中文 · Личный кабинет китайского</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">中</div>
+        <div>
+          <div class="brand-title">中文</div>
+          <div class="brand-subtitle">личный китайский</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="today"><span>今日</span><b>Сегодня</b></button>
+        <button class="nav-item" data-view="words"><span>词汇</span><b>Слова</b></button>
+        <button class="nav-item" data-view="practice"><span>练习</span><b>Практика</b></button>
+        <button class="nav-item" data-view="mistakes"><span>错题</span><b>Ошибки</b></button>
+        <button class="nav-item" data-view="progress"><span>进步</span><b>Прогресс</b></button>
+      </nav>
+
+      <div class="sidebar-card">
+        <div class="mini-label">Текущая цель</div>
+        <div class="goal">HSK 3 → HSK 4</div>
+        <div class="progress-track"><div id="goalProgress" class="progress-fill"></div></div>
+        <div class="muted"><span id="masteredCount">0</span> слов закреплено</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">个人中文学习系统</div>
+          <h1 id="pageTitle">今天学一点，不多，但记住。</h1>
+        </div>
+        <div class="top-actions">
+          <button class="ghost" id="resetBtn">Сбросить демо</button>
+          <div class="streak">
+            <span class="streak-fire">火</span>
+            <div><b id="streakCount">1</b><small>дней подряд</small></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="view active" id="view-today">
+        <div class="hero-grid">
+          <article class="card hero-card">
+            <div class="hero-kicker">今日任务 · план на сегодня</div>
+            <h2>20 минут китайского</h2>
+            <p>Короткая сессия: повторить старое, выучить новое и закончить одним живым предложением.</p>
+            <div class="task-list">
+              <label><input type="checkbox" data-task="review"> <span><b>8 мин</b> · повторить 10 слов</span></label>
+              <label><input type="checkbox" data-task="new"> <span><b>7 мин</b> · выучить 5 новых слов</span></label>
+              <label><input type="checkbox" data-task="sentence"> <span><b>5 мин</b> · составить 3 фразы</span></label>
+            </div>
+            <button class="primary" id="startSession">Начать сессию</button>
+          </article>
+
+          <article class="card quote-card">
+            <div class="hanzi-big">积少成多</div>
+            <div class="pinyin">jī shǎo chéng duō</div>
+            <div class="translation">Понемногу накапливается многое.</div>
+            <div class="quote-note">Сегодня важнее не объём, а то, что останется в памяти завтра.</div>
+          </article>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat card">
+            <div class="mini-label">На повторение</div>
+            <div class="stat-value" id="dueCount">10</div>
+            <div class="muted">слов сегодня</div>
+          </article>
+          <article class="stat card">
+            <div class="mini-label">Точность</div>
+            <div class="stat-value"><span id="accuracy">0</span>%</div>
+            <div class="muted">за последние ответы</div>
+          </article>
+          <article class="stat card">
+            <div class="mini-label">Серия</div>
+            <div class="stat-value"><span id="streakMirror">1</span> 天</div>
+            <div class="muted">дней занятий</div>
+          </article>
+          <article class="stat card">
+            <div class="mini-label">Закреплено</div>
+            <div class="stat-value" id="masteredMirror">0</div>
+            <div class="muted">слов</div>
+          </article>
+        </div>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Сегодняшняя лексика</div>
+              <h2>5 слов для живой речи</h2>
+            </div>
+            <button class="ghost" data-go="words">Открыть словарь</button>
+          </div>
+          <div class="word-strip" id="todayWords"></div>
+        </article>
+      </section>
+
+      <section class="view" id="view-words">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">词汇库 · словарь</div>
+            <h2>Личная база слов</h2>
+          </div>
+          <div class="search-wrap">
+            <input id="wordSearch" placeholder="Поиск: 汉字, pinyin или перевод" />
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <button class="chip active" data-filter="all">Все</button>
+          <button class="chip" data-filter="new">Новые</button>
+          <button class="chip" data-filter="learning">Учу</button>
+          <button class="chip" data-filter="mastered">Знаю</button>
+        </div>
+
+        <div class="table-card card">
+          <div class="word-table-head">
+            <span>汉字</span><span>Pinyin</span><span>Перевод</span><span>Статус</span><span></span>
+          </div>
+          <div id="wordTable"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-practice">
+        <div class="practice-layout">
+          <article class="card practice-card">
+            <div class="eyebrow">闪卡 · карточки</div>
+            <div id="flashcard" class="flashcard">
+              <div class="flash-main" id="flashHanzi">开始</div>
+              <div class="flash-pinyin hidden" id="flashPinyin">kāi shǐ</div>
+              <div class="flash-translation hidden" id="flashTranslation">начинать</div>
+            </div>
+            <div class="practice-actions">
+              <button class="ghost" id="showAnswer">Показать ответ</button>
+              <button class="bad" id="answerBad">Не помню</button>
+              <button class="good" id="answerGood">Знаю</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="eyebrow">快速测试 · мини-тест</div>
+            <h2 id="quizPrompt">Как переводится 经验?</h2>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div id="quizFeedback" class="quiz-feedback"></div>
+            <button class="primary small" id="nextQuiz">Следующий вопрос</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-mistakes">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">错题本 · тетрадь ошибок</div>
+            <h2>То, что стоит повторить</h2>
+          </div>
+        </div>
+        <div id="mistakeList" class="mistake-list"></div>
+      </section>
+
+      <section class="view" id="view-progress">
+        <div class="stats-grid">
+          <article class="stat card"><div class="mini-label">Всего слов</div><div class="stat-value" id="totalWords">0</div></article>
+          <article class="stat card"><div class="mini-label">Знаю</div><div class="stat-value" id="knownWords">0</div></article>
+          <article class="stat card"><div class="mini-label">Ошибок</div><div class="stat-value" id="mistakesTotal">0</div></article>
+          <article class="stat card"><div class="mini-label">Ответов</div><div class="stat-value" id="answersTotal">0</div></article>
+        </div>
+        <article class="card chart-card">
+          <div class="section-head">
+            <div><div class="eyebrow">学习进度</div><h2>Распределение слов</h2></div>
+          </div>
+          <div class="bar-block">
+            <div class="bar-label"><span>Новые</span><b id="newLabel">0</b></div>
+            <div class="bar-track"><div id="barNew" class="bar"></div></div>
+          </div>
+          <div class="bar-block">
+            <div class="bar-label"><span>В процессе</span><b id="learningLabel">0</b></div>
+            <div class="bar-track"><div id="barLearning" class="bar"></div></div>
+          </div>
+          <div class="bar-block">
+            <div class="bar-label"><span>Закреплено</span><b id="masteredLabel">0</b></div>
+            <div class="bar-track"><div id="barMastered" class="bar"></div></div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="session-modal" id="sessionModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeSession">×</button>
+      <div class="eyebrow">今日复习</div>
+      <div class="session-counter"><span id="sessionIndex">1</span> / <span id="sessionTotal">10</span></div>
+      <div class="session-hanzi" id="sessionHanzi">经验</div>
+      <div class="session-answer hidden" id="sessionAnswer">
+        <div id="sessionPinyin" class="pinyin"></div>
+        <div id="sessionTranslation" class="translation"></div>
+        <div id="sessionExample" class="example"></div>
+      </div>
+      <button class="ghost full" id="revealSession">Показать</button>
+      <div class="session-grade hidden" id="sessionGrade">
+        <button class="bad" data-grade="bad">Не вспомнил</button>
+        <button class="good" data-grade="good">Вспомнил</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
