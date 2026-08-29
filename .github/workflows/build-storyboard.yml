@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "data/*/*-author-review.json"
+      - "data/*/*-author-feedback.json"
   workflow_dispatch:
     inputs:
       trip:
@@ -51,11 +52,12 @@ jobs:
             trip="${{ github.event.inputs.trip }}"
             chapter="${{ github.event.inputs.chapter }}"
           else
-            changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^data/[^/]+/[^/]+-author-review\.json$' | head -n 1)
-            test -n "$changed" || { echo "No author-review change found"; exit 1; }
+            changed=$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^data/[^/]+/[^/]+-(author-review|author-feedback)\.json$' | head -n 1)
+            test -n "$changed" || { echo "No editorial source change found"; exit 1; }
             trip=$(printf '%s' "$changed" | cut -d/ -f2)
             file=$(basename "$changed")
             chapter=${file%-author-review.json}
+            chapter=${chapter%-author-feedback.json}
           fi
           echo "TRIP=$trip" >> "$GITHUB_ENV"
           echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
