@@ -20,16 +20,27 @@ test("editor uses chapter artifacts and blocks incomplete export", async () => {
   assert.match(html, /object-fit:contain;background:var\(--paper2\)/);
 });
 
-test("preview requires author review and storyboard without AI fallback", async () => {
-  const [html, app] = await Promise.all([fs.readFile("preview.html", "utf8"), fs.readFile("preview-app.js", "utf8")]);
+test("preview requires author review, complete storyboard and revision-bound approval", async () => {
+  const [html, app, validator, workflow] = await Promise.all([
+    fs.readFile("preview.html", "utf8"),
+    fs.readFile("preview-app.js", "utf8"),
+    fs.readFile("validate-editorial-chapter.mjs", "utf8"),
+    fs.readFile(".github/workflows/process-editorial-approval.yml", "utf8")
+  ]);
   assert.match(html, /preview-app\.js/);
   assert.match(app, /-author-review\.json/);
   assert.match(app, /-storyboard\.json/);
   assert.doesNotMatch(app, /-ai-review\.json|`\$\{base\}-review\.json`/);
   assert.match(app, /photo_selection_approved/);
   assert.match(app, /preview_approved/);
+  assert.match(app, /storyboard_updated_at:\s*storyboard\.updated_at/);
+  assert.match(app, /author_review_updated_at:\s*author\.updated_at/);
+  assert.match(app, /storyboard пропустил утверждённый кадр/);
   assert.match(app, /approvePreview\(approval\)/);
   assert.match(app, /\/thumbnail\//);
+  assert.match(validator, /approval\.storyboard_updated_at === storyboard\?\.updated_at/);
+  assert.match(validator, /approval\.author_review_updated_at === \(author\?\.updated_at \|\| ""\)/);
+  assert.match(workflow, /Reject stale preview approval/);
 });
 
 test("new workflows no longer invoke Cloudinary", async () => {
