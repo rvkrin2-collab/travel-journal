@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "chapter": "teriberka",
+  "source": "author_submission",
+  "chapter_title": "Териберка",
+  "author_description": "Один день на другом берегу: полузабытое село и прогулка по местам вокруг Териберки.",
+  "route_context": [
+    "Териберка",
+    "места вокруг Териберки"
+  ],
+  "route": [
+    "Териберка",
+    "места вокруг Териберки"
+  ]
+}
