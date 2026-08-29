@@ -8,7 +8,6 @@ const analysisFile = process.env.ANALYSIS_FILE || target.analysis;
 const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${chapter}-context.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${chapter}-author-notes.json`;
 
-
 async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
 }
@@ -34,7 +33,7 @@ function rankingSchema(items) {
             type: "object", additionalProperties: false,
             required: ["public_id", "score", "reason", "visual_function", "duplicate_group"],
             properties: {
-              public_id: {type: "string", minLength: 1},
+              public_id: {type: "string", enum: items.map(item => item.public_id)},
               score: {type: "integer", minimum: 0, maximum: 100},
               reason: {type: "string", minLength: 1},
               visual_function: {type: "string", minLength: 1},
@@ -167,7 +166,7 @@ function normalizeRanking(raw, items, policy) {
 
   for (const [id, entry] of entries) {
     const item = byId.get(id);
-    if (!item) continue;
+    if (!item) throw new Error(`Series ranking unknown public_id: ${id}`);
     if (seen.has(id)) throw new Error(`Series ranking duplicated public_id: ${id}`);
     seen.add(id);
     ranking[id] = {
