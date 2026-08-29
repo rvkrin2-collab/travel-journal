@@ -7,6 +7,8 @@ test("editor uses chapter artifacts and blocks incomplete export", async () => {
   assert.match(html, /editor-app\.js/);
   assert.match(app, /params\.get\("chapter"\)/);
   assert.match(app, /analysis.*ai-review/s);
+  assert.match(app, /apply\(aiReview\)/);
+  assert.match(app, /cache:\s*"no-store"/);
   assert.match(app, /ровно одно главное фото/);
   assert.match(app, /Выберите решение для каждого кадра/);
   assert.match(app, /photos_fingerprint/);
@@ -14,6 +16,8 @@ test("editor uses chapter artifacts and blocks incomplete export", async () => {
   assert.match(app, /Открыть оригинал/);
   assert.match(app, /\/thumbnail\//);
   assert.match(app, /decoding = "async"/);
+  assert.doesNotMatch(html, /\.thumb\{[^}]*background:#171714/);
+  assert.match(html, /object-fit:contain;background:var\(--paper2\)/);
 });
 
 test("preview requires author review and storyboard without AI fallback", async () => {
