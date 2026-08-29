@@ -7,7 +7,7 @@
   "photos_source": "data/kolskiy-u-vody-i-pod-vodoy/kray-zemli-photos.json",
   "photos_fingerprint": "af86b6483ef601ef949b355fecd01775f936d7766f4c46c1b50dee65177007df",
   "context_source": null,
-  "generated_at": "2026-08-29T18:00:58.992Z",
+  "generated_at": "2026-08-29T18:09:24.978Z",
   "vision_model": "anthropic:claude-haiku-4-5,openai:gpt-4o",
   "cache": {
     "reused": 14,
