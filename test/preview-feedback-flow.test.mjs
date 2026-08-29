@@ -35,6 +35,16 @@ test("author feedback rebuilds storyboard and enforces one photo with one captio
   assert.match(builder, /Each storyboard photo must have its own non-empty caption/);
 });
 
+test("storyboard grounding guard rejects invented caption facts and unsupported places", () => {
+  const builder = read("build-storyboard.mjs");
+  assert.match(builder, /function enforcePhotoGrounding/);
+  assert.match(builder, /captionIsGrounded/);
+  assert.match(builder, /scene\.text = String\(record\.label/);
+  assert.match(builder, /placeIsGrounded/);
+  assert.match(builder, /scene\.place = ""/);
+  assert.match(builder, /route_context никогда не является достаточным основанием/);
+});
+
 test("preview renders every approved photo as its own figure with an individual caption", () => {
   const app = read("preview-app.js");
   assert.match(app, /scene\.photos\.length !== 1/);
