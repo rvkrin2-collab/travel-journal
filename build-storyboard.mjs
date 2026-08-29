@@ -29,42 +29,27 @@ function storyboardSchema(selectedIds) {
           additionalProperties: false,
           required: ["title", "subtitle", "one_line", "intro", "emotional_curve", "rhythm"],
           properties: {
-            title: { type: "string" },
-            subtitle: { type: "string" },
-            one_line: { type: "string" },
-            intro: { type: "string" },
-            emotional_curve: { type: "string" },
-            rhythm: { type: "string" }
+            title: { type: "string" }, subtitle: { type: "string" }, one_line: { type: "string" },
+            intro: { type: "string" }, emotional_curve: { type: "string" }, rhythm: { type: "string" }
           }
         },
         layout_rules: { type: "array", items: { type: "string" } },
         scenes: {
-          type: "array",
-          minItems: selectedIds.length,
-          maxItems: selectedIds.length,
+          type: "array", minItems: selectedIds.length, maxItems: selectedIds.length,
           items: {
-            type: "object",
-            additionalProperties: false,
+            type: "object", additionalProperties: false,
             required: ["id", "place", "title", "text", "text_mode", "photos", "layout", "editorial_note"],
             properties: {
-              id: { type: "string", minLength: 1 },
-              place: { type: "string" },
-              title: { type: "string" },
+              id: { type: "string", minLength: 1 }, place: { type: "string" }, title: { type: "string" },
               text: { type: "string", minLength: 1 },
               text_mode: { type: "string", enum: ["short", "quiet", "pause", "main", "final", "hero"] },
-              photos: {
-                type: "array",
-                minItems: 1,
-                maxItems: 1,
-                items: { type: "string", enum: selectedIds }
-              },
+              photos: { type: "array", minItems: 1, maxItems: 1, items: { type: "string", enum: selectedIds } },
               layout: { type: "string", enum: ["single-wide", "single-quiet", "hero-wide"] },
               editorial_note: { type: "string" }
             }
           }
         },
-        backstage_role: { type: "string" },
-        publication_note: { type: "string" },
+        backstage_role: { type: "string" }, publication_note: { type: "string" },
         fact_checks: { type: "array", items: { type: "string" } }
       }
     }
@@ -72,51 +57,121 @@ function storyboardSchema(selectedIds) {
 }
 
 function selectedPhotoIds(authorReview) {
-  return (authorReview.items || [])
-    .filter(item => item.status === "hero" || item.status === "story")
-    .map(item => item.public_id);
+  return (authorReview.items || []).filter(item => item.status === "hero" || item.status === "story").map(item => item.public_id);
 }
 
 function selectedPhotoRecords(review, selectedIds) {
   const allowed = new Set(selectedIds);
-  return (review?.items || [])
-    .filter(item => allowed.has(item.public_id))
-    .map(item => ({
-      public_id: item.public_id,
-      status: item.status,
-      label: String(item.label || ""),
-      note: String(item.note || "")
-    }));
+  return (review?.items || []).filter(item => allowed.has(item.public_id)).map(item => ({
+    public_id: item.public_id,
+    status: item.status,
+    label: String(item.label || ""),
+    note: String(item.note || "")
+  }));
 }
 
 function photoSpecificFeedback(authorFeedback, selectedIds) {
   const allowed = new Set(selectedIds);
-  return (authorFeedback?.notes || [])
-    .filter(note => note?.photo && allowed.has(note.photo))
-    .map(note => ({ photo: note.photo, text: String(note.text || "") }));
+  return (authorFeedback?.notes || []).filter(note => note?.photo && allowed.has(note.photo)).map(note => ({
+    photo: note.photo,
+    text: String(note.text || "")
+  }));
+}
+
+function normalizeText(value) {
+  return String(value || "").toLowerCase().replace(/ё/g, "е").replace(/[^a-zа-я0-9\s-]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+const SAFE_GLUE_WORDS = new Set([
+  "виден", "видна", "видны", "стоит", "стоят", "лежит", "лежат", "находится", "находятся",
+  "открывается", "открываются", "переходит", "переходят", "покрывает", "покрывают", "поднимается", "поднимаются",
+  "занимает", "занимают", "выделяется", "выделяются", "тянется", "тянутся", "уходит", "уходят", "дальше",
+  "здесь", "там", "прямо", "рядом", "вдоль", "вокруг", "напротив", "переднем", "заднем", "обоим", "сторонам"
+]);
+
+const STOP_WORDS = new Set([
+  "и", "а", "но", "или", "в", "во", "на", "с", "со", "к", "ко", "по", "из", "от", "до", "за", "над", "под",
+  "при", "у", "о", "об", "для", "между", "через", "среди", "без", "не", "это", "этот", "эта", "эти", "его", "ее",
+  "их", "как", "что", "где", "почти", "весь", "вся", "все"
+]);
+
+function stemToken(token) {
+  const value = normalizeText(token);
+  if (value.length <= 4) return value;
+  return value.slice(0, 5);
+}
+
+function contentStems(value) {
+  return normalizeText(value).split(" ").filter(Boolean).filter(token => token.length >= 4 && !STOP_WORDS.has(token) && !SAFE_GLUE_WORDS.has(token)).map(stemToken);
+}
+
+function isBoilerplateReviewNote(value) {
+  const text = normalizeText(value);
+  return !text || text === "кадр для основного визуального рассказа" || text === "ключевой визуальный кадр серии" || text.startsWith("дополнительный кадр для блока");
+}
+
+function groundingSource(record, feedbackItems) {
+  const parts = [record?.label || ""];
+  if (record?.note && !isBoilerplateReviewNote(record.note)) parts.push(record.note);
+  for (const item of feedbackItems || []) parts.push(item.text || "");
+  return parts.filter(Boolean).join(" ");
+}
+
+function captionIsGrounded(caption, source) {
+  const sourceStems = new Set(contentStems(source));
+  if (!sourceStems.size) return false;
+  return contentStems(caption).every(stem => sourceStems.has(stem));
+}
+
+function placeIsGrounded(place, source) {
+  const normalizedPlace = normalizeText(place);
+  if (!normalizedPlace) return true;
+  return normalizeText(source).includes(normalizedPlace);
+}
+
+function enforcePhotoGrounding(storyboard, records, feedback) {
+  const byId = new Map(records.map(record => [record.public_id, record]));
+  const feedbackById = new Map();
+  for (const item of feedback) {
+    if (!feedbackById.has(item.photo)) feedbackById.set(item.photo, []);
+    feedbackById.get(item.photo).push(item);
+  }
+
+  let captionFallbacks = 0;
+  let clearedPlaces = 0;
+  for (const scene of storyboard.scenes || []) {
+    const id = Array.isArray(scene.photos) ? scene.photos[0] : "";
+    const record = byId.get(id);
+    if (!record) continue;
+    const source = groundingSource(record, feedbackById.get(id) || []);
+    if (!captionIsGrounded(scene.text, source)) {
+      scene.text = String(record.label || "").trim();
+      captionFallbacks += 1;
+    }
+    if (!placeIsGrounded(scene.place, source)) {
+      scene.place = "";
+      clearedPlaces += 1;
+    }
+  }
+  if (captionFallbacks || clearedPlaces) {
+    console.log(`Grounding guard: replaced ${captionFallbacks} caption(s), cleared ${clearedPlaces} unsupported place(s)`);
+  }
+  return storyboard;
 }
 
 function assertStoryboardPhotoCoverage(storyboard, selectedIds) {
   const scenes = storyboard.scenes || [];
-  if (scenes.length !== selectedIds.length) {
-    throw new Error(`Storyboard must contain exactly one scene per approved photo: expected ${selectedIds.length}, got ${scenes.length}`);
-  }
-
+  if (scenes.length !== selectedIds.length) throw new Error(`Storyboard must contain exactly one scene per approved photo: expected ${selectedIds.length}, got ${scenes.length}`);
   const allowed = new Set(selectedIds);
   const seen = new Set();
   for (const scene of scenes) {
-    if (!Array.isArray(scene.photos) || scene.photos.length !== 1) {
-      throw new Error(`Each storyboard scene must contain exactly one photo: ${scene.id || "untitled"}`);
-    }
-    if (!String(scene.text || "").trim()) {
-      throw new Error(`Each storyboard photo must have its own non-empty caption: ${scene.id || "untitled"}`);
-    }
+    if (!Array.isArray(scene.photos) || scene.photos.length !== 1) throw new Error(`Each storyboard scene must contain exactly one photo: ${scene.id || "untitled"}`);
+    if (!String(scene.text || "").trim()) throw new Error(`Each storyboard photo must have its own non-empty caption: ${scene.id || "untitled"}`);
     const id = scene.photos[0];
     if (!allowed.has(id)) throw new Error(`Storyboard uses a photo not approved for the story: ${id}`);
     if (seen.has(id)) throw new Error(`Storyboard duplicates approved photo: ${id}`);
     seen.add(id);
   }
-
   const missing = selectedIds.filter(id => !seen.has(id));
   if (missing.length) throw new Error(`Storyboard omitted ${missing.length} approved story photo(s): ${missing.join(", ")}`);
 }
@@ -138,63 +193,41 @@ async function buildStoryboard(payload, selectedIds) {
 - фактическое содержание text и place разрешено брать ТОЛЬКО из label/note этой записи и из photo_specific_feedback для этого же public_id;
 - general_author_feedback задаёт стиль и редакторские требования, но НЕ является источником новых фактов о конкретном кадре;
 - author_notes и chapter_context разрешены для заголовка главы, вступления, общей последовательности и маршрута главы, но НЕ доказывают, что конкретная фотография снята в конкретной точке маршрута;
-- нельзя переносить название места, погоду, время суток, занятие людей, возраст объекта, историю, назначение или образ жизни из общего контекста на отдельную фотографию;
 - если label конкретного public_id не называет место, а photo_specific_feedback этого public_id его не подтверждает, place оставь пустым;
 - route_context никогда не является достаточным основанием заполнить scene.place;
-- каждое утверждение в подписи должно быть непосредственно поддержано записью именно этой фотографии. Если поддержки нет — не пиши его.
+- каждое утверждение в подписи должно быть непосредственно поддержано записью именно этой фотографии.
 
-ИСТОЧНИКИ И ИХ ПРИОРИТЕТ:
-1. photo_specific_feedback — прямое указание автора по конкретной фотографии;
-2. selected_photo_records — утверждённые автором label/note конкретного кадра;
-3. general_author_feedback — только стиль, тон и общие редакторские требования;
-4. author_notes и chapter_context — только общий смысл главы, вступление и порядок маршрута.
-
-КАК ПИСАТЬ ПОДПИСИ:
-- подпись — одно короткое, естественное журнальное предложение, обычно до 20 слов;
-- она должна читаться как подпись в хорошем фотожурнале, а не как отчёт компьютерного зрения;
-- не перечисляй все объекты в кадре и не начинай с канцелярского «на фотографии изображено»;
-- переформулируй только то, что уже подтверждено label/note конкретного public_id;
-- не добавляй «красивых» деталей, которых нет в записи этого кадра;
-- не превращай спокойную подпись в интерпретацию жизни, характера места или состояния автора;
-- при неопределённости используй нейтральную формулировку, а не догадку.
+ПОДПИСИ:
+- одно короткое естественное предложение, обычно до 20 слов;
+- переформулируй только подтверждённое содержание записи этого public_id;
+- не добавляй время суток, ветер, историю, назначение, образ жизни, эмоции, мотивы, географию или природные факты, если их нет у этого же public_id;
+- не используй метафоры и олицетворения вместо наблюдения;
+- тщательно проверь русскую орфографию и грамматику.
 
 ПЛОХО:
-«Безветренное утро дарит чистоту линии горизонта» — время и ветер не подтверждены.
-«Здесь люди живут между камнем и морем уже много поколений» — история людей придумана.
-«Жизнь на краю концентрируется здесь» — смысл придуман за автора.
-«Тундра начинает отступать к морю» — метафора подменяет наблюдение.
+«Безветренное утро дарит чистоту линии горизонта».
+«Здесь люди живут между камнем и морем уже много поколений».
+«Жизнь на краю концентрируется здесь».
+«Тундра начинает отступать к морю».
 
-ХОРОШО:
-«За каменистым берегом открывается спокойная вода и холмистый противоположный берег.»
-«Деревянные дома стоят прямо у скалистого берега.»
-Это короткие переформулировки подтверждённого содержания без добавления новых фактов.
-
-ЗАПРЕЩЕНО ПРИДУМЫВАТЬ:
-- мысли, эмоции, метафоры, мотивы и причины за автора;
-- образ жизни людей по одному кадру;
-- время суток или силу ветра, если это не записано у конкретного public_id;
-- назначение и возраст объектов, если это не подтверждено;
-- историю, географию и природные факты из общей памяти модели;
-- конструкции вроде «море диктует ритм», «место живёт», «край света», «время остановилось», «следы человека».
-
-ЗАГОЛОВКИ:
-- title может быть пустым; не дублируй в нём подпись;
-- place может быть непустым только при подтверждении в данных ТОЙ ЖЕ фотографии.
+ГЛАВА:
+- intro — максимум 2 коротких фактических предложения только из author_notes/chapter_context и подтверждённых selected_photo_records;
+- intro не должен содержать метафор, олицетворений, общих красивых фраз или новых фактов;
+- emotional_curve и rhythm описывают только монтаж и последовательность кадров, а не эмоции автора или «характер места»;
+- title может быть пустым; place может быть непустым только при подтверждении в данных ТОЙ ЖЕ фотографии.
 
 МОНТАЖ:
 - scenes содержат только hero/story;
-- сохраняй реальный порядок маршрута, когда он подтверждён на уровне конкретных фотографий; иначе не выдумывай географическую последовательность;
-- соседние кадры могут быть смыслово связаны, но НИКОГДА не объединяются в один блок;
+- соседние кадры могут быть связаны, но НИКОГДА не объединяются в один блок;
 - каждый кадр остаётся самостоятельной единицей ритма;
 - layout только single-wide, single-quiet или hero-wide.
 
 FACT_CHECKS:
 - не выдавай предположение за факт;
-- добавляй сюда только утверждения, которые реально требуют отдельной проверки перед публикацией;
 - если внешние факты не используются, верни [].
 
 СТИЛЬ:
-Спокойный, интеллигентный, точный. National Geographic / Sidetracked / Cereal как ориентир по лаконичности, но без подражания конкретным текстам. Без рекламы, пафоса, экскурсионного тона и технического жаргона.
+Спокойный, интеллигентный, точный. Фотожурнал, а не путеводитель. Без рекламы, пафоса, экскурсионного тона, технического жаргона и типичных ИИ-фраз.
 
 APPROVED STORY PUBLIC IDS:
 ${JSON.stringify(selectedIds, null, 2)}
@@ -202,21 +235,14 @@ ${JSON.stringify(selectedIds, null, 2)}
 DATA:
 ${JSON.stringify(payload, null, 2)}`;
 
-  const response = await callStructured({
-    prompt,
-    schema: storyboardSchema(selectedIds),
-    label: `Storyboard ${trip}/${dayTag}`,
-    maxTokens: 7000
-  });
+  const response = await callStructured({ prompt, schema: storyboardSchema(selectedIds), label: `Storyboard ${trip}/${dayTag}`, maxTokens: 7000 });
   return response.value;
 }
 
 const finalReview = await readJsonIfExists(finalReviewFile);
 const authorReview = await readJsonIfExists(authorReviewFile);
 if (!authorReview) throw new Error(`${authorReviewFile} is required before storyboard`);
-if (authorReview.approval !== "photo_selection_approved" && Number(authorReview.schema_version || 0) >= 2) {
-  throw new Error("Author photo selection is not approved");
-}
+if (authorReview.approval !== "photo_selection_approved" && Number(authorReview.schema_version || 0) >= 2) throw new Error("Author photo selection is not approved");
 
 const inventory = await readJson(process.env.PHOTOS_FILE || target.photos);
 const photosFingerprint = assertSamePhotoSet(inventory, authorReview, "author-review");
@@ -227,17 +253,17 @@ const authorFeedback = await readJsonIfExists(authorFeedbackFile);
 const chapterContext = await readJsonIfExists(contextFile);
 const selectedIds = selectedPhotoIds(authorReview);
 if (!selectedIds.length) throw new Error("Author review contains no hero/story photos");
-if ((authorReview.items || []).filter(item => item.status === "hero").length !== 1) {
-  throw new Error("Author review must contain exactly one hero");
-}
+if ((authorReview.items || []).filter(item => item.status === "hero").length !== 1) throw new Error("Author review must contain exactly one hero");
 
-const storyboard = await buildStoryboard({
-  selected_photo_records: selectedPhotoRecords(review, selectedIds),
-  photo_specific_feedback: photoSpecificFeedback(authorFeedback, selectedIds),
+const records = selectedPhotoRecords(review, selectedIds);
+const specificFeedback = photoSpecificFeedback(authorFeedback, selectedIds);
+const storyboard = enforcePhotoGrounding(await buildStoryboard({
+  selected_photo_records: records,
+  photo_specific_feedback: specificFeedback,
   general_author_feedback: (authorFeedback?.notes || []).filter(note => !note?.photo),
   author_notes: authorNotes,
   chapter_context: chapterContext
-}, selectedIds);
+}, selectedIds), records, specificFeedback);
 
 assertStoryboardPhotoCoverage(storyboard, selectedIds);
 storyboard.trip = trip;
