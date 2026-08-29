@@ -2,6 +2,7 @@ const MAX_FILE_SIZE = 30 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]);
 const MAX_REQUEST_SIZE = 1024 * 1024;
 const AUTHOR_SESSION_SECONDS = 12 * 60 * 60;
+const FEEDBACK_TYPES = new Set(["general", "idea", "photo_order", "caption", "fact", "photo_selection"]);
 
 function corsHeaders(origin, allowedOrigin) {
   const headers = {
@@ -187,10 +188,15 @@ async function dispatchEditorial(request, env, cors, eventType) {
   if (eventType === "photo_selection_approved") {
     if (input.schema_version !== 2 || input.approval !== "photo_selection_approved" || !Array.isArray(input.items) || input.items.filter(item => item.status === "hero").length !== 1 || input.items.some(item => !["hero", "story", "backstage", "skip"].includes(item.status))) return json({ error: "Invalid author review" }, 400, cors);
   }
+  if (eventType === "preview_feedback_submitted") {
+    const text = String(input.text || "").trim();
+    if (input.schema_version !== 1 || input.status !== "preview_feedback" || !FEEDBACK_TYPES.has(input.type) || !text || text.length > 4000 || String(input.photo || "").length > 500 || !input.photos_fingerprint || !input.storyboard_updated_at) return json({ error: "Invalid preview feedback" }, 400, cors);
+    input.text = text;
+  }
   if (eventType === "preview_approved" && (input.status !== "preview_approved" || !input.photos_fingerprint)) return json({ error: "Invalid preview approval" }, 400, cors);
   if (eventType === "publish_requested" && (input.status !== "publish_requested" || safeSegment(input.cover_chapter, "") !== input.cover_chapter)) return json({ error: "Invalid publication request" }, 400, cors);
   const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "travel-journal-uploader", "X-GitHub-Api-Version": "2022-11-28" }, body: JSON.stringify({ event_type: eventType, client_payload: { artifact: input } }) });
-  if (!response.ok) return json({ error: "Editorial automation did not accept the approval" }, 502, cors);
+  if (!response.ok) return json({ error: "Editorial automation did not accept the request" }, 502, cors);
   return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, ...(chapter ? { preview_url: `https://owntravel.ru/preview.html?trip=${trip}&chapter=${chapter}` } : {}) }, 202, cors);
 }
 
@@ -200,7 +206,7 @@ export default {
     const cors = corsHeaders(origin, env.ALLOWED_ORIGIN);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
-    if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2", version: "2026-08-29-retry-v1" }, 200, cors);
+    if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2", version: "2026-08-30-feedback-v1" }, 200, cors);
     if (request.method === "GET" && url.pathname.startsWith("/media/")) {
       const key = safeMediaKey(url.pathname, "/media/"); return key ? r2Response(env, key) : new Response("Invalid media key", { status: 400 });
     }
@@ -220,6 +226,7 @@ export default {
       if (request.method === "POST" && url.pathname === "/submit") return await submitTrip(request, env, cors);
       if (request.method === "POST" && url.pathname === "/retry-processing") return await retryProcessing(request, env, cors);
       if (request.method === "POST" && url.pathname === "/approve-photos") return await dispatchEditorial(request, env, cors, "photo_selection_approved");
+      if (request.method === "POST" && url.pathname === "/preview-feedback") return await dispatchEditorial(request, env, cors, "preview_feedback_submitted");
       if (request.method === "POST" && url.pathname === "/approve-preview") return await dispatchEditorial(request, env, cors, "preview_approved");
       if (request.method === "POST" && url.pathname === "/publish") return await dispatchEditorial(request, env, cors, "publish_requested");
       return json({ error: "not found" }, 404, cors);
