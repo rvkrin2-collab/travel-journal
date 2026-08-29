@@ -15,150 +15,18 @@
     "Завершить главу спокойным открытым берегом."
   ],
   "scenes": [
-    {
-      "id": "scene-01-evening",
-      "place": "Териберка",
-      "title": "Вечерний свет",
-      "text": "Закатное небо отражается в воде; на переднем плане — низкая растительность.",
-      "text_mode": "short",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/ed1afe2b-f91a-4274-81b4-013dca688459.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Спокойное открытие главы."
-    },
-    {
-      "id": "scene-02-beach",
-      "place": "Териберка",
-      "title": "На пляже",
-      "text": "На деревянном настиле лежат крупные кости; за ними — здание, вода и острова.",
-      "text_mode": "main",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/40da0623-f2eb-4a24-baf8-6696b5290b1b.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Описываем только видимую сцену, не объясняя происхождение предметов."
-    },
-    {
-      "id": "scene-03-ship",
-      "place": "Териберка",
-      "title": "Ржавеющий корабль",
-      "text": "Металлический корпус стоит на песчаном берегу под ясным небом.",
-      "text_mode": "hero",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/14790a84-05d6-41b4-9c65-e7283f2cd247.jpg"
-      ],
-      "layout": "hero-wide",
-      "editorial_note": "Утверждённый автором главный кадр главы."
-    },
-    {
-      "id": "scene-04-boat",
-      "place": "Териберка",
-      "title": "Лодка на песке",
-      "text": "Деревянная лодка лежит на пляже; дальше — спокойная вода и скалистый берег.",
-      "text_mode": "main",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/dc6cacbf-36e9-4220-b73b-368db52a0fdd.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Отдельная береговая сцена."
-    },
-    {
-      "id": "scene-05-vessel",
-      "place": "Териберка",
-      "title": "Судно на берегу",
-      "text": "Деревянное судно с рубкой стоит среди травы и кустарника на фоне скалистого холма.",
-      "text_mode": "quiet",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/81b45506-95c6-4530-a2ac-f2be6347afeb.jpg"
-      ],
-      "layout": "single-quiet",
-      "editorial_note": "Вторая сцена с судном отделена от предыдущей, чтобы не смешивать локации."
-    },
-    {
-      "id": "scene-06-old-boats",
-      "place": "Териберка",
-      "title": "Старые лодки",
-      "text": "Старые лодки и хозяйственные постройки стоят у подножия горы.",
-      "text_mode": "main",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/f390a84b-cf6c-40a0-a996-efdeb6522b05.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Сохраняем авторскую формулировку без дополнительной истории места."
-    },
-    {
-      "id": "scene-07-red-ship",
-      "place": "Териберка",
-      "title": "Красное судно",
-      "text": "Красное судно выделяется на фоне спокойной воды и облачного неба.",
-      "text_mode": "short",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/f6c4ca26-cde9-496c-a44f-9645099ebf26.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Цветовой акцент перед переходом к природным сценам."
-    },
-    {
-      "id": "scene-08-waterfall",
-      "place": "места вокруг Териберки",
-      "title": "Водопад",
-      "text": "Водопад проходит через скалистое ущелье; за ним открывается море.",
-      "text_mode": "main",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/c7e95537-74de-4348-8fff-a893475cb3ec.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Переход от предметных сцен к окружающему ландшафту."
-    },
-    {
-      "id": "scene-09-rocky-shore",
-      "place": "места вокруг Териберки",
-      "title": "Скалистый берег",
-      "text": "Камень, мох и трава занимают передний план; дальше — спокойное море и небольшие островки.",
-      "text_mode": "quiet",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/5c9c5816-2b06-4094-a0fd-e240a587ad82.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Пейзажная пауза."
-    },
-    {
-      "id": "scene-10-gorge",
-      "place": "места вокруг Териберки",
-      "title": "Камни и вода",
-      "text": "Крупные каменные глыбы окружают небольшую воду в скальном ущелье.",
-      "text_mode": "pause",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/bf07fd9d-280c-4c82-8c4d-66c2dac49c11.jpg"
-      ],
-      "layout": "single-quiet",
-      "editorial_note": "Самостоятельная сцена; не объединяем её с другим берегом."
-    },
-    {
-      "id": "scene-11-house",
-      "place": "места вокруг Териберки",
-      "title": "Дом",
-      "text": "Заброшенный деревянный дом стоит на скальном плато среди низкой растительности.",
-      "text_mode": "quiet",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/8fa8fc5f-d43f-4612-b01e-7a2f0f7b1907.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Последний человеческий след перед финальным берегом."
-    },
-    {
-      "id": "scene-12-pebbles",
-      "place": "места вокруг Териберки",
-      "title": "Галечный пляж",
-      "text": "Галька уходит к воде; напротив под облачным небом тянется скалистый берег.",
-      "text_mode": "final",
-      "photos": [
-        "kolskiy-u-vody-i-pod-vodoy/teriberka/d7479703-c993-43a2-b6c4-2c74773218d9.jpg"
-      ],
-      "layout": "single-wide",
-      "editorial_note": "Открытый спокойный финал главы."
-    }
+    {"id":"scene-01-evening","place":"Териберка","title":"Вечерний свет","text":"Закатное небо отражается в воде; на переднем плане — низкая растительность.","text_mode":"short","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/ed1afe2b-f91a-4274-81b4-013dca688459.jpg"],"layout":"single-wide","editorial_note":"Спокойное открытие главы."},
+    {"id":"scene-02-beach","place":"Териберка","title":"На пляже","text":"На деревянном настиле лежат крупные кости; за ними — здание, вода и острова.","text_mode":"main","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/40da0623-f2eb-4a24-baf8-6696b5290b1b.jpg"],"layout":"single-wide","editorial_note":"Описываем только видимую сцену, не объясняя происхождение предметов."},
+    {"id":"scene-03-ship","place":"Териберка","title":"Ржавеющий корабль","text":"Металлический корпус стоит на песчаном берегу под ясным небом.","text_mode":"hero","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/14790a84-05d6-41b4-9c65-e7283f2cd247.jpg"],"layout":"hero-wide","editorial_note":"Утверждённый автором главный кадр главы."},
+    {"id":"scene-04-boat","place":"Териберка","title":"Лодка на песке","text":"Деревянная лодка лежит на пляже; дальше — спокойная вода и скалистый берег.","text_mode":"main","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/dc6cacbf-36e9-4220-b73b-368db52a0fdd.jpg"],"layout":"single-wide","editorial_note":"Отдельная береговая сцена."},
+    {"id":"scene-05-vessel","place":"Териберка","title":"Судно на берегу","text":"Деревянное судно с рубкой стоит среди травы и кустарника на фоне скалистого холма.","text_mode":"quiet","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/81b45506-95c6-4530-a2ac-f2be6347afeb.jpg"],"layout":"single-quiet","editorial_note":"Вторая сцена с судном отделена от предыдущей, чтобы не смешивать локации."},
+    {"id":"scene-06-old-boats","place":"Териберка","title":"Старые лодки","text":"Старые лодки и хозяйственные постройки стоят у подножия горы.","text_mode":"main","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/f390a84b-cf6c-40a0-a996-efdeb6522b05.jpg"],"layout":"single-wide","editorial_note":"Сохраняем авторскую формулировку без дополнительной истории места."},
+    {"id":"scene-07-red-ship","place":"Териберка","title":"Красное судно","text":"Красное судно выделяется на фоне спокойной воды и облачного неба.","text_mode":"short","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/f6c4ca26-cde9-496c-a44f-9645099ebf26.jpg"],"layout":"single-wide","editorial_note":"Цветовой акцент перед переходом к природным сценам."},
+    {"id":"scene-08-waterfall","place":"места вокруг Териберки","title":"Водопад","text":"Водопад проходит через скалистое ущелье; за ним открывается море.","text_mode":"main","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/c7e95537-74de-4348-8fff-a893475cb3ec.jpg"],"layout":"single-wide","editorial_note":"Переход от предметных сцен к окружающему ландшафту."},
+    {"id":"scene-09-rocky-shore","place":"места вокруг Териберки","title":"Скалистый берег","text":"Камень, мох и трава занимают передний план; дальше — спокойное море и небольшие островки.","text_mode":"quiet","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/5c9c5816-2b06-4094-a0fd-e240a587ad82.jpg"],"layout":"single-wide","editorial_note":"Пейзажная пауза."},
+    {"id":"scene-10-gorge","place":"места вокруг Териберки","title":"Камни и вода","text":"Крупные каменные глыбы окружают небольшой водоём в скальном ущелье.","text_mode":"pause","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/bf07fd9d-280c-4c82-8c4d-66c2dac49c11.jpg"],"layout":"single-quiet","editorial_note":"Самостоятельная сцена; не объединяем её с другим берегом."},
+    {"id":"scene-11-house","place":"места вокруг Териберки","title":"Дом","text":"Заброшенный деревянный дом стоит на скальном плато среди низкой растительности.","text_mode":"quiet","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/8fa8fc5f-d43f-4612-b01e-7a2f0f7b1907.jpg"],"layout":"single-wide","editorial_note":"Последний человеческий след перед финальным берегом."},
+    {"id":"scene-12-pebbles","place":"места вокруг Териберки","title":"Галечный пляж","text":"Галька уходит к воде; напротив под облачным небом тянется скалистый берег.","text_mode":"final","photos":["kolskiy-u-vody-i-pod-vodoy/teriberka/d7479703-c993-43a2-b6c4-2c74773218d9.jpg"],"layout":"single-wide","editorial_note":"Открытый спокойный финал главы."}
   ],
   "backstage_role": "Дополнительные кадры строений и береговых сцен остаются в компактном блоке «За кадром».",
   "publication_note": "Основная серия использует все утверждённые автором hero/story кадры ровно по одному разу. Текст не добавляет неподтверждённую историю объектов или мест.",
@@ -169,5 +37,5 @@
   "photos_fingerprint": "08de778ad4481db604ee3f602bc789495d877bb1192bd497944df61db406d1ef",
   "status": "storyboard",
   "final_review_source": "data/kolskiy-u-vody-i-pod-vodoy/teriberka-author-review.json",
-  "updated_at": "2026-08-29T21:07:00.000Z"
+  "updated_at": "2026-08-29T20:48:40.000Z"
 }
