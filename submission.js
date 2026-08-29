@@ -116,6 +116,11 @@ async function publishTrip() {
   if (!document.querySelector("#publish-confirm").checked) { result.textContent = "Сначала подтвердите, что проверили все главы."; return; }
   try { if (!photoPicker) throw new Error("Сеанс публикации ещё загружается"); result.textContent = "Отправляем прямую команду публикации…"; await photoPicker.publishTrip({ schema_version: 1, trip, status: "publish_requested", cover_chapter: document.querySelector("#cover-chapter").value, requested_at: new Date().toISOString() }); result.textContent = "Публикация запущена. Страница обновится автоматически."; setTimeout(refresh, 5000); } catch (error) { result.textContent = `Не удалось опубликовать: ${error.message}`; }
 }
+function retryProcessingError(error) {
+  const message = String(error?.message || error || "неизвестная ошибка");
+  if (/not found|HTTP 404/i.test(message)) return "Сервис повторного запуска ещё не обновлён. Обработка не запущена; требуется публикация Cloudflare Worker.";
+  return message;
+}
 async function retryProcessing() {
   const buttons = [...document.querySelectorAll("[data-retry-processing]")];
   const result = document.querySelector("#retry-result");
@@ -137,9 +142,10 @@ async function retryProcessing() {
     document.querySelectorAll(".workflow-card.stalled").forEach(card => { card.classList.remove("stalled"); card.classList.add("working"); card.querySelector(".state-badge").textContent = "Запускается"; card.querySelector("h3").textContent = "Обработка запускается"; });
     secondsToRefresh = 5;
   } catch (error) {
-    live.textContent = `Не удалось запустить: ${error.message}`;
+    const message = retryProcessingError(error);
+    live.textContent = `Не удалось запустить: ${message}`;
     live.classList.add("error");
-    if (result) result.textContent = `Не удалось запустить: ${error.message}`;
+    if (result) result.textContent = `Не удалось запустить: ${message}`;
     buttons.forEach(button => { button.disabled = false; button.textContent = "Повторно запустить обработку"; });
   }
 }
