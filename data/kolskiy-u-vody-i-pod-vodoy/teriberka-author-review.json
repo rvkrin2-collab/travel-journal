@@ -1,0 +1,134 @@
+{
+  "ai_review_source": "data/kolskiy-u-vody-i-pod-vodoy/teriberka-ai-review.json",
+  "approval": "photo_selection_approved",
+  "chapter": "teriberka",
+  "day": "teriberka",
+  "items": [
+    {
+      "label": "Белое животное с коротким хвостом лежит на песчано-травянистом грунте",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 1,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/d5d80edb-823e-4396-bd79-cd49131db263.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/d5d80edb-823e-4396-bd79-cd49131db263.jpg",
+      "status": "skip"
+    },
+    {
+      "label": "Закатное небо над водоёмом с низкорослой растительностью на переднем плане и тёмными берегами вдали",
+      "note": "Ключевой визуальный кадр серии.",
+      "number": 2,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/ed1afe2b-f91a-4274-81b4-013dca688459.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/ed1afe2b-f91a-4274-81b4-013dca688459.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Деревянный настил на пляже с белыми костями крупного морского животного, здание и вид на море с островами",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 3,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/40da0623-f2eb-4a24-baf8-6696b5290b1b.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/40da0623-f2eb-4a24-baf8-6696b5290b1b.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Ржавеющий металлический корабль на песчаном пляже с голубым небом",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 4,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/14790a84-05d6-41b4-9c65-e7283f2cd247.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/14790a84-05d6-41b4-9c65-e7283f2cd247.jpg",
+      "status": "hero"
+    },
+    {
+      "label": "Песчаный пляж с деревянной лодкой, скалистый берег и спокойное море в ясную погоду",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 5,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/dc6cacbf-36e9-4220-b73b-368db52a0fdd.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/dc6cacbf-36e9-4220-b73b-368db52a0fdd.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Деревянное судно с рубкой на берегу среди травы и кустарника, на фоне скалистого холма",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 6,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/81b45506-95c6-4530-a2ac-f2be6347afeb.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/81b45506-95c6-4530-a2ac-f2be6347afeb.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Заброшенное каменное строение с тремя арочными проёмами у берега водоёма",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 7,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/cd706e0f-82d1-4232-b09e-058c2fa1e620.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/cd706e0f-82d1-4232-b09e-058c2fa1e620.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Старые лодки и хозяйственные постройки у подножия горы",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 8,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/f390a84b-cf6c-40a0-a996-efdeb6522b05.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/f390a84b-cf6c-40a0-a996-efdeb6522b05.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Красное судно на фоне спокойного моря с облачным небом и скалистым берегом слева",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 9,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/f6c4ca26-cde9-496c-a44f-9645099ebf26.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/f6c4ca26-cde9-496c-a44f-9645099ebf26.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Водопад в скалистом ущелье с видом на море",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 10,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/c7e95537-74de-4348-8fff-a893475cb3ec.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/c7e95537-74de-4348-8fff-a893475cb3ec.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Скалистый берег с мхом и травой, вид на спокойное море с небольшими островками",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 11,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/5c9c5816-2b06-4094-a0fd-e240a587ad82.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/5c9c5816-2b06-4094-a0fd-e240a587ad82.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Скалистый морской берег с видом на залив, окружённый низкорослой растительностью и отдалёнными скалистыми возвышениями",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 12,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/3b438071-e2b3-4dc7-91ad-55aeeab14411.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/3b438071-e2b3-4dc7-91ad-55aeeab14411.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Галечный пляж с видом на скалистый берег и открытое море под облачным небом",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 13,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/d7479703-c993-43a2-b6c4-2c74773218d9.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/d7479703-c993-43a2-b6c4-2c74773218d9.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Скальное ущелье с валунами и небольшой водоём, окружённый крупными каменными глыбами",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 14,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/bf07fd9d-280c-4c82-8c4d-66c2dac49c11.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/bf07fd9d-280c-4c82-8c4d-66c2dac49c11.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Заброшенный деревянный дом на скальном плато с низкорослой растительностью",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 15,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/8fa8fc5f-d43f-4612-b01e-7a2f0f7b1907.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/teriberka/8fa8fc5f-d43f-4612-b01e-7a2f0f7b1907.jpg",
+      "status": "story"
+    }
+  ],
+  "photos_fingerprint": "08de778ad4481db604ee3f602bc789495d877bb1192bd497944df61db406d1ef",
+  "photos_source": "data/kolskiy-u-vody-i-pod-vodoy/teriberka-photos.json",
+  "schema_version": 2,
+  "status": "author_review",
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "updated_at": "2026-08-29T20:47:16.169Z"
+}
