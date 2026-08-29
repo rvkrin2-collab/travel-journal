@@ -127,7 +127,7 @@ async function retryProcessing() {
   const buttons = [...document.querySelectorAll("[data-retry-processing]")];
   const result = document.querySelector("#retry-result");
   buttons.forEach(button => { button.disabled = true; button.textContent = "Запускаем…"; });
-  if (result) { result.hidden = false; result.classList.remove("error"); result.textContent = "Подтвердите Google-аккаунт в открывшемся окне. После подтверждения команда будет отправлена автоматически."; }
+  if (result) { result.hidden = false; result.classList.remove("error"); result.textContent = "Отправляем команду повторного запуска…"; }
   try {
     if (!photoPicker) await loadPhotoPicker();
     if (typeof photoPicker.retryProcessing !== "function") {
@@ -157,7 +157,7 @@ async function retryProcessing() {
 
 async function loadPhotoPicker() {
   if (photoPicker) return photoPicker;
-  if (!photoPickerPromise) photoPickerPromise = Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=26")])
+  if (!photoPickerPromise) photoPickerPromise = Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=27")])
     .then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
       const response = await fetch("./config/photo-services.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`Настройки подключения: HTTP ${response.status}`);
