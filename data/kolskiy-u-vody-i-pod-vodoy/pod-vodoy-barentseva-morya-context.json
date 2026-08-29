@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "source": "author_submission",
+  "chapter_title": "Под водой Баренцева моря",
+  "author_description": "Подводный рельеф, водоросли, морская жизнь.",
+  "route_context": [
+    "Баренцево море"
+  ],
+  "route": [
+    "Баренцево море"
+  ]
+}
