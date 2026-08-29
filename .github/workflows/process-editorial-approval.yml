@@ -55,21 +55,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { ref: main, fetch-depth: 0 }
-      - name: Save second author approval without publishing
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Stage second author approval
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
         run: |
           trip=$(node -p 'JSON.parse(process.env.ARTIFACT).trip')
           chapter=$(node -p 'JSON.parse(process.env.ARTIFACT).chapter')
           printf '%s\n' "$ARTIFACT" > "data/$trip/$chapter-approval.json"
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+          echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+      - name: Reject stale preview approval
+        run: node validate-editorial-chapter.mjs
+      - name: Commit second author approval without publishing
+        run: |
+          set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add "data/$trip/$chapter-approval.json"
+          git add "data/$TRIP/$CHAPTER-approval.json"
           if git diff --cached --quiet; then
             echo "Preview approval is already current"
             exit 0
           fi
-          git commit -m "Approve preview for $trip $chapter"
+          git commit -m "Approve preview for $TRIP $CHAPTER"
           git pull --rebase origin main
           git push origin HEAD:main
 
