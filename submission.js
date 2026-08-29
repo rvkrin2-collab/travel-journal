@@ -10,7 +10,7 @@ const overall = document.querySelector("#overall-status");
 const live = document.querySelector("#live-status");
 const refreshButton = document.querySelector("#refresh");
 const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
-let photoPicker, refreshing = false, secondsToRefresh = 15;
+let photoPicker, photoPickerPromise, refreshing = false, secondsToRefresh = 15;
 const PROCESSING_KEY = `travel-journal-processing-${trip}`;
 const PROCESSING_WINDOW_MS = 20 * 60 * 1000;
 
@@ -50,8 +50,13 @@ function actionFor(value) {
   const chapter = value.chapter;
   if (value.status.action === "editor") return `<a class="primary status-link" href="editor.html?trip=${trip}&chapter=${chapter.id}">Выбрать и утвердить фотографии</a>`;
   if (value.status.action === "preview") return `<a class="primary status-link" href="preview.html?trip=${trip}&chapter=${chapter.id}">Проверить и утвердить preview</a>`;
-  if (value.status.action === "restart") return `<button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p>`;
   return "";
+}
+
+function retryPanel(states) {
+  const stalled = states.filter(value => value.status.kind === "stalled");
+  if (!stalled.length) return "";
+  return `<div class="workflow-card stalled retry-box"><h3>Перезапустить обработку путешествия</h3><p>Остановлена обработка ${stalled.length} ${stalled.length === 1 ? "главы" : "глав"}. Команда запустит их все сразу.</p><button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p><div id="retry-result" class="service-state" hidden></div></div>`;
 }
 function renderChapter(value) {
   const state = value.status;
@@ -89,7 +94,7 @@ async function refresh() {
       else states = states.map(value => value.status.kind === "stalled" ? { ...value, status: { ...value.status, kind: "working", action: null, label: "Обработка выполняется", instruction: "Анализируем фотографии и готовим редакторский отбор. Обычно это занимает несколько минут." } } : value);
     }
     renderOverall(states, published);
-    root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${states.map(renderChapter).join("")}`;
+    root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${retryPanel(states)}${states.map(renderChapter).join("")}`;
     document.querySelectorAll("[data-retry-processing]").forEach(button => { button.onclick = retryProcessing; });
     const stalled = states.filter(value => value.status.kind === "stalled"), actions = states.filter(value => value.status.kind === "action"), working = states.filter(value => value.status.kind === "working");
     if (published) summary.textContent = "Готово — путешествие опубликовано.";
@@ -109,22 +114,39 @@ async function publishTrip() {
 }
 async function retryProcessing() {
   const buttons = [...document.querySelectorAll("[data-retry-processing]")];
+  const result = document.querySelector("#retry-result");
   buttons.forEach(button => { button.disabled = true; button.textContent = "Запускаем…"; });
+  if (result) { result.hidden = false; result.textContent = "Подключаем Google и отправляем команду…"; }
   try {
-    if (!photoPicker) throw new Error("Подключение Google ещё загружается");
+    if (!photoPicker) await loadPhotoPicker();
     await photoPicker.retryProcessing(trip);
     rememberProcessing();
     summary.textContent = "Повторная обработка запущена. Первые результаты обычно появляются в течение нескольких минут.";
     live.textContent = "Команда принята. Проверяем появление результатов каждые 15 секунд.";
+    if (result) result.textContent = "Команда принята. Можно закрыть страницу — обработка продолжится.";
     document.querySelectorAll(".workflow-card.stalled").forEach(card => { card.classList.remove("stalled"); card.classList.add("working"); card.querySelector(".state-badge").textContent = "Запускается"; card.querySelector("h3").textContent = "Обработка запускается"; });
     secondsToRefresh = 5;
   } catch (error) {
     live.textContent = `Не удалось запустить: ${error.message}`;
     live.classList.add("error");
+    if (result) result.textContent = `Не удалось запустить: ${error.message}`;
     buttons.forEach(button => { button.disabled = false; button.textContent = "Повторно запустить обработку"; });
   }
 }
+
+async function loadPhotoPicker() {
+  if (photoPicker) return photoPicker;
+  if (!photoPickerPromise) photoPickerPromise = Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=25")])
+    .then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+      const response = await fetch("./config/photo-services.json", { cache: "no-store" });
+      if (!response.ok) throw new Error(`Настройки подключения: HTTP ${response.status}`);
+      photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json()));
+      return photoPicker;
+    })
+    .catch(error => { photoPickerPromise = null; throw error; });
+  return photoPickerPromise;
+}
 refreshButton.onclick = refresh;
-Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=25")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => { const response = await fetch("./config/photo-services.json", { cache: "no-store" }); photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json())); }).catch(() => {});
+loadPhotoPicker().catch(() => {});
 refresh();
 setInterval(() => { if (document.hidden || refreshing) return; secondsToRefresh--; if (secondsToRefresh <= 0) refresh(); else if (!live.classList.contains("error")) live.textContent = live.textContent.replace(/Следующая проверка через \d+ секунд\./, `Следующая проверка через ${secondsToRefresh} секунд.`); }, 1000);

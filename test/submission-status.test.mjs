@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import test from "node:test";
 import { chapterStatus, overallProgress } from "../lib/submission-status.mjs";
 
@@ -32,4 +33,11 @@ test("overall progress counts every chapter stage and publication", () => {
   const complete = chapterStatus({ photos: artifact(), analysis: artifact(), ai: artifact(), author: artifact(), storyboard: artifact(), approval: artifact({ status: "preview_approved" }) });
   assert.deepEqual(overallProgress([complete], false), { percent: 86, done: 6, total: 7 });
   assert.deepEqual(overallProgress([complete], true), { percent: 100, done: 7, total: 7 });
+});
+
+test("submission page offers one trip-wide retry with a local result", () => {
+  const script = fs.readFileSync(new URL("../submission.js", import.meta.url), "utf8");
+  assert.match(script, /Перезапустить обработку путешествия/);
+  assert.match(script, /id="retry-result"/);
+  assert.doesNotMatch(script, /if \(value\.status\.action === "restart"\)/);
 });
