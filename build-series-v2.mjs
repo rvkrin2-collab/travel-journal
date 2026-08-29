@@ -17,6 +17,16 @@ async function readJsonIfExists(path) {
   catch (error) { if (error?.code === "ENOENT") return null; throw error; }
 }
 
+function rankingEntryProperties(publicIds) {
+  return {
+    public_id: {type: "string", enum: publicIds},
+    score: {type: "integer", minimum: 0, maximum: 100},
+    reason: {type: "string", minLength: 1},
+    visual_function: {type: "string", minLength: 1},
+    duplicate_group: {type: "string"}
+  };
+}
+
 function rankingSchema(items) {
   return {
     name: "travel_series_ranking",
@@ -27,24 +37,29 @@ function rankingSchema(items) {
       properties: {
         ranking: {
           type: "array",
-          minItems: items.length,
-          maxItems: items.length,
+          minItems: 1,
           items: {
             type: "object", additionalProperties: false,
             required: ["public_id", "score", "reason", "visual_function", "duplicate_group"],
-            properties: {
-              public_id: {type: "string", enum: items.map(item => item.public_id)},
-              score: {type: "integer", minimum: 0, maximum: 100},
-              reason: {type: "string", minLength: 1},
-              visual_function: {type: "string", minLength: 1},
-              duplicate_group: {type: "string"}
-            }
+            properties: rankingEntryProperties(items.map(item => item.public_id))
           }
         },
         sequence_note: {type: "string", minLength: 1},
         editorial_summary: {type: "string", minLength: 1},
         fact_checks: {type: "array", items: {type: "string"}}
       }
+    }
+  };
+}
+
+function rankingRepairSchema(publicId) {
+  return {
+    name: "travel_series_ranking_repair",
+    strict: true,
+    schema: {
+      type: "object", additionalProperties: false,
+      required: ["public_id", "score", "reason", "visual_function", "duplicate_group"],
+      properties: rankingEntryProperties([publicId])
     }
   };
 }
@@ -156,6 +171,15 @@ function groupKey(entry, id) {
   return group || `__unique__:${id}`;
 }
 
+function normalizeRankingEntry(entry, item, policy) {
+  return {
+    score: Number(entry.score),
+    reason: cleanText(entry.reason, policy),
+    visual_function: cleanText(entry.visual_function, policy),
+    duplicate_group: canonicalDuplicateGroup(entry, item)
+  };
+}
+
 function normalizeRanking(raw, items, policy) {
   const byId = new Map(items.map(item => [item.public_id, item]));
   const ranking = {};
@@ -163,19 +187,19 @@ function normalizeRanking(raw, items, policy) {
     ? raw.ranking.map(entry => [String(entry?.public_id || ""), entry])
     : Object.entries(raw.ranking || {});
   const seen = new Set();
+  let duplicates = 0;
 
   for (const [id, entry] of entries) {
     const item = byId.get(id);
     if (!item) throw new Error(`Series ranking unknown public_id: ${id}`);
-    if (seen.has(id)) throw new Error(`Series ranking duplicated public_id: ${id}`);
+    if (seen.has(id)) {
+      duplicates += 1;
+      continue;
+    }
     seen.add(id);
-    ranking[id] = {
-      score: Number(entry.score),
-      reason: cleanText(entry.reason, policy),
-      visual_function: cleanText(entry.visual_function, policy),
-      duplicate_group: canonicalDuplicateGroup(entry, item)
-    };
+    ranking[id] = normalizeRankingEntry(entry, item, policy);
   }
+  if (duplicates) console.warn(`Series ranking contained ${duplicates} duplicate item(s); keeping first valid occurrence`);
   return {
     ...raw,
     ranking,
@@ -185,11 +209,36 @@ function normalizeRanking(raw, items, policy) {
   };
 }
 
+async function repairMissingRanking(normalized, items, policy) {
+  const byId = new Map(items.map(item => [item.public_id, item]));
+  const ids = items.map(item => item.public_id);
+  const missing = ids.filter(id => !normalized.ranking[id]);
+  if (!missing.length) return normalized;
+
+  console.warn(`Series ranking missing ${missing.length} source photo(s); repairing individually`);
+  for (const id of missing) {
+    const item = byId.get(id);
+    const comparison = ids
+      .filter(existingId => normalized.ranking[existingId])
+      .map(existingId => ({ public_id: existingId, ...normalized.ranking[existingId] }));
+    const repairPrompt = `Ты выпускающий фоторедактор авторского журнала. В общем ранжировании пропущен один исходный кадр. Оцени ТОЛЬКО указанный public_id и верни одну запись. Нельзя менять public_id. Сопоставь силу кадра с уже выставленными оценками серии. Не назначай статус hero/story/backstage/skip. Пиши только по-русски.\n\nНУЖНЫЙ КАДР:\n${JSON.stringify(compactItem(item), null, 2)}\n\nУЖЕ ОЦЕНЁННЫЕ КАДРЫ СЕРИИ:\n${JSON.stringify(comparison, null, 2)}`;
+    const repairResponse = await callStructured({
+      prompt: repairPrompt,
+      schema: rankingRepairSchema(id),
+      label: `Series ranking repair ${id}`,
+      maxTokens: 3000
+    });
+    normalized.ranking[id] = normalizeRankingEntry(repairResponse.value, item, policy);
+    console.log(`Repaired missing series ranking: ${id}`);
+  }
+  return normalized;
+}
+
 function buildRecommendation(raw, items, policy) {
   const ranking = raw.ranking || {};
   const selection = policy.selection || {};
   const ids = items.map(item => item.public_id);
-  for (const id of ids) if (!ranking[id]) throw new Error(`Series ranking missing public_id: ${id}`);
+  for (const id of ids) if (!ranking[id]) throw new Error(`Series ranking missing public_id after repair: ${id}`);
 
   const byNumber = new Map(items.map(item => [item.public_id, Number(item.number || 0)]));
   const sorted = [...ids].sort((a, b) => Number(ranking[b].score) - Number(ranking[a].score) || byNumber.get(a) - byNumber.get(b));
@@ -273,7 +322,7 @@ function buildRecommendation(raw, items, policy) {
     sequence_note: cleanText(raw.sequence_note, policy),
     editorial_summary: cleanText(raw.editorial_summary, policy),
     fact_checks: (raw.fact_checks || []).map(value => cleanText(value, policy)).filter(Boolean),
-    ranking_method: "single_model_ranking_then_dominant_subject_function_normalization"
+    ranking_method: "series_ranking_with_deduplication_and_targeted_missing_item_repair"
   };
 }
 
@@ -286,7 +335,7 @@ if (!items.length) throw new Error(`${analysisFile} has no analyzed photos`);
 
 const prompt = `Ты выпускающий фоторедактор авторского журнала. Не назначай статусы hero/story/backstage/skip. Только оцени и ранжируй каждый кадр.
 
-Для каждого public_id верни один элемент массива ranking с public_id, score 0-100, буквальной visual_function, реальной duplicate_group и конкретной reason. Каждый public_id из списка должен встретиться ровно один раз.
+Для каждого public_id верни один элемент массива ranking с public_id, score 0-100, буквальной visual_function, реальной duplicate_group и конкретной reason. Постарайся вернуть каждый public_id из списка ровно один раз. Если случайно повторишь строку, система сама уберёт дубль и отдельно дозапросит недостающее.
 
 Правила:
 - сначала сравни все кадры между собой;
@@ -313,7 +362,8 @@ ${JSON.stringify(items.map(compactItem), null, 2)}`;
 
 const seriesResponse = await callStructured({ prompt, schema: rankingSchema(items), label: "Series ranking", maxTokens: 16000 });
 const raw = seriesResponse.value;
-const normalized = normalizeRanking(raw, items, policy);
+let normalized = normalizeRanking(raw, items, policy);
+normalized = await repairMissingRanking(normalized, items, policy);
 const recommendation = buildRecommendation(normalized, items, policy);
 
 analysis.recommendation = recommendation;
