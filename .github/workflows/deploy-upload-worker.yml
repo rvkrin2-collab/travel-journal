@@ -1,0 +1,44 @@
+name: Deploy upload Worker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "worker/**"
+      - ".github/workflows/deploy-upload-worker.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-upload-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Deploy Cloudflare Worker
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+          command: deploy
+
+      - name: Verify retry endpoint is published
+        shell: bash
+        run: |
+          response_file="${RUNNER_TEMP}/retry-response.json"
+          status="$(curl --silent --show-error --output "$response_file" --write-out "%{http_code}"             --request POST             --header "Origin: https://owntravel.ru"             --header "Content-Type: application/json"             --data '{"trip":"deployment-check"}'             https://upload.owntravel.ru/retry-processing)"
+          cat "$response_file"
+          if [ "$status" != "401" ]; then
+            echo "Expected HTTP 401 from the published authenticated endpoint, got HTTP $status"
+            exit 1
+          fi
