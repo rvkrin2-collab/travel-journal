@@ -2,7 +2,7 @@ name: Process editorial approval
 
 on:
   repository_dispatch:
-    types: [photo_selection_approved, preview_approved, publish_requested]
+    types: [photo_selection_approved, preview_feedback_submitted, preview_approved, publish_requested]
 
 permissions:
   contents: write
@@ -46,6 +46,49 @@ jobs:
             exit 0
           fi
           git commit -m "Save approved selection for $TRIP $CHAPTER"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+  save-feedback:
+    if: github.event.action == 'preview_feedback_submitted'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Append durable author feedback
+        env:
+          ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
+        run: |
+          set -euo pipefail
+          trip=$(node -p 'JSON.parse(process.env.ARTIFACT).trip')
+          chapter=$(node -p 'JSON.parse(process.env.ARTIFACT).chapter')
+          file="data/$trip/$chapter-author-feedback.json"
+          mkdir -p "data/$trip"
+          ARTIFACT="$ARTIFACT" FILE="$file" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const note = JSON.parse(process.env.ARTIFACT);
+          const file = process.env.FILE;
+          let current = { schema_version: 1, trip: note.trip, chapter: note.chapter, notes: [] };
+          if (fs.existsSync(file)) current = JSON.parse(fs.readFileSync(file, 'utf8'));
+          current.schema_version = 1;
+          current.trip = note.trip;
+          current.chapter = note.chapter;
+          current.notes = Array.isArray(current.notes) ? current.notes : [];
+          current.notes.push({ type: note.type, photo: note.photo || '', text: note.text, photos_fingerprint: note.photos_fingerprint, author_review_updated_at: note.author_review_updated_at || '', storyboard_updated_at: note.storyboard_updated_at, submitted_at: note.submitted_at });
+          current.updated_at = note.submitted_at;
+          fs.writeFileSync(file, JSON.stringify(current, null, 2) + '\n');
+          NODE
+          echo "TRIP=$trip" >> "$GITHUB_ENV"
+          echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+      - name: Commit feedback checkpoint
+        run: |
+          set -euo pipefail
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add "data/$TRIP/$CHAPTER-author-feedback.json"
+          git commit -m "Save preview feedback for $TRIP $CHAPTER"
           git pull --rebase origin main
           git push origin HEAD:main
 
