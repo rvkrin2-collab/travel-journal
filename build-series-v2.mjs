@@ -19,17 +19,6 @@ async function readJsonIfExists(path) {
 }
 
 function rankingSchema(items) {
-  const properties = Object.fromEntries(items.map(item => [item.public_id, {
-    type: "object", additionalProperties: false,
-    required: ["score", "reason", "visual_function", "duplicate_group"],
-    properties: {
-      score: {type: "integer", minimum: 0, maximum: 100},
-      reason: {type: "string", minLength: 1},
-      visual_function: {type: "string", minLength: 1},
-      duplicate_group: {type: "string"}
-    }
-  }]));
-
   return {
     name: "travel_series_ranking",
     strict: true,
@@ -37,7 +26,22 @@ function rankingSchema(items) {
       type: "object", additionalProperties: false,
       required: ["ranking", "sequence_note", "editorial_summary", "fact_checks"],
       properties: {
-        ranking: {type: "object", additionalProperties: false, required: items.map(item => item.public_id), properties},
+        ranking: {
+          type: "array",
+          minItems: items.length,
+          maxItems: items.length,
+          items: {
+            type: "object", additionalProperties: false,
+            required: ["public_id", "score", "reason", "visual_function", "duplicate_group"],
+            properties: {
+              public_id: {type: "string", minLength: 1},
+              score: {type: "integer", minimum: 0, maximum: 100},
+              reason: {type: "string", minLength: 1},
+              visual_function: {type: "string", minLength: 1},
+              duplicate_group: {type: "string"}
+            }
+          }
+        },
         sequence_note: {type: "string", minLength: 1},
         editorial_summary: {type: "string", minLength: 1},
         fact_checks: {type: "array", items: {type: "string"}}
@@ -156,9 +160,16 @@ function groupKey(entry, id) {
 function normalizeRanking(raw, items, policy) {
   const byId = new Map(items.map(item => [item.public_id, item]));
   const ranking = {};
-  for (const [id, entry] of Object.entries(raw.ranking || {})) {
+  const entries = Array.isArray(raw.ranking)
+    ? raw.ranking.map(entry => [String(entry?.public_id || ""), entry])
+    : Object.entries(raw.ranking || {});
+  const seen = new Set();
+
+  for (const [id, entry] of entries) {
     const item = byId.get(id);
     if (!item) continue;
+    if (seen.has(id)) throw new Error(`Series ranking duplicated public_id: ${id}`);
+    seen.add(id);
     ranking[id] = {
       score: Number(entry.score),
       reason: cleanText(entry.reason, policy),
@@ -276,7 +287,7 @@ if (!items.length) throw new Error(`${analysisFile} has no analyzed photos`);
 
 const prompt = `Ты выпускающий фоторедактор авторского журнала. Не назначай статусы hero/story/backstage/skip. Только оцени и ранжируй каждый кадр.
 
-Для каждого public_id укажи score 0-100, буквальную visual_function, реальную duplicate_group и конкретную reason.
+Для каждого public_id верни один элемент массива ranking с public_id, score 0-100, буквальной visual_function, реальной duplicate_group и конкретной reason. Каждый public_id из списка должен встретиться ровно один раз.
 
 Правила:
 - сначала сравни все кадры между собой;
@@ -312,10 +323,11 @@ analysis.editorial_policy = {
   version: policy.version,
   validated: true,
   assignment: "chapter_visual_selection_with_dominant_subject_groups",
-  model,
+  model: seriesResponse.model,
   updated_at: new Date().toISOString()
 };
-analysis.series_model = model;
+analysis.series_model = seriesResponse.model;
+analysis.series_provider = seriesResponse.provider;
 analysis.generated_at = new Date().toISOString();
 
 await fs.writeFile(analysisFile, JSON.stringify(analysis, null, 2), "utf8");
