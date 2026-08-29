@@ -58,7 +58,9 @@ jobs:
       - name: Analyze every submitted chapter and build AI proposals
         if: github.event_name == 'repository_dispatch'
         env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_PROVIDER_ORDER: anthropic,openai
           REQUEST_FILE: /tmp/travel-journal-requests/submission.json
           RETRY_TRIP: ${{ github.event.client_payload.artifact.trip }}
         shell: bash
@@ -119,6 +121,12 @@ jobs:
           if grep -Eq 'credit_balance_exhausted|insufficient_quota|no credits remaining' <<< "$log"; then
             code="openai_insufficient_quota"
             message="Закончился баланс OpenAI API. Пополните баланс или замените API-ключ, затем повторите запуск."
+          elif grep -Eqi 'anthropic.*(credit|billing)|credit balance is too low' <<< "$log"; then
+            code="anthropic_insufficient_credit"
+            message="Недостаточно средств на балансе Claude API. Пополните баланс Anthropic или замените API-ключ, затем повторите запуск."
+          elif grep -Eqi 'anthropic.*HTTP (401|403)|authentication_error|invalid x-api-key' <<< "$log"; then
+            code="anthropic_authentication_failed"
+            message="Claude API отклонил ключ доступа. Проверьте секрет ANTHROPIC_API_KEY и повторите запуск."
           elif grep -Eq '429|rate.?limit' <<< "$log"; then
             code="openai_rate_limit"
             message="OpenAI API временно ограничил число запросов. Подождите несколько минут и повторите запуск."

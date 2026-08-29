@@ -1,15 +1,12 @@
 import fs from "fs/promises";
 import {loadEditorialPolicy, policyPrompt} from "./lib/editorial-policy.mjs";
 import { resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
+import { callStructured } from "./lib/structured-ai.mjs";
 
-const apiKey = process.env.OPENAI_API_KEY;
-const model = process.env.OPENAI_SERIES_MODEL || process.env.OPENAI_VISION_MODEL || "gpt-4o";
 const target = resolveEditorialTarget(); const trip = target.trip; const chapter = target.chapter;
 const analysisFile = process.env.ANALYSIS_FILE || target.analysis;
 const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${chapter}-context.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${chapter}-author-notes.json`;
-
-if (!apiKey) throw new Error("OPENAI_API_KEY secret is missing");
 
 
 async function readJson(path) {
@@ -19,39 +16,6 @@ async function readJson(path) {
 async function readJsonIfExists(path) {
   try { return await readJson(path); }
   catch (error) { if (error?.code === "ENOENT") return null; throw error; }
-}
-
-function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
-async function callStructured(prompt, schema, label) {
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json"},
-      body: JSON.stringify({
-        model,
-        temperature: 0,
-        response_format: {type: "json_schema", json_schema: schema},
-        messages: [{role: "user", content: prompt}]
-      })
-    });
-
-    if (response.status === 429 && attempt < 5) {
-      const body = await response.text();
-      const seconds = Number(body.match(/try again in\s+([\d.]+)s/i)?.[1] || 2 ** attempt * 2);
-      await sleep(Math.ceil(seconds * 1000) + 500);
-      continue;
-    }
-
-    if (!response.ok) throw new Error(`${label} error: ${response.status} ${await response.text()}`);
-    const data = await response.json();
-    const choice = data.choices?.[0];
-    console.log(`${label} finish_reason=${choice?.finish_reason || "unknown"}, prompt_tokens=${data.usage?.prompt_tokens || "unknown"}, completion_tokens=${data.usage?.completion_tokens || "unknown"}`);
-    if (choice?.finish_reason !== "stop") throw new Error(`${label} incomplete: ${choice?.finish_reason || "unknown"}`);
-    if (!choice?.message?.content) throw new Error(`${label} content is empty`);
-    return JSON.parse(choice.message.content);
-  }
-  throw new Error(`${label}: retries exhausted`);
 }
 
 function rankingSchema(items) {
@@ -337,7 +301,8 @@ ${JSON.stringify(authorNotes || {}, null, 2)}
 КАДРЫ:
 ${JSON.stringify(items.map(compactItem), null, 2)}`;
 
-const raw = await callStructured(prompt, rankingSchema(items), "Series ranking");
+const seriesResponse = await callStructured({ prompt, schema: rankingSchema(items), label: "Series ranking", maxTokens: 16000 });
+const raw = seriesResponse.value;
 const normalized = normalizeRanking(raw, items, policy);
 const recommendation = buildRecommendation(normalized, items, policy);
 
