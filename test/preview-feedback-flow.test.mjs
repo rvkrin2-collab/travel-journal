@@ -48,6 +48,14 @@ test("storyboard grounding guard rejects invented facts while allowing grounded 
   assert.match(builder, /route_context никогда не является достаточным основанием/);
 });
 
+test("storyboard normalizes caption punctuation without producing double stops", () => {
+  const builder = read("build-storyboard.mjs");
+  assert.match(builder, /function finishSentence/);
+  assert.match(builder, /replace\(\/\[.!\?\]\+\$\/g, ""\)/);
+  assert.match(builder, /scene\.text = finishSentence\(scene\.text\)/);
+  assert.doesNotMatch(builder, /replace\(\/\[.!\?\]\*\$\/g, "\."\)/);
+});
+
 test("storyboard preserves supplied author chapter copy instead of inventing a new intro", () => {
   const builder = read("build-storyboard.mjs");
   assert.match(builder, /function preserveAuthorChapterCopy/);
