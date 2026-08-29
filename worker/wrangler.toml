@@ -1,0 +1,15 @@
+name = "travel-journal-upload"
+main = "src/index.js"
+compatibility_date = "2026-08-12"
+
+# Runtime variables and encrypted secrets are managed in the Cloudflare
+# dashboard. Preserve them when deploying code from GitHub.
+keep_vars = true
+
+# The custom domains upload.owntravel.ru and photos.owntravel.ru are managed
+# in the Cloudflare dashboard and must not be replaced by a workers.dev route.
+workers_dev = false
+
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "travel-journal-photos"
