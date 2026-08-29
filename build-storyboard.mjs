@@ -82,18 +82,19 @@ function normalizeText(value) {
   return String(value || "").toLowerCase().replace(/ё/g, "е").replace(/[^a-zа-я0-9\s-]/g, " ").replace(/\s+/g, " ").trim();
 }
 
-const SAFE_GLUE_WORDS = new Set([
-  "виден", "видна", "видны", "стоит", "стоят", "лежит", "лежат", "находится", "находятся",
-  "открывается", "открываются", "переходит", "переходят", "покрывает", "покрывают", "поднимается", "поднимаются",
-  "занимает", "занимают", "выделяется", "выделяются", "тянется", "тянутся", "уходит", "уходят", "дальше",
-  "здесь", "там", "прямо", "рядом", "вдоль", "вокруг", "напротив", "переднем", "заднем", "обоим", "сторонам"
-]);
-
 const STOP_WORDS = new Set([
   "и", "а", "но", "или", "в", "во", "на", "с", "со", "к", "ко", "по", "из", "от", "до", "за", "над", "под",
   "при", "у", "о", "об", "для", "между", "через", "среди", "без", "не", "это", "этот", "эта", "эти", "его", "ее",
   "их", "как", "что", "где", "почти", "весь", "вся", "все"
 ]);
+
+const SENSITIVE_STEMS = [
+  "споко", "безве", "ветер", "шторм", "утро", "вечер", "ночь", "полдн", "погод", "туман",
+  "жизнь", "живут", "покол", "местн", "рыбац", "турис", "посел", "обита",
+  "военн", "забро", "разру", "древн", "старин", "истор", "тради", "назнач",
+  "тундр", "аркти", "субар", "северн", "южн", "восточ", "западн",
+  "суров", "дикий", "безлю", "опас", "холод", "тепл"
+];
 
 function stemToken(token) {
   const value = normalizeText(token);
@@ -102,7 +103,7 @@ function stemToken(token) {
 }
 
 function contentStems(value) {
-  return normalizeText(value).split(" ").filter(Boolean).filter(token => token.length >= 4 && !STOP_WORDS.has(token) && !SAFE_GLUE_WORDS.has(token)).map(stemToken);
+  return normalizeText(value).split(" ").filter(Boolean).filter(token => token.length >= 4 && !STOP_WORDS.has(token)).map(stemToken);
 }
 
 function isBoilerplateReviewNote(value) {
@@ -117,16 +118,41 @@ function groundingSource(record, feedbackItems) {
   return parts.filter(Boolean).join(" ");
 }
 
+function sensitiveUnsupported(caption, source) {
+  const captionText = normalizeText(caption);
+  const sourceText = normalizeText(source);
+  return SENSITIVE_STEMS.some(stem => captionText.includes(stem) && !sourceText.includes(stem));
+}
+
+function unsupportedNumbers(caption, source) {
+  const captionNumbers = String(caption || "").match(/\d+(?:[.,]\d+)?/g) || [];
+  return captionNumbers.some(number => !String(source || "").includes(number));
+}
+
+function unsupportedCapitalizedTerms(caption, source) {
+  const sourceText = normalizeText(source);
+  const words = String(caption || "").match(/[A-ZА-ЯЁ][A-Za-zА-Яа-яЁё-]{2,}/g) || [];
+  return words.slice(1).some(word => !sourceText.includes(normalizeText(word)));
+}
+
 function captionIsGrounded(caption, source) {
+  if (!String(caption || "").trim() || !String(source || "").trim()) return false;
+  if (sensitiveUnsupported(caption, source) || unsupportedNumbers(caption, source) || unsupportedCapitalizedTerms(caption, source)) return false;
   const sourceStems = new Set(contentStems(source));
-  if (!sourceStems.size) return false;
-  return contentStems(caption).every(stem => sourceStems.has(stem));
+  const captionStems = contentStems(caption);
+  const overlap = captionStems.filter(stem => sourceStems.has(stem)).length;
+  return overlap >= Math.min(2, Math.max(1, sourceStems.size));
 }
 
 function placeIsGrounded(place, source) {
   const normalizedPlace = normalizeText(place);
   if (!normalizedPlace) return true;
   return normalizeText(source).includes(normalizedPlace);
+}
+
+function safeCaptionFallback(label) {
+  const text = String(label || "").trim().replace(/[.!?]+$/g, "");
+  return text ? `${text}.` : "";
 }
 
 function enforcePhotoGrounding(storyboard, records, feedback) {
@@ -145,17 +171,27 @@ function enforcePhotoGrounding(storyboard, records, feedback) {
     if (!record) continue;
     const source = groundingSource(record, feedbackById.get(id) || []);
     if (!captionIsGrounded(scene.text, source)) {
-      scene.text = String(record.label || "").trim();
+      scene.text = safeCaptionFallback(record.label);
       captionFallbacks += 1;
+    } else {
+      scene.text = String(scene.text || "").trim().replace(/[.!?]*$/g, ".");
     }
     if (!placeIsGrounded(scene.place, source)) {
       scene.place = "";
       clearedPlaces += 1;
     }
   }
-  if (captionFallbacks || clearedPlaces) {
-    console.log(`Grounding guard: replaced ${captionFallbacks} caption(s), cleared ${clearedPlaces} unsupported place(s)`);
-  }
+  if (captionFallbacks || clearedPlaces) console.log(`Grounding guard: replaced ${captionFallbacks} caption(s), cleared ${clearedPlaces} unsupported place(s)`);
+  return storyboard;
+}
+
+function preserveAuthorChapterCopy(storyboard, authorNotes, chapterContext) {
+  const description = String(authorNotes?.provided?.description || chapterContext?.author_description || "").trim();
+  if (!description) return storyboard;
+  storyboard.chapter = storyboard.chapter || {};
+  storyboard.chapter.intro = description;
+  const firstSentence = description.split(/(?<=[.!?])\s+/)[0]?.trim();
+  if (firstSentence) storyboard.chapter.one_line = firstSentence;
   return storyboard;
 }
 
@@ -199,8 +235,9 @@ async function buildStoryboard(payload, selectedIds) {
 
 ПОДПИСИ:
 - одно короткое естественное предложение, обычно до 20 слов;
-- переформулируй только подтверждённое содержание записи этого public_id;
-- не добавляй время суток, ветер, историю, назначение, образ жизни, эмоции, мотивы, географию или природные факты, если их нет у этого же public_id;
+- это журнальная подпись, а не перечень объектов через запятую;
+- можно менять синтаксис, порядок слов и использовать нейтральные связующие глаголы, но нельзя добавлять новый факт;
+- не добавляй время суток, ветер, историю, назначение, образ жизни, эмоции, мотивы, географию или природные классификации, если их нет у этого же public_id;
 - не используй метафоры и олицетворения вместо наблюдения;
 - тщательно проверь русскую орфографию и грамматику.
 
@@ -211,8 +248,7 @@ async function buildStoryboard(payload, selectedIds) {
 «Тундра начинает отступать к морю».
 
 ГЛАВА:
-- intro — максимум 2 коротких фактических предложения только из author_notes/chapter_context и подтверждённых selected_photo_records;
-- intro не должен содержать метафор, олицетворений, общих красивых фраз или новых фактов;
+- intro будет заменён исходным авторским описанием после генерации; не пытайся улучшать его фактами от себя;
 - emotional_curve и rhythm описывают только монтаж и последовательность кадров, а не эмоции автора или «характер места»;
 - title может быть пустым; place может быть непустым только при подтверждении в данных ТОЙ ЖЕ фотографии.
 
@@ -257,13 +293,15 @@ if ((authorReview.items || []).filter(item => item.status === "hero").length !==
 
 const records = selectedPhotoRecords(review, selectedIds);
 const specificFeedback = photoSpecificFeedback(authorFeedback, selectedIds);
-const storyboard = enforcePhotoGrounding(await buildStoryboard({
+let storyboard = await buildStoryboard({
   selected_photo_records: records,
   photo_specific_feedback: specificFeedback,
   general_author_feedback: (authorFeedback?.notes || []).filter(note => !note?.photo),
   author_notes: authorNotes,
   chapter_context: chapterContext
-}, selectedIds), records, specificFeedback);
+}, selectedIds);
+storyboard = enforcePhotoGrounding(storyboard, records, specificFeedback);
+storyboard = preserveAuthorChapterCopy(storyboard, authorNotes, chapterContext);
 
 assertStoryboardPhotoCoverage(storyboard, selectedIds);
 storyboard.trip = trip;
