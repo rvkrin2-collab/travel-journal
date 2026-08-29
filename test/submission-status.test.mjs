@@ -11,6 +11,7 @@ test("recent automatic processing is shown as active", () => {
   assert.equal(status.kind, "working");
   assert.equal(status.percent, 17);
   assert.equal(status.nextIndex, 1);
+  assert.equal(status.label, "Анализируем фотографии");
 });
 
 test("old inventory without analysis is reported as stalled", () => {
@@ -24,9 +25,11 @@ test("author selection and preview approval produce explicit actions", () => {
   const select = chapterStatus({ photos: artifact(), analysis: artifact(), ai: artifact() });
   assert.equal(select.kind, "action");
   assert.equal(select.action, "editor");
+  assert.equal(select.label, "Нужно утвердить фотографии");
   const preview = chapterStatus({ photos: artifact(), analysis: artifact(), ai: artifact(), author: artifact(), storyboard: artifact() });
   assert.equal(preview.kind, "action");
   assert.equal(preview.action, "preview");
+  assert.equal(preview.label, "Нужно утвердить preview");
 });
 
 test("overall progress counts every chapter stage and publication", () => {
