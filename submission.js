@@ -53,10 +53,11 @@ function actionFor(value) {
   return "";
 }
 
-function retryPanel(states) {
+function retryPanel(states, processingFailure) {
   const stalled = states.filter(value => value.status.kind === "stalled");
   if (!stalled.length) return "";
-  return `<div class="workflow-card stalled retry-box"><h3>Перезапустить обработку путешествия</h3><p>Остановлена обработка ${stalled.length} ${stalled.length === 1 ? "главы" : "глав"}. Команда запустит их все сразу.</p><button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p><div id="retry-result" class="service-state" hidden></div></div>`;
+  const failure = processingFailure ? `<div class="service-state error"><strong>Причина остановки</strong><p>${escapeHtml(processingFailure.message)}</p><p class="last-change">Ошибка зафиксирована: ${dateTime(processingFailure.failed_at)}</p></div>` : "";
+  return `<div class="workflow-card stalled retry-box"><h3>Перезапустить обработку путешествия</h3>${failure}<p>Остановлена обработка ${stalled.length} ${stalled.length === 1 ? "главы" : "глав"}. Команда запустит их все сразу.</p><button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p><div id="retry-result" class="service-state" hidden></div></div>`;
 }
 function renderChapter(value) {
   const state = value.status;
@@ -75,7 +76,7 @@ async function refresh() {
   refreshing = true; refreshButton.disabled = true; live.classList.remove("error"); live.textContent = "Проверяем изменения…";
   try {
     if (!trip) { title.textContent = "Не указан идентификатор путешествия"; summary.textContent = "Откройте страницу статуса из авторской мастерской."; return; }
-    const [tripData, registry] = await Promise.all([get(`data/${trip}/trip.json`), get("data/trips.json")]);
+    const [tripData, registry, processing] = await Promise.all([get(`data/${trip}/trip.json`), get("data/trips.json"), get(`data/${trip}/processing-status.json`)]);
     if (!tripData) { title.textContent = "Заявка принята"; summary.textContent = "Черновик ещё не появился. Обычно это занимает несколько минут."; overall.innerHTML = `<div class="waiting-block"><span class="spinner"></span><div><h2>Создаём путешествие</h2><p>Страница обновляется автоматически. Пока ничего нажимать не нужно.</p></div></div>`; root.innerHTML = ""; return; }
     const registryTrip = registry?.trips?.find(item => item.id === trip);
     const published = registryTrip?.status === "completed" && tripData.editorial_status === "published";
@@ -87,17 +88,20 @@ async function refresh() {
       return { chapter, status: chapterStatus({ photos, analysis, ai, author, storyboard, approval }) };
     }));
     const attempt = processingAttempt();
-    if (attempt) {
+    const failureIsCurrent = processing?.status === "failed" && (!attempt || Date.parse(processing.failed_at) >= Date.parse(attempt.started_at));
+    if (attempt && failureIsCurrent) localStorage.removeItem(PROCESSING_KEY);
+    if (attempt && !failureIsCurrent) {
       const startedAt = Date.parse(attempt.started_at);
       const hasNewResult = states.some(value => Date.parse(value.status.lastActivity || 0) > startedAt);
       if (hasNewResult) localStorage.removeItem(PROCESSING_KEY);
       else states = states.map(value => value.status.kind === "stalled" ? { ...value, status: { ...value.status, kind: "working", action: null, label: "Обработка выполняется", instruction: "Анализируем фотографии и готовим редакторский отбор. Обычно это занимает несколько минут." } } : value);
     }
     renderOverall(states, published);
-    root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${retryPanel(states)}${states.map(renderChapter).join("")}`;
+    root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${retryPanel(states, failureIsCurrent ? processing : null)}${states.map(renderChapter).join("")}`;
     document.querySelectorAll("[data-retry-processing]").forEach(button => { button.onclick = retryProcessing; });
     const stalled = states.filter(value => value.status.kind === "stalled"), actions = states.filter(value => value.status.kind === "action"), working = states.filter(value => value.status.kind === "working");
     if (published) summary.textContent = "Готово — путешествие опубликовано.";
+    else if (failureIsCurrent) summary.textContent = `Обработка остановилась: ${processing.message}`;
     else if (stalled.length) summary.textContent = `Обработка остановилась в ${stalled.length} ${stalled.length === 1 ? "главе" : "главах"}. Ниже указано, как запустить её снова.`;
     else if (actions.length) summary.textContent = `Сейчас нужен ваш шаг: ${actions[0].status.instruction}`;
     else if (working.length) summary.textContent = "Обработка идёт автоматически. Страницу можно закрыть и вернуться позже.";

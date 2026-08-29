@@ -73,13 +73,14 @@ jobs:
             trip=$(node -p 'JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)).trip.id')
             node -e 'const r=JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)); for(const c of r.chapters) console.log(c.id)' > /tmp/chapters.txt
           fi
+          printf '%s' "$trip" > /tmp/processing-trip-id
           while read -r chapter; do
             echo "Analyzing $trip / $chapter"
             TRIP="$trip" CHAPTER="$chapter" node analyze-photos-only-v3.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-series-v2.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-review-v2.mjs
             TRIP="$trip" CHAPTER="$chapter" node validate-editorial-chapter.mjs
-          done < /tmp/chapters.txt
+          done < /tmp/chapters.txt 2>&1 | tee /tmp/processing.log
       - name: Commit generated drafts
         if: github.event_name == 'repository_dispatch' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         shell: bash
@@ -87,7 +88,12 @@ jobs:
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
+          if [[ -f /tmp/processing-trip-id ]]; then
+            trip=$(cat /tmp/processing-trip-id)
+            rm -f "data/$trip/processing-status.json"
+          fi
           git add data/trips.json data/*/trip.json data/*/*-photos.json data/*/*-analysis.json data/*/*-ai-review.json trips/*/index.html trips/*/chapters/*.html
+          if [[ -n "${trip:-}" ]]; then git add -A -- "data/$trip/processing-status.json"; fi
           if git diff --cached --quiet; then
             echo "No generated changes"
             exit 0
@@ -98,3 +104,39 @@ jobs:
           git push origin "HEAD:$branch"
       - name: Test
         run: npm test
+      - name: Publish processing failure
+        if: failure() && github.event_name == 'repository_dispatch'
+        shell: bash
+        env:
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          test -f /tmp/processing-trip-id || exit 0
+          trip=$(cat /tmp/processing-trip-id)
+          log=$(cat /tmp/processing.log 2>/dev/null || true)
+          code="processing_failed"
+          message="Автоматическая обработка завершилась ошибкой. Повторите запуск или обратитесь к администратору."
+          if grep -Eq 'credit_balance_exhausted|insufficient_quota|no credits remaining' <<< "$log"; then
+            code="openai_insufficient_quota"
+            message="Закончился баланс OpenAI API. Пополните баланс или замените API-ключ, затем повторите запуск."
+          elif grep -Eq '429|rate.?limit' <<< "$log"; then
+            code="openai_rate_limit"
+            message="OpenAI API временно ограничил число запросов. Подождите несколько минут и повторите запуск."
+          elif grep -Eq '401|invalid.*api.*key' <<< "$log"; then
+            code="openai_authentication_failed"
+            message="OpenAI API отклонил ключ доступа. Проверьте секрет OPENAI_API_KEY и повторите запуск."
+          fi
+          mkdir -p "data/$trip"
+          TRIP="$trip" CODE="$code" MESSAGE="$message" node - <<'NODE'
+          const fs = require("fs");
+          const value = { schema_version: 1, trip: process.env.TRIP, status: "failed", code: process.env.CODE, message: process.env.MESSAGE, failed_at: new Date().toISOString(), run_url: process.env.RUN_URL };
+          fs.writeFileSync(`data/${process.env.TRIP}/processing-status.json`, `${JSON.stringify(value, null, 2)}\n`);
+          NODE
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add "data/$trip/processing-status.json"
+          git commit -m "Record processing failure for $trip"
+          git stash push --include-untracked -m processing-failure-leftovers || true
+          branch="${GITHUB_REF_NAME}"
+          git pull --rebase origin "$branch"
+          git push origin "HEAD:$branch"

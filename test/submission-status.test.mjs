@@ -39,5 +39,7 @@ test("submission page offers one trip-wide retry with a local result", () => {
   const script = fs.readFileSync(new URL("../submission.js", import.meta.url), "utf8");
   assert.match(script, /Перезапустить обработку путешествия/);
   assert.match(script, /id="retry-result"/);
+  assert.match(script, /Причина остановки/);
+  assert.match(script, /processing-status\.json/);
   assert.doesNotMatch(script, /if \(value\.status\.action === "restart"\)/);
 });
