@@ -118,7 +118,10 @@ jobs:
           log=$(cat /tmp/processing.log 2>/dev/null || true)
           code="processing_failed"
           message="Автоматическая обработка завершилась ошибкой. Повторите запуск или обратитесь к администратору."
-          if grep -Eq 'credit_balance_exhausted|insufficient_quota|no credits remaining' <<< "$log"; then
+          if grep -Eq "output_config\.format\.schema|invalid.*schema|schema.*not supported" <<< "$log"; then
+            code="ai_schema_incompatible"
+            message="Провайдер ИИ отклонил формат ответа. Требуется обновление обработчика, повторный запуск не поможет."
+          elif grep -Eq 'credit_balance_exhausted|insufficient_quota|no credits remaining' <<< "$log"; then
             code="openai_insufficient_quota"
             message="Закончился баланс OpenAI API. Пополните баланс или замените API-ключ, затем повторите запуск."
           elif grep -Eqi 'anthropic.*(credit|billing)|credit balance is too low' <<< "$log"; then
