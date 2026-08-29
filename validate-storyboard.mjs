@@ -27,10 +27,6 @@ function normalizeText(value) {
     .trim();
 }
 
-function sceneText(scene) {
-  return normalizeText([scene.place, scene.title, scene.text, scene.editorial_note].filter(Boolean).join(" "));
-}
-
 function routePlaces(authorNotes, chapterContext) {
   const order = authorNotes?.actual_route_order || [];
   if (Array.isArray(order) && order.length) return order.map(String);
@@ -43,13 +39,15 @@ function routePlaces(authorNotes, chapterContext) {
     .filter(Boolean);
 }
 
-function detectPlaceIndex(scene, places) {
-  const text = sceneText(scene);
+// Geography must never be inferred from a caption, title, editorial note, filename,
+// public ID or photo order. Route validation may use only an explicit scene.place.
+function detectExplicitPlaceIndex(scene, places) {
+  const explicitPlace = normalizeText(scene?.place);
+  if (!explicitPlace) return -1;
   for (let i = 0; i < places.length; i += 1) {
-    const place = normalizeText(places[i]);
-    if (!place) continue;
-    const tokens = place.split(" ").filter(token => token.length > 3);
-    if (text.includes(place) || tokens.some(token => text.includes(token))) return i;
+    const routePlace = normalizeText(places[i]);
+    if (!routePlace) continue;
+    if (explicitPlace === routePlace || explicitPlace.includes(routePlace) || routePlace.includes(explicitPlace)) return i;
   }
   return -1;
 }
@@ -104,13 +102,13 @@ const places = routePlaces(authorNotes, chapterContext);
 if (places.length) {
   let lastPlaceIndex = -1;
   for (const scene of scenes) {
-    const placeIndex = detectPlaceIndex(scene, places);
+    const placeIndex = detectExplicitPlaceIndex(scene, places);
     if (placeIndex < 0) {
-      warnings.push(`Scene has unclear route place: ${scene.id || scene.title || "untitled"}`);
+      warnings.push(`Scene has no confirmed route place: ${scene.id || scene.title || "untitled"}`);
       continue;
     }
     if (placeIndex < lastPlaceIndex) {
-      errors.push(`Route order is broken at scene: ${scene.id || scene.title}. Detected ${places[placeIndex]} after ${places[lastPlaceIndex]}.`);
+      errors.push(`Route order is broken at scene: ${scene.id || scene.title}. Explicit place ${places[placeIndex]} appears after ${places[lastPlaceIndex]}.`);
     }
     lastPlaceIndex = Math.max(lastPlaceIndex, placeIndex);
   }
