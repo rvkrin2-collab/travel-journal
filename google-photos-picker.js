@@ -37,9 +37,7 @@ export class GooglePhotosPicker {
       }
       if (accessToken) this.authorizedThisSession = true;
       globalThis.sessionStorage?.removeItem(TOKEN_KEY);
-    } catch {
-      // Continue with in-memory OAuth when sessionStorage is blocked or corrupt.
-    }
+    } catch {}
     return "";
   }
 
@@ -47,15 +45,14 @@ export class GooglePhotosPicker {
     const expiresIn = Math.max(0, Number(response.expires_in) || 3600);
     this.accessToken = { access_token: response.access_token, expires_at: Date.now() + expiresIn * 1000, scope: response.scope || this.config.google_photos_scope };
     this.authorizedThisSession = true;
-    try { globalThis.sessionStorage?.setItem(TOKEN_KEY, JSON.stringify(this.accessToken)); }
-    catch { /* The in-memory token still avoids repeated prompts in this page. */ }
+    try { globalThis.sessionStorage?.setItem(TOKEN_KEY, JSON.stringify(this.accessToken)); } catch {}
     return this.accessToken.access_token;
   }
 
   token(force = false) {
     if (force) {
       this.accessToken = null;
-      try { globalThis.sessionStorage?.removeItem(TOKEN_KEY); } catch { /* Continue with a fresh in-memory request. */ }
+      try { globalThis.sessionStorage?.removeItem(TOKEN_KEY); } catch {}
     }
     const cached = this.cachedToken();
     if (cached) return Promise.resolve(cached);
@@ -86,11 +83,7 @@ export class GooglePhotosPicker {
 
   async submit(request) {
     const token = await this.token();
-    const response = await fetch(`${this.config.upload_api_url}/submit`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify(request)
-    });
+    const response = await fetch(`${this.config.upload_api_url}/submit`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
     const fallback = response.clone();
     const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
     if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
@@ -108,35 +101,18 @@ export class GooglePhotosPicker {
     return value.token;
   }
 
-  async approvePhotos(review) {
-    const response = await fetch(`${this.config.upload_api_url}/approve-photos`, {
-      method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(review)
-    });
+  async editorialPost(path, body, label) {
+    const response = await fetch(`${this.config.upload_api_url}${path}`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `Утверждение фотографий: HTTP ${response.status}`);
+    if (!response.ok) throw new Error(result.error || `${label}: HTTP ${response.status}`);
     return result;
   }
 
-  async approvePreview(approval) {
-    const response = await fetch(`${this.config.upload_api_url}/approve-preview`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(approval) });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `Утверждение preview: HTTP ${response.status}`);
-    return result;
-  }
-
-  async publishTrip(request) {
-    const response = await fetch(`${this.config.upload_api_url}/publish`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `Публикация: HTTP ${response.status}`);
-    return result;
-  }
-
-  async retryProcessing(trip) {
-    const response = await fetch(`${this.config.upload_api_url}/retry-processing`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify({ trip }) });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || `Повторный запуск: HTTP ${response.status}`);
-    return result;
-  }
+  approvePhotos(review) { return this.editorialPost("/approve-photos", review, "Утверждение фотографий"); }
+  approvePreview(approval) { return this.editorialPost("/approve-preview", approval, "Утверждение preview"); }
+  submitPreviewFeedback(feedback) { return this.editorialPost("/preview-feedback", feedback, "Отправка замечания"); }
+  publishTrip(request) { return this.editorialPost("/publish", request, "Публикация"); }
+  retryProcessing(trip) { return this.editorialPost("/retry-processing", { trip }, "Повторный запуск"); }
 
   async pick({ tripId, chapterId, onProgress }) {
     const token = await this.token();
