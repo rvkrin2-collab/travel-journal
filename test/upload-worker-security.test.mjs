@@ -102,6 +102,19 @@ test("author workshop submission dispatches the editorial workflow", async () =>
   assert.ok(body.author_session);
 });
 
+test("stalled processing can be retried without uploading photos again", async () => {
+  let dispatch;
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url).startsWith("https://oauth2.googleapis.com/")) return Response.json({ aud: "client-id", email: "author@example.com", email_verified: "true", scope });
+    if (String(url).includes("api.github.com/repos/owner/repo/dispatches")) { dispatch = JSON.parse(options.body); return new Response(null, { status: 204 }); }
+    throw new Error(`unexpected URL: ${url}`);
+  };
+  const response = await worker.fetch(new Request("https://upload.example.test/retry-processing", { method: "POST", headers: { Origin: "https://owntravel.ru", Authorization: "Bearer test-token", "Content-Type": "application/json" }, body: JSON.stringify({ trip: "sample-trip" }) }), { GOOGLE_CLIENT_ID: "client-id", ALLOWED_GOOGLE_EMAILS: "author@example.com", ALLOWED_ORIGIN: "https://owntravel.ru", GITHUB_DISPATCH_TOKEN: "secret", GITHUB_REPOSITORY: "owner/repo" });
+  assert.equal(response.status, 202);
+  assert.equal(dispatch.event_type, "trip_processing_retry");
+  assert.deepEqual(dispatch.client_payload, { artifact: { trip: "sample-trip" } });
+});
+
 test("approved photo selection dispatches storyboard automation", async () => {
   let dispatch;
   globalThis.fetch = async (url, options = {}) => {

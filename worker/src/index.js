@@ -167,6 +167,17 @@ async function submitTrip(request, env, cors) {
   return json({ accepted: true, trip, author_session: await createAuthorSession(identity.email, env), author_session_expires_in: AUTHOR_SESSION_SECONDS, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
 }
 
+async function retryProcessing(request, env, cors) {
+  await authorize(request, env);
+  if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
+  const input = await request.json();
+  const trip = safeSegment(input.trip, "");
+  if (!trip || trip !== input.trip) return json({ error: "Invalid trip" }, 400, cors);
+  const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "travel-journal-uploader", "X-GitHub-Api-Version": "2022-11-28" }, body: JSON.stringify({ event_type: "trip_processing_retry", client_payload: { artifact: { trip } } }) });
+  if (!response.ok) return json({ error: "Editorial automation did not accept the retry" }, 502, cors);
+  return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}` }, 202, cors);
+}
+
 async function dispatchEditorial(request, env, cors, eventType) {
   await authorizeAuthorSession(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
@@ -207,6 +218,7 @@ export default {
       if (request.method === "POST" && url.pathname === "/upload") return await upload(request, env, cors);
       if (request.method === "POST" && url.pathname === "/import") return await importGooglePhoto(request, env, cors);
       if (request.method === "POST" && url.pathname === "/submit") return await submitTrip(request, env, cors);
+      if (request.method === "POST" && url.pathname === "/retry-processing") return await retryProcessing(request, env, cors);
       if (request.method === "POST" && url.pathname === "/approve-photos") return await dispatchEditorial(request, env, cors, "photo_selection_approved");
       if (request.method === "POST" && url.pathname === "/approve-preview") return await dispatchEditorial(request, env, cors, "preview_approved");
       if (request.method === "POST" && url.pathname === "/publish") return await dispatchEditorial(request, env, cors, "publish_requested");

@@ -127,6 +127,14 @@ export class GooglePhotosPicker {
     return result;
   }
 
+  async retryProcessing(trip) {
+    const token = await this.token();
+    const response = await fetch(`${this.config.upload_api_url}/retry-processing`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ trip }) });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || `Повторный запуск: HTTP ${response.status}`);
+    return result;
+  }
+
   async pick({ tripId, chapterId, onProgress }) {
     const token = await this.token();
     const session = await googleRequest(`${API}/sessions`, token, { method: "POST", body: "{}" });

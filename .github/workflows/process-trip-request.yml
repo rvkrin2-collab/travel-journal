@@ -2,7 +2,7 @@ name: Process trip requests
 
 on:
   repository_dispatch:
-    types: [author_trip_submitted]
+    types: [author_trip_submitted, trip_processing_retry]
   push:
     paths:
       - "requests/*.json"
@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 20
       - name: Receive request from author workshop
-        if: github.event_name == 'repository_dispatch'
+        if: github.event_name == 'repository_dispatch' && github.event.action == 'author_trip_submitted'
         env:
           REQUEST_JSON: ${{ toJSON(github.event.client_payload.request) }}
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Validate requests
         shell: bash
         env:
-          REQUESTS_DIR: ${{ github.event_name == 'repository_dispatch' && '/tmp/travel-journal-requests' || 'requests' }}
+          REQUESTS_DIR: ${{ github.event_name == 'repository_dispatch' && github.event.action == 'author_trip_submitted' && '/tmp/travel-journal-requests' || 'requests' }}
         run: |
           set -euo pipefail
           shopt -s nullglob
@@ -51,6 +51,7 @@ jobs:
             done
           fi
       - name: Create missing trip drafts
+        if: github.event_name != 'repository_dispatch' || github.event.action == 'author_trip_submitted'
         run: node process-trip-requests.mjs
         env:
           REQUESTS_DIR: ${{ github.event_name == 'repository_dispatch' && '/tmp/travel-journal-requests' || 'requests' }}
@@ -59,17 +60,26 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           REQUEST_FILE: /tmp/travel-journal-requests/submission.json
+          RETRY_TRIP: ${{ github.event.client_payload.artifact.trip }}
         shell: bash
         run: |
           set -euo pipefail
-          trip=$(node -p 'JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)).trip.id')
-          node -e 'const r=JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)); for(const c of r.chapters) console.log(c.id)' | while read -r chapter; do
+          if [[ "${{ github.event.action }}" == "trip_processing_retry" ]]; then
+            trip="$RETRY_TRIP"
+            chapter_source="data/$trip/trip.json"
+            test -f "$chapter_source" || { echo "Unknown trip: $trip"; exit 1; }
+            node -e 'const r=JSON.parse(require("fs").readFileSync(process.argv[1])); const v=r.views.find(v=>["chapters","days"].includes(v.id)); for(const c of v?.items||[]) console.log(c.id)' "$chapter_source" > /tmp/chapters.txt
+          else
+            trip=$(node -p 'JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)).trip.id')
+            node -e 'const r=JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)); for(const c of r.chapters) console.log(c.id)' > /tmp/chapters.txt
+          fi
+          while read -r chapter; do
             echo "Analyzing $trip / $chapter"
             TRIP="$trip" CHAPTER="$chapter" node analyze-photos-only-v3.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-series-v2.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-review-v2.mjs
             TRIP="$trip" CHAPTER="$chapter" node validate-editorial-chapter.mjs
-          done
+          done < /tmp/chapters.txt
       - name: Test
         run: npm test
       - name: Commit generated drafts

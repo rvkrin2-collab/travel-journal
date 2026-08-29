@@ -31,7 +31,7 @@ function actionFor(value) {
   const chapter = value.chapter;
   if (value.status.action === "editor") return `<a class="primary status-link" href="editor.html?trip=${trip}&chapter=${chapter.id}">Выбрать и утвердить фотографии</a>`;
   if (value.status.action === "preview") return `<a class="primary status-link" href="preview.html?trip=${trip}&chapter=${chapter.id}">Проверить и утвердить preview</a>`;
-  if (value.status.action === "restart") return `<a class="primary status-link restart" href="author.html">Открыть авторскую мастерскую</a><p class="restart-note">Откройте сохранённый черновик и снова нажмите «Отправить и запустить обработку».</p>`;
+  if (value.status.action === "restart") return `<button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p>`;
   return "";
 }
 function renderChapter(value) {
@@ -64,6 +64,7 @@ async function refresh() {
     }));
     renderOverall(states, published);
     root.innerHTML = `<div class="section-heading"><div><span class="status-kicker">По главам</span><h2>Что происходит сейчас</h2></div></div>${states.map(renderChapter).join("")}`;
+    document.querySelectorAll("[data-retry-processing]").forEach(button => { button.onclick = retryProcessing; });
     const stalled = states.filter(value => value.status.kind === "stalled"), actions = states.filter(value => value.status.kind === "action"), working = states.filter(value => value.status.kind === "working");
     if (published) summary.textContent = "Готово — путешествие опубликовано.";
     else if (stalled.length) summary.textContent = `Обработка остановилась в ${stalled.length} ${stalled.length === 1 ? "главе" : "главах"}. Ниже указано, как запустить её снова.`;
@@ -79,6 +80,22 @@ async function publishTrip() {
   const result = document.querySelector("#publish-result"); result.hidden = false;
   if (!document.querySelector("#publish-confirm").checked) { result.textContent = "Сначала подтвердите, что проверили все главы."; return; }
   try { if (!photoPicker) throw new Error("Сеанс публикации ещё загружается"); result.textContent = "Отправляем прямую команду публикации…"; await photoPicker.publishTrip({ schema_version: 1, trip, status: "publish_requested", cover_chapter: document.querySelector("#cover-chapter").value, requested_at: new Date().toISOString() }); result.textContent = "Публикация запущена. Страница обновится автоматически."; setTimeout(refresh, 5000); } catch (error) { result.textContent = `Не удалось опубликовать: ${error.message}`; }
+}
+async function retryProcessing() {
+  const buttons = [...document.querySelectorAll("[data-retry-processing]")];
+  buttons.forEach(button => { button.disabled = true; button.textContent = "Запускаем…"; });
+  try {
+    if (!photoPicker) throw new Error("Подключение Google ещё загружается");
+    await photoPicker.retryProcessing(trip);
+    summary.textContent = "Повторная обработка запущена. Первые результаты обычно появляются в течение нескольких минут.";
+    live.textContent = "Команда принята. Проверяем появление результатов каждые 15 секунд.";
+    document.querySelectorAll(".workflow-card.stalled").forEach(card => { card.classList.remove("stalled"); card.classList.add("working"); card.querySelector(".state-badge").textContent = "Запускается"; card.querySelector("h3").textContent = "Обработка запускается"; });
+    secondsToRefresh = 5;
+  } catch (error) {
+    live.textContent = `Не удалось запустить: ${error.message}`;
+    live.classList.add("error");
+    buttons.forEach(button => { button.disabled = false; button.textContent = "Повторно запустить обработку"; });
+  }
 }
 refreshButton.onclick = refresh;
 Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=25")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => { const response = await fetch("./config/photo-services.json", { cache: "no-store" }); photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json())); }).catch(() => {});
