@@ -1,7 +1,9 @@
 import fs from "fs/promises";
 import { inventoryItems, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 
-const target = resolveEditorialTarget(); const trip = target.trip; const dayTag = target.chapter;
+const target = resolveEditorialTarget();
+const trip = target.trip;
+const dayTag = target.chapter;
 const storyboardFile = process.env.STORYBOARD_FILE || `data/${trip}/${dayTag}-storyboard.json`;
 const authorNotesFile = process.env.AUTHOR_NOTES_FILE || `data/${trip}/${dayTag}-author-notes.json`;
 const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${dayTag}-context.json`;
@@ -63,27 +65,45 @@ const warnings = [];
 
 const inventoryIds = new Set((photos || []).map(photo => photo.public_id));
 const approvedItems = review?.items || [];
-const approvedStoryIds = new Set(approvedItems.filter(item => item.status === "hero" || item.status === "story").map(item => item.public_id));
+const approvedStoryIds = new Set(
+  approvedItems
+    .filter(item => item.status === "hero" || item.status === "story")
+    .map(item => item.public_id)
+);
+const scenes = Array.isArray(storyboard.scenes) ? storyboard.scenes : [];
 const seen = new Set();
 
-for (const scene of storyboard.scenes || []) {
-  if (!Array.isArray(scene.photos) || !scene.photos.length) errors.push(`Scene has no photos: ${scene.id || scene.title || "untitled"}`);
-  for (const id of scene.photos || []) {
-    if (inventoryIds.size && !inventoryIds.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);
-    if (approvedStoryIds.size && !approvedStoryIds.has(id)) errors.push(`Storyboard contains a photo not approved for story: ${id}`);
-    if (seen.has(id)) errors.push(`Storyboard duplicates public_id: ${id}`);
-    seen.add(id);
+if (approvedStoryIds.size && scenes.length !== approvedStoryIds.size) {
+  errors.push(`Storyboard must have one scene per approved photo: expected ${approvedStoryIds.size}, got ${scenes.length}`);
+}
+
+for (const scene of scenes) {
+  if (!Array.isArray(scene.photos) || scene.photos.length !== 1) {
+    errors.push(`Scene must contain exactly one photo: ${scene.id || scene.title || "untitled"}`);
+    continue;
   }
+
+  if (!String(scene.text || "").trim()) {
+    errors.push(`Scene photo has no individual caption: ${scene.id || scene.title || scene.photos[0]}`);
+  }
+
+  const id = scene.photos[0];
+  if (inventoryIds.size && !inventoryIds.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);
+  if (approvedStoryIds.size && !approvedStoryIds.has(id)) errors.push(`Storyboard contains a photo not approved for story: ${id}`);
+  if (seen.has(id)) errors.push(`Storyboard duplicates public_id: ${id}`);
+  seen.add(id);
 }
 
 if (approvedStoryIds.size) {
-  for (const id of approvedStoryIds) if (!seen.has(id)) errors.push(`Storyboard omitted approved story photo: ${id}`);
+  for (const id of approvedStoryIds) {
+    if (!seen.has(id)) errors.push(`Storyboard omitted approved story photo: ${id}`);
+  }
 }
 
 const places = routePlaces(authorNotes, chapterContext);
 if (places.length) {
   let lastPlaceIndex = -1;
-  for (const scene of storyboard.scenes || []) {
+  for (const scene of scenes) {
     const placeIndex = detectPlaceIndex(scene, places);
     if (placeIndex < 0) {
       warnings.push(`Scene has unclear route place: ${scene.id || scene.title || "untitled"}`);
@@ -101,4 +121,4 @@ if (errors.length) {
   console.error(errors.map(item => `ERROR: ${item}`).join("\n"));
   process.exit(1);
 }
-console.log(`Storyboard validation passed for ${trip} ${dayTag}`);
+console.log(`Storyboard validation passed for ${trip} ${dayTag}: ${scenes.length} photos, ${scenes.length} individual captions`);
