@@ -17,6 +17,7 @@ function safeEditorialNote(status) {
 function sanitizeObservationLabel(value) {
   let text = String(value || "").trim();
   const replacements = [
+    [/ярко-голубой панцирный морской член/giu, "ярко-голубое морское членистоногое"],
     [/панцирный морской член/giu, "морское членистоногое"],
     [/люминесцирующ\p{L}*/giu, "ярко выделяющееся"],
     [/кладбище заброшенных лодок и хозяйственных построек/giu, "старые лодки и хозяйственные постройки"],
@@ -27,10 +28,12 @@ function sanitizeObservationLabel(value) {
     [/тундровой растительностью/giu, "низкорослой растительностью"],
     [/тундровый ландшафт/giu, "ландшафт с низкорослой растительностью"],
     [/тундровый пейзаж/giu, "пейзаж с низкорослой растительностью"],
-    [/с озёрами,/giu, "с небольшими водоёмами,"]
+    [/с озёрами,/giu, "с небольшими водоёмами,"],
+    [/пейзаж с низкорослой растительностью с небольшими водоёмами/giu, "пейзаж с низкорослой растительностью и небольшими водоёмами"]
   ];
   for (const [pattern, replacement] of replacements) text = text.replace(pattern, replacement);
-  return text.replace(/\s{2,}/g, " ").trim();
+  text = text.replace(/\s{2,}/g, " ").trim();
+  return text ? `${text[0].toUpperCase()}${text.slice(1)}` : text;
 }
 
 const inventory = await read(photosFile);
