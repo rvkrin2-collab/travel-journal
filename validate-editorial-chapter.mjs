@@ -22,10 +22,12 @@ if (aiReview) {
   if (statuses.filter(status => status === "hero").length !== 1) throw new Error("ai-review must contain exactly one hero");
   if (Number(aiReview.schema_version || 0) >= 3) {
     const speculation = /\b(скорее всего|предположительно|вероятно|возможно|по[- ]видимому|может быть|напомина\w*|похож\w*)\b/iu;
+    const interpretation = /(люминесцен|биолюмин|флуоресцен|гранит|ресторан|кладбищ|рыболовн|тундр)/iu;
     for (const item of aiReview.items) {
       const label = String(item.label || "").trim();
       if (!label) throw new Error(`ai-review observation label is empty: ${item.public_id || item.photo_id}`);
-      if (speculation.test(label) || /[()]/u.test(label) || /\sили\s/iu.test(label)) throw new Error(`ai-review observation label contains unsupported interpretation: ${item.public_id || item.photo_id}`);
+      if (item.observation_only !== true) throw new Error(`ai-review item is not marked observation-only: ${item.public_id || item.photo_id}`);
+      if (speculation.test(label) || interpretation.test(label) || /[()]/u.test(label) || /\sили\s/iu.test(label)) throw new Error(`ai-review observation label contains unsupported interpretation: ${item.public_id || item.photo_id}`);
     }
   }
 }
