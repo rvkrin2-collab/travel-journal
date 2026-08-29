@@ -2,8 +2,8 @@
   "schema_version": 1,
   "trip": "kolskiy-u-vody-i-pod-vodoy",
   "status": "failed",
-  "code": "openai_insufficient_quota",
-  "message": "Закончился баланс OpenAI API. Пополните баланс или замените API-ключ, затем повторите запуск.",
-  "failed_at": "2026-08-29T16:10:42.945Z",
-  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33262227314"
+  "code": "processing_failed",
+  "message": "Автоматическая обработка завершилась ошибкой. Повторите запуск или обратитесь к администратору.",
+  "failed_at": "2026-08-29T16:43:58.659Z",
+  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33263617168"
 }
