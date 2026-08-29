@@ -4,6 +4,6 @@
   "status": "failed",
   "code": "ai_schema_incompatible",
   "message": "Провайдер ИИ отклонил формат ответа. Требуется обновление обработчика, повторный запуск не поможет.",
-  "failed_at": "2026-08-29T17:53:02.723Z",
-  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33266600305"
+  "failed_at": "2026-08-29T17:57:35.238Z",
+  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33266603652"
 }
