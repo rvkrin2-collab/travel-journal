@@ -150,9 +150,13 @@ function placeIsGrounded(place, source) {
   return normalizeText(source).includes(normalizedPlace);
 }
 
-function safeCaptionFallback(label) {
-  const text = String(label || "").trim().replace(/[.!?]+$/g, "");
+function finishSentence(value) {
+  const text = String(value || "").trim().replace(/[.!?]+$/g, "");
   return text ? `${text}.` : "";
+}
+
+function safeCaptionFallback(label) {
+  return finishSentence(label);
 }
 
 function enforcePhotoGrounding(storyboard, records, feedback) {
@@ -174,7 +178,7 @@ function enforcePhotoGrounding(storyboard, records, feedback) {
       scene.text = safeCaptionFallback(record.label);
       captionFallbacks += 1;
     } else {
-      scene.text = String(scene.text || "").trim().replace(/[.!?]*$/g, ".");
+      scene.text = finishSentence(scene.text);
     }
     if (!placeIsGrounded(scene.place, source)) {
       scene.place = "";
