@@ -10,7 +10,7 @@ const overall = document.querySelector("#overall-status");
 const live = document.querySelector("#live-status");
 const refreshButton = document.querySelector("#refresh");
 const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
-let photoPicker, photoPickerPromise, refreshing = false, secondsToRefresh = 15;
+let photoPicker, photoPickerPromise, refreshing = false, retrying = false, secondsToRefresh = 15;
 const PROCESSING_KEY = `travel-journal-processing-${trip}`;
 const PROCESSING_WINDOW_MS = 20 * 60 * 1000;
 
@@ -57,7 +57,7 @@ function retryPanel(states, processingFailure) {
   const stalled = states.filter(value => value.status.kind === "stalled");
   if (!stalled.length) return "";
   const failure = processingFailure ? `<div class="service-state error"><strong>Причина остановки</strong><p>${escapeHtml(processingFailure.message)}</p><p class="last-change">Ошибка зафиксирована: ${dateTime(processingFailure.failed_at)}</p></div>` : "";
-  return `<div class="workflow-card stalled retry-box"><h3>Перезапустить обработку путешествия</h3>${failure}<p>Остановлена обработка ${stalled.length} ${stalled.length === 1 ? "главы" : "глав"}. Команда запустит их все сразу.</p><button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p><div id="retry-result" class="service-state" hidden></div></div>`;
+  return `<div class="workflow-card stalled retry-box"><h3>Перезапустить обработку путешествия</h3>${failure}<p>Остановлена обработка ${stalled.length} ${stalled.length === 1 ? "главы" : "глав"}. Команда запустит их все сразу.</p><div id="retry-result" class="service-state" role="status" aria-live="polite" hidden></div><button class="primary status-link restart" type="button" data-retry-processing>Повторно запустить обработку</button><p class="restart-note">Фотографии уже загружены — выбирать их заново не потребуется.</p></div>`;
 }
 function renderChapter(value) {
   const state = value.status;
@@ -72,7 +72,7 @@ function renderPublish(states, published) {
   } else panel.hidden = true;
 }
 async function refresh() {
-  if (refreshing) return;
+  if (refreshing || retrying) return;
   refreshing = true; refreshButton.disabled = true; live.classList.remove("error"); live.textContent = "Проверяем изменения…";
   try {
     if (!trip) { title.textContent = "Не указан идентификатор путешествия"; summary.textContent = "Откройте страницу статуса из авторской мастерской."; return; }
@@ -122,10 +122,12 @@ function retryProcessingError(error) {
   return message;
 }
 async function retryProcessing() {
+  if (retrying) return;
+  retrying = true;
   const buttons = [...document.querySelectorAll("[data-retry-processing]")];
   const result = document.querySelector("#retry-result");
   buttons.forEach(button => { button.disabled = true; button.textContent = "Запускаем…"; });
-  if (result) { result.hidden = false; result.textContent = "Подключаем Google и отправляем команду…"; }
+  if (result) { result.hidden = false; result.classList.remove("error"); result.textContent = "Подтвердите Google-аккаунт в открывшемся окне. После подтверждения команда будет отправлена автоматически."; }
   try {
     if (!photoPicker) await loadPhotoPicker();
     if (typeof photoPicker.retryProcessing !== "function") {
@@ -136,6 +138,7 @@ async function retryProcessing() {
     if (typeof photoPicker.retryProcessing !== "function") throw new Error("Модуль запуска устарел. Обновите страницу и повторите попытку.");
     await photoPicker.retryProcessing(trip);
     rememberProcessing();
+    document.querySelectorAll(".retry-box .service-state.error").forEach(node => { if (node !== result) node.remove(); });
     summary.textContent = "Повторная обработка запущена. Первые результаты обычно появляются в течение нескольких минут.";
     live.textContent = "Команда принята. Проверяем появление результатов каждые 15 секунд.";
     if (result) result.textContent = "Команда принята. Можно закрыть страницу — обработка продолжится.";
@@ -147,6 +150,8 @@ async function retryProcessing() {
     live.classList.add("error");
     if (result) result.textContent = `Не удалось запустить: ${message}`;
     buttons.forEach(button => { button.disabled = false; button.textContent = "Повторно запустить обработку"; });
+  } finally {
+    retrying = false;
   }
 }
 
@@ -165,4 +170,4 @@ async function loadPhotoPicker() {
 refreshButton.onclick = refresh;
 loadPhotoPicker().catch(() => {});
 refresh();
-setInterval(() => { if (document.hidden || refreshing) return; secondsToRefresh--; if (secondsToRefresh <= 0) refresh(); else if (!live.classList.contains("error")) live.textContent = live.textContent.replace(/Следующая проверка через \d+ секунд\./, `Следующая проверка через ${secondsToRefresh} секунд.`); }, 1000);
+setInterval(() => { if (document.hidden || refreshing || retrying) return; secondsToRefresh--; if (secondsToRefresh <= 0) refresh(); else if (!live.classList.contains("error")) live.textContent = live.textContent.replace(/Следующая проверка через \d+ секунд\./, `Следующая проверка через ${secondsToRefresh} секунд.`); }, 1000);
