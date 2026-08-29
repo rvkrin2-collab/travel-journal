@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "notes": [
+    {
+      "type": "general",
+      "photo": "",
+      "text": "Переписать тексты как журнальную историю, а не технические подписи к фотографиям. Не пересказывать очевидное в кадре; если текст ничего не добавляет, убрать его.",
+      "photos_fingerprint": "a1ccd40992eb54b178ebaca119f674041e83a369e9291da8945003330fe19882",
+      "author_review_updated_at": "2026-08-29T20:46:18.164Z",
+      "storyboard_updated_at": "2026-08-29T20:48:20.000Z",
+      "submitted_at": "2026-08-29T21:22:03Z"
+    }
+  ],
+  "updated_at": "2026-08-29T21:22:03Z"
+}
