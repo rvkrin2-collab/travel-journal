@@ -14,6 +14,25 @@ function safeEditorialNote(status) {
   return "Кадр предлагается не использовать в основной публикации.";
 }
 
+function sanitizeObservationLabel(value) {
+  let text = String(value || "").trim();
+  const replacements = [
+    [/панцирный морской член/giu, "морское членистоногое"],
+    [/люминесцирующ\p{L}*/giu, "ярко выделяющееся"],
+    [/кладбище заброшенных лодок и хозяйственных построек/giu, "старые лодки и хозяйственные постройки"],
+    [/рыболовное судно/giu, "судно"],
+    [/ресторан/giu, "здание"],
+    [/гранитными глыбами/giu, "каменными глыбами"],
+    [/травянистой тундрой/giu, "низкой травянистой растительностью"],
+    [/тундровой растительностью/giu, "низкорослой растительностью"],
+    [/тундровый ландшафт/giu, "ландшафт с низкорослой растительностью"],
+    [/тундровый пейзаж/giu, "пейзаж с низкорослой растительностью"],
+    [/с озёрами,/giu, "с небольшими водоёмами,"]
+  ];
+  for (const [pattern, replacement] of replacements) text = text.replace(pattern, replacement);
+  return text.replace(/\s{2,}/g, " ").trim();
+}
+
 const inventory = await read(photosFile);
 const photos = inventoryItems(inventory);
 const analysis = await read(analysisFile);
@@ -28,7 +47,7 @@ const items = photos.map((photo, index) => {
   const decision = decisions[id];
   if (!observed) throw new Error(`Missing visual analysis for ${id}`);
   if (!decision || !["hero", "story", "backstage", "skip"].includes(decision.status)) throw new Error(`Missing AI decision for ${id}`);
-  const label = String(observed.observation_label || "").trim();
+  const label = sanitizeObservationLabel(observed.observation_label);
   if (!label) throw new Error(`Missing observation_label for ${id}; rerun visual analysis`);
   return {
     public_id: id,
