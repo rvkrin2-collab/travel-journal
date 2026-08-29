@@ -4,6 +4,6 @@
   "status": "failed",
   "code": "processing_failed",
   "message": "Автоматическая обработка завершилась ошибкой. Повторите запуск или обратитесь к администратору.",
-  "failed_at": "2026-08-29T16:43:58.659Z",
-  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33263617168"
+  "failed_at": "2026-08-29T17:18:16.010Z",
+  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33265248888"
 }
