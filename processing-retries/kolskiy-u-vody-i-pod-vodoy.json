@@ -1,5 +1,5 @@
 {
   "trip": "kolskiy-u-vody-i-pod-vodoy",
-  "requested_at": "2026-08-29T18:44:00Z",
-  "reason": "autonomous retry with deduplication and targeted missing-ranking repair"
+  "requested_at": "2026-08-29T19:40:00Z",
+  "reason": "reanalyze with restored author context and observation-safe editor labels"
 }
