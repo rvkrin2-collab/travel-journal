@@ -94,12 +94,16 @@ export class GooglePhotosPicker {
     const fallback = response.clone();
     const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
     if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
-    if (result.author_session) sessionStorage.setItem(AUTHOR_SESSION_KEY, JSON.stringify({ token: result.author_session, expires_at: Date.now() + Number(result.author_session_expires_in || 0) * 1000 }));
+    if (result.author_session) {
+      const session = JSON.stringify({ token: result.author_session, expires_at: Date.now() + Number(result.author_session_expires_in || 0) * 1000 });
+      sessionStorage.setItem(AUTHOR_SESSION_KEY, session);
+      globalThis.localStorage?.setItem(AUTHOR_SESSION_KEY, session);
+    }
     return result;
   }
 
   authorSession() {
-    const value = JSON.parse(sessionStorage.getItem(AUTHOR_SESSION_KEY) || "null");
+    const value = JSON.parse(sessionStorage.getItem(AUTHOR_SESSION_KEY) || globalThis.localStorage?.getItem(AUTHOR_SESSION_KEY) || "null");
     if (!value?.token || Number(value.expires_at) <= Date.now() + EXPIRY_MARGIN_MS) throw new Error("Сеанс автора закончился. Откройте авторскую мастерскую и отправьте путешествие снова.");
     return value.token;
   }
@@ -128,8 +132,7 @@ export class GooglePhotosPicker {
   }
 
   async retryProcessing(trip) {
-    const token = await this.token();
-    const response = await fetch(`${this.config.upload_api_url}/retry-processing`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ trip }) });
+    const response = await fetch(`${this.config.upload_api_url}/retry-processing`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify({ trip }) });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || `Повторный запуск: HTTP ${response.status}`);
     return result;
