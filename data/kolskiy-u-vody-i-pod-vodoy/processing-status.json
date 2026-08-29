@@ -3,7 +3,7 @@
   "trip": "kolskiy-u-vody-i-pod-vodoy",
   "status": "failed",
   "code": "processing_failed",
-  "message": "Обработчик обновлён после последней ошибки. Повторите запуск.",
-  "failed_at": "2026-08-29T17:57:35.238Z",
-  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33266603652"
+  "message": "Автоматическая обработка завершилась ошибкой. Повторите запуск или обратитесь к администратору.",
+  "failed_at": "2026-08-29T18:01:36.329Z",
+  "run_url": "https://github.com/rvkrin2-collab/travel-journal/actions/runs/33267115688"
 }
