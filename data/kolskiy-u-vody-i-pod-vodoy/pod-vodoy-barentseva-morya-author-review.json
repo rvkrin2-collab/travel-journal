@@ -1,0 +1,110 @@
+{
+  "ai_review_source": "data/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya-ai-review.json",
+  "approval": "photo_selection_approved",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "day": "pod-vodoy-barentseva-morya",
+  "items": [
+    {
+      "label": "Ярко-голубое морское членистоногое с длинными членистыми конечностями на дне среди водорослей и отложений",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 1,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/998b6c63-ed8c-4f58-8395-7743f347b22d.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/998b6c63-ed8c-4f58-8395-7743f347b22d.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Полупрозрачное морское животное среди подводной растительности в мутной воде",
+      "note": "Кадр предлагается не использовать в основной публикации.",
+      "number": 2,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/320be899-52e2-4bd1-8556-42b0854b7ebc.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/320be899-52e2-4bd1-8556-42b0854b7ebc.jpg",
+      "status": "skip"
+    },
+    {
+      "label": "Подводная съёмка с морскими животными и морской растительностью на скалистом дне",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 3,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/0e2f8125-9e4b-42f4-8571-69d96469f426.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/0e2f8125-9e4b-42f4-8571-69d96469f426.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Подводная съёмка скалистого дна с водорослями и морской биотой",
+      "note": "Кадр предлагается не использовать в основной публикации.",
+      "number": 4,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/5cd0f4f7-1544-4cfa-b84a-c822ef4aa1c3.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/5cd0f4f7-1544-4cfa-b84a-c822ef4aa1c3.jpg",
+      "status": "skip"
+    },
+    {
+      "label": "Ярко выделяющееся морское животное с радиальными щупальцами среди скалистых обломков на тёмном дне",
+      "note": "Ключевой визуальный кадр серии.",
+      "number": 5,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/e2f14c91-cfc4-4b33-9a4b-ebdf0fe2767a.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/e2f14c91-cfc4-4b33-9a4b-ebdf0fe2767a.jpg",
+      "status": "hero"
+    },
+    {
+      "label": "Голубой краб на скальном дне среди водорослей",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 6,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/5abb8a2a-afab-4703-9f69-10dc2908833a.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/5abb8a2a-afab-4703-9f69-10dc2908833a.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Подводный вид морского дна с буроватыми водорослями и донными отложениями",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 7,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/b9e23eaa-f2e7-4ba4-8403-023b57433b87.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/b9e23eaa-f2e7-4ba4-8403-023b57433b87.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Медуза",
+      "note": "Дополнительный кадр для блока «За кадром».",
+      "number": 8,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/b4a01315-6c81-4762-801b-c1b87a4b622d.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/b4a01315-6c81-4762-801b-c1b87a4b622d.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Крупное морское членистоногое на морском дне среди водорослей и обросших камней",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 9,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/3ef06f5b-45eb-40ff-9548-f344ff612a17.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/3ef06f5b-45eb-40ff-9548-f344ff612a17.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Подводный скалистый рельеф с морскими беспозвоночными и водорослями",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 10,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/db360802-c2a1-4442-ac1a-98c8c99b0ed0.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/db360802-c2a1-4442-ac1a-98c8c99b0ed0.jpg",
+      "status": "story"
+    },
+    {
+      "label": "Бирюзовое морское животное с щупальцами среди красно-коричневых водорослей на дне",
+      "note": "Кадр для основного визуального рассказа.",
+      "number": 11,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/110e59eb-9980-4fc4-8715-efeb2d740c78.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/110e59eb-9980-4fc4-8715-efeb2d740c78.jpg",
+      "status": "backstage"
+    },
+    {
+      "label": "Подводный ландшафт с бурыми водорослями и мелкой рыбой в голубой воде",
+      "note": "Кадр предлагается не использовать в основной публикации.",
+      "number": 12,
+      "photo_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/4f8aa7dc-74b1-42ca-a47c-78d61fcc729f.jpg",
+      "public_id": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/4f8aa7dc-74b1-42ca-a47c-78d61fcc729f.jpg",
+      "status": "story"
+    }
+  ],
+  "photos_fingerprint": "a1ccd40992eb54b178ebaca119f674041e83a369e9291da8945003330fe19882",
+  "photos_source": "data/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya-photos.json",
+  "schema_version": 2,
+  "status": "author_review",
+  "trip": "kolskiy-u-vody-i-pod-vodoy",
+  "updated_at": "2026-08-29T20:46:18.164Z"
+}
