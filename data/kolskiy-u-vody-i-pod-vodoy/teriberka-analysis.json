@@ -7,11 +7,11 @@
   "photos_source": "data/kolskiy-u-vody-i-pod-vodoy/teriberka-photos.json",
   "photos_fingerprint": "08de778ad4481db604ee3f602bc789495d877bb1192bd497944df61db406d1ef",
   "context_source": null,
-  "generated_at": "2026-08-29T18:31:58.159Z",
+  "generated_at": "2026-08-29T18:35:27.307Z",
   "vision_model": "anthropic:claude-haiku-4-5,openai:gpt-4o",
   "cache": {
-    "reused": 0,
-    "analyzed": 15
+    "reused": 15,
+    "analyzed": 0
   },
   "items": [
     {
