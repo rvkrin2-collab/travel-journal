@@ -64,12 +64,13 @@ test("storyboard preserves supplied author chapter copy instead of inventing a n
   assert.match(builder, /storyboard\.chapter\.one_line = firstSentence/);
 });
 
-test("preview renders every approved photo as its own figure with an individual caption", () => {
+test("preview renders every approved photo as its own figure with an individual heading and caption before the image", () => {
   const app = read("preview-app.js");
   assert.match(app, /scene\.photos\.length !== 1/);
+  assert.match(app, /у фотографии нет индивидуального заголовка/);
   assert.match(app, /у фотографии нет индивидуальной подписи/);
-  assert.match(app, /<figure class="scene-photo">/);
-  assert.match(app, /<figcaption class="scene-caption">/);
+  assert.match(app, /<figure class="scene-photo"><figcaption class="scene-caption">/);
+  assert.match(app, /<\/figcaption><img src=/);
   assert.match(app, /scenes\.length !== approvedStory\.size/);
-  assert.match(app, /Каждая фотография показана отдельно со своей подписью/);
+  assert.match(app, /Одна фотография — один блок, свой заголовок и подпись/);
 });
