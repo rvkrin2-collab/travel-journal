@@ -4,6 +4,24 @@ const EXPIRY_MARGIN_MS = 60 * 1000;
 const AUTHOR_SESSION_KEY = "travel-journal-author-session-v1";
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
+function defaultStatusTarget(label = "") {
+  if (typeof document === "undefined") return null;
+  if (/Публикац/i.test(label)) return document.querySelector("#publish-result") || document.querySelector("#live-status");
+  if (/Повторн/i.test(label)) return document.querySelector("#retry-result") || document.querySelector("#live-status");
+  return document.querySelector("#authorNoteStatus") || document.querySelector("#saveNote") || document.querySelector("#submission-result") || document.querySelector("#photo-service-state") || document.querySelector("#live-status");
+}
+
+function defaultStatusReporter(event) {
+  const target = defaultStatusTarget(event?.label || "");
+  if (!target || !event?.message) return;
+  if ("hidden" in target) target.hidden = false;
+  target.textContent = event.message;
+  target.dataset.commandState = event.state || "working";
+  target.classList?.remove("state-auth", "state-sending", "state-accepted", "state-working", "state-done", "state-error");
+  const cssState = ({ auth_required: "auth", authorizing: "auth", authorized: "sending", sending: "sending", accepted: "accepted", working: "working", done: "done", error: "error" })[event.state] || "working";
+  target.classList?.add(`state-${cssState}`);
+}
+
 async function googleRequest(url, token, options = {}) {
   const response = await fetch(url, { ...options, headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...options.headers } });
   if (!response.ok) throw new Error(`Google Photos API: HTTP ${response.status}`);
@@ -16,11 +34,11 @@ export class GooglePhotosPicker {
     this.accessToken = null;
     this.tokenRequest = null;
     this.authorizedThisSession = false;
-    this.statusReporter = null;
+    this.statusReporter = defaultStatusReporter;
   }
 
   setStatusReporter(reporter) {
-    this.statusReporter = typeof reporter === "function" ? reporter : null;
+    this.statusReporter = typeof reporter === "function" ? reporter : defaultStatusReporter;
     return this;
   }
 
@@ -83,20 +101,20 @@ export class GooglePhotosPicker {
 
   async identify() {
     try {
-      this.report("authorizing", "Проверяем Google-аккаунт…");
+      this.report("authorizing", "Проверяем Google-аккаунт…", { label: "Авторизация" });
       const request = token => fetch(`${this.config.upload_api_url}/whoami`, { headers: { Authorization: `Bearer ${token}` } });
       let response = await request(await this.token());
       if ([401, 403, 422].includes(response.status)) {
-        this.report("auth_required", "Нужно подтвердить Google-аккаунт ещё раз.");
+        this.report("auth_required", "Нужно подтвердить Google-аккаунт ещё раз.", { label: "Авторизация" });
         response = await request(await this.token(true));
       }
       const fallback = response.clone();
       const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
       if (!response.ok) throw new Error(result.error || `Проверка аккаунта: HTTP ${response.status}`);
-      this.report("authorized", "Google-аккаунт подтверждён.", { result });
+      this.report("done", "Google-аккаунт подтверждён.", { label: "Авторизация", result });
       return result;
     } catch (error) {
-      this.report("error", `Не удалось подтвердить Google-аккаунт: ${error.message}`);
+      this.report("error", `Не удалось подтвердить Google-аккаунт: ${error.message}`, { label: "Авторизация" });
       throw error;
     }
   }
@@ -150,9 +168,9 @@ export class GooglePhotosPicker {
         this.report("sending", `Отправляем команду: ${label}…`, { label });
         response = await request(`Session ${session}`);
       } else {
-        this.report("auth_required", `Для действия «${label}» нужна авторизация. Открываем Google…`, { label });
+        this.report("auth_required", `Для действия «${label}» нужна авторизация. Подтвердите Google-аккаунт.`, { label });
         const token = await this.token();
-        this.report("authorized", "Авторизация подтверждена. Отправляем команду…", { label });
+        this.report("authorized", "Авторизация подтверждена. Отправляем исходную команду…", { label });
         response = await request(`Bearer ${token}`);
       }
       if (response.status === 401 && session) {
