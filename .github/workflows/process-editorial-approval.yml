@@ -35,17 +35,29 @@ jobs:
           echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
       - name: Validate author approval
         run: node validate-editorial-chapter.mjs
-      - name: Commit durable author checkpoint
+      - name: Build storyboard from approved selection
+        run: node build-storyboard.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_PROVIDER_ORDER: anthropic,openai
+      - name: Validate storyboard
+        run: node validate-storyboard.mjs
+      - name: Validate editorial gates
+        run: node validate-editorial-chapter.mjs
+      - name: Test
+        run: npm test
+      - name: Commit durable author checkpoint and storyboard
         run: |
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add "data/$TRIP/$CHAPTER-author-review.json"
+          git add "data/$TRIP/$CHAPTER-author-review.json" "data/$TRIP/$CHAPTER-storyboard.json"
           if git diff --cached --quiet; then
-            echo "Author review is already current"
+            echo "Author review and storyboard are already current"
             exit 0
           fi
-          git commit -m "Save approved selection for $TRIP $CHAPTER"
+          git commit -m "Save approved selection and storyboard for $TRIP $CHAPTER"
           git pull --rebase origin main
           git push origin HEAD:main
 
@@ -54,9 +66,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { ref: main, fetch-depth: 0 }
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:
+          node-version: 20
       - name: Append durable author feedback
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -82,13 +97,31 @@ jobs:
           NODE
           echo "TRIP=$trip" >> "$GITHUB_ENV"
           echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
-      - name: Commit feedback checkpoint
+      - name: Validate durable author approval
+        run: node validate-editorial-chapter.mjs
+      - name: Rebuild storyboard with author feedback
+        run: node build-storyboard.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_PROVIDER_ORDER: anthropic,openai
+      - name: Validate storyboard
+        run: node validate-storyboard.mjs
+      - name: Validate editorial gates
+        run: node validate-editorial-chapter.mjs
+      - name: Test
+        run: npm test
+      - name: Commit feedback checkpoint and rebuilt storyboard
         run: |
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add "data/$TRIP/$CHAPTER-author-feedback.json"
-          git commit -m "Save preview feedback for $TRIP $CHAPTER"
+          git add "data/$TRIP/$CHAPTER-author-feedback.json" "data/$TRIP/$CHAPTER-storyboard.json"
+          if git diff --cached --quiet; then
+            echo "Feedback and storyboard are already current"
+            exit 0
+          fi
+          git commit -m "Apply preview feedback for $TRIP $CHAPTER"
           git pull --rebase origin main
           git push origin HEAD:main
 
@@ -97,9 +130,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { ref: main, fetch-depth: 0 }
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:
+          node-version: 20
       - name: Stage second author approval
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -130,9 +166,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { ref: main, fetch-depth: 0 }
+        with:
+          ref: main
+          fetch-depth: 0
       - uses: actions/setup-node@v4
-        with: { node-version: 20 }
+        with:
+          node-version: 20
       - name: Validate and build the approved public trip
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
