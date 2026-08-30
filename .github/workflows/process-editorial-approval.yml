@@ -16,13 +16,13 @@ jobs:
     if: github.event.action == 'photo_selection_approved'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Save approved photo selection
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -65,13 +65,13 @@ jobs:
     if: github.event.action == 'preview_feedback_submitted'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Append durable author feedback
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -97,6 +97,19 @@ jobs:
           NODE
           echo "TRIP=$trip" >> "$GITHUB_ENV"
           echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+      - name: Commit feedback checkpoint immediately
+        run: |
+          set -euo pipefail
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add "data/$TRIP/$CHAPTER-author-feedback.json"
+          if git diff --cached --quiet; then
+            echo "Feedback checkpoint is already current"
+          else
+            git commit -m "Save preview feedback for $TRIP $CHAPTER"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
       - name: Validate durable author approval
         run: node validate-editorial-chapter.mjs
       - name: Rebuild storyboard with author feedback
@@ -111,14 +124,14 @@ jobs:
         run: node validate-editorial-chapter.mjs
       - name: Test
         run: npm test
-      - name: Commit feedback checkpoint and rebuilt storyboard
+      - name: Commit rebuilt storyboard
         run: |
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add "data/$TRIP/$CHAPTER-author-feedback.json" "data/$TRIP/$CHAPTER-storyboard.json"
+          git add "data/$TRIP/$CHAPTER-storyboard.json"
           if git diff --cached --quiet; then
-            echo "Feedback and storyboard are already current"
+            echo "Storyboard is already current"
             exit 0
           fi
           git commit -m "Apply preview feedback for $TRIP $CHAPTER"
@@ -129,13 +142,13 @@ jobs:
     if: github.event.action == 'preview_approved'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Stage second author approval
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -165,13 +178,15 @@ jobs:
     if: github.event.action == 'publish_requested'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
+      - name: Test repository before publication
+        run: npm test
       - name: Validate and build the approved public trip
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -180,13 +195,18 @@ jobs:
           cover=$(node -p 'JSON.parse(process.env.ARTIFACT).cover_chapter')
           TRIP="$trip" COVER_CHAPTER="$cover" node publish-trip.mjs
           echo "TRIP=$trip" >> "$GITHUB_ENV"
-      - name: Test publication
-        run: npm test
+      - name: Validate published output
+        run: node validate-published-trip.mjs
       - name: Commit and publish
         run: |
+          set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add data/trips.json "data/$TRIP" "trips/$TRIP"
+          if git diff --cached --quiet; then
+            echo "Published trip is already current"
+            exit 0
+          fi
           git commit -m "Publish approved trip $TRIP"
           git pull --rebase origin main
           git push origin HEAD:main

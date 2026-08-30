@@ -219,6 +219,20 @@ ${JSON.stringify(context || {}, null, 2)}
   };
 }
 
+async function mapWithConcurrency(values, concurrency, worker) {
+  const results = new Array(values.length);
+  let cursor = 0;
+  async function run() {
+    while (true) {
+      const index = cursor++;
+      if (index >= values.length) return;
+      results[index] = await worker(values[index], index);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(concurrency, values.length) }, () => run()));
+  return results;
+}
+
 const inventory = await readJson(inFile);
 const photos = inventoryItems(inventory);
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${inFile} does not contain photos`);
@@ -227,24 +241,25 @@ const context = await readJsonIfExists(contextFile);
 const contextSignature = stableSignature(context);
 const previous = await readJsonIfExists(outFile);
 const previousByKey = new Map((previous?.items || []).map(item => [item.cache_key, item]));
-const items = [];
 let reused = 0;
 let analyzed = 0;
+const configuredConcurrency = Number(process.env.PHOTO_ANALYSIS_CONCURRENCY || 3);
+const photoConcurrency = Number.isFinite(configuredConcurrency) ? Math.max(1, Math.min(4, Math.floor(configuredConcurrency))) : 3;
+console.log(`Photo analysis concurrency: ${photoConcurrency}`);
 
-for (let index = 0; index < photos.length; index++) {
-  const photo = photos[index];
+const items = await mapWithConcurrency(photos, photoConcurrency, async (photo, index) => {
   const key = cacheKey(photo, contextSignature);
   const cached = previousByKey.get(key);
   if (cached) {
-    items.push({...cached, number: index + 1});
     reused++;
     console.log(`Reuse ${index + 1}/${photos.length}: ${photo.public_id}`);
-  } else {
-    console.log(`Analyze ${index + 1}/${photos.length}: ${photo.public_id}`);
-    items.push(await analyzePhoto(photo, index, photos.length, context, contextSignature));
-    analyzed++;
+    return {...cached, number: index + 1};
   }
-}
+  console.log(`Analyze ${index + 1}/${photos.length}: ${photo.public_id}`);
+  const item = await analyzePhoto(photo, index, photos.length, context, contextSignature);
+  analyzed++;
+  return item;
+});
 
 const result = {
   schema_version: schemaVersion,
