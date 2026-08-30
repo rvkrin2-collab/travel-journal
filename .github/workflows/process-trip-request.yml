@@ -61,6 +61,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           AI_PROVIDER_ORDER: anthropic,openai
+          ANALYSIS_CONCURRENCY: 2
+          CHAPTER_CONCURRENCY: 2
           REQUEST_FILE: /tmp/travel-journal-requests/submission.json
           RETRY_TRIP: ${{ github.event.client_payload.artifact.trip }}
         shell: bash
@@ -76,7 +78,9 @@ jobs:
             node -e 'const r=JSON.parse(require("fs").readFileSync(process.env.REQUEST_FILE)); for(const c of r.chapters) console.log(c.id)' > /tmp/chapters.txt
           fi
           printf '%s' "$trip" > /tmp/processing-trip-id
-          while read -r chapter; do
+
+          process_chapter() {
+            local chapter="$1"
             echo "Analyzing $trip / $chapter"
             TRIP="$trip" CHAPTER="$chapter" node ensure-editorial-context.mjs
             TRIP="$trip" CHAPTER="$chapter" node analyze-photos-only-v3.mjs
@@ -84,7 +88,21 @@ jobs:
             TRIP="$trip" CHAPTER="$chapter" node normalize-series-groups.mjs
             TRIP="$trip" CHAPTER="$chapter" node build-review-v2.mjs
             TRIP="$trip" CHAPTER="$chapter" node validate-editorial-chapter.mjs
-          done < /tmp/chapters.txt 2>&1 | tee /tmp/processing.log
+          }
+
+          failed=0
+          while read -r chapter; do
+            [[ -n "$chapter" ]] || continue
+            process_chapter "$chapter" &
+            while (( $(jobs -pr | wc -l) >= CHAPTER_CONCURRENCY )); do
+              wait -n || failed=1
+            done
+          done < /tmp/chapters.txt
+          while (( $(jobs -pr | wc -l) > 0 )); do
+            wait -n || failed=1
+          done
+          (( failed == 0 )) || exit 1
+        2>&1 | tee /tmp/processing.log
       - name: Commit generated drafts
         if: github.event_name == 'repository_dispatch' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         shell: bash
