@@ -16,6 +16,16 @@ export class GooglePhotosPicker {
     this.accessToken = null;
     this.tokenRequest = null;
     this.authorizedThisSession = false;
+    this.statusReporter = null;
+  }
+
+  setStatusReporter(reporter) {
+    this.statusReporter = typeof reporter === "function" ? reporter : null;
+    return this;
+  }
+
+  report(state, message, detail = {}) {
+    try { this.statusReporter?.({ state, message, ...detail }); } catch {}
   }
 
   hasRequiredScopes(value) {
@@ -72,13 +82,23 @@ export class GooglePhotosPicker {
   }
 
   async identify() {
-    const request = token => fetch(`${this.config.upload_api_url}/whoami`, { headers: { Authorization: `Bearer ${token}` } });
-    let response = await request(await this.token());
-    if ([401, 403, 422].includes(response.status)) response = await request(await this.token(true));
-    const fallback = response.clone();
-    const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
-    if (!response.ok) throw new Error(result.error || `Проверка аккаунта: HTTP ${response.status}`);
-    return result;
+    try {
+      this.report("authorizing", "Проверяем Google-аккаунт…");
+      const request = token => fetch(`${this.config.upload_api_url}/whoami`, { headers: { Authorization: `Bearer ${token}` } });
+      let response = await request(await this.token());
+      if ([401, 403, 422].includes(response.status)) {
+        this.report("auth_required", "Нужно подтвердить Google-аккаунт ещё раз.");
+        response = await request(await this.token(true));
+      }
+      const fallback = response.clone();
+      const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
+      if (!response.ok) throw new Error(result.error || `Проверка аккаунта: HTTP ${response.status}`);
+      this.report("authorized", "Google-аккаунт подтверждён.", { result });
+      return result;
+    } catch (error) {
+      this.report("error", `Не удалось подтвердить Google-аккаунт: ${error.message}`);
+      throw error;
+    }
   }
 
   rememberAuthorSession(result) {
@@ -94,13 +114,21 @@ export class GooglePhotosPicker {
   }
 
   async submit(request) {
-    const token = await this.token();
-    const response = await fetch(`${this.config.upload_api_url}/submit`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
-    const fallback = response.clone();
-    const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
-    if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
-    this.rememberAuthorSession(result);
-    return result;
+    try {
+      this.report("authorizing", "Проверяем авторизацию Google…", { label: "Отправка путешествия" });
+      const token = await this.token();
+      this.report("sending", "Отправляем путешествие в редакционный процесс…", { label: "Отправка путешествия" });
+      const response = await fetch(`${this.config.upload_api_url}/submit`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
+      const fallback = response.clone();
+      const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
+      if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
+      this.rememberAuthorSession(result);
+      this.report("accepted", "Команда принята. Обработка путешествия запущена.", { label: "Отправка путешествия", result });
+      return result;
+    } catch (error) {
+      this.report("error", `Не удалось отправить путешествие: ${error.message}`, { label: "Отправка путешествия" });
+      throw error;
+    }
   }
 
   authorSession() {
@@ -114,20 +142,43 @@ export class GooglePhotosPicker {
 
   async editorialPost(path, body, label) {
     const request = authorization => fetch(`${this.config.upload_api_url}${path}`, { method: "POST", headers: { Authorization: authorization, "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    let session = this.authorSession();
-    let usingGoogle = !session;
-    let response = await request(session ? `Session ${session}` : `Bearer ${await this.token()}`);
-    if (response.status === 401 && session) {
-      this.clearAuthorSession();
-      usingGoogle = true;
-      response = await request(`Bearer ${await this.token()}`);
+    try {
+      let session = this.authorSession();
+      let usingGoogle = !session;
+      let response;
+      if (session) {
+        this.report("sending", `Отправляем команду: ${label}…`, { label });
+        response = await request(`Session ${session}`);
+      } else {
+        this.report("auth_required", `Для действия «${label}» нужна авторизация. Открываем Google…`, { label });
+        const token = await this.token();
+        this.report("authorized", "Авторизация подтверждена. Отправляем команду…", { label });
+        response = await request(`Bearer ${token}`);
+      }
+      if (response.status === 401 && session) {
+        this.clearAuthorSession();
+        usingGoogle = true;
+        this.report("auth_required", "Сеанс автора закончился. Подтвердите Google-аккаунт — исходная команда будет отправлена автоматически.", { label });
+        const token = await this.token();
+        this.report("authorized", "Авторизация подтверждена. Повторяем исходную команду…", { label });
+        response = await request(`Bearer ${token}`);
+      }
+      if ([401, 403, 422].includes(response.status) && usingGoogle) {
+        this.report("auth_required", "Google просит подтвердить аккаунт ещё раз. После входа команда продолжится автоматически.", { label });
+        const token = await this.token(true);
+        this.report("authorized", "Авторизация подтверждена. Повторяем исходную команду…", { label });
+        response = await request(`Bearer ${token}`);
+      }
+      const fallback = response.clone();
+      const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
+      if (!response.ok) throw new Error(result.error || `${label}: HTTP ${response.status}`);
+      this.rememberAuthorSession(result);
+      this.report("accepted", `Команда «${label}» принята сервером.`, { label, result });
+      return result;
+    } catch (error) {
+      this.report("error", `Команда «${label}» не выполнена: ${error.message}`, { label });
+      throw error;
     }
-    if ([401, 403, 422].includes(response.status) && usingGoogle) response = await request(`Bearer ${await this.token(true)}`);
-    const fallback = response.clone();
-    const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
-    if (!response.ok) throw new Error(result.error || `${label}: HTTP ${response.status}`);
-    this.rememberAuthorSession(result);
-    return result;
   }
 
   approvePhotos(review) { return this.editorialPost("/approve-photos", review, "Утверждение фотографий"); }
