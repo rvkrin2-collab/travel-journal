@@ -10,10 +10,18 @@ test("preview exposes a real feedback action", () => {
   const picker = read("google-photos-picker.js");
   assert.match(html, /id="sendNoteBtn"/);
   assert.match(html, /Отправить замечание/);
-  assert.match(html, /preview-app\.js\?v=9/);
+  assert.match(html, /preview-app\.js\?v=10/);
   assert.match(app, /submitPreviewFeedback/);
   assert.match(app, /preview_feedback/);
   assert.match(picker, /\/preview-feedback/);
+});
+
+test("preview reads mutable editorial artifacts from live main before Pages fallback", () => {
+  const app = read("preview-app.js");
+  assert.match(app, /raw\.githubusercontent\.com\/rvkrin2-collab\/travel-journal\/main/);
+  assert.match(app, /cache: "no-store"/);
+  assert.match(app, /Pages fallback/);
+  assert.match(app, /waitFor\(paths\.storyboard/);
 });
 
 test("worker dispatches preview feedback separately from approval", () => {
@@ -21,6 +29,23 @@ test("worker dispatches preview feedback separately from approval", () => {
   assert.match(worker, /preview_feedback_submitted/);
   assert.match(worker, /url\.pathname === "\/preview-feedback"/);
   assert.match(worker, /Invalid preview feedback/);
+});
+
+test("feedback is committed before AI storyboard rebuild", () => {
+  const workflow = read(".github/workflows/process-editorial-approval.yml");
+  const persist = workflow.indexOf("Commit feedback checkpoint immediately");
+  const rebuild = workflow.indexOf("Rebuild storyboard with author feedback");
+  assert.ok(persist > 0 && rebuild > persist);
+  assert.match(workflow, /git add "data\/\$TRIP\/\$CHAPTER-author-feedback\.json"/);
+});
+
+test("publication tests draft state before mutation and validates published output afterwards", () => {
+  const workflow = read(".github/workflows/process-editorial-approval.yml");
+  const pretest = workflow.indexOf("Test repository before publication");
+  const publish = workflow.indexOf("Validate and build the approved public trip");
+  const validate = workflow.indexOf("Validate published output");
+  assert.ok(pretest > 0 && publish > pretest && validate > publish);
+  assert.match(workflow, /node validate-published-trip\.mjs/);
 });
 
 test("author feedback rebuilds storyboard and enforces one photo with one caption", () => {
