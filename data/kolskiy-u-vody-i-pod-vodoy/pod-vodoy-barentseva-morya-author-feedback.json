@@ -2,7 +2,7 @@
   "schema_version": 1,
   "trip": "kolskiy-u-vody-i-pod-vodoy",
   "chapter": "pod-vodoy-barentseva-morya",
-  "revision": 5,
+  "revision": 6,
   "notes": [
     {
       "type": "general",
@@ -47,6 +47,24 @@
       "photos_fingerprint": "a1ccd40992eb54b178ebaca119f674041e83a369e9291da8945003330fe19882",
       "author_review_updated_at": "2026-08-29T20:46:18.164Z",
       "storyboard_updated_at": "2026-08-30T07:19:00Z",
+      "submitted_at": "2026-08-30T12:51:23.177Z"
+    },
+    {
+      "type": "fact",
+      "photo": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/e2f14c91-cfc4-4b33-9a4b-ebdf0fe2767a.jpg",
+      "text": "Это актиния, на глубине 45 м.",
+      "photos_fingerprint": "a1ccd40992eb54b178ebaca119f674041e83a369e9291da8945003330fe19882",
+      "author_review_updated_at": "2026-08-29T20:46:18.164Z",
+      "storyboard_updated_at": "2026-08-30T18:08:37.198Z",
+      "submitted_at": "2026-08-30T12:51:23.177Z"
+    },
+    {
+      "type": "fact",
+      "photo": "kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/3ef06f5b-45eb-40ff-9548-f344ff612a17.jpg",
+      "text": "Это краб.",
+      "photos_fingerprint": "a1ccd40992eb54b178ebaca119f674041e83a369e9291da8945003330fe19882",
+      "author_review_updated_at": "2026-08-29T20:46:18.164Z",
+      "storyboard_updated_at": "2026-08-30T18:08:37.198Z",
       "submitted_at": "2026-08-30T12:51:23.177Z"
     }
   ],
