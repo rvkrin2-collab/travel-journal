@@ -1,0 +1,12 @@
+{
+  "approved_at": "2026-08-30T20:08:15.701Z",
+  "author_review_source": "data/kolskiy-u-vody-i-pod-vodoy/teriberka-author-review.json",
+  "author_review_updated_at": "2026-08-29T20:47:16.169Z",
+  "chapter": "teriberka",
+  "photos_fingerprint": "08de778ad4481db604ee3f602bc789495d877bb1192bd497944df61db406d1ef",
+  "schema_version": 2,
+  "status": "preview_approved",
+  "storyboard_source": "data/kolskiy-u-vody-i-pod-vodoy/teriberka-storyboard.json",
+  "storyboard_updated_at": "2026-08-30T20:05:47.277Z",
+  "trip": "kolskiy-u-vody-i-pod-vodoy"
+}
