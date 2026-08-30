@@ -1,0 +1,42 @@
+name: Validate travel journal
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.js"
+      - "**/*.mjs"
+      - "**/*.html"
+      - "test/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "**/*.js"
+      - "**/*.mjs"
+      - "**/*.html"
+      - "test/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Syntax check critical scripts
+        run: |
+          node --check analyze-photos-only-v3.mjs
+          node --check build-storyboard.mjs
+          node --check preview-app.js
+          node --check preview-fresh-data.js
+      - name: Run test suite
+        run: npm test
