@@ -1,0 +1,12 @@
+{
+  "approved_at": "2026-08-30T19:56:43.256Z",
+  "author_review_source": "data/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya-author-review.json",
+  "author_review_updated_at": "2026-08-29T20:46:18.164Z",
+  "chapter": "pod-vodoy-barentseva-morya",
+  "photos_fingerprint": "a1ccd40992eb54b178ebaca119f674041e83a369e9291da8945003330fe19882",
+  "schema_version": 2,
+  "status": "preview_approved",
+  "storyboard_source": "data/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya-storyboard.json",
+  "storyboard_updated_at": "2026-08-30T19:55:07.959Z",
+  "trip": "kolskiy-u-vody-i-pod-vodoy"
+}
