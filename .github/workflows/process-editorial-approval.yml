@@ -238,8 +238,8 @@ jobs:
           const journalPath = `data/${trip}/journal.json`;
           if (!fs.existsSync(journalPath)) throw new Error(`Published journal is missing: ${journalPath}`);
           const journal = JSON.parse(fs.readFileSync(journalPath, 'utf8'));
-          const chapters = Array.isArray(journal.chapters) ? journal.chapters : [];
-          if (!chapters.length) throw new Error('Published journal has no chapters');
+          const chapters = Array.isArray(journal.chapters) ? journal.chapters : (Array.isArray(journal.days) ? journal.days : []);
+          if (!chapters.length) throw new Error('Published journal has no chapters or days');
           console.log(`Publication validation passed for ${trip}: ${chapters.length} chapter(s)`);
           NODE
       - name: Commit and publish
