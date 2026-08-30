@@ -20,20 +20,19 @@ async function load(path, optional = false) { const response = await fetch(`${pa
 function exact(inventory, artifact, label) { const expected = new Set(items(inventory).map(photoId)); const actual = items(artifact).map(photoId); if (actual.length !== expected.size || new Set(actual).size !== actual.length || actual.some(id => !expected.has(id))) throw new Error(`${label} не соответствует исходному набору`); if (fp(inventory) !== "legacy-no-fingerprint" && fp(artifact) !== fp(inventory)) throw new Error(`${label}: устаревший fingerprint`); }
 
 function validateScene(scene, map, index) {
-  if (!Array.isArray(scene.photos) || scene.photos.length !== 1) {
-    throw new Error(`Сцена ${index + 1}: допустима ровно одна фотография`);
-  }
+  if (!Array.isArray(scene.photos) || scene.photos.length !== 1) throw new Error(`Сцена ${index + 1}: допустима ровно одна фотография`);
   const photo = map.get(scene.photos[0]);
   if (!photo) throw new Error(`Сцена ${index + 1}: фотография не найдена`);
+  const title = String(scene.title || "").trim();
+  if (!title) throw new Error(`Сцена ${index + 1}: у фотографии нет индивидуального заголовка`);
   const caption = String(scene.text || "").trim();
   if (!caption) throw new Error(`Сцена ${index + 1}: у фотографии нет индивидуальной подписи`);
-  return { photo, caption };
+  return { photo, title, caption };
 }
 
 function sceneHtml(scene, map, index) {
-  const { photo, caption } = validateScene(scene, map, index);
-  const title = String(scene.title || "").trim();
-  return `<section class="scene scene-single"><figure class="scene-photo"><img src="${esc(previewImage(photo))}" alt="" loading="lazy" decoding="async"><figcaption class="scene-caption">${title ? `<p class="eyebrow">${String(index + 1).padStart(2, "0")} · ${esc(title)}</p>` : ""}<p>${esc(caption)}</p></figcaption></figure></section>`;
+  const { photo, title, caption } = validateScene(scene, map, index);
+  return `<section class="scene scene-single"><figure class="scene-photo"><figcaption class="scene-caption"><p class="eyebrow">${String(index + 1).padStart(2, "0")} · ${esc(title)}</p><p>${esc(caption)}</p></figcaption><img src="${esc(previewImage(photo))}" alt="${esc(title)}" loading="lazy" decoding="async"></figure></section>`;
 }
 
 function renderFeedback(feedback) {
@@ -94,13 +93,13 @@ async function init() {
   const chapterData = storyboard.chapter || {};
   document.title = `Предпросмотр · ${chapterData.title || chapter}`;
   heroTitle.textContent = chapterData.title || chapter;
-  heroSubtitle.textContent = chapterData.subtitle || "";
+  heroSubtitle.textContent = chapterData.subtitle || chapterData.intro || "";
   chapterTitle.textContent = chapterData.title || chapter;
   chapterIntro.textContent = chapterData.intro || "";
-  heroHeader.style.backgroundImage = `linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.68)),url(${previewImage(map.get(photoId(hero)), 1600)})`;
+  heroHeader.style.backgroundImage = `linear-gradient(to top,rgba(0,0,0,.68),rgba(0,0,0,.05) 65%),url(${previewImage(map.get(photoId(hero)), 1800)})`;
   storyPhotos.innerHTML = scenes.map((scene, index) => sceneHtml(scene, map, index)).join("");
   backstagePhotos.innerHTML = items(source).filter(item => item.status === "backstage").map(item => { const photo = map.get(photoId(item)); return photo ? `<article class="backstage-card"><img src="${esc(previewImage(photo, 720))}" alt="" loading="lazy" decoding="async"><p>${esc(item.label)}</p></article>` : ""; }).join("");
-  previewNote.textContent = `Черновик из утверждённого отбора. Каждая фотография показана отдельно со своей подписью. Ревизия: ${storyboard.updated_at}.`;
+  previewNote.textContent = `Черновик из утверждённого отбора. Одна фотография — один блок, свой заголовок и подпись. Ревизия: ${storyboard.updated_at}.`;
   renderFeedback(feedback);
   document.querySelector("#sendNoteBtn").onclick = sendFeedback;
   document.querySelector("#approvePreviewBtn").onclick = async () => {
