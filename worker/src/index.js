@@ -39,7 +39,9 @@ export async function createAuthorSession(email, env) {
 }
 
 export async function authorizeAuthorSession(request, env) {
-  const token = request.headers.get("Authorization")?.match(/^Session\s+(.+)$/i)?.[1] || "";
+  const authorization = request.headers.get("Authorization") || "";
+  if (/^Bearer\s+/i.test(authorization)) return authorize(request, env);
+  const token = authorization.match(/^Session\s+(.+)$/i)?.[1] || "";
   const [payload, signature] = token.split(".");
   if (!payload || !signature || !env.AUTHOR_SESSION_SECRET || signature !== await sessionSignature(payload, env.AUTHOR_SESSION_SECRET)) throw new Response("Author session is missing or invalid", { status: 401 });
   let claims; try { claims = JSON.parse(new TextDecoder().decode(decodeBase64url(payload))); } catch { throw new Response("Author session is invalid", { status: 401 }); }
@@ -148,6 +150,21 @@ function validateTripRequest(input) {
   return trip;
 }
 
+function refreshedAuthorSession(identity, env) {
+  return createAuthorSession(identity.email, env);
+}
+
+function acceptedPayload(identity, env, extra = {}) {
+  return refreshedAuthorSession(identity, env).then(authorSession => ({
+    accepted: true,
+    command_state: "accepted",
+    accepted_at: new Date().toISOString(),
+    author_session: authorSession,
+    author_session_expires_in: AUTHOR_SESSION_SECONDS,
+    ...extra
+  }));
+}
+
 async function submitTrip(request, env, cors) {
   const identity = await authorize(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
@@ -165,22 +182,22 @@ async function submitTrip(request, env, cors) {
   });
   if (!response.ok) { console.error("GitHub dispatch failed", response.status, await response.text()); return json({ error: "Editorial automation did not accept the request" }, 502, cors); }
   const chapters = input.chapters.map(chapter => ({ id: chapter.id, editor_url: `https://owntravel.ru/editor.html?trip=${trip}&chapter=${chapter.id}` }));
-  return json({ accepted: true, trip, author_session: await createAuthorSession(identity.email, env), author_session_expires_in: AUTHOR_SESSION_SECONDS, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }, 202, cors);
+  return json(await acceptedPayload(identity, env, { trip, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, chapters }), 202, cors);
 }
 
 async function retryProcessing(request, env, cors) {
-  await authorizeAuthorSession(request, env);
+  const identity = await authorizeAuthorSession(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const input = await request.json();
   const trip = safeSegment(input.trip, "");
   if (!trip || trip !== input.trip) return json({ error: "Invalid trip" }, 400, cors);
   const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "travel-journal-uploader", "X-GitHub-Api-Version": "2022-11-28" }, body: JSON.stringify({ event_type: "trip_processing_retry", client_payload: { artifact: { trip } } }) });
   if (!response.ok) return json({ error: "Editorial automation did not accept the retry" }, 502, cors);
-  return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}` }, 202, cors);
+  return json(await acceptedPayload(identity, env, { status_url: `https://owntravel.ru/submission.html?trip=${trip}` }), 202, cors);
 }
 
 async function dispatchEditorial(request, env, cors, eventType) {
-  await authorizeAuthorSession(request, env);
+  const identity = await authorizeAuthorSession(request, env);
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) return json({ error: "Editorial automation is not configured" }, 503, cors);
   const input = await request.json();
   const trip = safeSegment(input.trip, ""); const chapter = safeSegment(input.chapter, "");
@@ -197,7 +214,7 @@ async function dispatchEditorial(request, env, cors, eventType) {
   if (eventType === "publish_requested" && (input.status !== "publish_requested" || safeSegment(input.cover_chapter, "") !== input.cover_chapter)) return json({ error: "Invalid publication request" }, 400, cors);
   const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/dispatches`, { method: "POST", headers: { Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "travel-journal-uploader", "X-GitHub-Api-Version": "2022-11-28" }, body: JSON.stringify({ event_type: eventType, client_payload: { artifact: input } }) });
   if (!response.ok) return json({ error: "Editorial automation did not accept the request" }, 502, cors);
-  return json({ accepted: true, status_url: `https://owntravel.ru/submission.html?trip=${trip}`, ...(chapter ? { preview_url: `https://owntravel.ru/preview.html?trip=${trip}&chapter=${chapter}` } : {}) }, 202, cors);
+  return json(await acceptedPayload(identity, env, { status_url: `https://owntravel.ru/submission.html?trip=${trip}`, ...(chapter ? { preview_url: `https://owntravel.ru/preview.html?trip=${trip}&chapter=${chapter}` } : {}) }), 202, cors);
 }
 
 export default {
@@ -206,7 +223,7 @@ export default {
     const cors = corsHeaders(origin, env.ALLOWED_ORIGIN);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
-    if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2", version: "2026-08-30-feedback-v1" }, 200, cors);
+    if (request.method === "GET" && url.pathname === "/health") return json({ ok: true, storage: "r2", version: "2026-08-30-author-reauth-v1" }, 200, cors);
     if (request.method === "GET" && url.pathname.startsWith("/media/")) {
       const key = safeMediaKey(url.pathname, "/media/"); return key ? r2Response(env, key) : new Response("Invalid media key", { status: 400 });
     }
