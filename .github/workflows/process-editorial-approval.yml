@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Save approved photo selection
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -73,7 +73,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Append durable author feedback
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -131,7 +131,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Validate durable author approval
         run: node validate-editorial-chapter.mjs
       - name: Rebuild storyboard from latest saved feedback
@@ -173,7 +173,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Stage second author approval
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -212,7 +212,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
       - name: Test approved source before publication
         run: npm test
       - name: Validate and build the approved public trip
