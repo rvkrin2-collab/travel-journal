@@ -21,7 +21,16 @@
       "author_review_updated_at": "2026-08-29T20:45:14.795Z",
       "storyboard_updated_at": "2026-08-29T21:27:09.907Z",
       "submitted_at": "2026-08-29T21:43:20Z"
+    },
+    {
+      "type": "fact",
+      "photo": "3",
+      "text": "это не трава, а мох",
+      "photos_fingerprint": "af86b6483ef601ef949b355fecd01775f936d7766f4c46c1b50dee65177007df",
+      "author_review_updated_at": "2026-08-29T20:45:14.795Z",
+      "storyboard_updated_at": "2026-08-30T07:18:00Z",
+      "submitted_at": "2026-08-30T19:59:13.706Z"
     }
   ],
-  "updated_at": "2026-08-29T21:43:20Z"
+  "updated_at": "2026-08-30T19:59:13.706Z"
 }
