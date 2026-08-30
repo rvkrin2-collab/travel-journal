@@ -4,6 +4,7 @@ const trip = clean(params.get("trip"), "kyrgyzstan-2026");
 const chapter = clean(params.get("chapter") || params.get("day") || params.get("day_tag"), "day02");
 const base = `data/${trip}/${chapter}`;
 const paths = { photos: `${base}-photos.json`, author: `${base}-author-review.json`, final: `${base}-final-review.json`, storyboard: `${base}-storyboard.json`, feedback: `${base}-author-feedback.json`, approval: `${base}-approval.json` };
+const liveRepositoryBase = "https://raw.githubusercontent.com/rvkrin2-collab/travel-journal/main/";
 const diagnostics = [];
 const photoId = photo => String(photo.photo_id || photo.public_id || photo.key || "");
 const items = value => Array.isArray(value) ? value : value?.items || [];
@@ -17,9 +18,25 @@ const esc = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&"
 const imgUrl = (url, width = 1800) => url.includes("/image/upload/") ? url.replace("/image/upload/", `/image/upload/f_auto,q_auto,w_${width}/`) : url;
 const previewImage = (photo, width = 1400) => photo.key ? `https://upload.owntravel.ru/thumbnail/${String(photo.key).split("/").map(encodeURIComponent).join("/")}?w=${width}` : imgUrl(photo.url, width);
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
-async function load(path, optional = false) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); if (!response.ok) { if (optional && response.status === 404) return null; throw new Error(`${path}: HTTP ${response.status}`); } diagnostics.push(`${path}: OK`); return response.json(); }
-async function loadFresh(path) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); if (response.status === 404) return null; if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`); return response.json(); }
-async function waitFor(path, predicate, attempts = 45, interval = 2000) { for (let index = 0; index < attempts; index++) { try { const value = await loadFresh(path); if (value && predicate(value)) return value; } catch {} await sleep(interval); } return null; }
+const freshUrl = path => `${liveRepositoryBase}${path}?v=${Date.now()}`;
+async function fetchLive(path, optional = false) {
+  try {
+    const response = await fetch(freshUrl(path), { cache: "no-store", headers: { Accept: "application/json" } });
+    if (response.status === 404) { if (optional) return null; throw new Error(`${path}: HTTP 404`); }
+    if (!response.ok) throw new Error(`${path}: live HTTP ${response.status}`);
+    diagnostics.push(`${path}: live`);
+    return response.json();
+  } catch (error) {
+    if (/HTTP 404/.test(String(error?.message || ""))) throw error;
+    const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) { if (optional && response.status === 404) return null; throw new Error(`${path}: HTTP ${response.status}`); }
+    diagnostics.push(`${path}: Pages fallback`);
+    return response.json();
+  }
+}
+async function load(path, optional = false) { return fetchLive(path, optional); }
+async function loadFresh(path) { return fetchLive(path, true); }
+async function waitFor(path, predicate, attempts = 60, interval = 1500) { for (let index = 0; index < attempts; index++) { try { const value = await loadFresh(path); if (value && predicate(value)) return value; } catch {} await sleep(interval); } return null; }
 function exact(inventory, artifact, label) { const expected = new Set(items(inventory).map(photoId)); const actual = items(artifact).map(photoId); if (actual.length !== expected.size || new Set(actual).size !== actual.length || actual.some(id => !expected.has(id))) throw new Error(`${label} не соответствует исходному набору`); if (fp(inventory) !== "legacy-no-fingerprint" && fp(artifact) !== fp(inventory)) throw new Error(`${label}: устаревший fingerprint`); }
 
 function setActionState(state, text, link = null) {
