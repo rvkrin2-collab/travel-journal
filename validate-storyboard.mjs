@@ -10,33 +10,16 @@ const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_
 const photosFile = process.env.PHOTOS_FILE || `data/${trip}/${dayTag}-photos.json`;
 const reviewFile = process.env.REVIEW_FILE || `data/${trip}/${dayTag}-author-review.json`;
 
-async function readJson(path) {
-  return JSON.parse(await fs.readFile(path, "utf8"));
-}
-
-async function readJsonIfExists(path) {
-  try { return await readJson(path); } catch (error) { return null; }
-}
-
-function normalizeText(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/ё/g, "е")
-    .replace(/[^a-zа-я0-9\s-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
+async function readJson(path) { return JSON.parse(await fs.readFile(path, "utf8")); }
+async function readJsonIfExists(path) { try { return await readJson(path); } catch (error) { return null; } }
+function normalizeText(value) { return String(value || "").toLowerCase().replace(/ё/g, "е").replace(/[^a-zа-я0-9\s-]/g, " ").replace(/\s+/g, " ").trim(); }
 function routePlaces(authorNotes, chapterContext) {
   const order = authorNotes?.actual_route_order || [];
   if (Array.isArray(order) && order.length) return order.map(String);
   if (Array.isArray(chapterContext?.route) && chapterContext.route.length) return chapterContext.route.map(String);
   if (Array.isArray(chapterContext?.route_context) && chapterContext.route_context.length) return chapterContext.route_context.map(String);
   const route = authorNotes?.route || chapterContext?.route || "";
-  return String(route)
-    .split("→")
-    .map(item => item.trim())
-    .filter(Boolean);
+  return String(route).split("→").map(item => item.trim()).filter(Boolean);
 }
 
 // Geography must never be inferred from a caption, title, editorial note, filename,
@@ -60,31 +43,21 @@ const photos = inventory ? inventoryItems(inventory) : null;
 const review = await readJsonIfExists(reviewFile);
 const errors = [];
 const warnings = [];
-
 const inventoryIds = new Set((photos || []).map(photo => photo.public_id));
 const approvedItems = review?.items || [];
-const approvedStoryIds = new Set(
-  approvedItems
-    .filter(item => item.status === "hero" || item.status === "story")
-    .map(item => item.public_id)
-);
+const approvedStoryIds = new Set(approvedItems.filter(item => item.status === "hero" || item.status === "story").map(item => item.public_id));
 const scenes = Array.isArray(storyboard.scenes) ? storyboard.scenes : [];
 const seen = new Set();
 
-if (approvedStoryIds.size && scenes.length !== approvedStoryIds.size) {
-  errors.push(`Storyboard must have one scene per approved photo: expected ${approvedStoryIds.size}, got ${scenes.length}`);
-}
+if (approvedStoryIds.size && scenes.length !== approvedStoryIds.size) errors.push(`Storyboard must have one scene per approved photo: expected ${approvedStoryIds.size}, got ${scenes.length}`);
 
 for (const scene of scenes) {
   if (!Array.isArray(scene.photos) || scene.photos.length !== 1) {
     errors.push(`Scene must contain exactly one photo: ${scene.id || scene.title || "untitled"}`);
     continue;
   }
-
-  if (!String(scene.text || "").trim()) {
-    errors.push(`Scene photo has no individual caption: ${scene.id || scene.title || scene.photos[0]}`);
-  }
-
+  if (!String(scene.title || "").trim()) errors.push(`Scene photo has no individual heading: ${scene.id || scene.photos[0]}`);
+  if (!String(scene.text || "").trim()) errors.push(`Scene photo has no individual caption: ${scene.id || scene.title || scene.photos[0]}`);
   const id = scene.photos[0];
   if (inventoryIds.size && !inventoryIds.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);
   if (approvedStoryIds.size && !approvedStoryIds.has(id)) errors.push(`Storyboard contains a photo not approved for story: ${id}`);
@@ -92,31 +65,19 @@ for (const scene of scenes) {
   seen.add(id);
 }
 
-if (approvedStoryIds.size) {
-  for (const id of approvedStoryIds) {
-    if (!seen.has(id)) errors.push(`Storyboard omitted approved story photo: ${id}`);
-  }
-}
+if (approvedStoryIds.size) for (const id of approvedStoryIds) if (!seen.has(id)) errors.push(`Storyboard omitted approved story photo: ${id}`);
 
 const places = routePlaces(authorNotes, chapterContext);
 if (places.length) {
   let lastPlaceIndex = -1;
   for (const scene of scenes) {
     const placeIndex = detectExplicitPlaceIndex(scene, places);
-    if (placeIndex < 0) {
-      warnings.push(`Scene has no confirmed route place: ${scene.id || scene.title || "untitled"}`);
-      continue;
-    }
-    if (placeIndex < lastPlaceIndex) {
-      errors.push(`Route order is broken at scene: ${scene.id || scene.title}. Explicit place ${places[placeIndex]} appears after ${places[lastPlaceIndex]}.`);
-    }
+    if (placeIndex < 0) { warnings.push(`Scene has no confirmed route place: ${scene.id || scene.title || "untitled"}`); continue; }
+    if (placeIndex < lastPlaceIndex) errors.push(`Route order is broken at scene: ${scene.id || scene.title}. Explicit place ${places[placeIndex]} appears after ${places[lastPlaceIndex]}.`);
     lastPlaceIndex = Math.max(lastPlaceIndex, placeIndex);
   }
 }
 
 if (warnings.length) console.warn(warnings.map(item => `WARN: ${item}`).join("\n"));
-if (errors.length) {
-  console.error(errors.map(item => `ERROR: ${item}`).join("\n"));
-  process.exit(1);
-}
-console.log(`Storyboard validation passed for ${trip} ${dayTag}: ${scenes.length} photos, ${scenes.length} individual captions`);
+if (errors.length) { console.error(errors.map(item => `ERROR: ${item}`).join("\n")); process.exit(1); }
+console.log(`Storyboard validation passed for ${trip} ${dayTag}: ${scenes.length} photos, ${scenes.length} individual headings and captions`);
