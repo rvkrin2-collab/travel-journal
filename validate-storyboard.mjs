@@ -22,6 +22,14 @@ function routePlaces(authorNotes, chapterContext) {
   return String(route).split("→").map(item => item.trim()).filter(Boolean);
 }
 
+function fallbackHeading(scene) {
+  const source = String(scene?.text || "").trim().replace(/[.!?]+$/g, "");
+  if (!source) return "";
+  const compact = source.replace(/\s+/g, " ");
+  const words = compact.split(" ").slice(0, 7).join(" ");
+  return words.length <= 72 ? words : `${words.slice(0, 69).trimEnd()}…`;
+}
+
 // Geography must never be inferred from a caption, title, editorial note, filename,
 // public ID or photo order. Route validation may use only an explicit scene.place.
 function detectExplicitPlaceIndex(scene, places) {
@@ -48,6 +56,7 @@ const approvedItems = review?.items || [];
 const approvedStoryIds = new Set(approvedItems.filter(item => item.status === "hero" || item.status === "story").map(item => item.public_id));
 const scenes = Array.isArray(storyboard.scenes) ? storyboard.scenes : [];
 const seen = new Set();
+let normalizedHeadings = 0;
 
 if (approvedStoryIds.size && scenes.length !== approvedStoryIds.size) errors.push(`Storyboard must have one scene per approved photo: expected ${approvedStoryIds.size}, got ${scenes.length}`);
 
@@ -56,7 +65,15 @@ for (const scene of scenes) {
     errors.push(`Scene must contain exactly one photo: ${scene.id || scene.title || "untitled"}`);
     continue;
   }
-  if (!String(scene.title || "").trim()) errors.push(`Scene photo has no individual heading: ${scene.id || scene.photos[0]}`);
+  if (!String(scene.title || "").trim()) {
+    const heading = fallbackHeading(scene);
+    if (heading) {
+      scene.title = heading;
+      normalizedHeadings += 1;
+    } else {
+      errors.push(`Scene photo has no individual heading: ${scene.id || scene.photos[0]}`);
+    }
+  }
   if (!String(scene.text || "").trim()) errors.push(`Scene photo has no individual caption: ${scene.id || scene.title || scene.photos[0]}`);
   const id = scene.photos[0];
   if (inventoryIds.size && !inventoryIds.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);
@@ -80,4 +97,8 @@ if (places.length) {
 
 if (warnings.length) console.warn(warnings.map(item => `WARN: ${item}`).join("\n"));
 if (errors.length) { console.error(errors.map(item => `ERROR: ${item}`).join("\n")); process.exit(1); }
+if (normalizedHeadings) {
+  await fs.writeFile(storyboardFile, `${JSON.stringify(storyboard, null, 2)}\n`, "utf8");
+  console.log(`Normalized ${normalizedHeadings} empty storyboard heading(s) from grounded scene captions`);
+}
 console.log(`Storyboard validation passed for ${trip} ${dayTag}: ${scenes.length} photos, ${scenes.length} individual headings and captions`);
