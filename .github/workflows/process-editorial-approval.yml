@@ -7,14 +7,13 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: editorial-approval-${{ github.event.client_payload.artifact.trip }}
-  cancel-in-progress: false
-
 jobs:
   save-selection:
     if: github.event.action == 'photo_selection_approved'
     runs-on: ubuntu-latest
+    concurrency:
+      group: editorial-selection-${{ github.event.client_payload.artifact.trip }}-${{ github.event.client_payload.artifact.chapter }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -64,6 +63,9 @@ jobs:
   save-feedback:
     if: github.event.action == 'preview_feedback_submitted'
     runs-on: ubuntu-latest
+    concurrency:
+      group: editorial-feedback-save-${{ github.event.client_payload.artifact.trip }}-${{ github.event.client_payload.artifact.chapter }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,15 +93,48 @@ jobs:
           current.trip = note.trip;
           current.chapter = note.chapter;
           current.notes = Array.isArray(current.notes) ? current.notes : [];
-          current.notes.push({ type: note.type, photo: note.photo || '', text: note.text, photos_fingerprint: note.photos_fingerprint, author_review_updated_at: note.author_review_updated_at || '', storyboard_updated_at: note.storyboard_updated_at, submitted_at: note.submitted_at });
+          const duplicate = current.notes.some(item => item.submitted_at === note.submitted_at && item.text === note.text);
+          if (!duplicate) current.notes.push({ type: note.type, photo: note.photo || '', text: note.text, photos_fingerprint: note.photos_fingerprint, author_review_updated_at: note.author_review_updated_at || '', storyboard_updated_at: note.storyboard_updated_at, submitted_at: note.submitted_at });
           current.updated_at = note.submitted_at;
           fs.writeFileSync(file, JSON.stringify(current, null, 2) + '\n');
           NODE
           echo "TRIP=$trip" >> "$GITHUB_ENV"
           echo "CHAPTER=$chapter" >> "$GITHUB_ENV"
+      - name: Commit feedback immediately
+        run: |
+          set -euo pipefail
+          git config user.name "travel-journal-bot"
+          git config user.email "travel-journal-bot@users.noreply.github.com"
+          git add "data/$TRIP/$CHAPTER-author-feedback.json"
+          if git diff --cached --quiet; then
+            echo "Feedback is already saved"
+            exit 0
+          fi
+          git commit -m "Save preview feedback for $TRIP $CHAPTER"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+  rebuild-feedback:
+    if: github.event.action == 'preview_feedback_submitted'
+    needs: save-feedback
+    runs-on: ubuntu-latest
+    concurrency:
+      group: editorial-feedback-rebuild-${{ github.event.client_payload.artifact.trip }}-${{ github.event.client_payload.artifact.chapter }}
+      cancel-in-progress: true
+    env:
+      TRIP: ${{ github.event.client_payload.artifact.trip }}
+      CHAPTER: ${{ github.event.client_payload.artifact.chapter }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Validate durable author approval
         run: node validate-editorial-chapter.mjs
-      - name: Rebuild storyboard with author feedback
+      - name: Rebuild storyboard from latest saved feedback
         run: node build-storyboard.mjs
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -111,23 +146,26 @@ jobs:
         run: node validate-editorial-chapter.mjs
       - name: Test
         run: npm test
-      - name: Commit feedback checkpoint and rebuilt storyboard
+      - name: Commit rebuilt storyboard
         run: |
           set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
-          git add "data/$TRIP/$CHAPTER-author-feedback.json" "data/$TRIP/$CHAPTER-storyboard.json"
+          git add "data/$TRIP/$CHAPTER-storyboard.json"
           if git diff --cached --quiet; then
-            echo "Feedback and storyboard are already current"
+            echo "Storyboard is already current"
             exit 0
           fi
-          git commit -m "Apply preview feedback for $TRIP $CHAPTER"
+          git commit -m "Rebuild preview from latest feedback for $TRIP $CHAPTER"
           git pull --rebase origin main
           git push origin HEAD:main
 
   approve-preview:
     if: github.event.action == 'preview_approved'
     runs-on: ubuntu-latest
+    concurrency:
+      group: editorial-approval-${{ github.event.client_payload.artifact.trip }}-${{ github.event.client_payload.artifact.chapter }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -164,6 +202,9 @@ jobs:
   publish:
     if: github.event.action == 'publish_requested'
     runs-on: ubuntu-latest
+    concurrency:
+      group: editorial-publication-${{ github.event.client_payload.artifact.trip }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
