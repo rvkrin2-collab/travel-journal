@@ -3,7 +3,7 @@ const clean = (value, fallback) => String(value || "").trim().toLowerCase().repl
 const trip = clean(params.get("trip"), "kyrgyzstan-2026");
 const chapter = clean(params.get("chapter") || params.get("day") || params.get("day_tag"), "day02");
 const base = `data/${trip}/${chapter}`;
-const paths = { photos: `${base}-photos.json`, author: `${base}-author-review.json`, final: `${base}-final-review.json`, storyboard: `${base}-storyboard.json`, feedback: `${base}-author-feedback.json` };
+const paths = { photos: `${base}-photos.json`, author: `${base}-author-review.json`, final: `${base}-final-review.json`, storyboard: `${base}-storyboard.json`, feedback: `${base}-author-feedback.json`, approval: `${base}-approval.json` };
 const diagnostics = [];
 const photoId = photo => String(photo.photo_id || photo.public_id || photo.key || "");
 const items = value => Array.isArray(value) ? value : value?.items || [];
@@ -16,8 +16,30 @@ const heroTitle = document.querySelector("#heroTitle"), heroSubtitle = document.
 const esc = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
 const imgUrl = (url, width = 1800) => url.includes("/image/upload/") ? url.replace("/image/upload/", `/image/upload/f_auto,q_auto,w_${width}/`) : url;
 const previewImage = (photo, width = 1400) => photo.key ? `https://upload.owntravel.ru/thumbnail/${String(photo.key).split("/").map(encodeURIComponent).join("/")}?w=${width}` : imgUrl(photo.url, width);
+const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 async function load(path, optional = false) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); if (!response.ok) { if (optional && response.status === 404) return null; throw new Error(`${path}: HTTP ${response.status}`); } diagnostics.push(`${path}: OK`); return response.json(); }
+async function loadFresh(path) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); if (response.status === 404) return null; if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`); return response.json(); }
+async function waitFor(path, predicate, attempts = 45, interval = 2000) { for (let index = 0; index < attempts; index++) { try { const value = await loadFresh(path); if (value && predicate(value)) return value; } catch {} await sleep(interval); } return null; }
 function exact(inventory, artifact, label) { const expected = new Set(items(inventory).map(photoId)); const actual = items(artifact).map(photoId); if (actual.length !== expected.size || new Set(actual).size !== actual.length || actual.some(id => !expected.has(id))) throw new Error(`${label} не соответствует исходному набору`); if (fp(inventory) !== "legacy-no-fingerprint" && fp(artifact) !== fp(inventory)) throw new Error(`${label}: устаревший fingerprint`); }
+
+function setActionState(state, text, link = null) {
+  const status = document.querySelector("#authorNoteStatus");
+  status.className = `author-action-status state-${state}`;
+  status.replaceChildren(document.createTextNode(text));
+  if (link?.href) {
+    status.append(document.createTextNode(" "));
+    const anchor = document.createElement("a");
+    anchor.href = link.href;
+    anchor.textContent = link.label || "Открыть статус";
+    status.append(anchor);
+  }
+}
+
+function pickerStatus(event) {
+  if (!event?.message) return;
+  const state = ({ auth_required: "auth", authorizing: "auth", authorized: "sending", sending: "sending", accepted: "accepted", error: "error" })[event.state] || "sending";
+  setActionState(state, event.message);
+}
 
 function validateScene(scene, map, index) {
   if (!Array.isArray(scene.photos) || scene.photos.length !== 1) throw new Error(`Сцена ${index + 1}: допустима ровно одна фотография`);
@@ -42,21 +64,50 @@ function renderFeedback(feedback) {
 }
 
 async function sendFeedback() {
-  const status = document.querySelector("#authorNoteStatus");
   const button = document.querySelector("#sendNoteBtn");
   const text = document.querySelector("#noteText").value.trim();
-  if (!text) { status.textContent = "Напишите замечание."; return; }
-  const feedback = { schema_version: 1, trip, chapter, status: "preview_feedback", type: document.querySelector("#noteType").value, photo: document.querySelector("#notePhoto").value.trim(), text, photos_fingerprint: fp(currentInventory), author_review_updated_at: currentAuthor?.updated_at || "", storyboard_updated_at: currentStoryboard?.updated_at || "", submitted_at: new Date().toISOString() };
+  if (!text) { setActionState("error", "Напишите замечание."); return; }
+  const previousStoryboardRevision = currentStoryboard?.updated_at || "";
+  const feedback = { schema_version: 1, trip, chapter, status: "preview_feedback", type: document.querySelector("#noteType").value, photo: document.querySelector("#notePhoto").value.trim(), text, photos_fingerprint: fp(currentInventory), author_review_updated_at: currentAuthor?.updated_at || "", storyboard_updated_at: previousStoryboardRevision, submitted_at: new Date().toISOString() };
   try {
     if (!photoPicker) throw new Error("Подключение отправки ещё загружается");
     button.disabled = true;
-    status.textContent = "Сохраняем замечание и запускаем новую редакцию…";
+    setActionState("sending", "Отправляем замечание…");
     const result = await photoPicker.submitPreviewFeedback(feedback);
     document.querySelector("#noteText").value = "";
     document.querySelector("#notePhoto").value = "";
-    status.innerHTML = `Замечание отправлено. Новая версия storyboard будет собрана автоматически. <a href="${esc(result.status_url)}">Открыть статус путешествия</a>`;
-  } catch (error) { status.textContent = `Не удалось отправить замечание: ${error.message}`; }
-  finally { button.disabled = false; }
+    setActionState("accepted", "Команда принята сервером. Проверяю, что замечание сохранено…");
+    const savedFeedback = await waitFor(paths.feedback, value => Array.isArray(value.notes) && value.notes.some(note => note.submitted_at === feedback.submitted_at), 30);
+    if (!savedFeedback) {
+      setActionState("accepted", "Команда принята, но подтверждение сохранения ещё не появилось.", { href: result.status_url, label: "Проверить статус" });
+      return;
+    }
+    renderFeedback(savedFeedback);
+    setActionState("working", "Замечание сохранено. Собирается новая версия preview…", { href: result.status_url, label: "Открыть статус" });
+    const nextStoryboard = await waitFor(paths.storyboard, value => String(value.updated_at || "") && value.updated_at !== previousStoryboardRevision, 45);
+    if (!nextStoryboard) return;
+    currentStoryboard = nextStoryboard;
+    setActionState("done", "Готово: замечание учтено, новая версия preview собрана.", { href: `${location.pathname}?trip=${encodeURIComponent(trip)}&chapter=${encodeURIComponent(chapter)}&v=${Date.now()}`, label: "Открыть новую версию" });
+  } catch (error) {
+    setActionState("error", `Замечание не отправлено: ${error.message}`);
+  } finally { button.disabled = false; }
+}
+
+async function approvePreview() {
+  const button = document.querySelector("#approvePreviewBtn");
+  const approval = { schema_version: 2, trip, chapter, status: "preview_approved", photos_fingerprint: fp(currentInventory), author_review_source: paths.author, author_review_updated_at: currentAuthor?.updated_at || "", storyboard_source: paths.storyboard, storyboard_updated_at: currentStoryboard?.updated_at || "", approved_at: new Date().toISOString() };
+  try {
+    if (!photoPicker) throw new Error("Подключение отправки ещё загружается");
+    button.disabled = true;
+    setActionState("sending", "Отправляем утверждение preview…");
+    const result = await photoPicker.approvePreview(approval);
+    setActionState("accepted", "Команда принята сервером. Проверяю, что утверждение сохранено…");
+    const savedApproval = await waitFor(paths.approval, value => value.status === "preview_approved" && value.approved_at === approval.approved_at, 30);
+    if (savedApproval) setActionState("done", "Готово: preview утверждён. Публикация не выполнялась.", { href: result.status_url, label: "Вернуться к статусу путешествия" });
+    else setActionState("accepted", "Команда принята, но подтверждение сохранения ещё не появилось.", { href: result.status_url, label: "Проверить статус" });
+  } catch (error) {
+    setActionState("error", `Preview не утверждён: ${error.message}`);
+  } finally { button.disabled = false; }
 }
 
 async function init() {
@@ -102,16 +153,7 @@ async function init() {
   previewNote.textContent = `Черновик из утверждённого отбора. Одна фотография — один блок, свой заголовок и подпись. Ревизия: ${storyboard.updated_at}.`;
   renderFeedback(feedback);
   document.querySelector("#sendNoteBtn").onclick = sendFeedback;
-  document.querySelector("#approvePreviewBtn").onclick = async () => {
-    const approval = { schema_version: 2, trip, chapter, status: "preview_approved", photos_fingerprint: fp(inventory), author_review_source: paths.author, author_review_updated_at: author.updated_at || "", storyboard_source: paths.storyboard, storyboard_updated_at: storyboard.updated_at, approved_at: new Date().toISOString() };
-    const status = document.querySelector("#authorNoteStatus");
-    try {
-      if (!photoPicker) throw new Error("Подключение отправки ещё загружается");
-      status.textContent = "Сохраняем второе утверждение…";
-      const result = await photoPicker.approvePreview(approval);
-      status.innerHTML = `Preview утверждён. Публикация не выполнена. <a href="${esc(result.status_url)}">Вернуться к статусу путешествия</a>`;
-    } catch (error) { status.textContent = `Не удалось сохранить утверждение: ${error.message}`; }
-  };
+  document.querySelector("#approvePreviewBtn").onclick = approvePreview;
 }
 
 init().catch(error => {
@@ -120,7 +162,7 @@ init().catch(error => {
   document.querySelector("#sendNoteBtn").disabled = true;
 });
 
-Promise.all([import("./lib/photo-services-config.mjs?v=24"), import("./google-photos-picker.js?v=25")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
+Promise.all([import("./lib/photo-services-config.mjs?v=25"), import("./google-photos-picker.js?v=28")]).then(async ([{ validatePhotoServicesConfig }, { GooglePhotosPicker }]) => {
   const response = await fetch("./config/photo-services.json", { cache: "no-store" });
-  photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json()));
+  photoPicker = new GooglePhotosPicker(validatePhotoServicesConfig(await response.json())).setStatusReporter(pickerStatus);
 }).catch(error => diagnostics.push(`approval: ${error.message}`));
