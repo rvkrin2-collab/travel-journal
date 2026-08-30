@@ -172,6 +172,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Test approved source before publication
+        run: npm test
       - name: Validate and build the approved public trip
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -180,13 +182,35 @@ jobs:
           cover=$(node -p 'JSON.parse(process.env.ARTIFACT).cover_chapter')
           TRIP="$trip" COVER_CHAPTER="$cover" node publish-trip.mjs
           echo "TRIP=$trip" >> "$GITHUB_ENV"
-      - name: Test publication
-        run: npm test
+      - name: Validate generated publication
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const trip = process.env.TRIP;
+          const registry = JSON.parse(fs.readFileSync('data/trips.json', 'utf8'));
+          const entries = Array.isArray(registry) ? registry : (registry.trips || registry.items || []);
+          const entry = entries.find(item => item.id === trip || item.trip === trip || item.slug === trip);
+          if (!entry) throw new Error(`Published trip ${trip} is missing from data/trips.json`);
+          if (entry.status && entry.status !== 'approved' && entry.status !== 'published') throw new Error(`Published trip ${trip} has unexpected status ${entry.status}`);
+          const page = fs.readFileSync(`trips/${trip}/index.html`, 'utf8');
+          if (/noindex\s*,?\s*nofollow/i.test(page)) throw new Error('Published trip page still contains noindex,nofollow');
+          const journalPath = `data/${trip}/journal.json`;
+          if (!fs.existsSync(journalPath)) throw new Error(`Published journal is missing: ${journalPath}`);
+          const journal = JSON.parse(fs.readFileSync(journalPath, 'utf8'));
+          const chapters = Array.isArray(journal.chapters) ? journal.chapters : [];
+          if (!chapters.length) throw new Error('Published journal has no chapters');
+          console.log(`Publication validation passed for ${trip}: ${chapters.length} chapter(s)`);
+          NODE
       - name: Commit and publish
         run: |
+          set -euo pipefail
           git config user.name "travel-journal-bot"
           git config user.email "travel-journal-bot@users.noreply.github.com"
           git add data/trips.json "data/$TRIP" "trips/$TRIP"
+          if git diff --cached --quiet; then
+            echo "Published trip is already current"
+            exit 0
+          fi
           git commit -m "Publish approved trip $TRIP"
           git pull --rebase origin main
           git push origin HEAD:main
