@@ -16,13 +16,13 @@ jobs:
     if: github.event.action == 'photo_selection_approved'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Save approved photo selection
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -65,13 +65,13 @@ jobs:
     if: github.event.action == 'preview_feedback_submitted'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Append durable author feedback
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -142,13 +142,13 @@ jobs:
     if: github.event.action == 'preview_approved'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Stage second author approval
         env:
           ARTIFACT: ${{ toJSON(github.event.client_payload.artifact) }}
@@ -178,13 +178,13 @@ jobs:
     if: github.event.action == 'publish_requested'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
       - name: Test repository before publication
         run: npm test
       - name: Validate and build the approved public trip
