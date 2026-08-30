@@ -12,6 +12,7 @@ const outFile = process.env.OUT_FILE || target.analysis;
 const contextFile = process.env.CHAPTER_CONTEXT_FILE || process.env.DAY_CONTEXT_FILE || `data/${trip}/${chapter}-context.json`;
 const schemaVersion = 4;
 const analysisVersion = "combined-vision-v2";
+const analysisConcurrency = Math.max(1, Math.min(4, Number(process.env.ANALYSIS_CONCURRENCY || 3)));
 
 async function readJson(path) {
   return JSON.parse(await fs.readFile(path, "utf8"));
@@ -219,6 +220,20 @@ ${JSON.stringify(context || {}, null, 2)}
   };
 }
 
+async function mapWithConcurrency(entries, concurrency, worker) {
+  const results = new Array(entries.length);
+  let cursor = 0;
+  async function run() {
+    while (true) {
+      const current = cursor++;
+      if (current >= entries.length) return;
+      results[current] = await worker(entries[current], current);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(concurrency, entries.length) }, () => run()));
+  return results;
+}
+
 const inventory = await readJson(inFile);
 const photos = inventoryItems(inventory);
 if (!Array.isArray(photos) || !photos.length) throw new Error(`${inFile} does not contain photos`);
@@ -227,24 +242,22 @@ const context = await readJsonIfExists(contextFile);
 const contextSignature = stableSignature(context);
 const previous = await readJsonIfExists(outFile);
 const previousByKey = new Map((previous?.items || []).map(item => [item.cache_key, item]));
-const items = [];
 let reused = 0;
 let analyzed = 0;
 
-for (let index = 0; index < photos.length; index++) {
-  const photo = photos[index];
+const items = await mapWithConcurrency(photos, analysisConcurrency, async (photo, index) => {
   const key = cacheKey(photo, contextSignature);
   const cached = previousByKey.get(key);
   if (cached) {
-    items.push({...cached, number: index + 1});
     reused++;
     console.log(`Reuse ${index + 1}/${photos.length}: ${photo.public_id}`);
-  } else {
-    console.log(`Analyze ${index + 1}/${photos.length}: ${photo.public_id}`);
-    items.push(await analyzePhoto(photo, index, photos.length, context, contextSignature));
-    analyzed++;
+    return {...cached, number: index + 1};
   }
-}
+  console.log(`Analyze ${index + 1}/${photos.length}: ${photo.public_id}`);
+  const item = await analyzePhoto(photo, index, photos.length, context, contextSignature);
+  analyzed++;
+  return item;
+});
 
 const result = {
   schema_version: schemaVersion,
@@ -258,7 +271,7 @@ const result = {
   context_fingerprint: contextSignature,
   generated_at: new Date().toISOString(),
   vision_model: visionModel,
-  cache: {reused, analyzed},
+  cache: {reused, analyzed, concurrency: analysisConcurrency},
   items,
   recommendation: previous?.recommendation || null,
   editorial_policy: previous?.editorial_policy || null
@@ -266,4 +279,4 @@ const result = {
 
 await fs.mkdir(outFile.split("/").slice(0, -1).join("/") || ".", {recursive: true});
 await fs.writeFile(outFile, JSON.stringify(result, null, 2), "utf8");
-console.log(`Saved visual analysis for ${items.length} photos: analyzed ${analyzed}, reused ${reused}`);
+console.log(`Saved visual analysis for ${items.length} photos: analyzed ${analyzed}, reused ${reused}, concurrency ${analysisConcurrency}`);
