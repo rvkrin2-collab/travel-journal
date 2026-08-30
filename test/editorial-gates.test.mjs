@@ -33,8 +33,8 @@ test("preview requires author review, complete storyboard and revision-bound app
   assert.doesNotMatch(app, /-ai-review\.json|`\$\{base\}-review\.json`/);
   assert.match(app, /photo_selection_approved/);
   assert.match(app, /preview_approved/);
-  assert.match(app, /storyboard_updated_at:\s*storyboard\.updated_at/);
-  assert.match(app, /author_review_updated_at:\s*author\.updated_at/);
+  assert.match(app, /storyboard_updated_at:\s*currentStoryboard\?\.updated_at/);
+  assert.match(app, /author_review_updated_at:\s*currentAuthor\?\.updated_at/);
   assert.match(app, /storyboard пропустил утверждённый кадр/);
   assert.match(app, /approvePreview\(approval\)/);
   assert.match(app, /\/thumbnail\//);
