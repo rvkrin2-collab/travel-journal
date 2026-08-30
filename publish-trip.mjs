@@ -11,6 +11,19 @@ const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character =>
 const publicHead = ({ title, description, canonical }) => `<title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}"><link rel="canonical" href="https://owntravel.ru${canonical}"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="https://owntravel.ru${canonical}"><meta name="twitter:card" content="summary_large_image">`;
 const appHead = `<meta name="theme-color" content="#263c34"><meta name="application-name" content="Журнал путешествий"><meta name="mobile-web-app-capable" content="yes"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/png" href="/icons/icon-192.png"><link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">`;
 const appScripts = `<script src="/pwa.js" defer></script><script src="/gallery.js" defer></script><script src="/onesignal.js" defer></script>`;
+
+function publishableScenes(storyboard, photos, chapterId) {
+  const scenes = storyboard.scenes || [];
+  return scenes.map((scene, index) => {
+    if (!String(scene.title || "").trim()) throw new Error(`${chapterId} scene ${index + 1} has no individual heading`);
+    if (!String(scene.text || "").trim()) throw new Error(`${chapterId} scene ${index + 1} has no individual caption`);
+    if (!Array.isArray(scene.photos) || scene.photos.length !== 1) throw new Error(`${chapterId} scene ${index + 1} must contain exactly one photo`);
+    const photo = photos.get(scene.photos[0]);
+    if (!photo) throw new Error(`${chapterId} scene ${index + 1} references a photo outside the approved inventory`);
+    return { title: scene.title, text: scene.text, photos: [photo] };
+  });
+}
+
 const registry = await read("data/trips.json");
 const registryTrip = registry.trips.find(item => item.id === trip);
 if (!registryTrip) throw new Error(`Trip ${trip} is not registered`);
@@ -26,7 +39,10 @@ for (const chapter of chaptersView.items) {
   const photos = new Map(inventoryItems(inventory).map(photo => [photoId(photo), photo]));
   const heroReview = review.items.find(item => item.status === "hero"); const hero = photos.get(photoId(heroReview));
   if (!hero) throw new Error(`${chapter.id} has no hero`);
-  const scenes = (storyboard.scenes || []).map(scene => ({ title: scene.title || "", text: scene.text || "", photos: (scene.photos || []).map(id => photos.get(id)).filter(Boolean) }));
+  const scenes = publishableScenes(storyboard, photos, chapter.id);
+  const approvedStoryIds = new Set(review.items.filter(item => item.status === "hero" || item.status === "story").map(item => photoId(item)));
+  const sceneIds = scenes.map(scene => photoId(scene.photos[0]));
+  if (sceneIds.length !== approvedStoryIds.size || new Set(sceneIds).size !== sceneIds.length || sceneIds.some(id => !approvedStoryIds.has(id))) throw new Error(`${chapter.id} storyboard does not cover every approved hero/story photo exactly once`);
   const backstage = review.items.filter(item => item.status === "backstage").map(item => photos.get(photoId(item))).filter(Boolean);
   published.push({ id: chapter.id, label: "Глава", title: storyboard.chapter?.title || chapter.title, summary: storyboard.chapter?.intro || chapter.description || "", route: [], hero, scenes, backstage });
 }
