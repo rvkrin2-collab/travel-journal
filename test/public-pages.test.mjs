@@ -51,7 +51,7 @@ test("mutable registry and authoring code are refreshed without stale PWA data",
   const worker = read("service-worker.js");
   assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
   assert.match(read("editor.html"), /editor-app\.js\?v=4/);
-  assert.match(read("preview.html"), /preview-app\.js\?v=6/);
+  assert.match(read("preview.html"), /preview-app\.js\?v=7/);
   assert.match(read("submission.html"), /submission\.js\?v=11/);
   assert.match(worker, /submission\.js\?v=11/);
 });
@@ -92,9 +92,12 @@ test("crawler policy exposes only approved canonical content", () => {
   assert.doesNotMatch(sitemap, /editor\.html|preview\.html|author\.html/);
 });
 
-test("publisher emits canonical discovery metadata for future trips", () => {
+test("publisher emits canonical discovery metadata and editorial v3 for future trips", () => {
   const publisher = read("publish-trip.mjs");
   assert.match(publisher, /const publicHead/);
   assert.match(publisher, /rel="canonical"/);
   assert.match(publisher, /\/trips\/\$\{trip\}\/chapters\/\$\{id\}\.html/);
+  assert.match(publisher, /trip-editorial-v3\.css/);
+  assert.match(publisher, /trip-editorial-v3\.js/);
+  assert.match(publisher, /layout_version: 3/);
 });
