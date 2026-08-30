@@ -64,6 +64,7 @@ jobs:
           REQUEST_FILE: /tmp/travel-journal-requests/submission.json
           RETRY_TRIP: ${{ github.event.client_payload.artifact.trip }}
           CHAPTER_CONCURRENCY: 2
+          PHOTO_ANALYSIS_CONCURRENCY: 2
         shell: bash
         run: |
           set -euo pipefail
