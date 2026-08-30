@@ -81,30 +81,52 @@ export class GooglePhotosPicker {
     return result;
   }
 
+  rememberAuthorSession(result) {
+    if (!result?.author_session) return;
+    const session = JSON.stringify({ token: result.author_session, expires_at: Date.now() + Number(result.author_session_expires_in || 0) * 1000 });
+    try { sessionStorage.setItem(AUTHOR_SESSION_KEY, session); } catch {}
+    try { globalThis.localStorage?.setItem(AUTHOR_SESSION_KEY, session); } catch {}
+  }
+
+  clearAuthorSession() {
+    try { sessionStorage.removeItem(AUTHOR_SESSION_KEY); } catch {}
+    try { globalThis.localStorage?.removeItem(AUTHOR_SESSION_KEY); } catch {}
+  }
+
   async submit(request) {
     const token = await this.token();
     const response = await fetch(`${this.config.upload_api_url}/submit`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify(request) });
     const fallback = response.clone();
     const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
     if (!response.ok) throw new Error(result.error || `Отправка заявки: HTTP ${response.status}`);
-    if (result.author_session) {
-      const session = JSON.stringify({ token: result.author_session, expires_at: Date.now() + Number(result.author_session_expires_in || 0) * 1000 });
-      sessionStorage.setItem(AUTHOR_SESSION_KEY, session);
-      globalThis.localStorage?.setItem(AUTHOR_SESSION_KEY, session);
-    }
+    this.rememberAuthorSession(result);
     return result;
   }
 
   authorSession() {
-    const value = JSON.parse(sessionStorage.getItem(AUTHOR_SESSION_KEY) || globalThis.localStorage?.getItem(AUTHOR_SESSION_KEY) || "null");
-    if (!value?.token || Number(value.expires_at) <= Date.now() + EXPIRY_MARGIN_MS) throw new Error("Сеанс автора закончился. Откройте авторскую мастерскую и отправьте путешествие снова.");
-    return value.token;
+    try {
+      const value = JSON.parse(sessionStorage.getItem(AUTHOR_SESSION_KEY) || globalThis.localStorage?.getItem(AUTHOR_SESSION_KEY) || "null");
+      if (value?.token && Number(value.expires_at) > Date.now() + EXPIRY_MARGIN_MS) return value.token;
+    } catch {}
+    this.clearAuthorSession();
+    return "";
   }
 
   async editorialPost(path, body, label) {
-    const response = await fetch(`${this.config.upload_api_url}${path}`, { method: "POST", headers: { Authorization: `Session ${this.authorSession()}`, "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    const result = await response.json().catch(() => ({}));
+    const request = authorization => fetch(`${this.config.upload_api_url}${path}`, { method: "POST", headers: { Authorization: authorization, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    let session = this.authorSession();
+    let usingGoogle = !session;
+    let response = await request(session ? `Session ${session}` : `Bearer ${await this.token()}`);
+    if (response.status === 401 && session) {
+      this.clearAuthorSession();
+      usingGoogle = true;
+      response = await request(`Bearer ${await this.token()}`);
+    }
+    if ([401, 403, 422].includes(response.status) && usingGoogle) response = await request(`Bearer ${await this.token(true)}`);
+    const fallback = response.clone();
+    const result = await response.json().catch(async () => ({ error: await fallback.text().catch(() => "") }));
     if (!response.ok) throw new Error(result.error || `${label}: HTTP ${response.status}`);
+    this.rememberAuthorSession(result);
     return result;
   }
 
