@@ -1,0 +1,12 @@
+{
+  "approved_at": "2026-08-30T20:01:29.864Z",
+  "author_review_source": "data/kolskiy-u-vody-i-pod-vodoy/kray-zemli-author-review.json",
+  "author_review_updated_at": "2026-08-29T20:45:14.795Z",
+  "chapter": "kray-zemli",
+  "photos_fingerprint": "af86b6483ef601ef949b355fecd01775f936d7766f4c46c1b50dee65177007df",
+  "schema_version": 2,
+  "status": "preview_approved",
+  "storyboard_source": "data/kolskiy-u-vody-i-pod-vodoy/kray-zemli-storyboard.json",
+  "storyboard_updated_at": "2026-08-30T19:59:46.382Z",
+  "trip": "kolskiy-u-vody-i-pod-vodoy"
+}
