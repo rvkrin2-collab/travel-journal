@@ -10,6 +10,7 @@ test("preview exposes a real feedback action", () => {
   const picker = read("google-photos-picker.js");
   assert.match(html, /id="sendNoteBtn"/);
   assert.match(html, /Отправить замечание/);
+  assert.match(html, /preview-app\.js\?v=8/);
   assert.match(app, /submitPreviewFeedback/);
   assert.match(app, /preview_feedback/);
   assert.match(picker, /\/preview-feedback/);
