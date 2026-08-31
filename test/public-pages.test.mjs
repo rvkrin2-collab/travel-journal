@@ -51,9 +51,9 @@ test("preview supports legacy storyboards linked through author_review_source", 
   assert.match(script, /storyboard\.author_review_source/);
 });
 
-test("approved Kola publication is visible in the public registry", () => {
+test("unfinished legacy Kola copy is hidden from the public registry", () => {
   const registry = JSON.parse(read("data/trips.json"));
-  assert.equal(registry.trips.find(trip => trip.id === "kolskiy")?.status, "completed");
+  assert.equal(registry.trips.find(trip => trip.id === "kolskiy")?.status, "hidden");
 });
 
 test("mutable registry and authoring code are refreshed without stale PWA data", () => {
