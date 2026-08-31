@@ -14,6 +14,14 @@ test("published editorial pages use responsive R2 thumbnails", () => {
   assert.doesNotMatch(script, /el\("img", \{ src: photoUrl\(day\.hero/);
 });
 
+test("public trip covers never expose the Cloudflare-backed photo host", () => {
+  const registry = JSON.parse(read("data/trips.json"));
+  const publicTrips = registry.trips.filter(trip => trip.status !== "hidden");
+  assert.ok(publicTrips.every(trip => !String(trip.cover_url || "").includes("photos.owntravel.ru")));
+  assert.match(read("index.html"), /hostname==='photos\.owntravel\.ru'[\s\S]*api\.owntravel\.ru\/thumbnail/);
+  assert.match(read("publish-trip.mjs"), /const publicPhotoUrl[\s\S]*api\.owntravel\.ru\/thumbnail/);
+});
+
 test("published editorial layout cannot overflow horizontally", () => {
   const css = read("trip-editorial.css");
   assert.match(css, /html\{[^}]*overflow-x:hidden/);

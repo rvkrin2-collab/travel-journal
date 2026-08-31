@@ -21,7 +21,9 @@ test("publishes only a fully approved trip and selects an explicit cover", async
   for (const [name, value] of [["photos", inventory], ["author-review", review], ["storyboard", storyboard], ["approval", approval]]) await fs.writeFile(path.join(root, `data/sample-trip/coast-${name}.json`), JSON.stringify(value));
   await exec(process.execPath, [path.resolve("publish-trip.mjs")], { env: { ...process.env, ROOT: root, TRIP: "sample-trip", COVER_CHAPTER: "coast" } });
   const [registry, trip, journal, page] = await Promise.all(["data/trips.json", "data/sample-trip/trip.json", "data/sample-trip/journal.json", "trips/sample-trip/chapters/coast.html"].map(file => fs.readFile(path.join(root, file), "utf8").then(value => file.endsWith(".json") ? JSON.parse(value) : value)));
-  assert.equal(registry.trips[0].status, "completed"); assert.equal(registry.trips[0].cover_url, photo.url);
+  assert.equal(registry.trips[0].status, "completed");
+  assert.equal(registry.trips[0].cover_url, "https://api.owntravel.ru/thumbnail/sample-trip/coast/one.jpg?w=1600");
+  assert.equal(trip.views[0].items[0].cover_url, "https://api.owntravel.ru/thumbnail/sample-trip/coast/one.jpg?w=1600");
   assert.equal(trip.editorial_status, "published"); assert.equal(trip.cover_selection.chapter_id, "coast");
   assert.equal(journal.editorial.status, "approved"); assert.equal(journal.chapters[0].hero.key, photo.key);
   assert.match(page, /data-chapter="coast"/);

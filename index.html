@@ -38,12 +38,17 @@
   <script>
     const root=document.querySelector('#trips');
     const esc=value=>String(value||'').replace(/[&<>\"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
+    const publicImageUrl=(value,width=1600)=>{
+      try{const url=new URL(value,location.href);if(url.hostname==='photos.owntravel.ru')return `https://api.owntravel.ru/thumbnail${url.pathname}?w=${width}`}
+      catch(error){}
+      return value||'';
+    };
     fetch('data/trips.json',{cache:'no-store'})
       .then(response=>{if(!response.ok)throw new Error(`HTTP ${response.status}`);return response.json()})
       .then(data=>{
         const trips=(data.trips||[]).filter(trip=>trip.status!=='hidden');
         if(!trips.length){root.innerHTML='<div class="empty">Пока нет опубликованных путешествий.</div>';return}
-        root.innerHTML=trips.map(trip=>`<a class="trip-card" href="${esc(trip.public_path)}"><img decoding="async" loading="lazy" src="${esc(trip.cover_url)}" alt="${esc(trip.title)}"><div class="trip-card__text"><span class="section-label">${esc(trip.period||'Путешествие')}</span><h3>${esc(trip.title)}</h3><p>${esc(trip.description||trip.subtitle||'')}</p><div class="trip-meta"><span>${esc(trip.published_days||0)} из ${esc(trip.total_days||0)} дней</span><span>${trip.status==='active'?'в процессе':'завершено'}</span></div></div></a>`).join('');
+        root.innerHTML=trips.map(trip=>`<a class="trip-card" href="${esc(trip.public_path)}"><img decoding="async" loading="lazy" src="${esc(publicImageUrl(trip.cover_url))}" alt="${esc(trip.title)}"><div class="trip-card__text"><span class="section-label">${esc(trip.period||'Путешествие')}</span><h3>${esc(trip.title)}</h3><p>${esc(trip.description||trip.subtitle||'')}</p><div class="trip-meta"><span>${esc(trip.published_days||0)} из ${esc(trip.total_days||0)} дней</span><span>${trip.status==='active'?'в процессе':'завершено'}</span></div></div></a>`).join('');
       })
       .catch(error=>{root.innerHTML=`<div class="empty">Не удалось загрузить список путешествий: ${esc(error.message)}</div>`});
   </script>
