@@ -55,6 +55,8 @@ jobs:
         run: node process-trip-requests.mjs
         env:
           REQUESTS_DIR: ${{ github.event_name == 'repository_dispatch' && '/tmp/travel-journal-requests' || 'requests' }}
+      - name: Refresh administrative trip list
+        run: node build-admin-trips.mjs
       - name: Analyze every submitted chapter and build AI proposals
         if: github.event_name == 'repository_dispatch'
         env:

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#263c34">
+  <title>Путешествия · Управление</title>
+  <link rel="stylesheet" href="author.css?v=25">
+  <link rel="stylesheet" href="admin.css?v=1">
+</head>
+<body>
+  <header class="top"><div><span>Журнал путешествий</span><strong>Управление</strong></div><div class="top-actions"><a class="quiet" href="index.html">На сайт</a><a class="quiet" href="author.html">＋ Новое</a></div></header>
+  <main>
+    <section class="intro admin-intro"><p class="step">Все материалы</p><h1>Путешествия</h1><p>Черновики, следующие действия и опубликованные истории — в одном месте.</p></section>
+
+    <section id="auth-panel" class="panel admin-auth" hidden>
+      <div><h2>Подтвердите доступ</h2><p>Список открывается владельцу через тот же Google-аккаунт, который используется для загрузки фотографий.</p></div>
+      <button id="sign-in" class="primary admin-auth-button" type="button">Войти</button>
+      <div id="auth-status" class="service-state" role="status" hidden></div>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div id="admin-summary" class="admin-summary" aria-live="polite"></div>
+      <section class="admin-section"><div class="section-heading"><div><span class="status-kicker">Требуют внимания</span><h2>Черновики</h2></div><span id="draft-count" class="count-badge"></span></div><div id="drafts" class="admin-grid"><div class="panel loading-card">Загружаем путешествия…</div></div></section>
+      <section class="admin-section"><div class="section-heading"><div><span class="status-kicker">На сайте</span><h2>Опубликованные</h2></div><span id="published-count" class="count-badge"></span></div><div id="published" class="admin-grid"></div></section>
+      <details id="archive-section" class="admin-archive"><summary>Старые и архивные версии <span id="archive-count"></span></summary><div id="archive" class="admin-grid"></div></details>
+    </section>
+  </main>
+  <script src="https://accounts.google.com/gsi/client" async></script>
+  <script type="module" src="admin.js?v=1"></script>
+</body>
+</html>

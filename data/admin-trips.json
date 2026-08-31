@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "trips": [
+    {
+      "id": "kolskiy",
+      "title": "Кольский",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "period": "Лето 2026",
+      "data_path": "data/kolskiy",
+      "public_path": "trips/kolskiy/",
+      "registry_status": "hidden",
+      "editorial_status": "published",
+      "chapter_count": 3,
+      "archived": true,
+      "legacy": false,
+      "redirects": false
+    },
+    {
+      "id": "kolskiy-26",
+      "title": "Кольский 26",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "period": "Лето 2026",
+      "data_path": "data/kolskiy-26",
+      "public_path": "trips/kolskiy-26/",
+      "registry_status": "hidden",
+      "editorial_status": "awaiting_visual_review",
+      "chapter_count": 1,
+      "archived": false,
+      "legacy": false,
+      "redirects": false
+    },
+    {
+      "id": "kolskiy-bereg-i-more",
+      "title": "Кольский. Берег и море",
+      "subtitle": "",
+      "period": "",
+      "data_path": "data/kolskiy-bereg-i-more",
+      "public_path": "trips/kolskiy-bereg-i-more/",
+      "registry_status": "unregistered",
+      "editorial_status": "",
+      "chapter_count": 3,
+      "archived": true,
+      "legacy": true,
+      "redirects": true
+    },
+    {
+      "id": "kolskiy-mezhdu-beregom-i-morem",
+      "title": "Кольский. Между берегом и морем",
+      "subtitle": "",
+      "period": "",
+      "data_path": "data/kolskiy-mezhdu-beregom-i-morem",
+      "public_path": "trips/kolskiy-mezhdu-beregom-i-morem/",
+      "registry_status": "unregistered",
+      "editorial_status": "awaiting_visual_review",
+      "chapter_count": 3,
+      "archived": true,
+      "legacy": true,
+      "redirects": true
+    },
+    {
+      "id": "kolskiy-u-vody-i-pod-vodoy",
+      "title": "Кольский. У воды и под водой",
+      "subtitle": "Немецкий, Териберка и Титовка",
+      "period": "Лето 2026",
+      "data_path": "data/kolskiy-u-vody-i-pod-vodoy",
+      "public_path": "trips/kolskiy-u-vody-i-pod-vodoy/",
+      "registry_status": "hidden",
+      "editorial_status": "photo_inventory_ready",
+      "chapter_count": 3,
+      "archived": false,
+      "legacy": false,
+      "redirects": true
+    },
+    {
+      "id": "kyrgyzstan-2026",
+      "title": "Кыргызстан 2026",
+      "subtitle": "Горы, вода и дорога по кругу",
+      "period": "Июль 2026",
+      "data_path": "data/kyrgyzstan-2026",
+      "public_path": "trips/kyrgyzstan-2026/",
+      "registry_status": "completed",
+      "editorial_status": "",
+      "chapter_count": 8,
+      "archived": false,
+      "legacy": false,
+      "redirects": false
+    }
+  ]
+}
