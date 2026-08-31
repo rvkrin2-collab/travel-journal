@@ -2,18 +2,18 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import test from "node:test";
 
-test("unapproved Kola draft exposes no photos or cover", async () => {
+test("approved Kola trip exposes its selected photos and cover", async () => {
   const [journal, trip, registry] = await Promise.all([
     fs.readFile("data/kolskiy-u-vody-i-pod-vodoy/journal.json", "utf8").then(JSON.parse),
     fs.readFile("data/kolskiy-u-vody-i-pod-vodoy/trip.json", "utf8").then(JSON.parse),
     fs.readFile("data/trips.json", "utf8").then(JSON.parse)
   ]);
-  assert.equal(journal.editorial.status, "awaiting_visual_review");
-  assert.equal(journal.editorial.approved_by_author, false);
-  assert.ok(journal.days.every(day => !day.hero && day.story.length === 0 && day.backstage.length === 0));
+  assert.equal(journal.editorial.status, "approved");
+  assert.equal(journal.editorial.approved_by_author, true);
+  assert.ok(journal.chapters.every(chapter => chapter.hero && chapter.scenes.length > 0));
   assert.deepEqual(trip.photo_manifest, []);
-  assert.equal(registry.trips.find(item => item.id === journal.meta.id).cover_url, "");
-  assert.equal(registry.trips.find(item => item.id === journal.meta.id).status, "hidden");
+  assert.equal(registry.trips.find(item => item.id === journal.meta.id).cover_url, journal.meta.cover.url);
+  assert.equal(registry.trips.find(item => item.id === journal.meta.id).status, "completed");
 });
 
 test("Kola chapter inventories preserve the submitted R2 photo sets", async () => {
@@ -34,14 +34,15 @@ test("Kola chapter inventories preserve the submitted R2 photo sets", async () =
   }
 });
 
-test("journal pages use days, navigation, and noindex draft protection", async () => {
+test("published journal pages use chapters, navigation, and public metadata", async () => {
   const [index, day, script] = await Promise.all([
     fs.readFile("trips/kolskiy-u-vody-i-pod-vodoy/index.html", "utf8"),
-    fs.readFile("trips/kolskiy-u-vody-i-pod-vodoy/days/teriberka.html", "utf8"),
-    fs.readFile("trip-editorial.js", "utf8")
+    fs.readFile("trips/kolskiy-u-vody-i-pod-vodoy/chapters/teriberka.html", "utf8"),
+    fs.readFile("trip-editorial-v3.js", "utf8")
   ]);
-  assert.match(index, /noindex,nofollow/);
-  assert.match(day, /data-day="teriberka"/);
-  assert.match(script, /previous|index - 1|Всё путешествие/);
+  assert.doesNotMatch(index, /noindex,nofollow/);
+  assert.match(index, /rel="canonical" href="https:\/\/owntravel\.ru\/trips\/kolskiy-u-vody-i-pod-vodoy\/"/);
+  assert.match(day, /data-chapter="teriberka"/);
+  assert.match(script, /previous|index - 1|Все главы/);
   assert.doesNotMatch(index + day, /photos\.owntravel\.ru/);
 });

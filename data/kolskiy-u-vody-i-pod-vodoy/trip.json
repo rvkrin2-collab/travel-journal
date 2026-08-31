@@ -1,11 +1,12 @@
 {
   "schema_version": 2,
   "trip": "kolskiy-u-vody-i-pod-vodoy",
-  "editorial_status": "photo_inventory_ready",
-  "author_approved": false,
+  "editorial_status": "published",
+  "author_approved": true,
   "cover_selection": {
-    "status": "not_selected",
-    "photo_url": ""
+    "chapter_id": "pod-vodoy-barentseva-morya",
+    "photo_url": "https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/e2f14c91-cfc4-4b33-9a4b-ebdf0fe2767a.jpg",
+    "status": "author_selected"
   },
   "photo_manifest": [],
   "views": [
@@ -17,19 +18,22 @@
           "id": "kray-zemli",
           "title": "Край земли",
           "description": "Берег, тундра и пейзажи северо-запада Кольского. Полуостров Немецкий, жизнь на берегу и несколько дней у Титовки.",
-          "href": "days/kray-zemli.html"
+          "href": "chapters/kray-zemli.html",
+          "cover_url": "https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/kray-zemli/e13d6097-70a0-4b4c-9bcf-a3263375f194.jpg"
         },
         {
           "id": "pod-vodoy-barentseva-morya",
           "title": "Под водой Баренцева моря",
           "description": "Подводный рельеф, водоросли, морская жизнь.",
-          "href": "days/pod-vodoy-barentseva-morya.html"
+          "href": "chapters/pod-vodoy-barentseva-morya.html",
+          "cover_url": "https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/e2f14c91-cfc4-4b33-9a4b-ebdf0fe2767a.jpg"
         },
         {
           "id": "teriberka",
           "title": "Териберка",
           "description": "Один день на другом берегу: полузабытое село и прогулка по местам вокруг Териберки.",
-          "href": "days/teriberka.html"
+          "href": "chapters/teriberka.html",
+          "cover_url": "https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/teriberka/14790a84-05d6-41b4-9c65-e7283f2cd247.jpg"
         }
       ]
     }

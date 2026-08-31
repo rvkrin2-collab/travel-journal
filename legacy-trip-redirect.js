@@ -1,5 +1,5 @@
 (() => {
-  const roots = ["kolskiy-bereg-i-more", "kolskiy-mezhdu-beregom-i-morem", "kolskiy-u-vody-i-pod-vodoy"];
+  const roots = ["kolskiy-bereg-i-more", "kolskiy-mezhdu-beregom-i-morem"];
   const match = location.pathname.match(/^\/trips\/([^/]+)(?:\/(?:chapters|days)\/([^/.]+)\.html)?\/?$/);
   if (!match || !roots.includes(match[1])) return;
   const chapterAliases = {

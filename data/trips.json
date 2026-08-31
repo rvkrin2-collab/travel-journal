@@ -21,12 +21,12 @@
       "subtitle": "Немецкий, Териберка и Титовка",
       "description": "Три разных эпизода на берегу Баренцева моря. Дайвинг у полуострова Немецкий, один день в Териберке и несколько дней на базе у Титовки — с выходами в море, рыбалкой, погружениями и прогулками.",
       "period": "Лето 2026",
-      "cover_url": "",
+      "cover_url": "https://photos.owntravel.ru/kolskiy-u-vody-i-pod-vodoy/pod-vodoy-barentseva-morya/e2f14c91-cfc4-4b33-9a4b-ebdf0fe2767a.jpg",
       "public_path": "trips/kolskiy-u-vody-i-pod-vodoy/",
-      "published_days": 0,
-      "total_days": 0,
+      "published_days": 3,
+      "total_days": 3,
       "data_path": "data/kolskiy-u-vody-i-pod-vodoy",
-      "status": "hidden"
+      "status": "completed"
     },
     {
       "id": "kolskiy",

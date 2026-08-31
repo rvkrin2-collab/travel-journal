@@ -27,6 +27,7 @@ test("editorial v3 renders the hero as an eager responsive image", () => {
   assert.match(script, /eager: true/);
   assert.match(script, /className: "cover__media"/);
   assert.match(css, /\.cover__media\{[^}]*object-fit:cover/);
+  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=3/);
 });
 
 test("legacy Kola trees redirect to the canonical trip", () => {
