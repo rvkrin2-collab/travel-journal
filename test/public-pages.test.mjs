@@ -51,9 +51,9 @@ test("preview supports legacy storyboards linked through author_review_source", 
   assert.match(script, /storyboard\.author_review_source/);
 });
 
-test("unfinished Kola publication is hidden from the public registry", () => {
+test("approved Kola publication is visible in the public registry", () => {
   const registry = JSON.parse(read("data/trips.json"));
-  assert.equal(registry.trips.find(trip => trip.id === "kolskiy")?.status, "hidden");
+  assert.equal(registry.trips.find(trip => trip.id === "kolskiy")?.status, "completed");
 });
 
 test("mutable registry and authoring code are refreshed without stale PWA data", () => {
@@ -61,8 +61,8 @@ test("mutable registry and authoring code are refreshed without stale PWA data",
   assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
   assert.match(read("editor.html"), /editor-app\.js\?v=5/);
   assert.match(read("preview.html"), /preview-app\.js\?v=10/);
-  assert.match(read("submission.html"), /submission\.js\?v=12/);
-  assert.match(worker, /submission\.js\?v=12/);
+  assert.match(read("submission.html"), /submission\.js\?v=13/);
+  assert.match(worker, /submission\.js\?v=13/);
 });
 
 test("every discoverable public page has canonical and social metadata", () => {

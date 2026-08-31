@@ -52,3 +52,11 @@ test("submission page offers one trip-wide retry with a local result", () => {
   assert.match(script, /processing-status\.json/);
   assert.doesNotMatch(script, /if \(value\.status\.action === "restart"\)/);
 });
+
+test("publication status remains visible until the public registry changes", () => {
+  const script = fs.readFileSync(new URL("../submission.js", import.meta.url), "utf8");
+  assert.match(script, /travel-journal-publication-/);
+  assert.match(script, /Команда отправлена/);
+  assert.match(script, /Проверяем результат автоматически/);
+  assert.match(script, /Открыть опубликованное путешествие/);
+});

@@ -8,10 +8,10 @@
       "period": "Лето 2026",
       "data_path": "data/kolskiy",
       "public_path": "trips/kolskiy/",
-      "registry_status": "hidden",
+      "registry_status": "completed",
       "editorial_status": "published",
       "chapter_count": 3,
-      "archived": true,
+      "archived": false,
       "legacy": false,
       "redirects": false
     },

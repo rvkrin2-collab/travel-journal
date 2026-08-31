@@ -13,6 +13,8 @@ const escapeHtml = value => String(value || "").replace(/[&<>\"]/g, character =>
 let photoPicker, photoPickerPromise, refreshing = false, retrying = false, secondsToRefresh = 15;
 const PROCESSING_KEY = `travel-journal-processing-${trip}`;
 const PROCESSING_WINDOW_MS = 20 * 60 * 1000;
+const PUBLICATION_KEY = `travel-journal-publication-${trip}`;
+const PUBLICATION_WINDOW_MS = 20 * 60 * 1000;
 
 function processingAttempt() {
   try {
@@ -28,6 +30,23 @@ function processingAttempt() {
 function rememberProcessing() {
   const value = { started_at: new Date().toISOString() };
   localStorage.setItem(PROCESSING_KEY, JSON.stringify(value));
+  return value;
+}
+
+function publicationAttempt() {
+  try {
+    const value = JSON.parse(localStorage.getItem(PUBLICATION_KEY) || "null");
+    if (!value?.started_at || Date.now() - Date.parse(value.started_at) > PUBLICATION_WINDOW_MS) {
+      localStorage.removeItem(PUBLICATION_KEY);
+      return null;
+    }
+    return value;
+  } catch { return null; }
+}
+
+function rememberPublication(coverChapter) {
+  const value = { started_at: new Date().toISOString(), cover_chapter: coverChapter };
+  localStorage.setItem(PUBLICATION_KEY, JSON.stringify(value));
   return value;
 }
 
@@ -66,9 +85,13 @@ function renderChapter(value) {
 }
 function renderPublish(states, published) {
   const panel = document.querySelector("#publish-panel");
-  if (published) { panel.hidden = false; panel.innerHTML = `<h2>Путешествие опубликовано</h2><a class="primary status-link" href="trips/${trip}/">Открыть путешествие</a>`; }
+  if (published) { localStorage.removeItem(PUBLICATION_KEY); panel.hidden = false; panel.innerHTML = `<h2>Путешествие опубликовано</h2><p>Оно уже доступно читателям и добавлено в журнал.</p><a class="primary status-link" href="trips/${trip}/">Открыть опубликованное путешествие</a>`; }
   else if (states.length && states.every(value => value.status.kind === "done")) {
-    panel.hidden = false; panel.innerHTML = `<h2>Финальный шаг — публикация</h2><p>Выберите главу, главное фото которой станет обложкой путешествия.</p><label>Обложка<select id="cover-chapter">${states.map(value => `<option value="${value.chapter.id}">${escapeHtml(value.chapter.title)}</option>`).join("")}</select></label><label class="publish-confirm"><input id="publish-confirm" type="checkbox"> Я проверил все главы и прямо разрешаю публикацию</label><button id="publish-trip" class="primary" type="button">Опубликовать путешествие</button><div id="publish-result" class="service-state" hidden></div>`; document.querySelector("#publish-trip").onclick = publishTrip;
+    const attempt = publicationAttempt();
+    const elapsed = attempt ? Date.now() - Date.parse(attempt.started_at) : 0;
+    const waiting = attempt && elapsed < 2 * 60 * 1000;
+    const result = attempt ? `<div id="publish-result" class="service-state">Команда отправлена ${dateTime(attempt.started_at)}. Проверяем результат автоматически.${waiting ? " Обычно публикация занимает до двух минут." : " Результат пока не появился — команду можно отправить повторно."}</div>` : `<div id="publish-result" class="service-state" hidden></div>`;
+    panel.hidden = false; panel.innerHTML = `<h2>Финальный шаг — публикация</h2><p>Выберите главу, главное фото которой станет обложкой путешествия.</p><label>Обложка<select id="cover-chapter">${states.map(value => `<option value="${value.chapter.id}"${value.chapter.id === attempt?.cover_chapter ? " selected" : ""}>${escapeHtml(value.chapter.title)}</option>`).join("")}</select></label><label class="publish-confirm"><input id="publish-confirm" type="checkbox"> Я проверил все главы и прямо разрешаю публикацию</label><button id="publish-trip" class="primary" type="button"${waiting ? " disabled" : ""}>${attempt ? waiting ? "Публикация выполняется…" : "Повторить публикацию" : "Опубликовать путешествие"}</button>${result}`; document.querySelector("#publish-trip").onclick = publishTrip;
   } else panel.hidden = true;
 }
 async function refresh() {
@@ -114,7 +137,7 @@ async function refresh() {
 async function publishTrip() {
   const result = document.querySelector("#publish-result"); result.hidden = false;
   if (!document.querySelector("#publish-confirm").checked) { result.textContent = "Сначала подтвердите, что проверили все главы."; return; }
-  try { if (!photoPicker) throw new Error("Сеанс публикации ещё загружается"); result.textContent = "Отправляем прямую команду публикации…"; await photoPicker.publishTrip({ schema_version: 1, trip, status: "publish_requested", cover_chapter: document.querySelector("#cover-chapter").value, requested_at: new Date().toISOString() }); result.textContent = "Публикация запущена. Страница обновится автоматически."; setTimeout(refresh, 5000); } catch (error) { result.textContent = `Не удалось опубликовать: ${error.message}`; }
+  try { if (!photoPicker) throw new Error("Сеанс публикации ещё загружается"); const coverChapter = document.querySelector("#cover-chapter").value; result.textContent = "Отправляем прямую команду публикации…"; await photoPicker.publishTrip({ schema_version: 1, trip, status: "publish_requested", cover_chapter: coverChapter, requested_at: new Date().toISOString() }); const attempt = rememberPublication(coverChapter); result.textContent = `Команда принята ${dateTime(attempt.started_at)}. Проверяем результат автоматически; обычно публикация занимает до двух минут.`; setTimeout(refresh, 5000); } catch (error) { result.textContent = `Не удалось опубликовать: ${error.message}`; }
 }
 function retryProcessingError(error) {
   const message = String(error?.message || error || "неизвестная ошибка");
