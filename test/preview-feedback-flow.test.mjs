@@ -10,7 +10,7 @@ test("preview exposes a real feedback action", () => {
   const picker = read("google-photos-picker.js");
   assert.match(html, /id="sendNoteBtn"/);
   assert.match(html, /Отправить замечание/);
-  assert.match(html, /preview-app\.js\?v=10/);
+  assert.match(html, /preview-app\.js\?v=11/);
   assert.match(app, /submitPreviewFeedback/);
   assert.match(app, /preview_feedback/);
   assert.match(picker, /\/preview-feedback/);
@@ -73,6 +73,7 @@ test("preview renders every approved photo as its own figure with an individual 
   assert.match(app, /у фотографии нет индивидуального заголовка/);
   assert.match(app, /у фотографии нет индивидуальной подписи/);
   assert.match(app, /<figure class="scene-photo"><figcaption class="scene-caption">/);
+  assert.match(app, /<p class="eyebrow">\$\{String\(index \+ 1\).*<h3>\$\{esc\(title\)\}<\/h3>/);
   assert.match(app, /<\/figcaption><img src=/);
   assert.match(app, /scenes\.length !== approvedStory\.size/);
   assert.match(app, /Одна фотография — один блок, свой заголовок и подпись/);

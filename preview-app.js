@@ -54,7 +54,7 @@ function validateScene(scene, map, index) {
 
 function sceneHtml(scene, map, index) {
   const { photo, title, caption } = validateScene(scene, map, index);
-  return `<section class="scene scene-single"><figure class="scene-photo"><figcaption class="scene-caption"><p class="eyebrow">${String(index + 1).padStart(2, "0")} · ${esc(title)}</p><p>${esc(caption)}</p></figcaption><img src="${esc(previewImage(photo))}" alt="${esc(title)}" loading="lazy" decoding="async"></figure></section>`;
+  return `<section class="scene scene-single"><figure class="scene-photo"><figcaption class="scene-caption"><p class="eyebrow">${String(index + 1).padStart(2, "0")}</p><h3>${esc(title)}</h3><p>${esc(caption)}</p></figcaption><img src="${esc(previewImage(photo))}" alt="${esc(title)}" loading="lazy" decoding="async"></figure></section>`;
 }
 
 function renderFeedback(feedback) {

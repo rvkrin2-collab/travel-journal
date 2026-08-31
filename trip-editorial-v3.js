@@ -70,7 +70,11 @@ function renderDay(data, id) {
   scenes.forEach((scene, index) => {
     const section = el("section", { className: "scene" });
     const copy = el("div", { className: "scene-copy" });
-    copy.append(el("small", { textContent: `${String(index + 1).padStart(2, "0")} · ${scene.title || "Без названия"}` }), el("p", { textContent: scene.text || "" }));
+    copy.append(
+      el("small", { className: "scene-number", textContent: String(index + 1).padStart(2, "0") }),
+      el("h2", { className: "scene-title", textContent: scene.title || "Без названия" }),
+      el("p", { className: "scene-caption", textContent: scene.text || "" })
+    );
     section.append(copy);
     const photo = (scene.photos || (scene.photo ? [scene.photo] : []))[0];
     if (photo) section.append(responsivePhoto(photo, { width: 1600, sizes: "(min-width:1200px) 1200px,100vw", alt: scene.title || chapter.title, className: "scene-photo" }));

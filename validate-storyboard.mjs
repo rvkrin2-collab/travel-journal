@@ -30,6 +30,17 @@ function fallbackHeading(scene) {
   return words.length <= 72 ? words : `${words.slice(0, 69).trimEnd()}…`;
 }
 
+const TRAILING_CONNECTOR = /(?:,|\b(?:и|а|но|или|в|во|на|с|со|к|по|из|от|до|за|над|под|при|у|о|об|для|между|через))$/iu;
+function headingProblem(scene) {
+  const title = String(scene?.title || "").trim();
+  const caption = String(scene?.text || "").trim();
+  if (!title) return "empty";
+  if (title.split(/\s+/).length > 6 || title.length > 64) return "too long";
+  if (TRAILING_CONNECTOR.test(title)) return "ends mid-phrase";
+  if (normalizeText(caption).startsWith(normalizeText(title))) return "duplicates the caption opening";
+  return "";
+}
+
 // Geography must never be inferred from a caption, title, editorial note, filename,
 // public ID or photo order. Route validation may use only an explicit scene.place.
 function detectExplicitPlaceIndex(scene, places) {
@@ -74,6 +85,8 @@ for (const scene of scenes) {
       errors.push(`Scene photo has no individual heading: ${scene.id || scene.photos[0]}`);
     }
   }
+  const titleIssue = headingProblem(scene);
+  if (titleIssue) errors.push(`Scene heading ${titleIssue}: ${scene.id || scene.photos[0]}`);
   if (!String(scene.text || "").trim()) errors.push(`Scene photo has no individual caption: ${scene.id || scene.title || scene.photos[0]}`);
   const id = scene.photos[0];
   if (inventoryIds.size && !inventoryIds.has(id)) errors.push(`Unknown public_id in storyboard: ${id}`);

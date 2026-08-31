@@ -35,7 +35,15 @@ test("editorial v3 renders the hero as an eager responsive image", () => {
   assert.match(script, /eager: true/);
   assert.match(script, /className: "cover__media"/);
   assert.match(css, /\.cover__media\{[^}]*object-fit:cover/);
-  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=3/);
+  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=4/);
+});
+
+test("published photo blocks separate number, title, and caption", () => {
+  const script = read("trip-editorial-v3.js");
+  assert.match(script, /className: "scene-number"/);
+  assert.match(script, /className: "scene-title"/);
+  assert.match(script, /className: "scene-caption"/);
+  assert.doesNotMatch(script, /padStart\(2, "0"\).* · .*scene\.title/);
 });
 
 test("legacy Kola trees redirect to the canonical trip", () => {
