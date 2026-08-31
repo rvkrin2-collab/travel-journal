@@ -4,7 +4,6 @@ const trip = clean(params.get("trip"), "kyrgyzstan-2026");
 const chapter = clean(params.get("chapter") || params.get("day") || params.get("day_tag"), "day02");
 const base = `data/${trip}/${chapter}`;
 const paths = { photos: `${base}-photos.json`, author: `${base}-author-review.json`, final: `${base}-final-review.json`, storyboard: `${base}-storyboard.json`, feedback: `${base}-author-feedback.json`, approval: `${base}-approval.json` };
-const draftBase = "https://raw.githubusercontent.com/rvkrin2-collab/travel-journal/main/";
 const diagnostics = [];
 const photoId = photo => String(photo.photo_id || photo.public_id || photo.key || "");
 const items = value => Array.isArray(value) ? value : value?.items || [];
@@ -18,27 +17,9 @@ const esc = value => String(value || "").replace(/[&<>\"]/g, character => ({ "&"
 const imgUrl = (url, width = 1800) => url.includes("/image/upload/") ? url.replace("/image/upload/", `/image/upload/f_auto,q_auto,w_${width}/`) : url;
 const previewImage = (photo, width = 1400) => photo.key ? `https://upload.owntravel.ru/thumbnail/${String(photo.key).split("/").map(encodeURIComponent).join("/")}?w=${width}` : imgUrl(photo.url, width);
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
-const draftUrl = path => `${draftBase}${path}?v=${Date.now()}`;
-const localUrl = path => `${path}?v=${Date.now()}`;
-async function fetchJson(url) { const response = await fetch(url, { cache: "no-store" }); if (!response.ok) { const error = new Error(`${url}: HTTP ${response.status}`); error.status = response.status; throw error; } return response.json(); }
-async function load(path, optional = false) {
-  try { const value = await fetchJson(draftUrl(path)); diagnostics.push(`${path}: GitHub main`); return value; }
-  catch (error) {
-    diagnostics.push(`${path}: GitHub ${error.status || "network"}`);
-    try { const value = await fetchJson(localUrl(path)); diagnostics.push(`${path}: Pages fallback`); return value; }
-    catch (fallbackError) { if (optional && fallbackError.status === 404) return null; throw fallbackError; }
-  }
-}
-async function loadFresh(path) {
-  try { return await fetchJson(draftUrl(path)); }
-  catch (error) {
-    if (error.status !== 404) {
-      try { return await fetchJson(localUrl(path)); } catch {}
-    }
-    return null;
-  }
-}
-async function waitFor(path, predicate, attempts = 90, interval = 1000) { for (let index = 0; index < attempts; index++) { try { const value = await loadFresh(path); if (value && predicate(value)) return value; } catch {} await sleep(interval); } return null; }
+async function load(path, optional = false) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); if (!response.ok) { if (optional && response.status === 404) return null; throw new Error(`${path}: HTTP ${response.status}`); } diagnostics.push(`${path}: OK`); return response.json(); }
+async function loadFresh(path) { const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" }); if (response.status === 404) return null; if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`); return response.json(); }
+async function waitFor(path, predicate, attempts = 45, interval = 2000) { for (let index = 0; index < attempts; index++) { try { const value = await loadFresh(path); if (value && predicate(value)) return value; } catch {} await sleep(interval); } return null; }
 function exact(inventory, artifact, label) { const expected = new Set(items(inventory).map(photoId)); const actual = items(artifact).map(photoId); if (actual.length !== expected.size || new Set(actual).size !== actual.length || actual.some(id => !expected.has(id))) throw new Error(`${label} не соответствует исходному набору`); if (fp(inventory) !== "legacy-no-fingerprint" && fp(artifact) !== fp(inventory)) throw new Error(`${label}: устаревший fingerprint`); }
 
 function setActionState(state, text, link = null) {
@@ -96,14 +77,14 @@ async function sendFeedback() {
     document.querySelector("#noteText").value = "";
     document.querySelector("#notePhoto").value = "";
     setActionState("accepted", "Команда принята сервером. Проверяю, что замечание сохранено…");
-    const savedFeedback = await waitFor(paths.feedback, value => Array.isArray(value.notes) && value.notes.some(note => note.submitted_at === feedback.submitted_at), 60);
+    const savedFeedback = await waitFor(paths.feedback, value => Array.isArray(value.notes) && value.notes.some(note => note.submitted_at === feedback.submitted_at), 30);
     if (!savedFeedback) {
       setActionState("accepted", "Команда принята, но подтверждение сохранения ещё не появилось.", { href: result.status_url, label: "Проверить статус" });
       return;
     }
     renderFeedback(savedFeedback);
     setActionState("working", "Замечание сохранено. Собирается новая версия preview…", { href: result.status_url, label: "Открыть статус" });
-    const nextStoryboard = await waitFor(paths.storyboard, value => String(value.updated_at || "") && value.updated_at !== previousStoryboardRevision, 90);
+    const nextStoryboard = await waitFor(paths.storyboard, value => String(value.updated_at || "") && value.updated_at !== previousStoryboardRevision, 45);
     if (!nextStoryboard) return;
     currentStoryboard = nextStoryboard;
     setActionState("done", "Готово: замечание учтено, новая версия preview собрана.", { href: `${location.pathname}?trip=${encodeURIComponent(trip)}&chapter=${encodeURIComponent(chapter)}&v=${Date.now()}`, label: "Открыть новую версию" });
@@ -121,7 +102,7 @@ async function approvePreview() {
     setActionState("sending", "Отправляем утверждение preview…");
     const result = await photoPicker.approvePreview(approval);
     setActionState("accepted", "Команда принята сервером. Проверяю, что утверждение сохранено…");
-    const savedApproval = await waitFor(paths.approval, value => value.status === "preview_approved" && value.approved_at === approval.approved_at, 60);
+    const savedApproval = await waitFor(paths.approval, value => value.status === "preview_approved" && value.approved_at === approval.approved_at, 30);
     if (savedApproval) setActionState("done", "Готово: preview утверждён. Публикация не выполнялась.", { href: result.status_url, label: "Вернуться к статусу путешествия" });
     else setActionState("accepted", "Команда принята, но подтверждение сохранения ещё не появилось.", { href: result.status_url, label: "Проверить статус" });
   } catch (error) {
