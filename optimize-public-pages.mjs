@@ -57,15 +57,22 @@ function insertDiscoveryMetadata(html, pathname) {
 }
 
 function preloadCssHero(html) {
-  if (/rel="preload"[^>]+as="image"[^>]+data-hero-preload/.test(html)) return html;
   const hero = html.match(/background(?:-image)?:\s*(?:linear-gradient\([^;]+?\),)?\s*url\(['"]?([^'")]+)['"]?\)/i)?.[1]
     || html.match(/background:\s*url\(['"]?([^'")]+)['"]?\)/i)?.[1];
   if (!hero) return html;
+  if (/rel="preload"[^>]+as="image"[^>]+data-hero-preload/.test(html)) {
+    return html.replace(/<link rel="preload" as="image" href="[^"]+" fetchpriority="high" data-hero-preload>/, `<link rel="preload" as="image" href="${escapeAttribute(hero)}" fetchpriority="high" data-hero-preload>`);
+  }
   return html.replace(/<\/head>/, `  <link rel="preload" as="image" href="${escapeAttribute(hero)}" fetchpriority="high" data-hero-preload>\n</head>`);
+}
+
+function rightSizeCssHero(html) {
+  return html.replace(/(background(?:-image)?\s*:[^;{}]*\/image\/upload\/f_auto,q_auto,w_)(?:2000|2200)(\/)/gi, (_, prefix, suffix) => `${prefix}1600${suffix}`);
 }
 
 for (const [file, pathname] of pages) {
   let html = await fs.readFile(file, "utf8");
+  html = rightSizeCssHero(html);
   html = html.replace(/<img\b[^>]*>/g, enhanceImage);
   html = insertDiscoveryMetadata(html, pathname);
   html = preloadCssHero(html);

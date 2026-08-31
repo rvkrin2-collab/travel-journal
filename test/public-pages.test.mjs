@@ -93,7 +93,11 @@ test("static public photographs are responsive and deferred", () => {
 
 test("static public pages preload their CSS hero", () => {
   const pages = ["trips/kyrgyzstan-2026/index.html", ...Array.from({ length: 8 }, (_, index) => `day${String(index + 1).padStart(2, "0")}.html`)];
-  for (const file of pages) assert.match(read(file), /rel="preload" as="image"[^>]+fetchpriority="high"[^>]+data-hero-preload/, file);
+  for (const file of pages) {
+    const html = read(file);
+    assert.match(html, /rel="preload" as="image"[^>]+fetchpriority="high"[^>]+data-hero-preload/, file);
+    assert.doesNotMatch(html, /background(?:-image)?\s*:[^;{}]*w_(?:2000|2200)\//, file);
+  }
 });
 
 test("crawler policy exposes only approved canonical content", () => {
