@@ -15,6 +15,7 @@ test("administrative dashboard is private from crawlers and reachable from autho
   assert.match(html, /admin\.js\?v=1/);
   assert.match(read("author.html"), /href="admin\.html">Мои путешествия/);
   assert.match(read("submission.html"), /href="admin\.html">Все путешествия/);
+  assert.match(read("index.html"), /href="\/admin\.html"[^>]*>Управление/);
   assert.match(read("robots.txt"), /Disallow: \/admin\.html/);
   assert.match(read("service-worker.js"), /\|admin\|draft/);
 });
