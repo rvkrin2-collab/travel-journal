@@ -56,10 +56,19 @@ function insertDiscoveryMetadata(html, pathname) {
   return result.replace(/<\/head>/, `  ${tags}\n</head>`);
 }
 
+function preloadCssHero(html) {
+  if (/rel="preload"[^>]+as="image"[^>]+data-hero-preload/.test(html)) return html;
+  const hero = html.match(/background(?:-image)?:\s*(?:linear-gradient\([^;]+?\),)?\s*url\(['"]?([^'")]+)['"]?\)/i)?.[1]
+    || html.match(/background:\s*url\(['"]?([^'")]+)['"]?\)/i)?.[1];
+  if (!hero) return html;
+  return html.replace(/<\/head>/, `  <link rel="preload" as="image" href="${escapeAttribute(hero)}" fetchpriority="high" data-hero-preload>\n</head>`);
+}
+
 for (const [file, pathname] of pages) {
   let html = await fs.readFile(file, "utf8");
   html = html.replace(/<img\b[^>]*>/g, enhanceImage);
   html = insertDiscoveryMetadata(html, pathname);
+  html = preloadCssHero(html);
   await fs.writeFile(file, html);
 }
 

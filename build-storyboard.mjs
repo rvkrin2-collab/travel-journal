@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import { assertSamePhotoSet, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
 import { callStructured } from "./lib/structured-ai.mjs";
+import { finishReaderSentence, readsLikeEditorialNote, safeReaderCaption } from "./lib/reader-caption.mjs";
 
 const target = resolveEditorialTarget();
 const trip = target.trip;
@@ -151,12 +152,7 @@ function placeIsGrounded(place, source) {
 }
 
 function finishSentence(value) {
-  const text = String(value || "").trim().replace(/[.!?]+$/g, "");
-  return text ? `${text}.` : "";
-}
-
-function safeCaptionFallback(label) {
-  return finishSentence(label);
+  return finishReaderSentence(value);
 }
 
 function enforcePhotoGrounding(storyboard, records, feedback) {
@@ -174,8 +170,8 @@ function enforcePhotoGrounding(storyboard, records, feedback) {
     const record = byId.get(id);
     if (!record) continue;
     const source = groundingSource(record, feedbackById.get(id) || []);
-    if (!captionIsGrounded(scene.text, source)) {
-      scene.text = safeCaptionFallback(record.label);
+    if (!captionIsGrounded(scene.text, source) || readsLikeEditorialNote(scene.text)) {
+      scene.text = safeReaderCaption({ generated: "", note: record.note, label: record.label });
       captionFallbacks += 1;
     } else {
       scene.text = finishSentence(scene.text);
@@ -244,6 +240,9 @@ async function buildStoryboard(payload, selectedIds) {
 - не добавляй время суток, ветер, историю, назначение, образ жизни, эмоции, мотивы, географию или природные классификации, если их нет у этого же public_id;
 - не используй метафоры и олицетворения вместо наблюдения;
 - тщательно проверь русскую орфографию и грамматику.
+- текст обращён к читателю путешествия, а не к редактору страницы;
+- запрещено упоминать «кадр», «сцену», «блок», «серию», «монтаж», «переход», «кульминацию», «финал», «визуальную функцию» или объяснять, зачем фотография поставлена в это место;
+- не противопоставляй фотографию другим фотографиям и не комментируй редакторский выбор;
 
 ПЛОХО:
 «Безветренное утро дарит чистоту линии горизонта».

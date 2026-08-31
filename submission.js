@@ -1,4 +1,4 @@
-import { CHAPTER_STAGES, chapterStatus, overallProgress } from "./lib/submission-status.mjs?v=1";
+import { CHAPTER_STAGES, chapterStatus, overallProgress, overallStateLabel } from "./lib/submission-status.mjs?v=2";
 
 const params = new URLSearchParams(location.search);
 const safe = value => String(value || "").toLowerCase().replace(/[^a-z0-9-]/g, "");
@@ -43,8 +43,8 @@ function dateTime(value) { return value ? new Intl.DateTimeFormat("ru-RU", { dat
 function renderOverall(states, published) {
   const progress = overallProgress(states.map(value => value.status), published);
   const stalled = states.filter(value => value.status.kind === "stalled").length;
-  const actions = states.filter(value => value.status.kind === "action").length;
-  overall.innerHTML = `<div class="overall-head"><div><span class="status-kicker">Общий прогресс</span><h2>${progress.percent}%</h2></div><span class="live-dot ${stalled ? "problem" : published ? "done" : ""}">${published ? "Опубликовано" : stalled ? "Нужна помощь" : actions ? "Ждёт вашего действия" : "Обработка идёт"}</span></div><div class="overall-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percent}"><i style="width:${progress.percent}%"></i></div><div class="journey-steps">${CHAPTER_STAGES.map((label, index) => `<div class="journey-step ${states.length && states.every(value => value.status.completed[index]) ? "done" : ""}"><b>${index + 1}</b><span>${label}</span></div>`).join("")}<div class="journey-step ${published ? "done" : ""}"><b>7</b><span>Публикация</span></div></div>`;
+  const label = overallStateLabel(states.map(value => value.status), published);
+  overall.innerHTML = `<div class="overall-head"><div><span class="status-kicker">Общий прогресс</span><h2>${progress.percent}%</h2></div><span class="live-dot ${stalled ? "problem" : published ? "done" : ""}">${label}</span></div><div class="overall-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress.percent}"><i style="width:${progress.percent}%"></i></div><div class="journey-steps">${CHAPTER_STAGES.map((stageLabel, index) => `<div class="journey-step ${states.length && states.every(value => value.status.completed[index]) ? "done" : ""}"><b>${index + 1}</b><span>${stageLabel}</span></div>`).join("")}<div class="journey-step ${published ? "done" : ""}"><b>7</b><span>Публикация</span></div></div>`;
 }
 function actionFor(value) {
   const chapter = value.chapter;

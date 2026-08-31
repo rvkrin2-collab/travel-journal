@@ -20,6 +20,15 @@ test("published editorial layout cannot overflow horizontally", () => {
   assert.match(css, /body\{[^}]*overflow-x:hidden/);
 });
 
+test("editorial v3 renders the hero as an eager responsive image", () => {
+  const script = read("trip-editorial-v3.js");
+  const css = read("trip-editorial-v3.css");
+  assert.match(script, /appendCoverPhoto/);
+  assert.match(script, /eager: true/);
+  assert.match(script, /className: "cover__media"/);
+  assert.match(css, /\.cover__media\{[^}]*object-fit:cover/);
+});
+
 test("legacy Kola trees redirect to the canonical trip", () => {
   const legacyRoots = ["trips/kolskiy-bereg-i-more", "trips/kolskiy-mezhdu-beregom-i-morem"];
   for (const directory of legacyRoots) {
@@ -52,8 +61,8 @@ test("mutable registry and authoring code are refreshed without stale PWA data",
   assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
   assert.match(read("editor.html"), /editor-app\.js\?v=4/);
   assert.match(read("preview.html"), /preview-app\.js\?v=9/);
-  assert.match(read("submission.html"), /submission\.js\?v=11/);
-  assert.match(worker, /submission\.js\?v=11/);
+  assert.match(read("submission.html"), /submission\.js\?v=12/);
+  assert.match(worker, /submission\.js\?v=12/);
 });
 
 test("every discoverable public page has canonical and social metadata", () => {
@@ -80,6 +89,11 @@ test("static public photographs are responsive and deferred", () => {
       }
     }
   }
+});
+
+test("static public pages preload their CSS hero", () => {
+  const pages = ["trips/kyrgyzstan-2026/index.html", ...Array.from({ length: 8 }, (_, index) => `day${String(index + 1).padStart(2, "0")}.html`)];
+  for (const file of pages) assert.match(read(file), /rel="preload" as="image"[^>]+fetchpriority="high"[^>]+data-hero-preload/, file);
 });
 
 test("crawler policy exposes only approved canonical content", () => {

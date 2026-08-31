@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
-import { chapterStatus, overallProgress } from "../lib/submission-status.mjs";
+import { chapterStatus, overallProgress, overallStateLabel } from "../lib/submission-status.mjs";
 
 const fingerprint = "photos-v1";
 const artifact = extra => ({ photos_fingerprint: fingerprint, updated_at: "2026-08-27T10:00:00.000Z", ...extra });
@@ -36,6 +36,12 @@ test("overall progress counts every chapter stage and publication", () => {
   const complete = chapterStatus({ photos: artifact(), analysis: artifact(), ai: artifact(), author: artifact(), storyboard: artifact(), approval: artifact({ status: "preview_approved" }) });
   assert.deepEqual(overallProgress([complete], false), { percent: 86, done: 6, total: 7 });
   assert.deepEqual(overallProgress([complete], true), { percent: 100, done: 7, total: 7 });
+});
+
+test("fully approved chapters are described as ready for publication", () => {
+  const complete = chapterStatus({ photos: artifact(), analysis: artifact(), ai: artifact(), author: artifact(), storyboard: artifact(), approval: artifact({ status: "preview_approved" }) });
+  assert.equal(overallStateLabel([complete], false), "Готово к публикации");
+  assert.equal(overallStateLabel([complete], true), "Опубликовано");
 });
 
 test("submission page offers one trip-wide retry with a local result", () => {

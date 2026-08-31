@@ -43,7 +43,8 @@ test("storyboard grounding guard rejects invented facts while allowing grounded 
   assert.match(builder, /sensitiveUnsupported/);
   assert.match(builder, /unsupportedNumbers/);
   assert.match(builder, /unsupportedCapitalizedTerms/);
-  assert.match(builder, /scene\.text = safeCaptionFallback\(record\.label\)/);
+  assert.match(builder, /safeReaderCaption/);
+  assert.match(builder, /readsLikeEditorialNote/);
   assert.match(builder, /placeIsGrounded/);
   assert.match(builder, /scene\.place = ""/);
   assert.match(builder, /route_context никогда не является достаточным основанием/);
@@ -51,8 +52,9 @@ test("storyboard grounding guard rejects invented facts while allowing grounded 
 
 test("storyboard normalizes caption punctuation without producing double stops", () => {
   const builder = read("build-storyboard.mjs");
+  const captions = read("lib/reader-caption.mjs");
   assert.match(builder, /function finishSentence/);
-  assert.match(builder, /replace\(\/\[.!\?\]\+\$\/g, ""\)/);
+  assert.match(captions, /replace\(\/\[.!\?\]\+\$\/g, ""\)/);
   assert.match(builder, /scene\.text = finishSentence\(scene\.text\)/);
   assert.doesNotMatch(builder, /replace\(\/\[.!\?\]\*\$\/g, "\."\)/);
 });

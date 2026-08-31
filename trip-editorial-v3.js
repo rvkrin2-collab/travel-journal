@@ -15,8 +15,12 @@ const responsivePhoto = (photo, { width = 1400, sizes = "100vw", eager = false, 
 };
 const chaptersOf = data => data.chapters || data.days || [];
 
-function coverStyle(photo) {
-  return photo?.url || photo?.key ? `linear-gradient(to top,rgba(0,0,0,.68),rgba(0,0,0,.05) 65%),url(${photoUrl(photo, 2000)})` : "linear-gradient(135deg,#263c34,#6d725f)";
+function appendCoverPhoto(container, photo, alt) {
+  if (!photo?.url && !photo?.key) {
+    container.classList.add("cover--fallback");
+    return;
+  }
+  container.append(responsivePhoto(photo, { width: 2000, sizes: "100vw", eager: true, alt, className: "cover__media" }));
 }
 
 function renderTrip(data) {
@@ -27,7 +31,7 @@ function renderTrip(data) {
   document.body.prepend(back);
   const coverPhoto = trip.cover || chapters[0]?.hero;
   const cover = el("header", { className: "cover" });
-  cover.style.backgroundImage = coverStyle(coverPhoto);
+  appendCoverPhoto(cover, coverPhoto, trip.title || "Обложка путешествия");
   const inner = el("div", { className: "cover__inner" });
   inner.append(el("small", { textContent: data.editorial?.status === "approved" ? "Путешествие" : "Черновик путешествия" }), el("h1", { textContent: trip.title || "Путешествие" }), el("p", { textContent: trip.description || trip.subtitle || "" }));
   cover.append(inner); root.append(cover);
@@ -56,7 +60,7 @@ function renderDay(data, id) {
   document.body.prepend(back);
 
   const hero = el("header", { className: "chapter-hero" });
-  hero.style.backgroundImage = coverStyle(chapter.hero);
+  appendCoverPhoto(hero, chapter.hero, chapter.title || "Обложка главы");
   const heroInner = el("div", { className: "chapter-hero__inner" });
   heroInner.append(el("small", { textContent: chapter.label || "Глава" }), el("h1", { textContent: chapter.title || id }), el("p", { textContent: chapter.summary || "" }));
   hero.append(heroInner); root.append(hero);

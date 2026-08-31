@@ -1,18 +1,12 @@
 import fs from "node:fs/promises";
 import { assertSamePhotoSet, inventoryItems, photoId, resolveEditorialTarget } from "./lib/editorial-artifacts.mjs";
+import { readerCaptionSeed } from "./lib/reader-caption.mjs";
 
 const target = resolveEditorialTarget();
 const photosFile = process.env.PHOTOS_FILE || target.photos;
 const analysisFile = process.env.ANALYSIS_FILE || target.analysis;
 const outFile = process.env.OUT_FILE || target.aiReview;
 const read = async file => JSON.parse(await fs.readFile(file, "utf8"));
-
-function safeEditorialNote(status) {
-  if (status === "hero") return "Ключевой визуальный кадр серии.";
-  if (status === "story") return "Кадр для основного визуального рассказа.";
-  if (status === "backstage") return "Дополнительный кадр для блока «За кадром».";
-  return "Кадр предлагается не использовать в основной публикации.";
-}
 
 function sanitizeObservationLabel(value) {
   let text = String(value || "").trim();
@@ -58,7 +52,7 @@ const items = photos.map((photo, index) => {
     number: index + 1,
     status: decision.status,
     label,
-    note: safeEditorialNote(decision.status),
+    note: readerCaptionSeed(observed, label),
     observation_only: true
   };
 });
