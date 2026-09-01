@@ -12,7 +12,7 @@ test("approved Kola trip exposes its selected photos and cover", async () => {
   assert.equal(journal.editorial.approved_by_author, true);
   assert.ok(journal.chapters.every(chapter => chapter.hero && chapter.scenes.length > 0));
   assert.deepEqual(trip.photo_manifest, []);
-  assert.equal(registry.trips.find(item => item.id === journal.meta.id).cover_url, `https://owntravel.ru/thumbnail/${journal.meta.cover.key}?w=1600`);
+  assert.equal(registry.trips.find(item => item.id === journal.meta.id).cover_url, `https://api.owntravel.ru/thumbnail/${journal.meta.cover.key}?w=1600`);
   assert.equal(registry.trips.find(item => item.id === journal.meta.id).status, "completed");
 });
 

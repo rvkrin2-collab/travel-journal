@@ -12,7 +12,7 @@ const saveNote = document.querySelector("#saveNote");
 let inventory, photos, analysis, aiReview, importedUnknown = [];
 let photoPicker;
 let uploadApiUrl = "";
-const DEFAULT_MEDIA_API = "https://owntravel.ru";
+const DEFAULT_MEDIA_API = "https://api.owntravel.ru";
 
 const photoId = photo => String(photo.photo_id || photo.public_id || photo.key || "");
 const items = value => Array.isArray(value) ? value : value?.items || [];
