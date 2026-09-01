@@ -18,8 +18,8 @@ test("public trip covers never expose the Cloudflare-backed photo host", () => {
   const registry = JSON.parse(read("data/trips.json"));
   const publicTrips = registry.trips.filter(trip => trip.status !== "hidden");
   assert.ok(publicTrips.every(trip => !String(trip.cover_url || "").includes("photos.owntravel.ru")));
-  assert.match(read("index.html"), /hostname==='photos\.owntravel\.ru'[\s\S]*api\.owntravel\.ru\/thumbnail/);
-  assert.match(read("publish-trip.mjs"), /const publicPhotoUrl[\s\S]*api\.owntravel\.ru\/thumbnail/);
+  assert.match(read("index.html"), /hostname==='photos\.owntravel\.ru'[\s\S]*`\/thumbnail/);
+  assert.match(read("publish-trip.mjs"), /const publicPhotoUrl[\s\S]*owntravel\.ru\/thumbnail/);
 });
 
 test("published editorial layout cannot overflow horizontally", () => {
@@ -35,7 +35,7 @@ test("editorial v3 renders the hero as an eager responsive image", () => {
   assert.match(script, /eager: true/);
   assert.match(script, /className: "cover__media"/);
   assert.match(css, /\.cover__media\{[^}]*object-fit:cover/);
-  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=4/);
+  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=5/);
 });
 
 test("published photo blocks separate number, title, and caption", () => {
@@ -76,8 +76,8 @@ test("unfinished legacy Kola copy is hidden from the public registry", () => {
 test("mutable registry and authoring code are refreshed without stale PWA data", () => {
   const worker = read("service-worker.js");
   assert.match(worker, /pathname === "\/data\/trips\.json"[\s\S]*networkFirst\(request\)/);
-  assert.match(read("editor.html"), /editor-app\.js\?v=5/);
-  assert.match(read("preview.html"), /preview-app\.js\?v=11/);
+  assert.match(read("editor.html"), /editor-app\.js\?v=6/);
+  assert.match(read("preview.html"), /preview-app\.js\?v=12/);
   assert.match(read("submission.html"), /submission\.js\?v=13/);
   assert.match(worker, /submission\.js\?v=13/);
 });

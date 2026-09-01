@@ -12,7 +12,7 @@ const config = {
 test("accepts the public Google OAuth client configuration", () => {
   assert.equal(validatePhotoServicesConfig(config), config);
   assert.equal(photoServicesReady(config), false);
-  assert.equal(photoServicesReady({ ...config, upload_api_url: "https://api.owntravel.ru", public_photo_base_url: "https://photos.owntravel.ru" }), true);
+  assert.equal(photoServicesReady({ ...config, upload_api_url: "https://owntravel.ru", public_photo_base_url: "https://photos.owntravel.ru" }), true);
 });
 
 test("rejects secrets and insecure service URLs", () => {

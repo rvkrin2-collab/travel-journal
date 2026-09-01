@@ -1,6 +1,6 @@
 {
   "google_client_id": "1068102637854-ag8pdb54sumdmeabkkduh2co5cnc1eqn.apps.googleusercontent.com",
   "google_photos_scope": "https://www.googleapis.com/auth/photospicker.mediaitems.readonly https://www.googleapis.com/auth/userinfo.email",
-  "upload_api_url": "https://api.owntravel.ru",
+  "upload_api_url": "https://owntravel.ru",
   "public_photo_base_url": "https://photos.owntravel.ru"
 }

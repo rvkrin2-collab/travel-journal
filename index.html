@@ -39,7 +39,7 @@
     const root=document.querySelector('#trips');
     const esc=value=>String(value||'').replace(/[&<>\"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[char]));
     const publicImageUrl=(value,width=1600)=>{
-      try{const url=new URL(value,location.href);if(url.hostname==='photos.owntravel.ru')return `https://api.owntravel.ru/thumbnail${url.pathname}?w=${width}`}
+      try{const url=new URL(value,location.href);if(url.hostname==='photos.owntravel.ru')return `/thumbnail${url.pathname}?w=${width}`}
       catch(error){}
       return value||'';
     };
