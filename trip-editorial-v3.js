@@ -2,14 +2,11 @@ const dataPath = document.body.dataset.tripData;
 const root = document.querySelector("#journal-content");
 const el = (tag, options = {}) => Object.assign(document.createElement(tag), options);
 const photoKey = photo => photo?.key?.split("/").map(encodeURIComponent).join("/");
-const photoUrl = (photo, width = 1400) => photoKey(photo) ? `https://api.owntravel.ru/thumbnail/${photoKey(photo)}?w=${width}` : photo?.url || "";
+const photoUrl = photo => photoKey(photo) ? `/media/${photoKey(photo)}` : photo?.url || "";
 const responsivePhoto = (photo, { width = 1400, sizes = "100vw", eager = false, alt = "", className = "" } = {}) => {
-  const image = el("img", { src: photoUrl(photo, width), alt, loading: eager ? "eager" : "lazy", decoding: "async", className });
+  const image = el("img", { src: photoUrl(photo), alt, loading: eager ? "eager" : "lazy", decoding: "async", className });
   if (eager) image.fetchPriority = "high";
-  if (photoKey(photo)) {
-    image.srcset = [480, 800, 1200, 1600].map(value => `${photoUrl(photo, value)} ${value}w`).join(", ");
-    image.sizes = sizes;
-  }
+  if (photoKey(photo)) image.sizes = sizes;
   if (photo?.width > 0 && photo?.height > 0) { image.width = photo.width; image.height = photo.height; }
   return image;
 };

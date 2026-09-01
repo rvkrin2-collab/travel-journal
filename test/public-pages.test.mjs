@@ -14,12 +14,13 @@ test("published editorial pages use responsive R2 thumbnails", () => {
   assert.doesNotMatch(script, /el\("img", \{ src: photoUrl\(day\.hero/);
 });
 
-test("public trip covers never expose the Cloudflare-backed photo host", () => {
+test("public trip covers and editorial pages use same-origin media", () => {
   const registry = JSON.parse(read("data/trips.json"));
   const publicTrips = registry.trips.filter(trip => trip.status !== "hidden");
   assert.ok(publicTrips.every(trip => !String(trip.cover_url || "").includes("photos.owntravel.ru")));
-  assert.match(read("index.html"), /hostname==='photos\.owntravel\.ru'[\s\S]*api\.owntravel\.ru\/thumbnail/);
-  assert.match(read("publish-trip.mjs"), /const publicPhotoUrl[\s\S]*api\.owntravel\.ru\/thumbnail/);
+  assert.match(read("index.html"), /hostname==='photos\.owntravel\.ru'[\s\S]*`\/media\$\{url\.pathname\}`/);
+  assert.match(read("lib/public-media.mjs"), /`\/media\/\$\{key\}`/);
+  assert.doesNotMatch(read("trip-editorial-v3.js"), /api\.owntravel\.ru/);
 });
 
 test("published editorial layout cannot overflow horizontally", () => {
@@ -35,7 +36,7 @@ test("editorial v3 renders the hero as an eager responsive image", () => {
   assert.match(script, /eager: true/);
   assert.match(script, /className: "cover__media"/);
   assert.match(css, /\.cover__media\{[^}]*object-fit:cover/);
-  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=6/);
+  assert.match(read("publish-trip.mjs"), /trip-editorial-v3\.js\?v=7/);
 });
 
 test("published photo blocks separate number, title, and caption", () => {
