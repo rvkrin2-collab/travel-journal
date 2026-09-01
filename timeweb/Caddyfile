@@ -1,0 +1,20 @@
+{
+  servers {
+    protocols h1
+  }
+}
+
+api.owntravel.ru {
+  header Alt-Svc "clear"
+
+  @media path /media/* /thumbnail/*
+  handle @media {
+    reverse_proxy media:8080
+  }
+
+  handle {
+    reverse_proxy https://upload.owntravel.ru {
+      header_up Host upload.owntravel.ru
+    }
+  }
+}

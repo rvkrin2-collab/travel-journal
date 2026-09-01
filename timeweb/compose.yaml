@@ -1,0 +1,36 @@
+services:
+  api:
+    image: caddy:2-alpine
+    container_name: owntravel-api
+    restart: unless-stopped
+    ports:
+      - "45.139.77.232:80:80"
+      - "45.139.77.232:443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      media:
+        condition: service_healthy
+
+  media:
+    build:
+      context: ./media-cache
+    container_name: owntravel-media
+    restart: unless-stopped
+    environment:
+      MEDIA_ORIGIN: https://upload.owntravel.ru
+      CACHE_ROOT: /cache
+    volumes:
+      - media_cache:/cache
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  caddy_data:
+  caddy_config:
+  media_cache:
